@@ -12,6 +12,7 @@
 /* Define the current STV version */
 #define kSTVCurrentVersion      @"13.0.0"
 
+// Sensible TableView
 #import "SCClassDefinition.h"
 #import "SCStringDefinition.h"
 #import "SCNumberDefinition.h"
@@ -29,3 +30,13 @@
 #import "SCTableViewController.h"
 
 #import "SCTheme.h"
+
+// STVCoreData
+#import "SCEntityDefinition.h"
+#import "SCCoreDataFetchOptions.h"
+#import "SCCoreDataStore.h"
+#import "SCObjectSelectionAttributes+CoreData.h"
+#import "SCArrayOfObjectsCell+CoreData.h"
+#import "SCArrayOfObjectsSection+CoreData.h"
+#import "SCArrayOfObjectsModel+CoreData.h"
+

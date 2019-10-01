@@ -38,6 +38,14 @@ module STV {
     header "SCViewControllerActions.h"
     header "SCViewControllerTypedefs.h"
 
+    header "SCArrayOfObjectsCell+CoreData.h"
+    header "SCArrayOfObjectsModel+CoreData.h"
+    header "SCArrayOfObjectsSection+CoreData.h"
+    header "SCCoreDataFetchOptions.h"
+    header "SCCoreDataStore.h"
+    header "SCEntityDefinition.h"
+    header "SCObjectSelectionAttributes+CoreData.h"
+
     //exclude header ".h"
 
     export *
