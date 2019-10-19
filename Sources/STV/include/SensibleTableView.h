@@ -1,7 +1,7 @@
 /*
  *  SensibleTableView.h
  *  Sensible TableView
- *  Version: 13.0.0
+ *  Version: 6.0.0
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
  *
@@ -10,7 +10,7 @@
 
 
 /* Define the current STV version */
-#define kSTVCurrentVersion      @"13.0.0"
+#define kSTVCurrentVersion      @"6.0.0"
 
 // Sensible TableView
 #import "SCClassDefinition.h"

@@ -1,7 +1,7 @@
 /*
  *  SCDataStore.m
  *  Sensible TableView
- *  Version: 13.0.0
+ *  Version: 6.0.0
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
  *
