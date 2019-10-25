@@ -8,8 +8,8 @@ iOS 13 and Xcode 11 compatability, and Swift Packaging by [dgApps](http://dgapps
 
 ##USAGE
 * Add STV to an Xcode 11 project as simply as `File > Swift Packages >  Add Package Dependancy...` and use the URL: [https://github.com/dgapps/STV)](https://github.com/dgapps/STV).
-* `@import STV;`
-* Marvel and enjoy!
+* Add an `@import STV;` in your code.
+* Marvel and enjoy! Maybe RTFM a bit :-)
  
 
 ##DOCUMENTATION
@@ -19,9 +19,9 @@ Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 
 5.x API Docs: [http://sensiblecocoa.com/documentation/latest](http://sensiblecocoa.com/documentation/latest)
 
-
 5.x Docset Feed: [http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom](http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom)  
-The Docset Feed is for Xcode, Dash, and other documentation browsers.
+  
+  The Docset Feed is for Xcode, Dash, and other documentation browsers.
 
 ##TODO
 * Update all the UIColor to use system colours so that Dark Mode is supported.
@@ -53,7 +53,7 @@ The Docset Feed is for Xcode, Dash, and other documentation browsers.
 * Bumped the version to 6.0.0.
 
 ##VERSION HISTORY
-* STV 6.0.0 Nov 01 2019 - First [Swift Package release](https://github.com/dgapps/STV) by [dgApps](http://dgapps.ie/).  
+* STV 6.0.0 Xxx XX 2019 - First [open source Swift Package release](https://github.com/dgapps/STV) by [dgApps](http://dgapps.ie/).  
 * STV 5.4.0 Apr 12 2018 - First [open source release](https://github.com/wizgod/STV) by [wizgod](https://github.com/wizgod) with [permission of Sensible Cocoa/Tarek Sakr](http://sensiblecocoa.com/community/topic/2534-stv-on-github/#entry13576).  
 * STV 5.4.0 Oct 15 2016 - Last closed source release from Sensible Cocoa.  
 * STV 4.2.5 Jun 30 2015  
