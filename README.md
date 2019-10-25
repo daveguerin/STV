@@ -20,8 +20,8 @@ Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 5.x API Docs: [http://sensiblecocoa.com/documentation/latest](http://sensiblecocoa.com/documentation/latest)
 
 5.x Docset Feed: [http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom](http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom)  
-  
-  The Docset Feed is for Xcode, Dash, and other documentation browsers.
+
+The Docset Feed is for Xcode, Dash, and other documentation browsers.
 
 ##TODO
 * Update all the UIColor to use system colours so that Dark Mode is supported.
