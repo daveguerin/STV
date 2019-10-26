@@ -1,0 +1,15 @@
+output: Documentation
+clean: true
+objc: true
+umbrella_header: /Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SensibleTableView.h
+sdk: iphoneos
+source_directory: /Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/
+author: dgApps
+author_url: http://dgapps.ie
+module: STV
+github_url: https://github.com/dgapps/STV
+github_file_prefix: https://github.com/dgapps/STV/tree/master
+skip_undocumented: false
+hide_documentation_coverage: false
+theme: apple
+exclude:
