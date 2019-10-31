@@ -73,7 +73,7 @@
 		_detailTextLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_detailTextLabel];
         
-        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
         _activityIndicator.hidesWhenStopped = TRUE;
         [self addSubview:_activityIndicator];
         
