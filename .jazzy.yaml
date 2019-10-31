@@ -26,10 +26,10 @@ readme: README.md
 # podspec:
 # docset_icon:
 # docset_path:
-root_url: https://github.com/daveguerin/Docs
-dash_url: https://realm.io/docsets/realm.xml
-github_url: https://github.com/daveguerin/STV
-github_file_prefix: https://github.com/daveguerin/STV/tree/master
+root_url: https://github.com/daveguerin/Documents
+dash_url: https://github.com/daveguerin/docsets/STV.xml
+github_url: https://github.com/daveguerin/STV/
+github_file_prefix: https://github.com/daveguerin/STV/tree/master/Sources/STV/
 # disable_search:
 skip_undocumented: false
 # min_acl:
