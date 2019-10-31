@@ -72,8 +72,8 @@
         _UITableViewCellSeparatorStyleDictionary = 
         [NSDictionary dictionaryWithObjectsAndKeys:
          [NSNumber numberWithInt:UITableViewCellSeparatorStyleNone], @"UITableViewCellSeparatorStyleNone",
-         [NSNumber numberWithInt:UITableViewCellSeparatorStyleSingleLine], @"UITableViewCellSeparatorStyleSingleLine", 
-         [NSNumber numberWithInt:UITableViewCellSeparatorStyleSingleLineEtched], @"UITableViewCellSeparatorStyleSingleLineEtched", nil];
+         [NSNumber numberWithInt:UITableViewCellSeparatorStyleSingleLine], @"UITableViewCellSeparatorStyleSingleLine", nil];
+         //[NSNumber numberWithInt:UITableViewCellSeparatorStyleSingleLineEtched], @"UITableViewCellSeparatorStyleSingleLineEtched", nil]; // dgApps deprecated in iOS 11
     }
         
     return _UITableViewCellSeparatorStyleDictionary;
