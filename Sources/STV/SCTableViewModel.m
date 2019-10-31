@@ -3326,6 +3326,7 @@
 
 
 
+#pragma mark - SCSelectionModel
 
 
 
@@ -3559,7 +3560,7 @@
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-		cell.textLabel.textColor = [UIColor blackColor];
+		cell.textLabel.textColor = [UIColor labelColor];
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -3600,7 +3601,7 @@
 			if(boundToNSString)
 				self.boundValue = [self buildStringFromSelectedItemsIndexes];
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-		selectedCell.textLabel.textColor = [UIColor blackColor];
+		selectedCell.textLabel.textColor = [UIColor labelColor];
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 		return;
@@ -3622,7 +3623,7 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-		oldCell.textLabel.textColor = [UIColor blackColor];
+		oldCell.textLabel.textColor = [UIColor labelColor];
 	}
 	
 	//check selected cell
@@ -3917,7 +3918,7 @@
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-		cell.textLabel.textColor = [UIColor blackColor];
+		cell.textLabel.textColor = [UIColor labelColor];
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -3964,7 +3965,7 @@
 		[self selectedItemsIndexesModified];
         
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-		selectedCell.textLabel.textColor = [UIColor blackColor];
+		selectedCell.textLabel.textColor = [UIColor labelColor];
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
         
@@ -3987,7 +3988,7 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-		oldCell.textLabel.textColor = [UIColor blackColor];
+		oldCell.textLabel.textColor = [UIColor labelColor];
 	}
 	
 	//check selected cell
