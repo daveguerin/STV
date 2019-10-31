@@ -56,6 +56,7 @@
 
 @end
 
+#pragma mark - SCTableViewCell
 
 @implementation SCTableViewCell
 
@@ -1228,8 +1229,7 @@
 
 
 
-#pragma mark -
-#pragma mark SCTableViewControllerDelegate methods
+#pragma mark - SCTableViewControllerDelegate
 
 - (void)tableViewControllerWillPresent:(SCTableViewController *)tableViewController
 {
@@ -1278,8 +1278,7 @@
     [self handleDetailViewControllerDidLoseFocus:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-#pragma mark -
-#pragma mark SCViewControllerDelegate methods
+#pragma mark - SCViewControllerDelegate
 
 - (void)viewControllerWillPresent:(SCViewController *)viewController
 {
@@ -1333,6 +1332,7 @@
 
 
 
+#pragma mark - SCCustomCell
 
 
 
@@ -2149,8 +2149,7 @@
     }
 }
 
-#pragma mark -
-#pragma mark UITextView methods
+#pragma mark - UITextView methods
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)_textView
 {
@@ -2218,8 +2217,7 @@
     }
 }
 
-#pragma mark -
-#pragma mark UITextField methods
+#pragma mark - UITextField methods
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)_textField
 {
@@ -2338,8 +2336,7 @@
 	return handeledReturn;
 }
 
-#pragma mark -
-#pragma mark UISlider methods
+#pragma mark - UISlider methods
 
 - (void)sliderValueChanged:(id)sender
 {	
@@ -2351,8 +2348,7 @@
 	[self cellValueChanged];
 }
 
-#pragma mark -
-#pragma mark UISegmentedControl methods
+#pragma mark - UISegmentedControl methods
 
 - (void)segmentedControlValueChanged:(id)sender
 {
@@ -2364,8 +2360,7 @@
 	[self cellValueChanged];
 }
 
-#pragma mark -
-#pragma mark UISwitch methods
+#pragma mark - UISwitch methods
 
 - (void)switchControlChanged:(id)sender
 {
@@ -2377,8 +2372,7 @@
 	[self cellValueChanged];
 }
 
-#pragma mark -
-#pragma mark UIButton methods
+#pragma mark - UIButton methods
 
 - (void)customButtonTapped:(id)sender
 {
@@ -2415,6 +2409,7 @@
 #define kControlIndexInContentViewKey     @"controlIndexInContentView"
 #define kControlCreatedInIBKey  @"controlCreatedInIB"
 
+#pragma mark - SCControlCell
 
 
 @interface SCControlCell ()
@@ -2692,6 +2687,7 @@
 
 
 
+#pragma mark - SCLabelCell
 
 
 
@@ -2815,6 +2811,7 @@
 
 
 
+#pragma mark - SCTextViewCell
 
 
 
@@ -3124,8 +3121,7 @@
     self.textView.text = nil;
 }
 
-#pragma mark -
-#pragma mark UITextViewDelegate methods
+#pragma mark - UITextViewDelegate methods
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -3169,6 +3165,7 @@
 @end
 
 
+#pragma mark - SCTextFieldCell
 
 
 
@@ -3362,6 +3359,7 @@
 @end
 
 
+#pragma mark - SCNumericTextFieldCell
 
 
 
@@ -3495,6 +3493,7 @@
 
 
 
+#pragma mark - SCSliderCell
 
 
 
@@ -3617,6 +3616,7 @@
 
 
 
+#pragma mark - SCSegmentedCell
 
 
 
@@ -3797,6 +3797,7 @@
 @end
 
 
+#pragma mark - SCSwitchCell
 
 
 
@@ -3918,6 +3919,9 @@
 
 
 #define kDefaultEmbeddedDatePickerHeight    163
+
+#pragma mark - SCDateCell
+
 
 
 @interface SCDateCell ()
@@ -4259,6 +4263,7 @@
 
 
 
+#pragma mark - SCImagePickerCell
 
 
 
@@ -4664,9 +4669,7 @@
     return [UIImage imageWithContentsOfFile:imagePath];
 }
 
-
-#pragma mark -
-#pragma mark UIActionSheetDelegate methods
+#pragma mark - UIActionSheetDelegate methods
 
 - (void)actionSheet:(UIActionSheet *)actionSheet
 	clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -4694,8 +4697,8 @@
     }
 }
 
-#pragma mark -
-#pragma mark UIImagePickerControllerDelegate methods
+
+#pragma mark - UIImagePickerControllerDelegate methods
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
@@ -4829,8 +4832,8 @@
 	[super handleDetailViewControllerWillPresent:detailViewController];
 }
 
-#pragma mark -
-#pragma mark UIScrollViewDelegate methods
+
+#pragma mark - UIScrollViewDelegate methods
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
@@ -4852,6 +4855,7 @@
 
 
 
+#pragma mark - SCSelectionCell
 
 
 
@@ -5487,6 +5491,7 @@
 
 
 
+#pragma mark - SCObjectSelectionCell
 
 
 
@@ -5892,6 +5897,7 @@
 
 
 
+#pragma mark - SCObjectCell
 
 
 
@@ -6150,6 +6156,7 @@
 
 
 
+#pragma mark - SCArrayOfObjectsCell
 
 
 
