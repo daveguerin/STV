@@ -25,7 +25,7 @@
 {
     [super performInitialization];
     
-    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     [self.contentView addSubview:_activityIndicator];
     
     _autoFetchItems = FALSE;
