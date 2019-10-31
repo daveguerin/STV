@@ -141,7 +141,7 @@
         _height = UITableViewAutomaticDimension;
 	selectable = TRUE;
     enabled = TRUE;
-    _disabledTextColor = [UIColor blackColor];
+    _disabledTextColor = [UIColor labelColor];
 	
 	autoResignFirstResponder = TRUE;
 	cellEditingStyle = UITableViewCellEditingStyleDelete;
@@ -2478,7 +2478,7 @@
 	controlMargin = kDefaultControlMargin;
     
     if(!self.controlCreatedInIB)
-        self.textLabel.font = [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
+        self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
 }
 
 //overrides superclass
@@ -2713,8 +2713,8 @@
 	
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
-    label.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    label.font = [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
+    label.textColor = [UIColor labelColor]; //dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
     label.backgroundColor = self.backgroundColor;
     self.control = label;
 }
@@ -2843,8 +2843,8 @@
     maximumHeight = kMaxTextViewHeight;
 	
     UITextView *textView = [[UITextView alloc] init];
-    textView.font = [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
-    textView.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
+    textView.textColor = [UIColor secondaryLabelColor]; //dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
     self.control = textView;
 }	
 
@@ -3192,8 +3192,8 @@
     UITextField *textField = [[UITextField alloc] init];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    textField.font = [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
+    textField.textColor =  [UIColor secondaryLabelColor]; // dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
     self.control = textField;
 }
 
