@@ -5013,7 +5013,7 @@
                 self.selectable = FALSE;
                 if(!_activityIndicator)
                 {
-                    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
                     _activityIndicator.frame = self.contentView.bounds;
                     [self.contentView addSubview:_activityIndicator];
                 }
