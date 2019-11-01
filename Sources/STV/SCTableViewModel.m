@@ -3558,7 +3558,12 @@
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-		cell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            cell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -3599,7 +3604,12 @@
 			if(boundToNSString)
 				self.boundValue = [self buildStringFromSelectedItemsIndexes];
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-		selectedCell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            selectedCell.textLabel.textColor = [UIColor blackColor];
+        }
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 		return;
@@ -3621,7 +3631,12 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-		oldCell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            selectedCell.textLabel.textColor = [UIColor blackColor];
+        }
 	}
 	
 	//check selected cell
@@ -3701,6 +3716,7 @@
 
 
 
+#pragma mark - SCObjectSelectionModel
 
 
 
@@ -3916,7 +3932,12 @@
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-		cell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            cell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -3963,7 +3984,12 @@
 		[self selectedItemsIndexesModified];
         
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-		selectedCell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            selectedCell.textLabel.textColor = [UIColor blackColor];
+        }
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
         
@@ -3986,7 +4012,12 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-		oldCell.textLabel.textColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            selectedCell.textLabel.textColor = [UIColor blackColor];
+        }
 	}
 	
 	//check selected cell

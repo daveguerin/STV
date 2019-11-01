@@ -25,7 +25,12 @@
 {
     [super performInitialization];
     
-    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+    if (@available(iOS 13.0, *)) {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
+    }
+    else {
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }
     [self.contentView addSubview:_activityIndicator];
     
     _autoFetchItems = FALSE;

@@ -142,7 +142,12 @@
         _height = UITableViewAutomaticDimension;
 	selectable = TRUE;
     enabled = TRUE;
-    _disabledTextColor = [UIColor labelColor];
+    if (@available(iOS 13.0, *)) {
+        _disabledTextColor = [UIColor labelColor]; // dgApps
+    }
+    else {
+        _disabledTextColor = [UIColor blackColor];
+    }
 	
 	autoResignFirstResponder = TRUE;
 	cellEditingStyle = UITableViewCellEditingStyleDelete;
@@ -2709,7 +2714,12 @@
 	
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
-    label.textColor = [UIColor labelColor]; //dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    if (@available(iOS 13.0, *)) {
+        label.textColor = [UIColor labelColor];  //dgApps
+    }
+    else {
+        label.textColor =[UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    }
     label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
     label.backgroundColor = self.backgroundColor;
     self.control = label;
@@ -2841,7 +2851,12 @@
 	
     UITextView *textView = [[UITextView alloc] init];
     textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
-    textView.textColor = [UIColor secondaryLabelColor]; //dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    if (@available(iOS 13.0, *)) {
+        textView.textColor = [UIColor secondaryLabelColor]; // dgApps
+    }
+    else {
+        textView.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    }
     self.control = textView;
 }	
 
@@ -3189,7 +3204,12 @@
     UITextField *textField = [[UITextField alloc] init];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.textColor =  [UIColor secondaryLabelColor]; // dgApps [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    if (@available(iOS 13.0, *)) {
+        textField.textColor =  [UIColor secondaryLabelColor];  // dgApps
+    }
+    else {
+        textField.textColor =  [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    }
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
     self.control = textField;
 }
@@ -5017,7 +5037,12 @@
                 self.selectable = FALSE;
                 if(!_activityIndicator)
                 {
-                    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+                    if (@available(iOS 13.0, *)) {
+                        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
+                    }
+                    else {
+                        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    }
                     _activityIndicator.frame = self.contentView.bounds;
                     [self.contentView addSubview:_activityIndicator];
                 }

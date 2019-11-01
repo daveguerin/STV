@@ -3654,7 +3654,12 @@
 		_selectedItemsIndexes = [[NSMutableSet alloc] init];
         
         _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-        _deselectedCellTextColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            _deselectedCellTextColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+           _deselectedCellTextColor =  [UIColor blackColor];
+        }
 	}
 	
 	return self;
@@ -4087,7 +4092,12 @@
         selectedItemsIndexes = [[NSMutableSet alloc] init];
         
         _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-        _deselectedCellTextColor = [UIColor labelColor];
+        if (@available(iOS 13.0, *)) {
+            _deselectedCellTextColor = [UIColor labelColor]; // dgApps
+        }
+        else {
+            _deselectedCellTextColor = [UIColor blackColor];
+        }
         
         intermediateEntityDefinition = nil;
 	}
