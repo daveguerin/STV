@@ -25,12 +25,9 @@ Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 The Docset Feed is for Xcode, Dash, and other documentation browsers.
 
 ## TODO
-* Update all UIColor to use system colours so that Dark Mode is fully supported.
-* Update all UIFont to use the built in UIFontTextStyle so that Dynamic Type is fully supported.
-* Use autolayout for all STV cells?
-* Update the docset feed.
+* Update the documentation and the docset feed.
 * Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13?
-* Add an example or two? Seperate repository?
+* Add an example, or two? Seperate repository?
 
 ## CHANGELOG
 
@@ -53,6 +50,9 @@ The Docset Feed is for Xcode, Dash, and other documentation browsers.
 * Added STVCoreData classes to the main package. STViCloud, STVParse, and STVWebServices are not part of this package.
 * Added license files in TXT and PLIST format. The PLIST can be used in a Settings bundle.
 * Bumped the version to 6.0.0.
+* Now using iOS 13 labelColor with a fallback for earlier iOS.
+* Now using UIFontTextStyleBody as the main font.
+
 
 ## VERSION HISTORY
 * STV 6.0.0 Xxx XX 2019 - First [open source Swift Package release](https://github.com/daveguerin/STV) by [dgApps](http://dgapps.ie/).  
