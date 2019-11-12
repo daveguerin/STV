@@ -71,6 +71,8 @@
 @synthesize enabled;
 @synthesize detailCellsImageViews;
 @synthesize badgeView;
+@synthesize leadingSwipePerformsFirstActionWithFullSwipe;
+@synthesize trailingSwipePerformsFirstActionWithFullSwipe;
 @synthesize autoDeselect;
 @synthesize autoResignFirstResponder;
 @synthesize cellEditingStyle;
@@ -162,6 +164,9 @@
     // Setup the badgeView
 	badgeView = [[SCBadgeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
 	[self.contentView addSubview:badgeView];
+
+    leadingSwipePerformsFirstActionWithFullSwipe = YES;
+    trailingSwipePerformsFirstActionWithFullSwipe = YES;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder

@@ -49,9 +49,12 @@
     BOOL enabled;
     BOOL autoDeselect;
 	BOOL autoResignFirstResponder;
-	UITableViewCellEditingStyle cellEditingStyle;
-	SCBadgeView *badgeView;
-    	
+    UITableViewCellEditingStyle cellEditingStyle;
+    SCBadgeView *badgeView;
+
+    BOOL leadingSwipePerformsFirstActionWithFullSwipe;
+    BOOL trailingSwipePerformsFirstActionWithFullSwipe;
+
 	NSArray *detailCellsImageViews;
 		
 	BOOL valueRequired;
@@ -167,6 +170,21 @@
  */
 @property (nonatomic, readonly) SCBadgeView *badgeView;
 
+/**
+ When this property is set to YES, a full leading swipe in the cell row performs the first UIContextualAction listed in the actions property. In a left-to-right language environment that is when the user swipes from left to right. The default value of this property is YES.
+
+ @warning Only available in iOS 11 and later.
+*/
+@property (nonatomic, readwrite) BOOL leadingSwipePerformsFirstActionWithFullSwipe;
+
+/**
+When this property is set to YES, a full trailing swipe in the cell row performs the first UIContextualAction listed in the actions property.  In a left-to-right language environment that is when the user swipes from right to left.  The default value of this property is YES.
+
+ @warning Only available in iOS 11 and later.
+*/
+@property (nonatomic, readwrite) BOOL trailingSwipePerformsFirstActionWithFullSwipe;
+
+
 /** Set this property to an array of UIImageView objects to be set to each of the cell's detail cells. 
  *	@note Only applicable to cells with detail views. 
  */
@@ -271,13 +289,13 @@
 /** Property used internally by framework to determine if cell is a custom cell. */
 @property (nonatomic, readwrite) BOOL customCell;
 
-/* For internal use only. */
+/** For internal use only. */
 @property (nonatomic) BOOL cellCreatedInIB;
 
-/* For internal use only. */
+/** For internal use only. */
 @property (nonatomic, copy) NSString *ibDetailViewControllerIdentifier;
 
-/* For internal use only. */
+/** For internal use only. */
 @property (nonatomic, readonly) BOOL generatesDetailView;
 
 /** Create STV cells from regular UITableViewCells **/
