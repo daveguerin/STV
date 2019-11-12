@@ -355,7 +355,7 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 
 
 // dgApps...
-/** Action gets called to provide custom swip action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
+/** Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
 
  Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
 
@@ -367,26 +367,26 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 
  Example:
 
- cellActions.leadingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
-     UIContextualAction *inAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"In" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-         // code
-         completionHandler(YES);
-     }];
+         cellActions.leadingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
+             UIContextualAction *inAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"In" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+                 // code
+                 completionHandler(YES);
+             }];
 
 
-     UIContextualAction *outAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Out" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-         // code
-         completionHandler(YES);
-     }];
+             UIContextualAction *outAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Out" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+                 // code
+                 completionHandler(YES);
+             }];
 
-     inAction.backgroundColor = [UIColor systemGreenColor];
-     outAction.backgroundColor = [UIColor systemYellowColor];
+             inAction.backgroundColor = [UIColor systemGreenColor];
+             outAction.backgroundColor = [UIColor systemYellowColor];
 
-     UISwipeActionsConfiguration *leadingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[inAction, outAction]];
-     leadingSwipeActions.performsFirstActionWithFullSwipe = NO;
+             UISwipeActionsConfiguration *leadingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[inAction, outAction]];
+             leadingSwipeActions.performsFirstActionWithFullSwipe = NO;
 
-     return leadingSwipeActions;
- };
+             return leadingSwipeActions;
+         };
 
  */
 
@@ -394,7 +394,7 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 // ...dgapps
 
 // dgApps...
-/** Action gets called to provide custom swip action buttons that appear when the user swipes the cell horizontally from it's trailing edge. For example, in a left-to-right language environment, they are displayed on the right side of the row when the user swipes from right to left.
+/** Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's trailing edge. For example, in a left-to-right language environment, they are displayed on the right side of the row when the user swipes from right to left.
 
 Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
 
@@ -404,25 +404,27 @@ Return nil if you want the cell to display the default set of actions. Note it's
 
 @warning Only available in iOS 11 and later.
 
- cellActions.trailingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
-     UIContextualAction *archiveAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Archive" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-         // code
-         completionHandler(YES);
-     }];
+Example:
 
-     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-         // code
-         completionHandler(YES);
-     }];
+     cellActions.trailingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
+         UIContextualAction *archiveAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Archive" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+             // code
+             completionHandler(YES);
+         }];
 
-     archiveAction.backgroundColor = [UIColor systemOrangeColor];
-     deleteAction.backgroundColor = [UIColor systemRedColor];
+         UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+             // code
+             completionHandler(YES);
+         }];
 
-     UISwipeActionsConfiguration *trailingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[archiveAction, deleteAction]];
-     trailingSwipeActions.performsFirstActionWithFullSwipe = NO;
+         archiveAction.backgroundColor = [UIColor systemOrangeColor];
+         deleteAction.backgroundColor = [UIColor systemRedColor];
 
-     return trailingSwipeActions;
- };
+         UISwipeActionsConfiguration *trailingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[archiveAction, deleteAction]];
+         trailingSwipeActions.performsFirstActionWithFullSwipe = NO;
+
+         return trailingSwipeActions;
+     };
  */
 
 @property (nonatomic, copy) SCCellTrailingSwipeActionsAction_Block trailingSwipeActions;
