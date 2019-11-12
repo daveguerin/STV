@@ -1,4 +1,4 @@
-output: Documentation
+output: docs
 clean: true
 objc: true
 umbrella_header: ./Sources/STV/include/SensibleTableView.h
