@@ -382,10 +382,9 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
              inAction.backgroundColor = [UIColor systemGreenColor];
              outAction.backgroundColor = [UIColor systemYellowColor];
 
-             UISwipeActionsConfiguration *leadingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[inAction, outAction]];
-             leadingSwipeActions.performsFirstActionWithFullSwipe = NO;
+             cell.leadingSwipePerformsFirstActionWithFullSwipe = NO;
 
-             return leadingSwipeActions;
+             return @[inAction, outAction];
          };
 
  */
@@ -420,10 +419,9 @@ Example:
          archiveAction.backgroundColor = [UIColor systemOrangeColor];
          deleteAction.backgroundColor = [UIColor systemRedColor];
 
-         UISwipeActionsConfiguration *trailingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[archiveAction, deleteAction]];
-         trailingSwipeActions.performsFirstActionWithFullSwipe = NO;
+         cell.trailingSwipePerformsFirstActionWithFullSwipe = NO;
 
-         return trailingSwipeActions;
+         return @[archiveAction, deleteAction];
      };
  */
 
