@@ -25,7 +25,12 @@
 	UIBarButtonItem *_doneButton;
 	BOOL _cancelButtonTapped;
 	BOOL _doneButtonTapped;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     UIPopoverController *_popoverController;
+#pragma clang diagnostic pop
+
     SCViewControllerActions *_actions;
     SCViewControllerState _state;
     BOOL _hasFocus;
@@ -155,12 +160,16 @@
         [(SCArrayOfItemsModel *)_tableViewModel setAddButtonItem:self.addButton];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 - (void)setPopoverController:(UIPopoverController *)popover
 {
     _popoverController = popover;
     
     _popoverController.delegate = self;
 }
+#pragma clang diagnostic pop
 
 
 - (void)loadView
@@ -814,6 +823,9 @@ dgApps
 #pragma mark -
 #pragma mark UIPopoverControllerDelegate methods
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
     BOOL shouldDismiss = TRUE;
@@ -832,6 +844,8 @@ dgApps
 {
     // handle dismissal
 }
+
+#pragma clang diagnostic pop
 
 @end
 

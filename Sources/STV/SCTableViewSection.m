@@ -2401,6 +2401,9 @@
                 break;
             case SCPresentationModePopover:
             {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
                 UIPopoverController *popoverController  = [[UIPopoverController alloc] initWithContentViewController:detailNavController];
                 if([detailViewController isKindOfClass:[SCTableViewController class]])
                 {
@@ -2442,7 +2445,8 @@
                 }
             }
                 break;
-                
+#pragma clang diagnostic pop
+
             default:
                 // Do nothing
                 break;

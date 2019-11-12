@@ -30,7 +30,12 @@
 	UIBarButtonItem *_doneButton;
 	BOOL _cancelButtonTapped;
 	BOOL _doneButtonTapped;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     UIPopoverController *_popoverController;
+#pragma clang diagnostic pop
+
     SCTableViewControllerActions *_actions;
     
     SCViewControllerState _state;
@@ -227,12 +232,16 @@
     _tableViewModel = model;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 - (void)setPopoverController:(UIPopoverController *)popover
 {
     _popoverController = popover;
     
     _popoverController.delegate = self;
 }
+#pragma clang diagnostic pop
 
 - (void)setAutoDisableNavigationButtonsUntilViewAppears:(BOOL)autoDisableNavigationButtonsUntilViewAppears
 {
@@ -1525,6 +1534,9 @@
 #pragma mark -
 #pragma mark UIPopoverControllerDelegate methods
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
     BOOL shouldDismiss = TRUE;
@@ -1543,6 +1555,9 @@
 {
     // handle dismissal
 }
+
+#pragma clang diagnostic pop
+
 
 @end
 

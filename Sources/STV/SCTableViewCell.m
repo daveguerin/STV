@@ -1071,6 +1071,9 @@
                 break;
             case SCPresentationModePopover:
             {
+                
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
                 UIPopoverController *popoverController  = [[UIPopoverController alloc] initWithContentViewController:self.ownerTableViewModel.viewController];
                 if([detailViewController isKindOfClass:[SCTableViewController class]])
                 {
@@ -1084,6 +1087,7 @@
                 detailViewController.modalInPopover = YES;
                 
                 [popoverController presentPopoverFromRect:cell.bounds inView:cell permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+#pragma clang diagnostic pop
             }
                 break;
                 
@@ -4666,9 +4670,14 @@
 {	
 	if([SCUtilities is_iPad])
 	{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 		popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
 		[popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view
 			   permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+#pragma clang diagnostic pop
+
 	}
 	else
 	{
