@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCSelectionAttributes Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCSelectionAttributes" class="dashAnchor"></a>
+    <a title="SCSelectionAttributes Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCSelectionAttributes Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCSelectionAttributes</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCSelectionAttributes</span> <span class="p">:</span> <span class="nc"><a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a></span> <span class="p">{</span>
+  <span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n">selectionItemsStore</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n">selectionItemsFetchOptions</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowMultipleSelection</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowNoSelection</span><span class="p">;</span>
+  <span class="n">NSUInteger</span> <span class="n">maximumSelections</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">autoDismissDetailView</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">hideDetailViewNavigationBar</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowAddingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowDeletingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowMovingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowEditingItems</span><span class="p">;</span>
+  <span class="n">NSObject</span> <span class="o">*</span><span class="n">placeholderuiElement</span><span class="p">;</span>
+  <span class="n">NSObject</span> <span class="o">*</span><span class="n">addNewObjectuiElement</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>This class is used to extend the definition of an &lsquo;SCPropertyAttributes&rsquo; instance of type 
+SCPropertyTypeSelection, thus allowing further customization of the generated control by the user.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@selectionItemsStore"></a>
+                    <a name="//apple_ref/objc/Ivar/selectionItemsStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@selectionItemsStore">selectionItemsStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n">selectionItemsStore</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@selectionItemsFetchOptions"></a>
+                    <a name="//apple_ref/objc/Ivar/selectionItemsFetchOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@selectionItemsFetchOptions">selectionItemsFetchOptions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n">selectionItemsFetchOptions</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowMultipleSelection"></a>
+                    <a name="//apple_ref/objc/Ivar/allowMultipleSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowMultipleSelection">allowMultipleSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowMultipleSelection</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowNoSelection"></a>
+                    <a name="//apple_ref/objc/Ivar/allowNoSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowNoSelection">allowNoSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowNoSelection</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@maximumSelections"></a>
+                    <a name="//apple_ref/objc/Ivar/maximumSelections" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@maximumSelections">maximumSelections</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSUInteger</span> <span class="n">maximumSelections</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@autoDismissDetailView"></a>
+                    <a name="//apple_ref/objc/Ivar/autoDismissDetailView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@autoDismissDetailView">autoDismissDetailView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">autoDismissDetailView</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@hideDetailViewNavigationBar"></a>
+                    <a name="//apple_ref/objc/Ivar/hideDetailViewNavigationBar" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@hideDetailViewNavigationBar">hideDetailViewNavigationBar</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">hideDetailViewNavigationBar</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowAddingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowAddingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowAddingItems">allowAddingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowAddingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowDeletingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowDeletingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowDeletingItems">allowDeletingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowDeletingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowMovingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowMovingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowMovingItems">allowMovingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowMovingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@allowEditingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowEditingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@allowEditingItems">allowEditingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowEditingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@placeholderuiElement"></a>
+                    <a name="//apple_ref/objc/Ivar/placeholderuiElement" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@placeholderuiElement">placeholderuiElement</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSObject</span> <span class="o">*</span><span class="n">placeholderuiElement</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes@addNewObjectuiElement"></a>
+                    <a name="//apple_ref/objc/Ivar/addNewObjectuiElement" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes@addNewObjectuiElement">addNewObjectuiElement</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSObject</span> <span class="o">*</span><span class="n">addNewObjectuiElement</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creation%20and%20Initialization"></a>
+                <a name="//apple_ref/objc/Section/Creation and Initialization" class="dashAnchor"></a>
+                <a href="#/Creation%20and%20Initialization">
+                  <h3 class="section-name">Creation and Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(cm)attributesWithItems:allowMultipleSelection:allowNoSelection:"></a>
+                    <a name="//apple_ref/objc/Method/+attributesWithItems:allowMultipleSelection:allowNoSelection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(cm)attributesWithItems:allowMultipleSelection:allowNoSelection:">+attributesWithItems:allowMultipleSelection:allowNoSelection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized &lsquo;SCSelectionAttributes&rsquo;.
+ *</p>
+
+<ul>
+<li>- parameter: _items The items of the generated selection control. Set to nil to ignore.</li>
+<li>- parameter: allowMultipleSel Determines if the generated selection control allows multiple selection.</li>
+<li>- parameter: allowNoSel Determines if the generated selection control allows no selection.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">attributesWithItems</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">_items</span>
+             <span class="nf">allowMultipleSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowMultipleSel</span>
+                   <span class="nf">allowNoSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowNoSel</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L462-L463">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(cm)attributesWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:"></a>
+                    <a name="//apple_ref/objc/Method/+attributesWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(cm)attributesWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:">+attributesWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized &lsquo;SCSelectionAttributes&rsquo;.
+ *</p>
+
+<ul>
+<li>- parameter: _items The items of the generated selection control. Set to nil to ignore.</li>
+<li>- parameter: allowMultipleSel Determines if the generated selection control allows multiple selection.</li>
+<li>- parameter: allowNoSel Determines if the generated selection control allows no selection.</li>
+<li>- parameter: autoDismiss Set to TRUE to automatically dismiss the selection detail view when an item is selected.</li>
+<li>- parameter: hideNavBar Set to TRUE to hide the detail view&rsquo;s navigation bar. - note: Only applicable if autoDismiss is TRUE.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">attributesWithItems</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">_items</span>
+             <span class="nf">allowMultipleSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowMultipleSel</span>
+                   <span class="nf">allowNoSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowNoSel</span>
+              <span class="nf">autoDismissDetailView</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoDismiss</span>
+        <span class="nf">hideDetailViewNavigationBar</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">hideNavBar</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L473-L475">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(im)initWithItems:allowMultipleSelection:allowNoSelection:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithItems:allowMultipleSelection:allowNoSelection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(im)initWithItems:allowMultipleSelection:allowNoSelection:">-initWithItems:allowMultipleSelection:allowNoSelection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized &lsquo;SCSelectionAttributes&rsquo;.
+ *</p>
+
+<ul>
+<li>- parameter: _items The items of the generated selection control. Set to nil to ignore.</li>
+<li>- parameter: allowMultipleSel Determines if the generated selection control allows multiple selection.</li>
+<li>- parameter: allowNoSel Determines if the generated selection control allows no selection.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithItems</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">_items</span>
+       <span class="nf">allowMultipleSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowMultipleSel</span>
+             <span class="nf">allowNoSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowNoSel</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes(py)items">items</a></span> <span class="nv">_items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowMultipleSelection">allowMultipleSelection</a></span> <span class="nv">allowMultipleSel</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowNoSelection">allowNoSelection</a></span> <span class="nv">allowNoSel</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L483-L484">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(im)initWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(im)initWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:">-initWithItems:allowMultipleSelection:allowNoSelection:autoDismissDetailView:hideDetailViewNavigationBar:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized &lsquo;SCSelectionAttributes&rsquo;.
+ *</p>
+
+<ul>
+<li>- parameter: _items The items of the generated selection control. Set to nil to ignore.</li>
+<li>- parameter: allowMultipleSel Determines if the generated selection control allows multiple selection.</li>
+<li>- parameter: allowNoSel Determines if the generated selection control allows no selection.</li>
+<li>- parameter: autoDismiss Set to TRUE to automatically dismiss the selection detail view when an item is selected.</li>
+<li>- parameter: hideNavBar Set to TRUE to hide the detail view&rsquo;s navigation bar. - note: Only applicable if autoDismiss is TRUE.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithItems</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">_items</span>
+         <span class="nf">allowMultipleSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowMultipleSel</span>
+               <span class="nf">allowNoSelection</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">allowNoSel</span>
+          <span class="nf">autoDismissDetailView</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoDismiss</span>
+    <span class="nf">hideDetailViewNavigationBar</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">hideNavBar</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes(py)items">items</a></span> <span class="nv">_items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowMultipleSelection">allowMultipleSelection</a></span> <span class="nv">allowMultipleSel</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowNoSelection">allowNoSelection</a></span> <span class="nv">allowNoSel</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@autoDismissDetailView">autoDismissDetailView</a></span> <span class="nv">autoDismiss</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@hideDetailViewNavigationBar">hideDetailViewNavigationBar</a></span> <span class="nv">hideNavBar</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L494-L496">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)selectionItemsStore"></a>
+                    <a name="//apple_ref/objc/Property/selectionItemsStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)selectionItemsStore">selectionItemsStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The data store for the selection items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@selectionItemsStore">selectionItemsStore</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">selectionItemsStore</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataStore.html">SCDataStore</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L500">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)selectionItemsFetchOptions"></a>
+                    <a name="//apple_ref/objc/Property/selectionItemsFetchOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)selectionItemsFetchOptions">selectionItemsFetchOptions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The fetch options for the selection items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@selectionItemsFetchOptions">selectionItemsFetchOptions</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">selectionItemsFetchOptions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L503">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)items"></a>
+                    <a name="//apple_ref/objc/Property/items" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)items">items</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The items stored in selectionItemsStore.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">items</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L506">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowMultipleSelection"></a>
+                    <a name="//apple_ref/objc/Property/allowMultipleSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowMultipleSelection">allowMultipleSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated selection control allows multiple selection.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowMultipleSelection">allowMultipleSelection</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowMultipleSelection</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L509">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowNoSelection"></a>
+                    <a name="//apple_ref/objc/Property/allowNoSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowNoSelection">allowNoSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated selection control allows no selection.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowNoSelection">allowNoSelection</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowNoSelection</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L512">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)maximumSelections"></a>
+                    <a name="//apple_ref/objc/Property/maximumSelections" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)maximumSelections">maximumSelections</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.</p>
+
+<ul>
+<li>- note: Only applicable when allowMultipleSelection is TRUE.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSUInteger</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@maximumSelections">maximumSelections</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">maximumSelections</span><span class="p">:</span> <span class="kt">UInt</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L516">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)autoDismissDetailView"></a>
+                    <a name="//apple_ref/objc/Property/autoDismissDetailView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)autoDismissDetailView">autoDismissDetailView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set to TRUE to automatically dismiss the selection detail view when an item is selected.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@autoDismissDetailView">autoDismissDetailView</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">autoDismissDetailView</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L519">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)hideDetailViewNavigationBar"></a>
+                    <a name="//apple_ref/objc/Property/hideDetailViewNavigationBar" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)hideDetailViewNavigationBar">hideDetailViewNavigationBar</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set to TRUE to hide the detail view&rsquo;s navigation bar. - note: Only applicable if autoDismissDetailView is TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@hideDetailViewNavigationBar">hideDetailViewNavigationBar</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">hideDetailViewNavigationBar</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L522">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowAddingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowAddingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowAddingItems">allowAddingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated control allows adding new items. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowAddingItems">allowAddingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowAddingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L525">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowDeletingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowDeletingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowDeletingItems">allowDeletingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated control allows deleting existing items. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowDeletingItems">allowDeletingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowDeletingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L528">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowMovingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowMovingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowMovingItems">allowMovingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated control allows moving items. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowMovingItems">allowMovingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowMovingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L531">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)allowEditingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowEditingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)allowEditingItems">allowEditingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines if the generated control allows editing items. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@allowEditingItems">allowEditingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowEditingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L534">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)placeholderuiElement"></a>
+                    <a name="//apple_ref/objc/Property/placeholderuiElement" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)placeholderuiElement">placeholderuiElement</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The user interface element that is used to add new objects when selected. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSObject</span> <span class="o">*</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@placeholderuiElement">placeholderuiElement</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">placeholderuiElement</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L537">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCSelectionAttributes(py)addNewObjectuiElement"></a>
+                    <a name="//apple_ref/objc/Property/addNewObjectuiElement" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCSelectionAttributes(py)addNewObjectuiElement">addNewObjectuiElement</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The uiElement that is displayed when no items are available to display. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSObject</span> <span class="o">*</span><span class="n"><a href="../Classes/SCSelectionAttributes.html#/c:objc(cs)SCSelectionAttributes@addNewObjectuiElement">addNewObjectuiElement</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">addNewObjectuiElement</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCPropertyAttributes.h#L540">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

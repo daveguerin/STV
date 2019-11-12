@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCDataDefinition Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCDataDefinition" class="dashAnchor"></a>
+    <a title="SCDataDefinition Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCDataDefinition Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCDataDefinition</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCDataDefinition</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n"><a href="../Protocols/SCibInitialization.html">SCibInitialization</a></span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">propertyDefinitions</span><span class="p">;</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">keyPropertyName</span><span class="p">;</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">titlePropertyName</span><span class="p">;</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">titlePropertyNameDelimiter</span><span class="p">;</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">descriptionPropertyName</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a></span> <span class="o">*</span><span class="n">defaultPropertyGroup</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span> <span class="o">*</span><span class="n">propertyGroups</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">requireEditingModeToEditPropertyValues</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>This class functions as a means to further extend the definition of user-defined data structures, such as classes and Core Data entities. This enables the framework to automatically generate user interfaces that accurately resemble these structures.</p>
+
+<p>&lsquo;SCDataDefinition&rsquo; mainly consists of one or more property definitions of type SCPropertyDefinition. The property definitions can be placed in one or more property groups that will control how the properties are grouped when the user interface is generated. If no property groups are assigned, all property definitions are placed in a single defaultPropertyGroup.</p>
+
+<p>See also: SCClassDefinition, SCDictionaryDefinition, SCEntityDefinition, SCWebServiceDefinition</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    This is an abstract base class and should never be directly instantiated.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@propertyDefinitions"></a>
+                    <a name="//apple_ref/objc/Ivar/propertyDefinitions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@propertyDefinitions">propertyDefinitions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">propertyDefinitions</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@keyPropertyName"></a>
+                    <a name="//apple_ref/objc/Ivar/keyPropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@keyPropertyName">keyPropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSString</span> <span class="o">*</span><span class="n">keyPropertyName</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@titlePropertyName"></a>
+                    <a name="//apple_ref/objc/Ivar/titlePropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@titlePropertyName">titlePropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSString</span> <span class="o">*</span><span class="n">titlePropertyName</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@titlePropertyNameDelimiter"></a>
+                    <a name="//apple_ref/objc/Ivar/titlePropertyNameDelimiter" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@titlePropertyNameDelimiter">titlePropertyNameDelimiter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSString</span> <span class="o">*</span><span class="n">titlePropertyNameDelimiter</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@descriptionPropertyName"></a>
+                    <a name="//apple_ref/objc/Ivar/descriptionPropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@descriptionPropertyName">descriptionPropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSString</span> <span class="o">*</span><span class="n">descriptionPropertyName</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@defaultPropertyGroup"></a>
+                    <a name="//apple_ref/objc/Ivar/defaultPropertyGroup" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@defaultPropertyGroup">defaultPropertyGroup</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a></span> <span class="o">*</span><span class="n">defaultPropertyGroup</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@propertyGroups"></a>
+                    <a name="//apple_ref/objc/Ivar/propertyGroups" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@propertyGroups">propertyGroups</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span> <span class="o">*</span><span class="n">propertyGroups</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition@requireEditingModeToEditPropertyValues"></a>
+                    <a name="//apple_ref/objc/Ivar/requireEditingModeToEditPropertyValues" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition@requireEditingModeToEditPropertyValues">requireEditingModeToEditPropertyValues</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">requireEditingModeToEditPropertyValues</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuration"></a>
+                <a name="//apple_ref/objc/Section/Configuration" class="dashAnchor"></a>
+                <a href="#/Configuration">
+                  <h3 class="section-name">Configuration</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)requireEditingModeToEditPropertyValues"></a>
+                    <a name="//apple_ref/objc/Property/requireEditingModeToEditPropertyValues" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)requireEditingModeToEditPropertyValues">requireEditingModeToEditPropertyValues</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When set to TRUE, the generated user interface elements are required to be placed in &lsquo;Editing Mode&rsquo; before the user can modify the generated property controls&rsquo; values. When not in Editing Mode, all the generated property controls will be put in a read-only state. If the UI was automatically generated by the framework, an &lsquo;Edit&rsquo; button will also be automatically added to the navigation bar. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@requireEditingModeToEditPropertyValues">requireEditingModeToEditPropertyValues</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">requireEditingModeToEditPropertyValues</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L50">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)keyPropertyName"></a>
+                    <a name="//apple_ref/objc/Property/keyPropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)keyPropertyName">keyPropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The property name that is used to sort the data whenever sorting is requested.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@keyPropertyName">keyPropertyName</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">keyPropertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L53">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)titlePropertyName"></a>
+                    <a name="//apple_ref/objc/Property/titlePropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)titlePropertyName">titlePropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the title property for the data structure. </p>
+
+<p>Title properties are used in user
+ interface elements to display title information based on the value of the property
+ named here. By default, &lsquo;SCDataDefinition&rsquo; sets this property to the name of the 
+ first property. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    To have the title set to more than one property value,
+separate the property names by a semi-colon (e.g.: @<q>firstName;lastName</q>). When displayed, the
+titles will be separated by the value of the titlePropertyNameDelimiter property.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@titlePropertyName">titlePropertyName</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">titlePropertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L65">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)titlePropertyNameDelimiter"></a>
+                    <a name="//apple_ref/objc/Property/titlePropertyNameDelimiter" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)titlePropertyNameDelimiter">titlePropertyNameDelimiter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The delimiter used to separate the titles specified in titlePropertyName. Default: @&ldquo; &rdquo;.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@titlePropertyNameDelimiter">titlePropertyNameDelimiter</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">titlePropertyNameDelimiter</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L68">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)descriptionPropertyName"></a>
+                    <a name="//apple_ref/objc/Property/descriptionPropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)descriptionPropertyName">descriptionPropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the description property for the data structure. </p>
+
+<p>Description properties are used in user
+ interface elements to display description information based on the value of the property
+ named here.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@descriptionPropertyName">descriptionPropertyName</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">descriptionPropertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L76">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)cellActions"></a>
+                    <a name="//apple_ref/objc/Property/cellActions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)cellActions">cellActions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of cell action blocks that will be assigned to all cells generated by the definition&rsquo;s properties.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCCellActions.html">SCCellActions</a></span> <span class="o">*</span><span class="n">cellActions</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">cellActions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCCellActions.html">SCCellActions</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L79">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Managing%20Property%20Definitions"></a>
+                <a name="//apple_ref/objc/Section/Managing Property Definitions" class="dashAnchor"></a>
+                <a href="#/Managing%20Property%20Definitions">
+                  <h3 class="section-name">Managing Property Definitions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)propertyDefinitionCount"></a>
+                    <a name="//apple_ref/objc/Property/propertyDefinitionCount" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)propertyDefinitionCount">propertyDefinitionCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of property definitions.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSUInteger</span> <span class="n">propertyDefinitionCount</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">propertyDefinitionCount</span><span class="p">:</span> <span class="kt">UInt</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L86">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)addPropertyDefinitionWithName:title:type:"></a>
+                    <a name="//apple_ref/objc/Method/-addPropertyDefinitionWithName:title:type:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)addPropertyDefinitionWithName:title:type:">-addPropertyDefinitionWithName:title:type:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Methods adds a new property definition.</p>
+
+<ul>
+<li>- parameter: propertyName The name of the property.</li>
+<li>- parameter: propertyTitle The title of the property. If no value is provided, the method automatically generates a user friendly name for the property.</li>
+<li>- parameter: propertyType The property type.</li>
+<li>- returns: Returns TRUE if adding the definition was successful. The main reason for addition failure is if the property name does not match an existing property in the data structure.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">addPropertyDefinitionWithName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span>
+                                <span class="nf">title</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyTitle</span>
+                                 <span class="nf">type</span><span class="p">:(</span><span class="n"><a href="../Enums/SCPropertyType.html">SCPropertyType</a></span><span class="p">)</span><span class="nv">propertyType</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addPropertyDefinition</span><span class="p">(</span><span class="n">withName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">title</span> <span class="nv">propertyTitle</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">type</span> <span class="nv">propertyType</span><span class="p">:</span> <span class="kt"><a href="../Enums/SCPropertyType.html">SCPropertyType</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L94-L96">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)addPropertyDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-addPropertyDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)addPropertyDefinition:">-addPropertyDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Methods adds a new property definition.</p>
+
+<ul>
+<li>- parameter: propertyDefinition The property definition to be added.</li>
+<li>- returns: Returns TRUE if adding the definition was successful. The main reason for addition failure is if the property name does not match an existing property in the data structure (not required if property definition is an SCCustomPropertyDefinition).</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">addPropertyDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyDefinition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="n">_</span> <span class="nv">propertyDefinition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L102">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)insertPropertyDefinition:atIndex:"></a>
+                    <a name="//apple_ref/objc/Method/-insertPropertyDefinition:atIndex:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)insertPropertyDefinition:atIndex:">-insertPropertyDefinition:atIndex:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Methods inserts a new property definition at the given index.</p>
+
+<ul>
+<li>- parameter: propertyDefinition The property definition to be added.</li>
+<li>- parameter: index The index to insert the property definition at. Must be less than propertyDefinitionCount.</li>
+<li>- returns: Returns TRUE if inserting the definition was successful. The main reason for insertion failure is if the property name does not match an existing property in the data structure (not required if property definition is an SCCustomPropertyDefinition).</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">insertPropertyDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyDefinition</span>
+                         <span class="nf">atIndex</span><span class="p">:(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">index</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">insert</span><span class="p">(</span><span class="n">_</span> <span class="nv">propertyDefinition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span><span class="o">!</span><span class="p">,</span> <span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L109-L110">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)removePropertyDefinitionAtIndex:"></a>
+                    <a name="//apple_ref/objc/Method/-removePropertyDefinitionAtIndex:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)removePropertyDefinitionAtIndex:">-removePropertyDefinitionAtIndex:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes the property definition at the given index.</p>
+
+<ul>
+<li>- parameter: index Must be less than the total number of property definitions.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">removePropertyDefinitionAtIndex</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">index</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">removePropertyDefinition</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L115">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)removePropertyDefinitionWithName:"></a>
+                    <a name="//apple_ref/objc/Method/-removePropertyDefinitionWithName:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)removePropertyDefinitionWithName:">-removePropertyDefinitionWithName:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes the property definition with the given name. </p>
+
+<ul>
+<li>- parameter: propertyName The name of the property to be removed.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">removePropertyDefinitionWithName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">removePropertyDefinition</span><span class="p">(</span><span class="n">withName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L120">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)propertyDefinitionAtIndex:"></a>
+                    <a name="//apple_ref/objc/Method/-propertyDefinitionAtIndex:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)propertyDefinitionAtIndex:">-propertyDefinitionAtIndex:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the property definition at the given index.</p>
+
+<ul>
+<li>- parameter: index Must be less than the total number of property definitions.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">propertyDefinitionAtIndex</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">index</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">propertyDefinition</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L125">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)propertyDefinitionWithName:"></a>
+                    <a name="//apple_ref/objc/Method/-propertyDefinitionWithName:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)propertyDefinitionWithName:">-propertyDefinitionWithName:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the property definition with the given name. </p>
+
+<ul>
+<li>- parameter: propertyName The name of the property whose definition to be returned.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">propertyDefinitionWithName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">propertyDefinition</span><span class="p">(</span><span class="n">withName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L130">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)indexOfPropertyDefinitionWithName:"></a>
+                    <a name="//apple_ref/objc/Method/-indexOfPropertyDefinitionWithName:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)indexOfPropertyDefinitionWithName:">-indexOfPropertyDefinitionWithName:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index for the property definition with the given name. </p>
+
+<ul>
+<li>- parameter: propertyName The name of the property whose index to be returned.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nf">indexOfPropertyDefinitionWithName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">indexOfPropertyDefinition</span><span class="p">(</span><span class="n">withName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UInt</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L135">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Managing%20Property%20Definition%20Groups"></a>
+                <a name="//apple_ref/objc/Section/Managing Property Definition Groups" class="dashAnchor"></a>
+                <a href="#/Managing%20Property%20Definition%20Groups">
+                  <h3 class="section-name">Managing Property Definition Groups</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)defaultPropertyGroup"></a>
+                    <a name="//apple_ref/objc/Property/defaultPropertyGroup" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)defaultPropertyGroup">defaultPropertyGroup</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The default property group. The framework will automatically add any properties not included in any other group to this group. If this group has any properties at the time the user interface is generated, it will be rendered as the first group, ahead of all other groups in propertyGroups. </p>
+
+<ul>
+<li>- note: The order of the properties automatically added to this group is the same as their order in the data structure definition.</li>
+<li>- warning: Since the framework automatically manages the properties included in this group, adding any properties manually will be ignored.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@defaultPropertyGroup">defaultPropertyGroup</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">defaultPropertyGroup</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L145">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)propertyGroups"></a>
+                    <a name="//apple_ref/objc/Property/propertyGroups" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)propertyGroups">propertyGroups</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An array of all property groups in the class definition. Property groups will be rendered to the user interface with the same order specified in this array.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCDataDefinition.html#/c:objc(cs)SCDataDefinition@propertyGroups">propertyGroups</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">propertyGroups</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L148">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Internal%20properties%20&amp;%20methods%20(should%20only%20be%20used%20by%20the%20framework%20or%20when%20subclassing)"></a>
+                <a name="//apple_ref/objc/Section/Internal properties &amp; methods (should only be used by the framework or when subclassing)" class="dashAnchor"></a>
+                <a href="#/Internal%20properties%20&amp;%20methods%20(should%20only%20be%20used%20by%20the%20framework%20or%20when%20subclassing)">
+                  <h3 class="section-name">Internal properties &amp; methods (should only be used by the framework or when subclassing)</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)ibUniqueID"></a>
+                    <a name="//apple_ref/objc/Property/ibUniqueID" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)ibUniqueID">ibUniqueID</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>///////////////////////////////////////////////////////////////////////////////////////</p>
+
+<p>///////////////////////////////////////////////////////////////////////////////////////</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">ibUniqueID</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">ibUniqueID</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L155">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)ibName"></a>
+                    <a name="//apple_ref/objc/Property/ibName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)ibName">ibName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">ibName</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">ibName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(py)dataStructureName"></a>
+                    <a name="//apple_ref/objc/Property/dataStructureName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(py)dataStructureName">dataStructureName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The string name of the data structure.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">dataStructureName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">dataStructureName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L159">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)initWithibDictionary:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithibDictionary:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)initWithibDictionary:">-initWithibDictionary:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Should be overridden by subclasses *</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithibDictionary</span><span class="p">:(</span><span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">ibDictionary</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">ibDictionary</span><span class="p">:</span> <span class="kt">NSMutableDictionary</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L162">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)setAllPropertiesFromibDictionary:"></a>
+                    <a name="//apple_ref/objc/Method/-setAllPropertiesFromibDictionary:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)setAllPropertiesFromibDictionary:">-setAllPropertiesFromibDictionary:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAllPropertiesFromibDictionary</span><span class="p">:(</span><span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">ibDictionary</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setAllPropertiesFromibDictionary</span><span class="p">(</span><span class="n">_</span> <span class="nv">ibDictionary</span><span class="p">:</span> <span class="kt">NSMutableDictionary</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)resolveibRelationshipsUsingDictionary:"></a>
+                    <a name="//apple_ref/objc/Method/-resolveibRelationshipsUsingDictionary:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)resolveibRelationshipsUsingDictionary:">-resolveibRelationshipsUsingDictionary:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">resolveibRelationshipsUsingDictionary</span><span class="p">:(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">dictionary</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">resolveibRelationships</span><span class="p">(</span><span class="n">using</span> <span class="nv">dictionary</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)setupDefaultConfiguration"></a>
+                    <a name="//apple_ref/objc/Method/-setupDefaultConfiguration" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)setupDefaultConfiguration">-setupDefaultConfiguration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets up default configuration for properties such as keyPropertyName and titlePropertyName.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">setupDefaultConfiguration</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setupDefaultConfiguration</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L169">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)propertyDataTypeForPropertyWithName:"></a>
+                    <a name="//apple_ref/objc/Method/-propertyDataTypeForPropertyWithName:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)propertyDataTypeForPropertyWithName:">-propertyDataTypeForPropertyWithName:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the property data type of a property given its name.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Enums/SCDataType.html">SCDataType</a></span><span class="p">)</span><span class="nf">propertyDataTypeForPropertyWithName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">propertyDataTypeForProperty</span><span class="p">(</span><span class="n">withName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/SCDataType.html">SCDataType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L172">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)isValidPropertyName:"></a>
+                    <a name="//apple_ref/objc/Method/-isValidPropertyName:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)isValidPropertyName:">-isValidPropertyName:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns TRUE if propertyName is valid. 
+ *</p>
+
+<ul>
+<li>A propertyName is valid if it exists within the defined data structure. 
+*</li>
+<li>- parameter: propertyName The name of the property whose validity is to be checked.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">isValidPropertyName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">isValidPropertyName</span><span class="p">(</span><span class="n">_</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L180">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)titleValueForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-titleValueForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)titleValueForObject:">-titleValueForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the title string value for the given object. </p>
+
+<p>The title value is determined based on the value of the titlePropertyName property. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    object must belong to the data structure.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">titleValueForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">titleValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L187">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)objectWithTitle:inObjectsArray:"></a>
+                    <a name="//apple_ref/objc/Method/-objectWithTitle:inObjectsArray:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)objectWithTitle:inObjectsArray:">-objectWithTitle:inObjectsArray:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the object with the given title in objectsArray.</p>
+
+<p>The title value is determined based on the value of the titlePropertyName property.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    All objects must belong to the data structure.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nf">objectWithTitle</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">title</span>
+               <span class="nf">inObjectsArray</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">objectsArray</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withTitle</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="k">in</span> <span class="nv">objectsArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSObject</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L194">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)descriptionValueForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-descriptionValueForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)descriptionValueForObject:">-descriptionValueForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the description string value for the given object. </p>
+
+<p>The description value is determined based on the value of the descriptionPropertyName property. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    object must be an instance of the data structure defined by the class.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">descriptionValueForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">descriptionValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L201">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)generatePropertiesFromPropertyNamesArray:propertyTitlesArray:"></a>
+                    <a name="//apple_ref/objc/Method/-generatePropertiesFromPropertyNamesArray:propertyTitlesArray:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)generatePropertiesFromPropertyNamesArray:propertyTitlesArray:">-generatePropertiesFromPropertyNamesArray:propertyTitlesArray:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates property definitions given an array of property names.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">generatePropertiesFromPropertyNamesArray</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesArray</span>
+                             <span class="nf">propertyTitlesArray</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyTitlesArray</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">generateProperties</span><span class="p">(</span><span class="n">fromPropertyNamesArray</span> <span class="nv">propertyNamesArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyTitlesArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L204">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)generatePropertiesFromPropertyNamesString:"></a>
+                    <a name="//apple_ref/objc/Method/-generatePropertiesFromPropertyNamesString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)generatePropertiesFromPropertyNamesString:">-generatePropertiesFromPropertyNamesString:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates property definitions given a string with the property names separated by semi-colons.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">generatePropertiesFromPropertyNamesString</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesString</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">generateProperties</span><span class="p">(</span><span class="n">fromPropertyNamesString</span> <span class="nv">propertyNamesString</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L207">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)generateDefaultPropertyGroupProperties"></a>
+                    <a name="//apple_ref/objc/Method/-generateDefaultPropertyGroupProperties" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)generateDefaultPropertyGroupProperties">-generateDefaultPropertyGroupProperties</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically adds the properties that should be present in defaultPropertyGroup.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">generateDefaultPropertyGroupProperties</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">generateDefaultPropertyGroupProperties</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L210">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)generateCompatibleDataStore"></a>
+                    <a name="//apple_ref/objc/Method/-generateCompatibleDataStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)generateCompatibleDataStore">-generateCompatibleDataStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates a compatible data store that can be later on used to store data instances of the definition.
+ *</p>
+
+<ul>
+<li>- note: Must be implemented by subclasses.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="p">)</span><span class="n">generateCompatibleDataStore</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">generateCompatibleDataStore</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SCDataStore.html">SCDataStore</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L216">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataDefinition(im)generateCompatibleDataFetchOptions"></a>
+                    <a name="//apple_ref/objc/Method/-generateCompatibleDataFetchOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataDefinition(im)generateCompatibleDataFetchOptions">-generateCompatibleDataFetchOptions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates a compatible data fetch options object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="p">)</span><span class="n">generateCompatibleDataFetchOptions</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">generateCompatibleDataFetchOptions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataDefinition.h#L219">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,0 +1,2894 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCDataStore Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCDataStore" class="dashAnchor"></a>
+    <a title="SCDataStore Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCDataStore Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCDataStore</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCDataStore</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="p">{</span>
+  <span class="n"><a href="../Enums/SCStoreMode.html">SCStoreMode</a></span> <span class="n">_storeMode</span><span class="p">;</span>
+  <span class="n">NSObject</span> <span class="o">*</span><span class="n">_storedData</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="n">_defaultDataDefinition</span><span class="p">;</span>
+  <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">_dataDefinitions</span><span class="p">;</span>
+  <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_uninsertedObjects</span><span class="p">;</span>
+  <span class="n">NSObject</span> <span class="o">*</span><span class="n">_boundObject</span><span class="p">;</span>
+  <span class="n">NSString</span> <span class="o">*</span><span class="n">_boundPropertyName</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="n">_boundObjectDefinition</span><span class="p">;</span>
+  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">_defaultsDictionary</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>SCDataStore is an abstract base class that can encapsulate any kind of data storage, providing means for the SC framework to communicate with this storage to fetch, add, update and remove data.</p>
+
+<p>Several SCDataStore subclasses have been implemented to enable the SC framework to communicate with Core Data, web services, iCloud storage, and even NSUserDefaults storage. Feel free to subclass SCDataStore to enable any kind of data storage not currently implemented by framework.</p>
+
+<p>Sample use:
+   // Display all the TaskEntity objects
+   SCCoreDataStore *coreDataStore = [SCCoreDataStore storeWithManagedObjectContext:context defaultEntityDefinition:TaskEntityDef];
+   SCArrayOfObjectsSection *tasksSection = [SCArrayOfObjectsSection sectionWithHeaderTitle:@<q>Task Objects</q> dataStore:coreDataStore];
+   [self.tableViewModel addSection:tasksSection];</p>
+
+<p>See also: SCArrayStore, SCCoreDataStore, SCWebServiceStore, SCiCloudStore, SCUserDefaultsStore</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>At initialization time, SCDataStore must be assigned at least one default SCDataDefinition that fully defines its stored data objects.</p>
+
+</div>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>SCDataStore is an abstract base class and should not be directly instantiated.</p>
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_storeMode"></a>
+                    <a name="//apple_ref/objc/Ivar/_storeMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_storeMode">_storeMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Enums/SCStoreMode.html">SCStoreMode</a></span> <span class="n">_storeMode</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_storedData"></a>
+                    <a name="//apple_ref/objc/Ivar/_storedData" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_storedData">_storedData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSObject</span> <span class="o">*</span><span class="n">_storedData</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_defaultDataDefinition"></a>
+                    <a name="//apple_ref/objc/Ivar/_defaultDataDefinition" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_defaultDataDefinition">_defaultDataDefinition</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="n">_defaultDataDefinition</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_dataDefinitions"></a>
+                    <a name="//apple_ref/objc/Ivar/_dataDefinitions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_dataDefinitions">_dataDefinitions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">_dataDefinitions</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_uninsertedObjects"></a>
+                    <a name="//apple_ref/objc/Ivar/_uninsertedObjects" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_uninsertedObjects">_uninsertedObjects</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_uninsertedObjects</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_boundObject"></a>
+                    <a name="//apple_ref/objc/Ivar/_boundObject" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_boundObject">_boundObject</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSObject</span> <span class="o">*</span><span class="n">_boundObject</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_boundPropertyName"></a>
+                    <a name="//apple_ref/objc/Ivar/_boundPropertyName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_boundPropertyName">_boundPropertyName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSString</span> <span class="o">*</span><span class="n">_boundPropertyName</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_boundObjectDefinition"></a>
+                    <a name="//apple_ref/objc/Ivar/_boundObjectDefinition" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_boundObjectDefinition">_boundObjectDefinition</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="n">_boundObjectDefinition</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore@_defaultsDictionary"></a>
+                    <a name="//apple_ref/objc/Ivar/_defaultsDictionary" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore@_defaultsDictionary">_defaultsDictionary</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">_defaultsDictionary</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creation%20and%20Initialization"></a>
+                <a name="//apple_ref/objc/Section/Creation and Initialization" class="dashAnchor"></a>
+                <a href="#/Creation%20and%20Initialization">
+                  <h3 class="section-name">Creation and Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(cm)storeWithDefaultDataDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/+storeWithDefaultDataDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(cm)storeWithDefaultDataDefinition:">+storeWithDefaultDataDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocated and returns an initialized SCDataStore given a default SCDataDefinition of the data stored.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">storeWithDefaultDataDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L75">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)initWithDefaultDataDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithDefaultDataDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)initWithDefaultDataDefinition:">-initWithDefaultDataDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCDataStore given a default SCDataDefinition of the data stored.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithDefaultDataDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n"><a href="../Classes/SCDataStore.html#/c:objc(cs)SCDataStore(py)defaultDataDefinition">defaultDataDefinition</a></span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L78">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuration"></a>
+                <a name="//apple_ref/objc/Section/Configuration" class="dashAnchor"></a>
+                <a href="#/Configuration">
+                  <h3 class="section-name">Configuration</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)storeMode"></a>
+                    <a name="//apple_ref/objc/Property/storeMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)storeMode">storeMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the mode that the SC framework should use to communicate with the store. Set to SCStoreModeSynchronous to have the framework communicate synchronously, otherwise set to SCStoreModeAsynchronous for asynchronous communication.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Enums/SCStoreMode.html">SCStoreMode</a></span> <span class="n">storeMode</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">storeMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/SCStoreMode.html">SCStoreMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L86">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)defaultDataDefinition"></a>
+                    <a name="//apple_ref/objc/Property/defaultDataDefinition" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)defaultDataDefinition">defaultDataDefinition</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The data store&rsquo;s default data definition. To add more data definitions (other than the default one), use addDataDefinition:.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="n">defaultDataDefinition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">defaultDataDefinition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L89">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)supportsNilValues"></a>
+                    <a name="//apple_ref/objc/Property/supportsNilValues" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)supportsNilValues">supportsNilValues</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the data store supports nil values. Default: YES.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n">supportsNilValues</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">supportsNilValues</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L92">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)addDataDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-addDataDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)addDataDefinition:">-addDataDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds a definition to dataDefinitions.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addDataDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="n">_</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L95">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)definitionForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-definitionForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)definitionForObject:">-definitionForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the data definition for the given object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">definitionForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">definition</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L98">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Synchronous%20Data%20Access"></a>
+                <a name="//apple_ref/objc/Section/Synchronous Data Access" class="dashAnchor"></a>
+                <a href="#/Synchronous%20Data%20Access">
+                  <h3 class="section-name">Synchronous Data Access</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)createNewObject"></a>
+                    <a name="//apple_ref/objc/Method/-createNewObject" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)createNewObject">-createNewObject</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a newly allocated and initialized object based on the store&rsquo;s default data definition.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="n">createNewObject</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">createNewObject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">NSObject</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The newly created object.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L109">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)createNewObjectWithDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-createNewObjectWithDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)createNewObjectWithDefinition:">-createNewObjectWithDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a newly allocated and initialized object based on the given data definition. </p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nf">createNewObjectWithDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">createNewObject</span><span class="p">(</span><span class="n">with</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSObject</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>definition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data definition that describes the object to be created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The newly created object.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L116">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)discardUninsertedObject:"></a>
+                    <a name="//apple_ref/objc/Method/-discardUninsertedObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)discardUninsertedObject:">-discardUninsertedObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Discards the given uninserted object.</p>
+
+<p>Any object created with createNewObject: or createNewObjectWithDefinition: and not later inserted to the store using insertObject: must be discarded using this method.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">discardUninsertedObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">discardUninsertedObject</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The uninserted newly created object to be discarded.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L125">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)insertObject:"></a>
+                    <a name="//apple_ref/objc/Method/-insertObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)insertObject:">-insertObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Inserts the given object into the data store.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">insertObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">insert</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be inserted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L131">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)insertObject:atOrder:"></a>
+                    <a name="//apple_ref/objc/Method/-insertObject:atOrder:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)insertObject:atOrder:">-insertObject:atOrder:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Inserts the given object into the data store at the specified order.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Only applicable for data stores that maintain ordered object storage.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">insertObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span> <span class="nf">atOrder</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">order</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">insert</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">atOrder</span> <span class="nv">order</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be inserted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>order</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The order index that the object should be inserted at.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L139">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)changeOrderForObject:toOrder:subsetArray:"></a>
+                    <a name="//apple_ref/objc/Method/-changeOrderForObject:toOrder:subsetArray:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)changeOrderForObject:toOrder:subsetArray:">-changeOrderForObject:toOrder:subsetArray:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Changes the order of the given object to the specified order.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Only applicable for data stores that maintain ordered object storage.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">changeOrderForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+                     <span class="nf">toOrder</span><span class="p">:(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">toOrder</span>
+                 <span class="nf">subsetArray</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">subsetArray</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">changeOrder</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="nv">toOrder</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">,</span> <span class="nv">subsetArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object that the order of will change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>toOrder</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new order index of the object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L147">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)updateObject:"></a>
+                    <a name="//apple_ref/objc/Method/-updateObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)updateObject:">-updateObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Updates the given object in the data store. </p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">updateObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L152">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)deleteObject:"></a>
+                    <a name="//apple_ref/objc/Method/-deleteObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)deleteObject:">-deleteObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes the given object from the data store. </p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">deleteObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Returns TRUE if successful.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L157">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)fetchObjectsWithOptions:"></a>
+                    <a name="//apple_ref/objc/Method/-fetchObjectsWithOptions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)fetchObjectsWithOptions:">-fetchObjectsWithOptions:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetches objects from the data store that satisfy the given fetch options.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    SCDataFetchOptions
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchObjectsWithOptions</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">fetchOptions</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchObjects</span><span class="p">(</span><span class="n">with</span> <span class="nv">fetchOptions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fetchOptions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The fetch options that the data store must satisfy when returning the objects.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of the fetched objects.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L164">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)valueForPropertyName:inObject:"></a>
+                    <a name="//apple_ref/objc/Method/-valueForPropertyName:inObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)valueForPropertyName:inObject:">-valueForPropertyName:inObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the value for the given property name in the given object. </p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nf">valueForPropertyName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span>
+                          <span class="nf">inObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">value</span><span class="p">(</span><span class="n">forPropertyName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="k">in</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSObject</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the property.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object containing propertyName.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value for the given propertyName.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L171">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)stringValueForPropertyName:inObject:separateValuesUsingDelimiter:"></a>
+                    <a name="//apple_ref/objc/Method/-stringValueForPropertyName:inObject:separateValuesUsingDelimiter:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)stringValueForPropertyName:inObject:separateValuesUsingDelimiter:">-stringValueForPropertyName:inObject:separateValuesUsingDelimiter:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the string value for the given property name in the given object. </p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">stringValueForPropertyName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span>
+                                <span class="nf">inObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+            <span class="nf">separateValuesUsingDelimiter</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">delimiter</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">stringValue</span><span class="p">(</span><span class="n">forPropertyName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="k">in</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">separateValuesUsingDelimiter</span> <span class="nv">delimiter</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the property.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object containing propertyName.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>delimiter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If the property returns more than one value, this delimiter is used to separate the values in the returned string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value for the given propertyName.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L179-L180">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)setValue:forPropertyName:inObject:"></a>
+                    <a name="//apple_ref/objc/Method/-setValue:forPropertyName:inObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)setValue:forPropertyName:inObject:">-setValue:forPropertyName:inObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets the value for the given property name in the given object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setValue</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">value</span>
+    <span class="nf">forPropertyName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span>
+           <span class="nf">inObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">forPropertyName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="k">in</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value of the property.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the property.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object containing propertyName.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L187">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Asynchronous%20Data%20Access"></a>
+                <a name="//apple_ref/objc/Section/Asynchronous Data Access" class="dashAnchor"></a>
+                <a href="#/Asynchronous%20Data%20Access">
+                  <h3 class="section-name">Asynchronous Data Access</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)asynchronousInsertObject:success:failure:noConnection:"></a>
+                    <a name="//apple_ref/objc/Method/-asynchronousInsertObject:success:failure:noConnection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)asynchronousInsertObject:success:failure:noConnection:">-asynchronousInsertObject:success:failure:noConnection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asynchronously inserts the given object into the data store.</p>
+
+<p>SCDataStoreInsertSuccess_Block syntax:
+    ^()
+    {
+        // Your code here
+    }</p>
+
+<p>SCDataStoreFailure_Block syntax:
+    ^(NSError *error)
+    {
+        // Your code here
+    }</p>
+
+<p>SCNoConnection_Block syntax:
+    ^BOOL()
+    {
+        // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
+    }</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">asynchronousInsertObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+                         <span class="nf">success</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a></span><span class="p">)</span><span class="nv">success_block</span>
+                         <span class="nf">failure</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="p">)</span><span class="nv">failure_block</span>
+                    <span class="nf">noConnection</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="p">)</span><span class="nv">noConnection_block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asynchronousInsert</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">success</span> <span class="nv">success_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">failure</span> <span class="nv">failure_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">noConnection</span> <span class="nv">noConnection_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be inserted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called after the object has been successfully inserted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case the object could not be inserted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>noConnection_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case no connection could be established to data store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L221">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)asynchronousUpdateObject:success:failure:noConnection:"></a>
+                    <a name="//apple_ref/objc/Method/-asynchronousUpdateObject:success:failure:noConnection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)asynchronousUpdateObject:success:failure:noConnection:">-asynchronousUpdateObject:success:failure:noConnection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asynchronously updates the given object into the data store.</p>
+
+<p>SCDataStoreUpdateSuccess_Block syntax:
+    ^()
+    {
+        // Your code here
+    }</p>
+
+<p>SCDataStoreFailure_Block syntax:
+    ^(NSError *error)
+    {
+        // Your code here
+    }</p>
+
+<p>SCNoConnection_Block syntax:
+    ^BOOL()
+    {
+        // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
+    }</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">asynchronousUpdateObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+                         <span class="nf">success</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a></span><span class="p">)</span><span class="nv">success_block</span>
+                         <span class="nf">failure</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="p">)</span><span class="nv">failure_block</span>
+                    <span class="nf">noConnection</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="p">)</span><span class="nv">noConnection_block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asynchronousUpdate</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">success</span> <span class="nv">success_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">failure</span> <span class="nv">failure_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">noConnection</span> <span class="nv">noConnection_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called after the object has been successfully updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case the object could not be updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>noConnection_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case no connection could be established to data store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L249">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)asynchronousDeleteObject:success:failure:noConnection:"></a>
+                    <a name="//apple_ref/objc/Method/-asynchronousDeleteObject:success:failure:noConnection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)asynchronousDeleteObject:success:failure:noConnection:">-asynchronousDeleteObject:success:failure:noConnection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asynchronously deletes the given object from the data store.</p>
+
+<p>SCDataStoreDeleteSuccess_Block syntax:
+    ^()
+    {
+        // Your code here
+    }</p>
+
+<p>SCDataStoreFailure_Block syntax:
+    ^(NSError *error)
+    {
+        // Your code here
+    }</p>
+
+<p>SCNoConnection_Block syntax:
+    ^BOOL()
+    {
+        // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
+    }</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">asynchronousDeleteObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+                         <span class="nf">success</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a></span><span class="p">)</span><span class="nv">success_block</span>
+                         <span class="nf">failure</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="p">)</span><span class="nv">failure_block</span>
+                    <span class="nf">noConnection</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="p">)</span><span class="nv">noConnection_block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asynchronousDelete</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">success</span> <span class="nv">success_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">failure</span> <span class="nv">failure_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">noConnection</span> <span class="nv">noConnection_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to be deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called after the object has been successfully deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case the object could not be deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>noConnection_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case no connection could be established to data store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L277">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)asynchronousFetchObjectsWithOptions:success:failure:noConnection:"></a>
+                    <a name="//apple_ref/objc/Method/-asynchronousFetchObjectsWithOptions:success:failure:noConnection:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)asynchronousFetchObjectsWithOptions:success:failure:noConnection:">-asynchronousFetchObjectsWithOptions:success:failure:noConnection:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asynchronously fetches objects from the data store that satisfy the given fetch options.</p>
+
+<p>SCDataStoreFetchSuccess_Block syntax:
+    ^(NSArray *results)
+    {
+        // Your code here
+    }
+ Where &lsquo;results&rsquo; is the fetched data array.</p>
+
+<p>SCDataStoreFailure_Block syntax:
+    ^(NSError *error)
+    {
+        // Your code here
+    }</p>
+
+<p>SCNoConnection_Block syntax:
+    ^BOOL()
+    {
+        // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
+    }</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    SCDataFetchOptions
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="nf">asynchronousFetchObjectsWithOptions</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">fetchOptions</span>
+                                <span class="nf">success</span><span class="p">:</span>
+                                    <span class="p">(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a></span><span class="p">)</span><span class="nv">success_block</span>
+                                <span class="nf">failure</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="p">)</span><span class="nv">failure_block</span>
+                           <span class="nf">noConnection</span><span class="p">:</span>
+                               <span class="p">(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="p">)</span><span class="nv">noConnection_block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asynchronousFetchObjects</span><span class="p">(</span><span class="n">with</span> <span class="nv">fetchOptions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span><span class="o">!</span><span class="p">,</span> <span class="n">success</span> <span class="nv">success_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">failure</span> <span class="nv">failure_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">noConnection</span> <span class="nv">noConnection_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fetchOptions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The fetch options that the data store must satisfy when returning the objects.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>success_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called after the data has been successfully fetched.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>failure_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case the data could not be fetched.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>noConnection_block</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code block called in case no connection could be established to data store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L307">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)postAsynchronousFetchObjectsAction"></a>
+                    <a name="//apple_ref/objc/Property/postAsynchronousFetchObjectsAction" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)postAsynchronousFetchObjectsAction">postAsynchronousFetchObjectsAction</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called right after asynchronousFetchObjectsWithOptions has successfully finished.</p>
+
+<p>This action is typically used to asynchronously load further objects or data in addition to the ones fetched in asynchronousFetchObjectsWithOptions.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">myDataStore</span><span class="p">.</span><span class="n">postAsynchronousFetchObjectsAction</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">results</span><span class="p">,</span> <span class="n">SCPostFetchAsyncronousCompletionHandler_Block</span> <span class="n">completionHandler</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ... load your data here asynchronously ...</span>
+
+    <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="n">completionHandler</span><span class="p">(</span><span class="n">myUpdatedResultsArray</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">myDataStore</span><span class="p">.</span><span class="n">postAsynchronousFetchObjectsAction</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">completionHandler</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="c1">// ... load your data here asynchronously ...</span>
+
+    <span class="n">let</span> <span class="n">error</span> <span class="o">:</span> <span class="n">NSError</span> <span class="o">=</span> <span class="nb">nil</span>
+    <span class="n">completionHandler</span><span class="p">(</span><span class="n">myUpdatedResultsArray</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a></span> <span class="n">postAsynchronousFetchObjectsAction</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">postAsynchronousFetchObjectsAction</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Return The updated array of objects.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L338">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Data%20Validation"></a>
+                <a name="//apple_ref/objc/Section/Data Validation" class="dashAnchor"></a>
+                <a href="#/Data%20Validation">
+                  <h3 class="section-name">Data Validation</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)validateInsertForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-validateInsertForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)validateInsertForObject:">-validateInsertForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns TRUE if the given object can be inserted into the data store, otherwise returns FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">validateInsertForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">validateInsert</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L346">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)validateUpdateForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-validateUpdateForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)validateUpdateForObject:">-validateUpdateForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns TRUE if the given object can be updated into the data store, otherwise returns FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">validateUpdateForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">validateUpdate</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L349">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)validateDeleteForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-validateDeleteForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)validateDeleteForObject:">-validateDeleteForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns TRUE if the given object can be deleted from the data store, otherwise returns FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">validateDeleteForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">validateDelete</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L352">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)validateOrderChangeForObject:"></a>
+                    <a name="//apple_ref/objc/Method/-validateOrderChangeForObject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)validateOrderChangeForObject:">-validateOrderChangeForObject:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns TRUE if the order of the given object can be changed in the data store, otherwise returns FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="nf">validateOrderChangeForObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">validateOrderChange</span><span class="p">(</span><span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L355">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Data%20Management"></a>
+                <a name="//apple_ref/objc/Section/Data Management" class="dashAnchor"></a>
+                <a href="#/Data%20Management">
+                  <h3 class="section-name">Data Management</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)commitData"></a>
+                    <a name="//apple_ref/objc/Method/-commitData" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)commitData">-commitData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Commits the data store objects to the persistent store. This method is only applicable to data stores that store their objects in memory before persisting them to a permenant persistant storage.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">commitData</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">commitData</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L363">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Internal%20Properties%20&amp;%20Methods%20(should%20only%20be%20used%20by%20the%20framework%20or%20when%20subclassing)"></a>
+                <a name="//apple_ref/objc/Section/Internal Properties &amp; Methods (should only be used by the framework or when subclassing)" class="dashAnchor"></a>
+                <a href="#/Internal%20Properties%20&amp;%20Methods%20(should%20only%20be%20used%20by%20the%20framework%20or%20when%20subclassing)">
+                  <h3 class="section-name">Internal Properties &amp; Methods (should only be used by the framework or when subclassing)</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)storedData"></a>
+                    <a name="//apple_ref/objc/Property/storedData" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)storedData">storedData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Should be used by subclasses to store their data when heap memory storage is needed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSObject</span> <span class="o">*</span><span class="n">storedData</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">storedData</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L371">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(py)defaultsDictionary"></a>
+                    <a name="//apple_ref/objc/Property/defaultsDictionary" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(py)defaultsDictionary">defaultsDictionary</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Should be used by subclasses to store any default values needed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">defaultsDictionary</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">defaultsDictionary</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L374">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)bindStoreToPropertyName:forObject:withDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-bindStoreToPropertyName:forObject:withDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)bindStoreToPropertyName:forObject:withDefinition:">-bindStoreToPropertyName:forObject:withDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Binds the store to a property name that will be used to fetch all the store&rsquo;s data.</p>
+
+<p>Should only be used by the framework all must be implemented by all subclasses.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">bindStoreToPropertyName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyName</span>
+                      <span class="nf">forObject</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">object</span>
+                 <span class="nf">withDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">bindStore</span><span class="p">(</span><span class="n">toPropertyName</span> <span class="nv">propertyName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="k">for</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">NSObject</span><span class="o">!</span><span class="p">,</span> <span class="n">with</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L379">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)forceDiscardAllUnaddedObjects"></a>
+                    <a name="//apple_ref/objc/Method/-forceDiscardAllUnaddedObjects" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)forceDiscardAllUnaddedObjects">-forceDiscardAllUnaddedObjects</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This method is typically called internally by the framework when all unadded objects must be discarded. The method will issue the &lsquo;SCDataStoreWillDiscardAllUnaddedObjectsNotification&rsquo; notification to inform all classes using the store that this will happen.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">forceDiscardAllUnaddedObjects</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">forceDiscardAllUnaddedObjects</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L382">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)applicationWillEnterForeground"></a>
+                    <a name="//apple_ref/objc/Method/-applicationWillEnterForeground" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)applicationWillEnterForeground">-applicationWillEnterForeground</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method called when the application is about to leave the background state. Subclasses should override this method when any initialization is needed at this point.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">applicationWillEnterForeground</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">applicationWillEnterForeground</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L385">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCDataStore(im)fetchObjectsSuccessful:successBlock:failure:"></a>
+                    <a name="//apple_ref/objc/Method/-fetchObjectsSuccessful:successBlock:failure:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCDataStore(im)fetchObjectsSuccessful:successBlock:failure:">-fetchObjectsSuccessful:successBlock:failure:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">fetchObjectsSuccessful</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">objects</span> <span class="nf">successBlock</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a></span><span class="p">)</span><span class="nv">success_block</span> <span class="nf">failure</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="p">)</span><span class="nv">failure_block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchObjectsSuccessful</span><span class="p">(</span><span class="n">_</span> <span class="nv">objects</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">,</span> <span class="n">successBlock</span> <span class="nv">success_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a></span><span class="o">!</span><span class="p">,</span> <span class="n">failure</span> <span class="nv">failure_block</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCDataStore.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

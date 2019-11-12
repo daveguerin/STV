@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCEntityDefinition Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCEntityDefinition" class="dashAnchor"></a>
+    <a title="SCEntityDefinition Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCEntityDefinition Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCEntityDefinition</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCEntityDefinition</span> <span class="p">:</span> <span class="nc"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>This class functions as a means to further extend the definition of user-defined Core Data entities.
+Using entity definitions, classes like SCObjectCell and SCObjectSection 
+will be able to better generate user interface elements that truly represent the 
+properties of their bound objects. </p>
+
+<p>SCEntityDefinition mainly consists of one or more property definitions of type SCPropertyDefinition.
+Upon creation, SCEntityDefinition will (optionally) automatically generate all the
+property definitions for the given entity. From there, the user will be able to customize
+the generated property definitions, add new definitions, or remove generated definitions.</p>
+
+<p>Sample use:
+   // Extend the definition of &lsquo;TaskEntity&rsquo; (user defined Core Data entity)
+   SCEntityDefinition *taskDef = [SCEntityDefinition definitionWithEntityName:@<q>TaskEntity</q>
+       managedObjectContext:context
+       propertyNamesString:@<q>Task Details:(name,description,category,dueDate);Task Status:(completed)</q>];
+   SCPropertyDefinition *namePropertyDef = [taskDef propertyDefinitionWithName:@<q>name</q>];
+   namePropertyDef.required = TRUE;
+   SCPropertyDefinition *descPropertyDef = [taskDef propertyDefinitionWithName:@<q>description</q>];
+   descPropertyDef.type = SCPropertyTypeTextView;
+   SCPropertyDefinition *categoryPropertyDef = [taskDef propertyDefinitionWithName:@<q>category</q>];
+   categoryPropertyDef.type = SCPropertyTypeSelection;
+   NSArray *categoryItems = [NSArray arrayWithObjects:@<q>Home</q>, @<q>Work</q>, @<q>Other</q>, nil];
+   categoryPropertyDef.attributes = [SCSelectionAttributes attributesWithItems:categoryItems 
+       allowMultipleSelection:NO allowNoSelection:NO];</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    SCPropertyDefinition.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creation%20and%20Initialization"></a>
+                <a name="//apple_ref/objc/Section/Creation and Initialization" class="dashAnchor"></a>
+                <a href="#/Creation%20and%20Initialization">
+                  <h3 class="section-name">Creation and Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:autoGeneratePropertyDefinitions:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:autoGeneratePropertyDefinitions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:autoGeneratePropertyDefinitions:">+definitionWithEntityName:autoGeneratePropertyDefinitions:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity&rsquo;s properties.</p>
+
+<p>The method will also generate user friendly property titles from the names of
+ the generated properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you&rsquo;d like to provide a diffrerent one, please use definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions: instead.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+         <span class="nf">autoGeneratePropertyDefinitions</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoGenerate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>autoGenerate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If TRUE, &lsquo;SCClassDefinition&rsquo; will automatically generate all the property definitions for the given entity&rsquo;s attributes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L66">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:propertyNamesString:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:propertyNamesString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:propertyNamesString:">+definitionWithEntityName:propertyNamesString:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of 
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+<p>Property names string syntax options:
+    @<q>property1;property2;property3;&hellip;</q>
+    @<q>group1 header:(property1, property2,&hellip;):group1 footer;group2&hellip;</q></p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you&rsquo;d like to provide a diffrerent one, please use definitionWithEntityName:managedObjectContext:propertyNamesString: instead.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                     <span class="nf">propertyNamesString</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesString</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNamesString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string with the property names separated by semi-colons. Example string: @<q>firstName;lastName</q>. Property groups can also be defined in the string using the following format: @<q>Personal Details:(firstName, lastName); Address:(street, state, country)</q>. The group title can also be ommitted to create a group with no title. For example: @<q>:(firstName, lastName)</q>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L83">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:">+definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity&rsquo;s properties.</p>
+
+<p>The method will also generate user friendly property titles from the names of
+ the generated properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                    <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+         <span class="nf">autoGeneratePropertyDefinitions</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoGenerate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>autoGenerate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If TRUE, &lsquo;SCClassDefinition&rsquo; will automatically generate all the property definitions for the given entity&rsquo;s attributes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L95">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNamesString:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:managedObjectContext:propertyNamesString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNamesString:">+definitionWithEntityName:managedObjectContext:propertyNamesString:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+<p>Property names string syntax options:
+    @<q>property1;property2;property3;&hellip;</q>
+    @<q>group1 header:(property1, property2,&hellip;):group1 footer;group2&hellip;</q></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                    <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                     <span class="nf">propertyNamesString</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesString</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNamesString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string with the property names separated by semi-colons. Example string: @<q>firstName;lastName</q>. Property groups can also be defined in the string using the following format: @<q>Personal Details:(firstName, lastName); Address:(street, state, country)</q>. The group title can also be ommitted to create a group with no title. For example: @<q>:(firstName, lastName)</q>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L111">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNames:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:managedObjectContext:propertyNames:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNames:">+definitionWithEntityName:managedObjectContext:propertyNames:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of 
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                    <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                           <span class="nf">propertyNames</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNames</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of the names of properties to be generated. All array elements must be of type NSString.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L123">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNames:propertyTitles:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:managedObjectContext:propertyNames:propertyTitles:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyNames:propertyTitles:">+definitionWithEntityName:managedObjectContext:propertyNames:propertyTitles:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized &lsquo;SCEntityDefinition&rsquo; given a Core Data entity name, an array of
+ the property names to generate property definitions for, and array of titles
+ for these properties.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                    <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                           <span class="nf">propertyNames</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNames</span>
+                          <span class="nf">propertyTitles</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyTitles</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of the names of properties to be generated. All array elements must be of type NSString.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyTitles</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of titles to the properties in propertyNames. All array elements must be of type NSString.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L134">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyGroups:"></a>
+                    <a name="//apple_ref/objc/Method/+definitionWithEntityName:managedObjectContext:propertyGroups:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(cm)definitionWithEntityName:managedObjectContext:propertyGroups:">+definitionWithEntityName:managedObjectContext:propertyGroups:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.</p>
+
+<ul>
+<li></li>
+<li>- parameter: entityName The name of the entity for which the definition will be extended.</li>
+<li>- parameter: context The managed object context of the entity.</li>
+<li>- parameter: groups A collection of property groups.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">definitionWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+                    <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                          <span class="nf">propertyGroups</span><span class="p">:(</span><span class="n"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">groups</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L142">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:autoGeneratePropertyDefinitions:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:autoGeneratePropertyDefinitions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:autoGeneratePropertyDefinitions:">-initWithEntityName:autoGeneratePropertyDefinitions:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity&rsquo;s properties.</p>
+
+<p>The method will also generate user friendly property titles from the names of 
+ the generated properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you&rsquo;d like to provide a diffrerent one, please use initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions: instead.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+    <span class="nf">autoGeneratePropertyDefinitions</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoGenerate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">autoGeneratePropertyDefinitions</span> <span class="nv">autoGenerate</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>autoGenerate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If TRUE, SCEntityDefinition will automatically generate all the property definitions for the given entity&rsquo;s attributes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L156">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:propertyNamesString:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:propertyNamesString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:propertyNamesString:">-initWithEntityName:propertyNamesString:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of 
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+<p>Property names string syntax options:
+    @<q>property1;property2;property3;&hellip;</q>
+    @<q>group1 header:(property1, property2,&hellip;):group1 footer;group2&hellip;</q></p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you&rsquo;d like to provide a diffrerent one, please use initWithEntityName:managedObjectContext:propertyNamesString: instead.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+               <span class="nf">propertyNamesString</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesString</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyNamesString</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNamesString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string with the property names separated by semi-colons. Example string: @<q>firstName;lastName</q>. Property groups can also be defined in the string using the following format: @<q>Personal Details:(firstName, lastName); Address:(street, state, country)</q>. The group title can also be ommitted to create a group with no title. For example: @<q>:(firstName, lastName)</q>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L173">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:">-initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity&rsquo;s properties.</p>
+
+<p>The method will also generate user friendly property titles from the names of
+ the generated properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+               <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+    <span class="nf">autoGeneratePropertyDefinitions</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">autoGenerate</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCEntityDefinition.html#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a></span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span><span class="p">,</span> <span class="n">autoGeneratePropertyDefinitions</span> <span class="nv">autoGenerate</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>autoGenerate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If TRUE, SCEntityDefinition will automatically generate all the property definitions for the given entity&rsquo;s attributes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L185">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNamesString:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:managedObjectContext:propertyNamesString:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNamesString:">-initWithEntityName:managedObjectContext:propertyNamesString:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+<p>Property names string syntax options:
+    @<q>property1;property2;property3;&hellip;</q>
+    @<q>group1 header:(property1, property2,&hellip;):group1 footer;group2&hellip;</q></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+              <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+               <span class="nf">propertyNamesString</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNamesString</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCEntityDefinition.html#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a></span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyNamesString</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNamesString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string with the property names separated by semi-colons. Example string: @<q>firstName;lastName</q>. Property groups can also be defined in the string using the following format: @<q>Personal Details:(firstName, lastName); Address:(street, state, country)</q>. The group title can also be ommitted to create a group with no title. For example: @<q>:(firstName, lastName)</q>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L201">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNames:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:managedObjectContext:propertyNames:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNames:">-initWithEntityName:managedObjectContext:propertyNames:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.</p>
+
+<p>The method will also generate user friendly property titles from the names of 
+ the given properties. These titles can be modified by the user later as part of
+ the property definition customization.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+              <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                     <span class="nf">propertyNames</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNames</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCEntityDefinition.html#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a></span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyNames</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>entityName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name of the entity for which the definition will be extended.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The managed object context of the entity.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>propertyNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of the names of properties to be generated. All array elements must be of type NSString.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L213">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNames:propertyTitles:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:managedObjectContext:propertyNames:propertyTitles:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyNames:propertyTitles:">-initWithEntityName:managedObjectContext:propertyNames:propertyTitles:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name, an array of
+ the property names to generate property definitions for, and array of titles
+ for these properties.
+ *</p>
+
+<ul>
+<li>- parameter: entityName The name of the entity for which the definition will be extended.</li>
+<li>- parameter: context The managed object context of the entity.</li>
+<li>- parameter: propertyNames An array of the names of properties to be generated. All array elements must be of type NSString.</li>
+<li>- parameter: propertyTitles An array of titles to the properties in propertyNames. All array elements must be of type NSString.
+*</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+              <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                     <span class="nf">propertyNames</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyNames</span>
+                    <span class="nf">propertyTitles</span><span class="p">:(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">propertyTitles</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCEntityDefinition.html#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a></span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyNames</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">,</span> <span class="nv">propertyTitles</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L225">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyGroups:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityName:managedObjectContext:propertyGroups:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(im)initWithEntityName:managedObjectContext:propertyGroups:">-initWithEntityName:managedObjectContext:propertyGroups:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.</p>
+
+<ul>
+<li></li>
+<li>- parameter: entityName The name of the entity for which the definition will be extended.</li>
+<li>- parameter: context The managed object context of the entity.</li>
+<li>- parameter: groups A collection of property groups.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityName</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">entityName</span>
+              <span class="nf">managedObjectContext</span><span class="p">:(</span><span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+                    <span class="nf">propertyGroups</span><span class="p">:(</span><span class="n"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">groups</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n"><a href="../Classes/SCEntityDefinition.html#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a></span> <span class="nv">context</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span><span class="p">,</span> <span class="n">propertyGroups</span> <span class="nv">groups</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L233">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuration"></a>
+                <a name="//apple_ref/objc/Section/Configuration" class="dashAnchor"></a>
+                <a href="#/Configuration">
+                  <h3 class="section-name">Configuration</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(py)entity"></a>
+                    <a name="//apple_ref/objc/Property/entity" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(py)entity">entity</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The entity associated with the definition.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSEntityDescription</span> <span class="o">*</span><span class="n">entity</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">entity</span><span class="p">:</span> <span class="kt">NSEntityDescription</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L240">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(py)managedObjectContext"></a>
+                    <a name="//apple_ref/objc/Property/managedObjectContext" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(py)managedObjectContext">managedObjectContext</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The managed object context of the entity associated with the definition.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n">NSManagedObjectContext</span> <span class="o">*</span><span class="n">managedObjectContext</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">managedObjectContext</span><span class="p">:</span> <span class="kt">NSManagedObjectContext</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L243">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCEntityDefinition(py)orderAttributeName"></a>
+                    <a name="//apple_ref/objc/Property/orderAttributeName" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCEntityDefinition(py)orderAttributeName">orderAttributeName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the entity attribute that will be used to store the display order of its objects. </p>
+
+<p>Setting this property to a valid attribute name allows for custom re-ordering of the generated
+ user interface elements representing the Core Data objects (e.g. custom re-ordering of cells).
+ Setting this property overrides the value set for the keyPropertyName property.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Important: This Core Data attribute must be of integer type.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">orderAttributeName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">orderAttributeName</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCEntityDefinition.h#L251">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

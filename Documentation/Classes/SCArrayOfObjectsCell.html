@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCArrayOfObjectsCell Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCArrayOfObjectsCell" class="dashAnchor"></a>
+    <a title="SCArrayOfObjectsCell Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCArrayOfObjectsCell Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCArrayOfObjectsCell</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCArrayOfObjectsCell</span> <span class="p">:</span> <span class="nc"><a href="../Classes/SCCustomCell.html">SCCustomCell</a></span> <span class="p">{</span>
+  <span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n">dataStore</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n">dataFetchOptions</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowAddingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowDeletingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowMovingItems</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowEditDetailView</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">allowRowSelection</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">autoSelectNewItemCell</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">displayItemsCountInBadgeView</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n">placeholderCell</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n">addNewItemCell</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">addNewItemCellExistsInNormalMode</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">addNewItemCellExistsInEditingMode</span><span class="p">;</span>
+  <span class="n"><a href="../Classes/SCSectionActions.html">SCSectionActions</a></span> <span class="o">*</span><span class="n">_detailSectionActions</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>This class functions as a cell that, given an array of objects, will generate an SCArrayOfObjectsSection detail view that&rsquo;s displayed when the cell is tapped. </p>
+
+<p>The cell can also be optionally bound to an object and generate an additional SCObjectSection detail view when the cell is tapped while the table is in edit mode.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    SCObjectCell, SCObjectSection, SCArrayOfObjectsSection.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@dataStore"></a>
+                    <a name="//apple_ref/objc/Ivar/dataStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@dataStore">dataStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n">dataStore</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@dataFetchOptions"></a>
+                    <a name="//apple_ref/objc/Ivar/dataFetchOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@dataFetchOptions">dataFetchOptions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n">dataFetchOptions</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@allowAddingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowAddingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@allowAddingItems">allowAddingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowAddingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@allowDeletingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowDeletingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@allowDeletingItems">allowDeletingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowDeletingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@allowMovingItems"></a>
+                    <a name="//apple_ref/objc/Ivar/allowMovingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@allowMovingItems">allowMovingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowMovingItems</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@allowEditDetailView"></a>
+                    <a name="//apple_ref/objc/Ivar/allowEditDetailView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@allowEditDetailView">allowEditDetailView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowEditDetailView</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@allowRowSelection"></a>
+                    <a name="//apple_ref/objc/Ivar/allowRowSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@allowRowSelection">allowRowSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">allowRowSelection</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@autoSelectNewItemCell"></a>
+                    <a name="//apple_ref/objc/Ivar/autoSelectNewItemCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@autoSelectNewItemCell">autoSelectNewItemCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">autoSelectNewItemCell</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@displayItemsCountInBadgeView"></a>
+                    <a name="//apple_ref/objc/Ivar/displayItemsCountInBadgeView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@displayItemsCountInBadgeView">displayItemsCountInBadgeView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">displayItemsCountInBadgeView</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@placeholderCell"></a>
+                    <a name="//apple_ref/objc/Ivar/placeholderCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@placeholderCell">placeholderCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n">placeholderCell</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@addNewItemCell"></a>
+                    <a name="//apple_ref/objc/Ivar/addNewItemCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCell">addNewItemCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n">addNewItemCell</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInNormalMode"></a>
+                    <a name="//apple_ref/objc/Ivar/addNewItemCellExistsInNormalMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInNormalMode">addNewItemCellExistsInNormalMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">addNewItemCellExistsInNormalMode</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInEditingMode"></a>
+                    <a name="//apple_ref/objc/Ivar/addNewItemCellExistsInEditingMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInEditingMode">addNewItemCellExistsInEditingMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">addNewItemCellExistsInEditingMode</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell@_detailSectionActions"></a>
+                    <a name="//apple_ref/objc/Ivar/_detailSectionActions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell@_detailSectionActions">_detailSectionActions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n"><a href="../Classes/SCSectionActions.html">SCSectionActions</a></span> <span class="o">*</span><span class="n">_detailSectionActions</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creation%20and%20Initialization"></a>
+                <a name="//apple_ref/objc/Section/Creation and Initialization" class="dashAnchor"></a>
+                <a href="#/Creation%20and%20Initialization">
+                  <h3 class="section-name">Creation and Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithDataStore:"></a>
+                    <a name="//apple_ref/objc/Method/+cellWithDataStore:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithDataStore:">+cellWithDataStore:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCArrayOfObjectsCell given a data store.
+ *</p>
+
+<ul>
+<li>- parameter: store The data store containing the cell&rsquo;s objects.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">cellWithDataStore</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">store</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1589">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithItems:itemsDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/+cellWithItems:itemsDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithItems:itemsDefinition:">+cellWithItems:itemsDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCArrayOfObjectsCell given an array of objects and their class definition.
+ *</p>
+
+<ul>
+<li>- parameter: cellItems An array of objects that the cell will use to generate its detail cells.</li>
+<li>- parameter: definition The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsClassDefinitions dictionary after initialization.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">cellWithItems</span><span class="p">:(</span><span class="n">NSMutableArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">cellItems</span>
+              <span class="nf">itemsDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1596">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(im)initWithDataStore:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithDataStore:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(im)initWithDataStore:">-initWithDataStore:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCArrayOfObjectsCell given a data store.
+ *</p>
+
+<ul>
+<li>- parameter: store The data store containing the cell&rsquo;s objects.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithDataStore</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">store</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@dataStore">dataStore</a></span> <span class="nv">store</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataStore.html">SCDataStore</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1603">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(im)initWithItems:itemsDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithItems:itemsDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(im)initWithItems:itemsDefinition:">-initWithItems:itemsDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCArrayOfObjectsCell given an array of objects and their class definition.
+ *</p>
+
+<ul>
+<li>- parameter: cellItems An array of objects that the cell will use to generate its detail cells.</li>
+<li>- parameter: definition The class definition of the class or entity of the objects in the objects array. If the array contains more than one type of object, then their respective class definitions must be added to the itemsClassDefinitions dictionary after initialization.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithItems</span><span class="p">:(</span><span class="n">NSMutableArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">cellItems</span>
+              <span class="nf">itemsDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell(py)items">items</a></span> <span class="nv">cellItems</span><span class="p">:</span> <span class="kt">NSMutableArray</span><span class="o">!</span><span class="p">,</span> <span class="n">itemsDefinition</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataDefinition.html">SCDataDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1610">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuration"></a>
+                <a name="//apple_ref/objc/Section/Configuration" class="dashAnchor"></a>
+                <a href="#/Configuration">
+                  <h3 class="section-name">Configuration</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)dataStore"></a>
+                    <a name="//apple_ref/objc/Property/dataStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)dataStore">dataStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The data store that&rsquo;s used to store and fetch the cell&rsquo;s objects.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCDataStore.html">SCDataStore</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@dataStore">dataStore</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">dataStore</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataStore.html">SCDataStore</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1618">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)dataFetchOptions"></a>
+                    <a name="//apple_ref/objc/Property/dataFetchOptions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)dataFetchOptions">dataFetchOptions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The options used to fetch the cell&rsquo;s items from dataStore.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@dataFetchOptions">dataFetchOptions</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">dataFetchOptions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1621">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)items"></a>
+                    <a name="//apple_ref/objc/Property/items" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)items">items</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The items fetched from the dataStore.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">items</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1624">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)allowAddingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowAddingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)allowAddingItems">allowAddingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables adding new objects to the items array. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@allowAddingItems">allowAddingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowAddingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1627">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)allowDeletingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowDeletingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)allowDeletingItems">allowDeletingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables deleting new objects from the items array. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@allowDeletingItems">allowDeletingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowDeletingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1630">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)allowMovingItems"></a>
+                    <a name="//apple_ref/objc/Property/allowMovingItems" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)allowMovingItems">allowMovingItems</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables moving objects from one row to another. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@allowMovingItems">allowMovingItems</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowMovingItems</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1633">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)allowEditDetailView"></a>
+                    <a name="//apple_ref/objc/Property/allowEditDetailView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)allowEditDetailView">allowEditDetailView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables editing detail views for objects. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@allowEditDetailView">allowEditDetailView</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowEditDetailView</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1636">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)allowRowSelection"></a>
+                    <a name="//apple_ref/objc/Property/allowRowSelection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)allowRowSelection">allowRowSelection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables row selection. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@allowRowSelection">allowRowSelection</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">allowRowSelection</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1639">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)autoSelectNewItemCell"></a>
+                    <a name="//apple_ref/objc/Property/autoSelectNewItemCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)autoSelectNewItemCell">autoSelectNewItemCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables automatic cell selection of newly created items. Default: FALSE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@autoSelectNewItemCell">autoSelectNewItemCell</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">autoSelectNewItemCell</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1642">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)displayItemsCountInBadgeView"></a>
+                    <a name="//apple_ref/objc/Property/displayItemsCountInBadgeView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)displayItemsCountInBadgeView">displayItemsCountInBadgeView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allows/disables displaying the number of objects in the cell&rsquo;s badgeView. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@displayItemsCountInBadgeView">displayItemsCountInBadgeView</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">displayItemsCountInBadgeView</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1645">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)detailSectionActions"></a>
+                    <a name="//apple_ref/objc/Property/detailSectionActions" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)detailSectionActions">detailSectionActions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of actions for the cell&rsquo;s automatically generated detail section.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCSectionActions.html">SCSectionActions</a></span> <span class="o">*</span><span class="n">detailSectionActions</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">detailSectionActions</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCSectionActions.html">SCSectionActions</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1648">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Configuring%20Special%20Cells"></a>
+                <a name="//apple_ref/objc/Section/Configuring Special Cells" class="dashAnchor"></a>
+                <a href="#/Configuring%20Special%20Cells">
+                  <h3 class="section-name">Configuring Special Cells</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)placeholderCell"></a>
+                    <a name="//apple_ref/objc/Property/placeholderCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)placeholderCell">placeholderCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When set to a valid cell object, &lsquo;placeholderCell&rsquo; will be displayed when no items exist in the generated section. As soon as any items are added, this cell automatically disappears. Default: nil.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@placeholderCell">placeholderCell</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">placeholderCell</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1656">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCell"></a>
+                    <a name="//apple_ref/objc/Property/addNewItemCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCell">addNewItemCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When set to a valid cell object, &lsquo;addNewItemCell&rsquo; will be displayed as the last cell of the generated section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to the section&rsquo;s addButtonItem. Default: nil.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span> <span class="o">*</span><span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCell">addNewItemCell</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">addNewItemCell</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCTableViewCell.html">SCTableViewCell</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1661">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCellExistsInNormalMode"></a>
+                    <a name="//apple_ref/objc/Property/addNewItemCellExistsInNormalMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCellExistsInNormalMode">addNewItemCellExistsInNormalMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When TRUE, addNewItemCell will be displayed in Normal Mode. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInNormalMode">addNewItemCellExistsInNormalMode</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">addNewItemCellExistsInNormalMode</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1664">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCellExistsInEditingMode"></a>
+                    <a name="//apple_ref/objc/Property/addNewItemCellExistsInEditingMode" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(py)addNewItemCellExistsInEditingMode">addNewItemCellExistsInEditingMode</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When TRUE, addNewItemCell will be displayed in Editing Mode. Default: TRUE.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n"><a href="../Classes/SCArrayOfObjectsCell.html#/c:objc(cs)SCArrayOfObjectsCell@addNewItemCellExistsInEditingMode">addNewItemCellExistsInEditingMode</a></span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">addNewItemCellExistsInEditingMode</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCTableViewCell.h#L1667">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creation%20and%20Initialization2"></a>
+                <a name="//apple_ref/objc/Section/Creation and Initialization" class="dashAnchor"></a>
+                <a href="#/Creation%20and%20Initialization2">
+                  <h3 class="section-name">Creation and Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithEntityDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/+cellWithEntityDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithEntityDefinition:">+cellWithEntityDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCArrayOfObjectsCell given a header title and an entity definition. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method creates a cell with all the objects that exist in classDefinition&rsquo;s entity&rsquo;s managedObjectContext. To create a cell with only a subset of these objects, consider using the other cell initializers.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">cellWithEntityDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>definition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The entity definition of the objects in the objects set.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCArrayOfObjectsCell+CoreData.h#L28">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:"></a>
+                    <a name="//apple_ref/objc/Method/+cellWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(cm)cellWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:">+cellWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocates and returns an initialized SCArrayOfObjectsCell given a mutable set of objects. </p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>This method should only be used to create a cell with the contents of a Core Data relationship.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">cellWithBoundItemsSet</span><span class="p">:(</span><span class="n">NSMutableSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">cellItemsSet</span>
+             <span class="nf">boundSetEntityDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span>
+                  <span class="nf">boundSetOwnsObjects</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">ownsObjects</span><span class="p">;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cellItemsSet</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A mutable set of objects that the cell will use to generate its cells.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>definition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The class definition of the entity of the objects in the objects set.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCArrayOfObjectsCell+CoreData.h#L37">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(im)initWithEntityDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithEntityDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(im)initWithEntityDefinition:">-initWithEntityDefinition:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCArrayOfObjectsCell given a header title and an entity definition. </p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method creates a cell with all the objects that exist in classDefinition&rsquo;s entity&rsquo;s managedObjectContext. To create a cell with only a subset of these objects, consider using the other cell initializers.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithEntityDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n">entityDefinition</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>definition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The entity definition of the objects in the objects set.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCArrayOfObjectsCell+CoreData.h#L47">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCArrayOfObjectsCell(im)initWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCArrayOfObjectsCell(im)initWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:">-initWithBoundItemsSet:boundSetEntityDefinition:boundSetOwnsObjects:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an initialized SCArrayOfObjectsCell given a mutable set of objects. </p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>This method should only be used to create a cell with the contents of a Core Data relationship.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithBoundItemsSet</span><span class="p">:(</span><span class="n">NSMutableSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">cellItemsSet</span>
+             <span class="nf">boundSetEntityDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span>
+                  <span class="nf">boundSetOwnsObjects</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">ownsObjects</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="o">!</span><span class="p">(</span><span class="n">boundItemsSet</span> <span class="nv">cellItemsSet</span><span class="p">:</span> <span class="kt">NSMutableSet</span><span class="o">!</span><span class="p">,</span> <span class="n">boundSetEntityDefinition</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a></span><span class="o">!</span><span class="p">,</span> <span class="n">boundSetOwnsObjects</span> <span class="nv">ownsObjects</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cellItemsSet</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A mutable set of objects that the cell will use to generate its cells.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>definition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The class definition of the entity of the objects in the objects set.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCArrayOfObjectsCell+CoreData.h#L56">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

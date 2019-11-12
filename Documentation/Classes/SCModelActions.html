@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCModelActions Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/SCModelActions" class="dashAnchor"></a>
+    <a title="SCModelActions Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">STV 6.0.0 Docs</a> (69% documented)</p>
+        <p class="header-right"><a href="https://github.com/daveguerin/STV/"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Fgithub%2Ecom%2Fdaveguerin%2Fdocsets%2FSTV%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">STV Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SCModelActions Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28SensibleCocoa%29.html">NSObject(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UILabel%28SensibleCocoa%29.html">UILabel(SensibleCocoa)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Categories/UINavigationController%28SensibleCocoa%29.html">UINavigationController(SensibleCocoa)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsModel.html">SCArrayOfItemsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfItemsSection.html">SCArrayOfItemsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsAttributes.html">SCArrayOfObjectsAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsCell.html">SCArrayOfObjectsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsModel.html">SCArrayOfObjectsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfObjectsSection.html">SCArrayOfObjectsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsModel.html">SCArrayOfStringsModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayOfStringsSection.html">SCArrayOfStringsSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCArrayStore.html">SCArrayStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)SCBadgeView">SCBadgeView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCellActions.html">SCCellActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCClassDefinition.html">SCClassDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCControlCell.html">SCControlCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataFetchOptions.html">SCCoreDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCoreDataStore.html">SCCoreDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomCell.html">SCCustomCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCCustomPropertyDefinition.html">SCCustomPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataDefinition.html">SCDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataFetchOptions.html">SCDataFetchOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDataStore.html">SCDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateAttributes.html">SCDateAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateCell.html">SCDateCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDateDefinition.html">SCDateDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDetailViewControllerOptions.html">SCDetailViewControllerOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCDictionaryDefinition.html">SCDictionaryDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCEntityDefinition.html">SCEntityDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCExpandCollapseCell.html">SCExpandCollapseCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCFetchItemsCell.html">SCFetchItemsCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImagePickerCell.html">SCImagePickerCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCImageView.html">SCImageView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCInputAccessoryView.html">SCInputAccessoryView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCLabelCell.html">SCLabelCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataDefinition.html">SCMissingFrameworkDataDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCMissingFrameworkDataStore.html">SCMissingFrameworkDataStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelActions.html">SCModelActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCModelCenter.html">SCModelCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumberDefinition.html">SCNumberDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldAttributes.html">SCNumericTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCNumericTextFieldCell.html">SCNumericTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectAttributes.html">SCObjectAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectCell.html">SCObjectCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSection.html">SCObjectSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionAttributes.html">SCObjectSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionCell.html">SCObjectSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionModel.html">SCObjectSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCObjectSelectionSection.html">SCObjectSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPluginUtilities.html">SCPluginUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyAttributes.html">SCPropertyAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyDefinition.html">SCPropertyDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroup.html">SCPropertyGroup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPropertyGroupArray.html">SCPropertyGroupArray</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCPullToRefreshView.html">SCPullToRefreshView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSearchViewController.html">SCSearchViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSectionActions.html">SCSectionActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedAttributes.html">SCSegmentedAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSegmentedCell.html">SCSegmentedCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionAttributes.html">SCSelectionAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionCell.html">SCSelectionCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionModel.html">SCSelectionModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSelectionSection.html">SCSelectionSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderAttributes.html">SCSliderAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSliderCell.html">SCSliderCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCStringDefinition.html">SCStringDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCSwitchCell.html">SCSwitchCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewCell.html">SCTableViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewController.html">SCTableViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewControllerActions.html">SCTableViewControllerActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewModel.html">SCTableViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTableViewSection.html">SCTableViewSection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldAttributes.html">SCTextFieldAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextFieldCell.html">SCTextFieldCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewAttributes.html">SCTextViewAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTextViewCell.html">SCTextViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCTheme.html">SCTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsDefinition.html">SCUserDefaultsDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUserDefaultsStore.html">SCUserDefaultsStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCUtilities.html">SCUtilities</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewController.html">SCViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SCViewControllerActions.html">SCViewControllerActions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@SCDataStoreWillDiscardAllUninsertedObjectsNotification">SCDataStoreWillDiscardAllUninsertedObjectsNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SCDataType.html">SCDataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCNavigationBarType.html">SCNavigationBarType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPresentationMode.html">SCPresentationMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPropertyType.html">SCPropertyType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCPullToRefreshViewState.html">SCPullToRefreshViewState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCStoreMode.html">SCStoreMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SCViewControllerState.html">SCViewControllerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SCInputAccessoryViewDelegate.html">SCInputAccessoryViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCTableViewControllerDelegate.html">SCTableViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCViewControllerDelegate.html">SCViewControllerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SCibInitialization.html">SCibInitialization</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCBOOLReturnCellAction_Block">SCBOOLReturnCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellAction_Block">SCCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellBoundValueAction_Block">SCCellBoundValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCalculatedValueAction_Block">SCCellCalculatedValueAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCanPerformAction_Block">SCCellCanPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomButtonTappedAction_Block">SCCellCustomButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellCustomEditingStyleAction_Block">SCCellCustomEditingStyleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailTableViewModelAction_Block">SCCellDetailTableViewModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellDetailViewControllerAction_Block">SCCellDetailViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellEditActionsAction_Block">SCCellEditActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCellForRowAtIndexPathAction_Block">SCCellForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellLeadingSwipeActionsAction_Block">SCCellLeadingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellPerformAction_Block">SCCellPerformAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCCellTrailingSwipeActionsAction_Block">SCCellTrailingSwipeActionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCConditionalDetailModelCellAction_Block">SCConditionalDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCConditionalDetailModelSectionAction_Block">SCConditionalDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCCustomHeightForRowAtIndexPathAction_Block">SCCustomHeightForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreDeleteSuccess_Block">SCDataStoreDeleteSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFailure_Block">SCDataStoreFailure_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreFetchSuccess_Block">SCDataStoreFetchSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreInsertSuccess_Block">SCDataStoreInsertSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCDataStoreUpdateSuccess_Block">SCDataStoreUpdateSuccess_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCDetailModelCellAction_Block">SCDetailModelCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailModelSectionAction_Block">SCDetailModelSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailTableViewModelForRowAtIndexPathAction_Block">SCDetailTableViewModelForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDetailViewControllerForRowAtIndexPathAction_Block">SCDetailViewControllerForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidAddSpecialCellsAction_Block">SCDidAddSpecialCellsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCDidFetchSectionItemsAction_Block">SCDidFetchSectionItemsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCFetchSectionItemsFailedAction_Block">SCFetchSectionItemsFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerDidFinishPickingMediaAction_Block">SCImagePickerDidFinishPickingMediaAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerImageNameAction_Block">SCImagePickerImageNameAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerLoadImageAction_Block">SCImagePickerLoadImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCImagePickerSaveImageAction_Block">SCImagePickerSaveImageAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCNoConnection_Block">SCNoConnection_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousAction_Block">SCPostFetchAsyncronousAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCDataStore.h@T@SCPostFetchAsyncronousCompletionHandler_Block">SCPostFetchAsyncronousCompletionHandler_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCReuseIdForRowAtIndexPathAction_Block">SCReuseIdForRowAtIndexPathAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionAction_Block">SCSectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteFailedAction_Block">SCSectionItemDeleteFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDeleteNoConnectionAction_Block">SCSectionItemDeleteNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidCreateAction_Block">SCSectionItemDidCreateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidDeleteAction_Block">SCSectionItemDidDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidInsertAction_Block">SCSectionItemDidInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemDidUpdateAction_Block">SCSectionItemDidUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertFailedAction_Block">SCSectionItemInsertFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemInsertNoConnectionAction_Block">SCSectionItemInsertNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateFailedAction_Block">SCSectionItemUpdateFailedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemUpdateNoConnectionAction_Block">SCSectionItemUpdateNoConnectionAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillDeleteAction_Block">SCSectionItemWillDeleteAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillInsertAction_Block">SCSectionItemWillInsertAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionItemWillUpdateAction_Block">SCSectionItemWillUpdateAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCSectionActions.h@T@SCSectionViewAction_Block">SCSectionViewAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerAction_Block">SCTableViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCTableViewControllerActions.h@T@SCTableViewControllerButtonTappedAction_Block">SCTableViewControllerButtonTappedAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCCellActions.h@T@SCTextFieldShouldChangeCharactersInRangeAction_Block">SCTextFieldShouldChangeCharactersInRangeAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerAction_Block">SCViewControllerAction_Block</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:SCViewControllerActions.h@T@SCViewControllerButtonTappedAction_Block">SCViewControllerButtonTappedAction_Block</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SCModelActions</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">SCModelActions</span> <span class="p">:</span> <span class="nc">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <hr>
+
+<p>This class hosts a set of model action blocks. Once an action is set to a desired code block, it will execute the block as soon as the action occurs.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    SCSectionActions, SCCellActions.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Actions"></a>
+                <a name="//apple_ref/objc/Section/Actions" class="dashAnchor"></a>
+                <a href="#/Actions">
+                  <h3 class="section-name">Actions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didAddSection"></a>
+                    <a name="//apple_ref/objc/Property/didAddSection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didAddSection">didAddSection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as soon as a section has been added to the model.</p>
+
+<p>This action is typically used to customize automatically generated sections (e.g.: sections generated by SCArrayOfObjectsModel).</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didAddSection</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">SCTableViewSection</span> <span class="o">*</span><span class="n">section</span><span class="p">,</span> <span class="n">NSUInteger</span> <span class="n">sectionIndex</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// use custom data sorting for the first section in a Core Data SCArrayOfObjectsModel</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">sectionIndex</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">section</span> <span class="nf">isKindOfClass</span><span class="p">:[</span><span class="n">SCArrayOfObjectsSection</span> <span class="nf">class</span><span class="p">]])</span>
+    <span class="p">{</span>
+        <span class="n">SCArrayOfObjectsSection</span> <span class="o">*</span><span class="n">objectsSection</span> <span class="o">=</span> <span class="p">(</span><span class="n">SCArrayOfObjectsSection</span> <span class="o">*</span><span class="p">)</span><span class="n">section</span><span class="p">;</span>
+        <span class="n">SCCoreDataFetchOptions</span> <span class="o">*</span><span class="n">oldFetchOptions</span> <span class="o">=</span> <span class="p">(</span><span class="n">SCCoreDataFetchOptions</span> <span class="o">*</span><span class="p">)</span><span class="n">objectsSection</span><span class="p">.</span><span class="n">dataFetchOptions</span><span class="p">;</span>
+        <span class="n">objectsSection</span><span class="p">.</span><span class="n">dataFetchOptions</span> <span class="o">=</span> <span class="p">[</span><span class="n">SCCoreDataFetchOptions</span> <span class="nf">optionsWithSortKey</span><span class="p">:</span><span class="n">oldFetchOptions</span><span class="p">.</span><span class="n">sortKey</span> <span class="nf">sortAscending</span><span class="p">:</span><span class="n">FALSE</span> <span class="n">filterPredicate</span><span class="o">:</span><span class="n">oldFetchOptions</span><span class="p">.</span><span class="n">filterPredicate</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didAddSection</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">sectionIndex</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="c1">// use custom data sorting for the first section in a Core Data SCArrayOfObjectsModel</span>
+    <span class="k">if</span> <span class="n">let</span> <span class="n">objectsSection</span> <span class="o">=</span> <span class="n">section</span> <span class="n">as</span><span class="p">?</span> <span class="n">SCArrayOfObjectsSection</span>
+    <span class="err">{</span>
+        <span class="k">if</span> <span class="n">sectionIndex</span><span class="o">==</span><span class="mi">0</span>
+        <span class="err">{</span>
+            <span class="n">let</span> <span class="n">oldFetchOptions</span> <span class="o">=</span> <span class="n">objectsSection</span><span class="p">.</span><span class="n">dataFetchOptions</span>
+            <span class="n">objectsSection</span><span class="p">.</span><span class="n">dataFetchOptions</span> <span class="o">=</span> <span class="n">SCCoreDataFetchOptions</span><span class="p">(</span><span class="n">sortKey</span><span class="p">:</span> <span class="n">oldFetchOptions</span><span class="p">.</span><span class="n">sortKey</span><span class="p">,</span> <span class="n">sortAscending</span><span class="o">:</span> <span class="nb">false</span><span class="p">,</span> <span class="n">filterPredicate</span><span class="o">:</span> <span class="n">oldFetchOptions</span><span class="p">.</span><span class="n">filterPredicate</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="err">}</span>
+<span class="err">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a></span> <span class="n">didAddSection</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didAddSection</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidAddSectionAction_Block">SCDidAddSectionAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L85">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didRemoveSection"></a>
+                    <a name="//apple_ref/objc/Property/didRemoveSection" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didRemoveSection">didRemoveSection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as soon as a section has been removed from the model.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didRemoveSection</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">NSUInteger</span> <span class="n">sectionIndex</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Section at index '%i' has been removed."</span><span class="p">,</span> <span class="n">sectionIndex</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didRemoveSection</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">sectionIndex</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"Section at index '%i' has been removed."</span><span class="p">,</span> <span class="n">sectionIndex</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a></span> <span class="n">didRemoveSection</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didRemoveSection</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidRemoveSectionAction_Block">SCDidRemoveSectionAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L106">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)sortSections"></a>
+                    <a name="//apple_ref/objc/Property/sortSections" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)sortSections">sortSections</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called to give you a chance to provide custom section sorting.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sortSections</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">sections</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Rearrange the 'sections' mutable array here as you see fit</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sortSections</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">sections</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="c1">// Rearrange the 'sections' mutable array here as you see fit</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    To have the model automatically sort its sections alphabetically, simply set its &lsquo;autoSortSections&rsquo; property to TRUE.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a></span> <span class="n">sortSections</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">sortSections</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSortSectionsAction_Block">SCSortSectionsAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L129">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)sectionForSectionIndexTitle"></a>
+                    <a name="//apple_ref/objc/Property/sectionForSectionIndexTitle" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)sectionForSectionIndexTitle">sectionForSectionIndexTitle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called to give you a chance  to return the index of the section having the given title and section title index.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionForSectionIndexTitle</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSInteger</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">title</span><span class="p">,</span> <span class="n">NSInteger</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">sectionCount</span><span class="p">)</span>
+       <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+    <span class="c1">// else return the last section index</span>
+    <span class="k">return</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">sectionCount</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionForSectionIndexTitle</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NSInteger</span> <span class="k">in</span>
+
+    <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">sectionCount</span>
+    <span class="p">{</span>
+       <span class="k">return</span> <span class="n">index</span>
+    <span class="p">}</span>
+    <span class="c1">// else return the last section index</span>
+    <span class="k">return</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">sectionCount</span><span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    &lsquo;index&rsquo; is an index number identifying a section title in the SCTableViewModel&rsquo;s &lsquo;sectionIndexTitles&rsquo; array.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a></span> <span class="n">sectionForSectionIndexTitle</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">sectionForSectionIndexTitle</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionForSectionIndexTitleAction_Block">SCSectionForSectionIndexTitleAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L160">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didFinishLoadingCells"></a>
+                    <a name="//apple_ref/objc/Property/didFinishLoadingCells" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didFinishLoadingCells">didFinishLoadingCells</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as soon as the model&rsquo;s table view has finished loading all its cells.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didFinishLoadingCells</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The table view has finished loading cells."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didFinishLoadingCells</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The table view has finished loading cells."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didFinishLoadingCells</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didFinishLoadingCells</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L181">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didRefresh"></a>
+                    <a name="//apple_ref/objc/Property/didRefresh" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didRefresh">didRefresh</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as soon as the model has refreshed its contents after returning from a pull-to-refresh operation.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didRefresh</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model has been refreshed."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didRefresh</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model has been refreshed."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didRefresh</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didRefresh</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L202">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didScroll"></a>
+                    <a name="//apple_ref/objc/Property/didScroll" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didScroll">didScroll</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after the model&rsquo;s table view has started scrolling.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didScroll</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model's table view has started scrolling."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didScroll</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model's table view has started scrolling."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didScroll</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didScroll</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L224">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didEndDragging"></a>
+                    <a name="//apple_ref/objc/Property/didEndDragging" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didEndDragging">didEndDragging</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after the model&rsquo;s table view has ended dragging.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndDragging</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model's table view has ended dragging with decelerating=%i."</span><span class="p">,</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">decelerating</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndDragging</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model's table view has ended dragging with decelerating=%i."</span><span class="p">,</span> <span class="n">tableModel</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">decelerating</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didEndDragging</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didEndDragging</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L245">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didEndDecelerating"></a>
+                    <a name="//apple_ref/objc/Property/didEndDecelerating" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didEndDecelerating">didEndDecelerating</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after the model&rsquo;s table view has ended decelerating.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndDecelerating</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model's table view has ended decelerating."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndDecelerating</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model's table view has ended decelerating."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didEndDecelerating</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didEndDecelerating</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L266">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)shouldBeginEditing"></a>
+                    <a name="//apple_ref/objc/Property/shouldBeginEditing" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)shouldBeginEditing">shouldBeginEditing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as the model&rsquo;s table view is about to enter editing mode. Return NO to prevent the table view from entering editing mode, otherwise return YES.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">shouldBeginEditing</span> <span class="o">=</span> <span class="o">^</span><span class="n">BOOL</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model is about to enter editing mode."</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>     <span class="c1">// allow editing to begin</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">shouldBeginEditing</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Bool</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model is about to enter editing mode."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">true</span>     <span class="c1">// allow editing to begin</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a></span> <span class="n">shouldBeginEditing</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">shouldBeginEditing</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L292">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didBeginEditing"></a>
+                    <a name="//apple_ref/objc/Property/didBeginEditing" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didBeginEditing">didBeginEditing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after the model&rsquo;s table view has entered editing mode.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didBeginEditing</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model has entered editing mode."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didBeginEditing</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model has entered editing mode."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didBeginEditing</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didBeginEditing</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L313">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)shouldEndEditing"></a>
+                    <a name="//apple_ref/objc/Property/shouldEndEditing" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)shouldEndEditing">shouldEndEditing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as the model&rsquo;s table view is about to exit editing mode. Return NO to prevent the table view from exiting editing mode, otherwise return YES.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">shouldEndEditing</span> <span class="o">=</span> <span class="o">^</span><span class="n">BOOL</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model is about to exit editing mode."</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>     <span class="c1">// allow editing to end</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">shouldEndEditing</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Bool</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model is about to exit editing mode."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">true</span>     <span class="c1">// allow editing to end</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a></span> <span class="n">shouldEndEditing</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">shouldEndEditing</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCConditionalModelAction_Block">SCConditionalModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L338">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didEndEditing"></a>
+                    <a name="//apple_ref/objc/Property/didEndEditing" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didEndEditing">didEndEditing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after the model&rsquo;s table view has exited editing mode.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndEditing</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"The model has exited editing mode."</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didEndEditing</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"The model has exited editing mode."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span> <span class="n">didEndEditing</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didEndEditing</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCModelAction_Block">SCModelAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L359">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didMoveCell"></a>
+                    <a name="//apple_ref/objc/Property/didMoveCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didMoveCell">didMoveCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called after any of the model&rsquo;s sections&rsquo; cells has moved.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didMoveCell</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewModel</span> <span class="o">*</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">SCTableViewCell</span> <span class="o">*</span><span class="n">cell</span><span class="p">,</span> <span class="n">NSIndexPath</span> <span class="o">*</span><span class="n">fromIndexPath</span><span class="p">,</span> <span class="n">NSIndexPath</span> <span class="o">*</span><span class="n">toIndexPath</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"A cell has been moved from:%@ to:%@."</span><span class="p">,</span> <span class="n">fromIndexPath</span><span class="p">,</span> <span class="n">toIndexPath</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didMoveCell</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">fromIndexPath</span><span class="p">,</span> <span class="n">toIndexPath</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">"A cell has been moved from:%@ to:%@."</span><span class="p">,</span> <span class="n">fromIndexPath</span><span class="p">,</span> <span class="n">toIndexPath</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a></span> <span class="n">didMoveCell</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didMoveCell</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidMoveCellAction_Block">SCDidMoveCellAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L381">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/SCArrayOfItemsModel%20Actions"></a>
+                <a name="//apple_ref/objc/Section/SCArrayOfItemsModel Actions" class="dashAnchor"></a>
+                <a href="#/SCArrayOfItemsModel%20Actions">
+                  <h3 class="section-name">SCArrayOfItemsModel Actions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didFetchItemsFromStore"></a>
+                    <a name="//apple_ref/objc/Property/didFetchItemsFromStore" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didFetchItemsFromStore">didFetchItemsFromStore</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called as soon as the model has retrieved its items from their data store.</p>
+
+<p>This action is typically used to customize the &lsquo;items&rsquo; array after it has been fetched from the data store. Items can be added, removed, or rearranged. The added items can either be objects that are suppored by the data store, or normal SCTableViewCell (or subclass) objects.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didFetchItemsFromStore</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCArrayOfItemsModel</span> <span class="o">*</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">items</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Add a button cell at the end of the fetched items list</span>
+    <span class="n">SCTableViewCell</span> <span class="o">*</span><span class="n">buttonCell</span> <span class="o">=</span> <span class="p">[</span><span class="n">SCTableViewCell</span> <span class="nf">cellWithText</span><span class="p">:</span><span class="s">@"Tap me!"</span> <span class="nf">textAlignment</span><span class="p">:</span><span class="n">NSTextAlignmentCenter</span><span class="p">];</span>
+    <span class="n">buttonCell</span><span class="p">.</span><span class="n">cellActions</span><span class="p">.</span><span class="n">didSelect</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">SCTableViewCell</span> <span class="o">*</span><span class="n">cell</span><span class="p">,</span> <span class="n">NSIndexPath</span> <span class="o">*</span><span class="n">indexPath</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"buttonCell tapped!"</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="p">[</span><span class="n">items</span> <span class="nf">addObject</span><span class="p">:</span><span class="n">buttonCell</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didFetchItemsFromStore</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span> <span class="k">in</span>
+
+    <span class="c1">// Add a button cell at the end of the fetched items list</span>
+
+    <span class="n">let</span> <span class="n">buttonCell</span> <span class="o">=</span> <span class="n">SCTableViewCell</span><span class="p">(</span><span class="n">text</span><span class="o">:</span> <span class="s">"Tap me!"</span><span class="p">,</span> <span class="n">textAlignment</span><span class="o">:</span> <span class="p">.</span><span class="n">Center</span><span class="p">)</span>
+    <span class="n">buttonCell</span><span class="p">.</span><span class="n">cellActions</span><span class="p">.</span><span class="n">didSelect</span> <span class="o">=</span>
+    <span class="p">{</span>
+        <span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">in</span>
+
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">"buttonCell tapped!"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">items</span><span class="p">.</span><span class="n">addObject</span><span class="p">(</span><span class="n">buttonCell</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This action is only applicable to SCArrayOfItemsModel subclasses, such as SCArrayOfObjectsModel.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a></span> <span class="n">didFetchItemsFromStore</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didFetchItemsFromStore</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidFetchModelItemsAction_Block">SCDidFetchModelItemsAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L431">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)sectionHeaderTitleForItem"></a>
+                    <a name="//apple_ref/objc/Property/sectionHeaderTitleForItem" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)sectionHeaderTitleForItem">sectionHeaderTitleForItem</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called when SCArrayOfItemsModel requests a section header title for each of its items.</p>
+
+<p>Use this action to control how the automatically generated sections are created. In the following example, a new section will be created for each group of items sharing the same first letter (i.e.: items will be grouped alphabetically).</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionHeaderTitleForItem</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSString</span><span class="o">*</span><span class="p">(</span><span class="n">SCArrayOfItemsModel</span> <span class="o">*</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">NSObject</span> <span class="o">*</span><span class="n">item</span><span class="p">,</span> <span class="n">NSUInteger</span> <span class="n">itemIndex</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">objectName</span> <span class="o">=</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)[</span><span class="n">item</span> <span class="nf">valueForKey</span><span class="p">:</span><span class="s">@"firstName"</span><span class="p">];</span>
+
+    <span class="c1">// Return first charcter of objectName</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">objectName</span> <span class="nf">substringToIndex</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="nf">uppercaseString</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionHeaderTitleForItem</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">itemIndex</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">String</span><span class="o">!</span> <span class="k">in</span>
+
+    <span class="n">let</span> <span class="n">objectName</span> <span class="o">=</span> <span class="n">item</span><span class="p">.</span><span class="n">valueForKey</span><span class="p">(</span><span class="s">"firstName"</span><span class="p">)</span> <span class="n">as</span><span class="o">!</span> <span class="n">String</span>
+
+    <span class="c1">// Return first charcter of objectName</span>
+    <span class="k">return</span> <span class="n">objectName</span><span class="p">.</span><span class="n">substringToIndex</span><span class="p">(</span><span class="n">advance</span><span class="p">(</span><span class="n">objectName</span><span class="p">.</span><span class="n">startIndex</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">uppercaseString</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a></span> <span class="n">sectionHeaderTitleForItem</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">sectionHeaderTitleForItem</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitleForItemAction_Block">SCSectionHeaderTitleForItemAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L460">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)sectionHeaderTitles"></a>
+                    <a name="//apple_ref/objc/Property/sectionHeaderTitles" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)sectionHeaderTitles">sectionHeaderTitles</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Implement this action to provide custom sections for SCArrayOfItemsModel.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionHeaderTitles</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSArray</span><span class="o">*</span><span class="p">(</span><span class="n">SCArrayOfItemsModel</span> <span class="o">*</span><span class="n">itemsModel</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">@[</span><span class="s">@"Section A"</span><span class="p">,</span> <span class="s">@"Section B"</span><span class="p">,</span> <span class="s">@"Section C"</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">sectionHeaderTitles</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">tableModel</span><span class="p">)</span><span class="o">-&gt;</span><span class="p">[</span><span class="nf">AnyObject</span><span class="p">]</span> <span class="k">in</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="s">"Section A"</span><span class="p">,</span> <span class="s">"Section B"</span><span class="p">,</span> <span class="s">"Section C"</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a></span> <span class="n">sectionHeaderTitles</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">sectionHeaderTitles</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCSectionHeaderTitlesAction_Block">SCSectionHeaderTitlesAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L480">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)didComputeSearchResults"></a>
+                    <a name="//apple_ref/objc/Property/didComputeSearchResults" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)didComputeSearchResults">didComputeSearchResults</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Action gets called when SCArrayOfItemsModel has computed the search results for the given searchText.</p>
+
+<p>Use this action is typically used to customize the automatically computed searchResults array.</p>
+
+<p>Example:</p>
+<pre class="highlight objective_c"><code><span class="c1">// Objective-C</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didComputeSearchResults</span> <span class="o">=</span> <span class="o">^</span><span class="n">NSArray</span><span class="o">*</span><span class="p">(</span><span class="n">SCArrayOfItemsModel</span> <span class="o">*</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">searchText</span><span class="p">,</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">searchResults</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">myCustomSearchResults</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// Swift</span>
+<span class="n">modelActions</span><span class="p">.</span><span class="n">didComputeSearchResults</span> <span class="o">=</span>
+<span class="p">{</span>
+    <span class="p">(</span><span class="n">itemsModel</span><span class="p">,</span> <span class="n">searchText</span><span class="p">,</span> <span class="n">searchResults</span><span class="p">)</span><span class="o">-&gt;</span><span class="p">[</span><span class="nf">AnyObject</span><span class="p">]</span> <span class="k">in</span>
+
+    <span class="k">return</span> <span class="n">myCustomSearchResults</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>
+    <span class="n"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a></span> <span class="n">didComputeSearchResults</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didComputeSearchResults</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:SCModelActions.h@T@SCDidComputeSearchResultsAction_Block">SCDidComputeSearchResultsAction_Block</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L503">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Miscellaneous"></a>
+                <a name="//apple_ref/objc/Section/Miscellaneous" class="dashAnchor"></a>
+                <a href="#/Miscellaneous">
+                  <h3 class="section-name">Miscellaneous</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(py)ownerTableViewModel"></a>
+                    <a name="//apple_ref/objc/Property/ownerTableViewModel" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(py)ownerTableViewModel">ownerTableViewModel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The owner table view model of the actions object.
+ *</p>
+
+<ul>
+<li>- warning: This property gets set automatically by the framework, you should never set this property manually</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/SCTableViewModel.html">SCTableViewModel</a></span> <span class="o">*</span><span class="n">ownerTableViewModel</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">weak</span> <span class="k">var</span> <span class="nv">ownerTableViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/SCTableViewModel.html">SCTableViewModel</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L514">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)SCModelActions(im)setActionsTo:overrideExisting:"></a>
+                    <a name="//apple_ref/objc/Method/-setActionsTo:overrideExisting:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)SCModelActions(im)setActionsTo:overrideExisting:">-setActionsTo:overrideExisting:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method assigns all the actions of another &lsquo;SCModelActions&rsquo; class to the current one.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setActionsTo</span><span class="p">:(</span><span class="n">SCModelActions</span> <span class="o">*</span><span class="p">)</span><span class="nv">actions</span> <span class="nf">overrideExisting</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">override</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setActionsTo</span><span class="p">(</span><span class="n">_</span> <span class="nv">actions</span><span class="p">:</span> <span class="kt">SCModelActions</span><span class="o">!</span><span class="p">,</span> <span class="n">overrideExisting</span> <span class="nv">override</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>actions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The source &lsquo;SCModelActions&rsquo; class.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>override</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to TRUE to override any existing actions, otherwise set to FALSE.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/daveguerin/STV/tree/master/Sources/STV//include/SCModelActions.h#L521">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; Copyright 2010 - 2019 <a class="link" href="http://sensiblecocoa.com/" target="_blank" rel="external">Sensible Cocoa</a> and &copy; Copyright 2019  <a class="link" href="http://dgapps.ie/" target="_blank" rel="external">dgApps</a></p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
