@@ -128,28 +128,28 @@
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCCellActions.h",
-      "line": 1086,
+      "line": 1084,
       "symbol": "SCImagePickerDidFinishPickingMediaAction_Block",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCCellActions.h",
-      "line": 1088,
+      "line": 1086,
       "symbol": "SCImagePickerImageNameAction_Block",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCCellActions.h",
-      "line": 1089,
+      "line": 1087,
       "symbol": "SCImagePickerSaveImageAction_Block",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCCellActions.h",
-      "line": 1090,
+      "line": 1088,
       "symbol": "SCImagePickerLoadImageAction_Block",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
       "warning": "undocumented"
@@ -1914,594 +1914,587 @@
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 55,
-      "symbol": "SCTableViewCell.detailCellsImageViews",
+      "symbol": "SCTableViewCell.leadingSwipePerformsFirstActionWithFullSwipe",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 57,
-      "symbol": "SCTableViewCell.valueRequired",
+      "line": 56,
+      "symbol": "SCTableViewCell.trailingSwipePerformsFirstActionWithFullSwipe",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 58,
-      "symbol": "SCTableViewCell.autoValidateValue",
+      "symbol": "SCTableViewCell.detailCellsImageViews",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 60,
-      "symbol": "SCTableViewCell.commitChangesLive",
+      "symbol": "SCTableViewCell.valueRequired",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 61,
-      "symbol": "SCTableViewCell.needsCommit",
-      "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 62,
-      "symbol": "SCTableViewCell.beingReused",
+      "symbol": "SCTableViewCell.autoValidateValue",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 63,
-      "symbol": "SCTableViewCell.customCell",
+      "symbol": "SCTableViewCell.commitChangesLive",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 64,
-      "symbol": "SCTableViewCell.isSpecialCell",
+      "symbol": "SCTableViewCell.needsCommit",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
+      "line": 65,
+      "symbol": "SCTableViewCell.beingReused",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
       "line": 66,
+      "symbol": "SCTableViewCell.customCell",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
+      "line": 67,
+      "symbol": "SCTableViewCell.isSpecialCell",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
+      "line": 69,
       "symbol": "SCTableViewCell.detailViewControllerOptions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 68,
+      "line": 71,
       "symbol": "SCTableViewCell.themeStyle",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 275,
-      "symbol": "SCTableViewCell.cellCreatedInIB",
-      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 278,
-      "symbol": "SCTableViewCell.ibDetailViewControllerIdentifier",
-      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 281,
-      "symbol": "SCTableViewCell.generatesDetailView",
-      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 432,
+      "line": 450,
       "symbol": "SCCustomCell._pauseControlEvents",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 434,
+      "line": 452,
       "symbol": "SCCustomCell._objectBindings",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 436,
+      "line": 454,
       "symbol": "SCCustomCell._autoResize",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 437,
+      "line": 455,
       "symbol": "SCCustomCell._showClearButtonInInputAccessoryView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 573,
+      "line": 591,
       "symbol": "SCCustomCell.-callDidBecomeFirstResponderActions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 574,
+      "line": 592,
       "symbol": "SCCustomCell.-callDidResignFirstResponderActions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 577,
+      "line": 595,
       "symbol": "SCCustomCell.-setInitialControlValueIfNeeded:propertyName:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 597,
+      "line": 615,
       "symbol": "SCControlCell._boundValueLoaded",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 598,
+      "line": 616,
       "symbol": "SCControlCell._initialControlColor",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 600,
+      "line": 618,
       "symbol": "SCControlCell.maxTextLabelWidth",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 601,
+      "line": 619,
       "symbol": "SCControlCell.controlIndentation",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 602,
+      "line": 620,
       "symbol": "SCControlCell.controlMargin",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 603,
+      "line": 621,
       "symbol": "SCControlCell.showClearButtonInInputAccessoryView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 644,
+      "line": 662,
       "symbol": "SCControlCell.ibControlLabel",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 723,
+      "line": 741,
       "symbol": "SCTextViewCell.minimumHeight",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 724,
+      "line": 742,
       "symbol": "SCTextViewCell.maximumHeight",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 826,
+      "line": 844,
       "symbol": "SCNumericTextFieldCell.minimumValue",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 827,
+      "line": 845,
       "symbol": "SCNumericTextFieldCell.maximumValue",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 828,
+      "line": 846,
       "symbol": "SCNumericTextFieldCell.allowFloatValue",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 829,
+      "line": 847,
       "symbol": "SCNumericTextFieldCell.displayZeroAsBlank",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 830,
+      "line": 848,
       "symbol": "SCNumericTextFieldCell.numberFormatter",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1006,
+      "line": 1024,
       "symbol": "SCDateCell._pickerField",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1007,
+      "line": 1025,
       "symbol": "SCDateCell._activePickerDetailViewController",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1009,
+      "line": 1027,
       "symbol": "SCDateCell.datePicker",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1010,
+      "line": 1028,
       "symbol": "SCDateCell.dateFormatter",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1011,
+      "line": 1029,
       "symbol": "SCDateCell.displaySelectedDate",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1083,
+      "line": 1101,
       "symbol": "SCImagePickerCell.cachedImage",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1087,
+      "line": 1105,
       "symbol": "SCImagePickerCell.popover",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1091,
+      "line": 1109,
       "symbol": "SCImagePickerCell.imagePickerController",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1092,
+      "line": 1110,
       "symbol": "SCImagePickerCell.placeholderImageName",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1093,
+      "line": 1111,
       "symbol": "SCImagePickerCell.placeholderImageTitle",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1094,
+      "line": 1112,
       "symbol": "SCImagePickerCell.displayImageNameAsCellText",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1095,
+      "line": 1113,
       "symbol": "SCImagePickerCell.askForSourceType",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1096,
+      "line": 1114,
       "symbol": "SCImagePickerCell.clearImageButton",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1097,
+      "line": 1115,
       "symbol": "SCImagePickerCell.displayClearImageButtonInDetailView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1098,
+      "line": 1116,
       "symbol": "SCImagePickerCell.autoPositionClearImageButton",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1099,
+      "line": 1117,
       "symbol": "SCImagePickerCell.autoPositionImageView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1101,
+      "line": 1119,
       "symbol": "SCImagePickerCell.textLabelFrame",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1102,
+      "line": 1120,
       "symbol": "SCImagePickerCell.imageViewFrame",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1104,
+      "line": 1122,
       "symbol": "SCImagePickerCell.selectedImageName",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1216,
+      "line": 1234,
       "symbol": "SCSelectionCell.selectionItemsStore",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1217,
+      "line": 1235,
       "symbol": "SCSelectionCell.selectionItemsFetchOptions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1219,
+      "line": 1237,
       "symbol": "SCSelectionCell.allowMultipleSelection",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1220,
+      "line": 1238,
       "symbol": "SCSelectionCell.allowNoSelection",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1221,
+      "line": 1239,
       "symbol": "SCSelectionCell.maximumSelections",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1222,
+      "line": 1240,
       "symbol": "SCSelectionCell.autoDismissDetailView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1223,
+      "line": 1241,
       "symbol": "SCSelectionCell.hideDetailViewNavigationBar",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1225,
+      "line": 1243,
       "symbol": "SCSelectionCell.allowAddingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1226,
+      "line": 1244,
       "symbol": "SCSelectionCell.allowDeletingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1227,
+      "line": 1245,
       "symbol": "SCSelectionCell.allowMovingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1228,
+      "line": 1246,
       "symbol": "SCSelectionCell.allowEditDetailView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1230,
+      "line": 1248,
       "symbol": "SCSelectionCell.displaySelection",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1231,
+      "line": 1249,
       "symbol": "SCSelectionCell.delimeter",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1233,
+      "line": 1251,
       "symbol": "SCSelectionCell.selectedItemsIndexes",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1235,
+      "line": 1253,
       "symbol": "SCSelectionCell.placeholderCell",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1236,
+      "line": 1254,
       "symbol": "SCSelectionCell.addNewItemCell",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1403,
+      "line": 1421,
       "symbol": "SCObjectSelectionCell.intermediateEntityDefinition",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1479,
+      "line": 1497,
       "symbol": "SCObjectCell.boundObjectTitleText",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1562,
+      "line": 1580,
       "symbol": "SCArrayOfObjectsCell.dataStore",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1563,
+      "line": 1581,
       "symbol": "SCArrayOfObjectsCell.dataFetchOptions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1565,
+      "line": 1583,
       "symbol": "SCArrayOfObjectsCell.allowAddingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1566,
+      "line": 1584,
       "symbol": "SCArrayOfObjectsCell.allowDeletingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1567,
+      "line": 1585,
       "symbol": "SCArrayOfObjectsCell.allowMovingItems",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1568,
+      "line": 1586,
       "symbol": "SCArrayOfObjectsCell.allowEditDetailView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1569,
+      "line": 1587,
       "symbol": "SCArrayOfObjectsCell.allowRowSelection",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1570,
+      "line": 1588,
       "symbol": "SCArrayOfObjectsCell.autoSelectNewItemCell",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1571,
+      "line": 1589,
       "symbol": "SCArrayOfObjectsCell.displayItemsCountInBadgeView",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1573,
+      "line": 1591,
       "symbol": "SCArrayOfObjectsCell.placeholderCell",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1574,
+      "line": 1592,
       "symbol": "SCArrayOfObjectsCell.addNewItemCell",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1575,
+      "line": 1593,
       "symbol": "SCArrayOfObjectsCell.addNewItemCellExistsInNormalMode",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1576,
+      "line": 1594,
       "symbol": "SCArrayOfObjectsCell.addNewItemCellExistsInEditingMode",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
     },
     {
       "file": "/Users/daveguerin/Xcode/@SPM/STV/Sources/STV/include/SCTableViewCell.h",
-      "line": 1578,
+      "line": 1596,
       "symbol": "SCArrayOfObjectsCell._detailSectionActions",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.ivar",
       "warning": "undocumented"
