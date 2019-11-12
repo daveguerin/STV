@@ -4,10 +4,15 @@ A Swift Packge of the amazing **SensibleTableView** framework by [Sensible Cocoa
 iOS 13 compatability, Xcode 11 compatability, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
 
 ## LICENSE
-**SensibleTableView** is now licensed under the MIT License. See [STV.txt](./License/STV.txt) and [STV.plist](./License/STV.plist) in the [License](./License/) folder.
+**SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/) folder.
 
 ## USAGE
-* Add STV to an Xcode 11 project as simply as `File > Swift Packages >  Add Package Dependancy...` and use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/).
+Add STV to an Xcode 11 project as simply as:
+
+* `File > Swift Packages >  Add Package Dependancy...`
+* Use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/).
+* Set the version to 'Up to next major'
+* Choose the target where you want to use it.
 * Add an `@import STV;` in your code.
 * Marvel and enjoy! 
 * Maybe RTFM a bit :-)
@@ -22,11 +27,13 @@ Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 
 5.x Docset Feed: [http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom](http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom)  
 
-The Docset Feed is for Xcode, Dash, and other documentation browsers.
+6.x Docset Feed: [https://daveguerin.github.io/STV/docsets/STV.xml](https://daveguerin.github.io/STV/docsets/STV.xml)  
+
+The Docset Feeds are for Xcode, Dash, and other documentation browsers.
 
 ## TODO
-* Update the documentation and the docset feed.
-* Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13?
+* Update the documentation.
+* Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13.x?
 * Add an example, or two? Seperate repository?
 
 ## CHANGELOG
