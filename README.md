@@ -53,10 +53,12 @@ The Docset Feed is for Xcode, Dash, and other documentation browsers.
 * Now using iOS 13 labelColor with a fallback for earlier iOS.
 * Now using UIFontTextStyleBody as the main font.
 * Added two new cellActions: leadingSwipeActions and trailingSwipeActions. iOS 11 and up only. 
+* All UIPopoverController are now clang diagnostic ignored "-Wdeprecated-declarations"
+
 
 
 ## VERSION HISTORY
-* STV 6.0.0 Xxx XX 2019 - First [open source Swift Package release](https://github.com/daveguerin/STV) by [dgApps](http://dgapps.ie/).  
+* STV 6.0.0 Nov 12 2019 - First [open source Swift Package release](https://github.com/daveguerin/STV) by [dgApps](http://dgapps.ie/).  
 * STV 5.4.0 Apr 12 2018 - First [open source release](https://github.com/wizgod/STV) by [wizgod](https://github.com/wizgod) with [permission of Sensible Cocoa/Tarek Sakr](http://sensiblecocoa.com/community/topic/2534-stv-on-github/#entry13576).  
 * STV 5.4.0 Oct 15 2016 - Last closed source release from Sensible Cocoa.  
 * STV 4.2.5 Jun 30 2015  
