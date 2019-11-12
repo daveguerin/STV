@@ -1829,8 +1829,13 @@
         }
     }
 
-    UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:leadingSwipeActions];
-    return swipeActionsConfiguration;
+    if (leadingSwipeActions) {
+        UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:leadingSwipeActions];
+        swipeActionsConfiguration.performsFirstActionWithFullSwipe = cell.leadingSwipePerformsFirstActionWithFullSwipe;
+        return swipeActionsConfiguration;
+    }
+    // else
+    return nil;
 }
 
 
@@ -1854,8 +1859,14 @@
         }
     }
 
-    UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:trailingSwipeActions];
-    return swipeActionsConfiguration;
+    if (trailingSwipeActions) {
+        UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:trailingSwipeActions];
+        swipeActionsConfiguration.performsFirstActionWithFullSwipe = cell.trailingSwipePerformsFirstActionWithFullSwipe;
+        return swipeActionsConfiguration;
+    }
+    // else
+    return nil;
+
 }
 
 // ...dgApps
