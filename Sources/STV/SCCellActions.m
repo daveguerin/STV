@@ -3,8 +3,8 @@
  *  Sensible TableView
  *  Version: 6.0.0
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2029 dgApps. All rights reserved.
  *
  */
 
@@ -49,6 +49,12 @@
         self.didDeselect = actions.didDeselect;
     if((override || !self.editActions) && actions.editActions)
         self.editActions = actions.editActions;
+    if ((override || !self.leadingSwipeActions) && actions.leadingSwipeActions) {       // dgApps
+        self.leadingSwipeActions = actions.leadingSwipeActions;                         // dgApps
+    }                                                                                   // dgApps
+    if ((override || !self.trailingSwipeActions) && actions.trailingSwipeActions) {     // dgApps
+        self.trailingSwipeActions = actions.trailingSwipeActions;                       // dgApps
+    }                                                                                   // dgApps
     if((override || !self.customEditingStyle) && actions.customEditingStyle)
         self.customEditingStyle = actions.customEditingStyle;
     if((override || !self.didBecomeFirstResponder) && actions.didBecomeFirstResponder)

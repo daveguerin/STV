@@ -1,7 +1,7 @@
 # STV
 A Swift Packge of the amazing **SensibleTableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
 
-iOS 13 compatability, Xcode 11 compatability, and Swift Packaging by [dgApps](http://dgapps.ie/), although it's all still glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
+iOS 13 compatability, Xcode 11 compatability, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
 
 ## LICENSE
 **SensibleTableView** is now licensed under the MIT License. See [STV.txt](./License/STV.txt) and [STV.plist](./License/STV.plist) in the [License](./License/) folder.
@@ -52,6 +52,7 @@ The Docset Feed is for Xcode, Dash, and other documentation browsers.
 * Bumped the version to 6.0.0.
 * Now using iOS 13 labelColor with a fallback for earlier iOS.
 * Now using UIFontTextStyleBody as the main font.
+* Added two new cellActions: leadingSwipeActions and trailingSwipeActions. iOS 11 and up only. 
 
 
 ## VERSION HISTORY

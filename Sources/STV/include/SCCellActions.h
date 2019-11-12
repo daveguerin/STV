@@ -4,6 +4,7 @@
  *  Version: 6.0.0
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2029 dgApps. All rights reserved.
  *
  *
  */
@@ -20,6 +21,8 @@ typedef void(^SCCellAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath)
 typedef BOOL(^SCBOOLReturnCellAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
 typedef UITableViewCellEditingStyle(^SCCellCustomEditingStyleAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
 typedef NSArray*(^SCCellEditActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
+typedef NSArray*(^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);    // dgApps
+typedef NSArray*(^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);   // dgApps
 typedef NSObject*(^SCCellCalculatedValueAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
 typedef NSObject*(^SCCellBoundValueAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath, NSObject *value);
 typedef void(^SCCellCustomButtonTappedAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath, UIButton *button);
@@ -349,6 +352,85 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     }
  */
 @property (nonatomic, copy) SCCellEditActionsAction_Block editActions;
+
+
+// dgApps...
+/** Action gets called to provide custom swip action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
+
+ Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
+
+ Return nil if you want the cell to display the default set of actions. Note it's an NSArray that is returned here, not a UISwipeActionsConfiguration.
+
+ @return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the leading edge of the cell.
+
+ @warning Only available in iOS 11 and later.
+
+ Example:
+
+ cellActions.leadingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
+     UIContextualAction *inAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"In" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+         // code
+         completionHandler(YES);
+     }];
+
+
+     UIContextualAction *outAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Out" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+         // code
+         completionHandler(YES);
+     }];
+
+     inAction.backgroundColor = [UIColor systemGreenColor];
+     outAction.backgroundColor = [UIColor systemYellowColor];
+
+     UISwipeActionsConfiguration *leadingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[inAction, outAction]];
+     leadingSwipeActions.performsFirstActionWithFullSwipe = NO;
+
+     return leadingSwipeActions;
+ };
+
+ */
+
+@property (nonatomic, copy) SCCellLeadingSwipeActionsAction_Block leadingSwipeActions;
+// ...dgapps
+
+// dgApps...
+/** Action gets called to provide custom swip action buttons that appear when the user swipes the cell horizontally from it's trailing edge. For example, in a left-to-right language environment, they are displayed on the right side of the row when the user swipes from right to left.
+
+Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
+
+Return nil if you want the cell to display the default set of actions. Note it's an NSArray that is returned here, not a UISwipeActionsConfiguration.
+
+@return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the trailing edge of the cell.
+
+@warning Only available in iOS 11 and later.
+
+ cellActions.trailingSwipeActions = ^NSArray*(SCTableViewCell *cell, NSIndexPath *indexPath) {
+     UIContextualAction *archiveAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"Archive" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+         // code
+         completionHandler(YES);
+     }];
+
+     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+         // code
+         completionHandler(YES);
+     }];
+
+     archiveAction.backgroundColor = [UIColor systemOrangeColor];
+     deleteAction.backgroundColor = [UIColor systemRedColor];
+
+     UISwipeActionsConfiguration *trailingSwipeActions = [UISwipeActionsConfiguration configurationWithActions:@[archiveAction, deleteAction]];
+     trailingSwipeActions.performsFirstActionWithFullSwipe = NO;
+
+     return trailingSwipeActions;
+ };
+ */
+
+@property (nonatomic, copy) SCCellTrailingSwipeActionsAction_Block trailingSwipeActions;
+// ...dgapps
+
+
+
+
 
 
 /** Action gets called when the cell (or more typically one of the cell's controls) becomes the first responder.

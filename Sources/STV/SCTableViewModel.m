@@ -4,7 +4,7 @@
  *  Version: 6.0.0
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright 2019 dgApps. All rights reserved.
+ *  Copyright © 2029 dgApps. All rights reserved.
  *
  */
 
@@ -1806,6 +1806,64 @@
     
     return editActions;
 }
+
+
+// dgApps...
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+    NSArray *leadingSwipeActions = nil;
+
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+
+    if(cell.cellActions.leadingSwipeActions) {
+        leadingSwipeActions = cell.cellActions.leadingSwipeActions(cell, indexPath);
+    }
+    else {
+        if(section.cellActions.leadingSwipeActions) {
+            leadingSwipeActions = section.cellActions.leadingSwipeActions(cell, indexPath);
+        }
+        else {
+            if(self.cellActions.leadingSwipeActions) {
+                leadingSwipeActions = self.cellActions.leadingSwipeActions(cell, indexPath);
+            }
+        }
+    }
+
+    UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:leadingSwipeActions];
+    return swipeActionsConfiguration;
+}
+
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+    NSArray *trailingSwipeActions = nil;
+
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+
+    if(cell.cellActions.trailingSwipeActions) {
+        trailingSwipeActions = cell.cellActions.trailingSwipeActions(cell, indexPath);
+    }
+    else {
+        if(section.cellActions.trailingSwipeActions) {
+            trailingSwipeActions = section.cellActions.trailingSwipeActions(cell, indexPath);
+        }
+        else {
+            if(self.cellActions.leadingSwipeActions) {
+                trailingSwipeActions = self.cellActions.trailingSwipeActions(cell, indexPath);
+            }
+        }
+    }
+
+    UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:trailingSwipeActions];
+    return swipeActionsConfiguration;
+}
+
+// ...dgApps
+
+
+
+
+
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
