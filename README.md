@@ -1,25 +1,27 @@
 # STV
 A Swift Packge of the amazing **SensibleTableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
 
-iOS 13 compatability, Xcode 11 compatability, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
+iOS 13 compatibility, Xcode 11 compatibility, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
 
 ## LICENSE
-**SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/Sources/STV/License/) folder.
+**SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.
+
+## REQUIREMENTS
+* Xcode 11 and later.
+* iOS 9 and later.
 
 ## USAGE
 Add STV to an Xcode 11 project as simply as:
 
 * `File > Swift Packages >  Add Package Dependancy...`
-* Use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/).
-* Set the version to 'Up to next major'
+* Use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/)
+* Set the version to 'Up to next major'.
 * Choose the target where you want to use it.
 * Add an `@import STV;` in your code.
 * Marvel and enjoy! 
 * Maybe RTFM a bit :-)
  
-
 ## DOCUMENTATION
-Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 
 5.x Manual: [http://sensiblecocoa.com/usermanual/latest](http://sensiblecocoa.com/usermanual/latest)
 
@@ -27,14 +29,26 @@ Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 
 5.x Docset Feed: [http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom](http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom)  
 
+6.x API Docs: [https://daveguerin.github.io/STV/](https://daveguerin.github.io/STV/)
+
 6.x Docset Feed: [https://daveguerin.github.io/STV/docsets/STV.xml](https://daveguerin.github.io/STV/docsets/STV.xml)  
 
-The Docset Feeds are for Xcode, Dash, and other documentation browsers.
+The Docset Feeds are for Dash and other documentation browsers.
+
+## FORUM
+
+Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
+
+## ISSUES
+Please report any issues and bugs with this Swift Package of STV via [https://github.com/daveguerin/STV/issues](https://github.com/daveguerin/STV/issues). 
+
+[Pull requests](https://github.com/daveguerin/STV/pulls) are much appreciated!
+
 
 ## TODO
 * Update the documentation.
 * Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13.x?
-* Add an example, or two? Seperate repository?
+* Add an example, or two? Separate repository?
 
 ## CHANGELOG
 

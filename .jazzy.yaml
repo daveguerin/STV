@@ -26,7 +26,7 @@ readme: README.md
 # podspec:
 # docset_icon:
 # docset_path:
-root_url: https://github.com/daveguerin/docs
+root_url: https://daveguerin.github.io/STV/
 dash_url: https://daveguerin.github.io/STV/docsets/STV.xml
 github_url: https://github.com/daveguerin/STV/
 github_file_prefix: https://github.com/daveguerin/STV/tree/master/Sources/STV/
