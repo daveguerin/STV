@@ -1,7 +1,12 @@
 # STV
-A Swift Packge of the amazing **SensibleTableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
+A Swift Packge of the amazing **Sensible TableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
 
 iOS 13 compatibility, Xcode 11 compatibility, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
+
+### What is Sensible TableView?
+**Sensible TableView** (STV) is a Swift Package that drastically simplifies iOS table view development, while focusing on delivering a simple and enjoyable developer experience. Every single thing that can be done with normal table views can still be done with STV, only a lot easier. Have a custom UITableView subclass? No problem, STV flawlessly integrates with that. A custom cell? Even better! Custom view controllers? STV’s bread and butter! STV elegantly reduces the amount of work you have to do to an absolute bare minimum!
+
+Based on countless user testimonials and feedback, [Sensible Cocoa](http://sensiblecocoa.com/) found that developers were saving on average about 70% of their development time when they started using STV in their apps. What this means is that an app that would normally take weeks or even months for to develop alone, can now be conceived in just a matter of days using STV. Since STV keeps your code very short, simple and straight forward, maintenance suddenly becomes much easier.
 
 ## LICENSE
 **SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.
@@ -22,66 +27,30 @@ Add STV to an Xcode 11 project as simply as:
 * Maybe RTFM a bit :-)
  
 ## DOCUMENTATION
-
 5.x Manual: [http://sensiblecocoa.com/usermanual/latest](http://sensiblecocoa.com/usermanual/latest)
 
 5.x API Docs: [http://sensiblecocoa.com/documentation/latest](http://sensiblecocoa.com/documentation/latest)
 
 5.x Docset Feed: [http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom](http://sensiblecocoa.com/documentation/latest/com.sensiblecocoa.STV-5.0.atom)  
 
-6.x API Docs: [https://daveguerin.github.io/STV/](https://daveguerin.github.io/STV/)
+6.x API Docs: [https://daveguerin.github.io/STVDocumentation/](https://daveguerin.github.io/STVDocumentation/)
 
-6.x Docset Feed: [https://daveguerin.github.io/STV/docsets/STV.xml](https://daveguerin.github.io/STV/docsets/STV.xml)  
+6.x Docset Feed: [https://daveguerin.github.io/STVDocumentation/docsets/STV.xml](https://daveguerin.github.io/STVDocumentation/docsets/STV.xml)  
 
-The Docset Feeds are for Dash and other documentation browsers.
+The Docset Feeds are for [Dash](https://kapeli.com/dash) and other documentation browsers.
 
 ## FORUM
-
 Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
 
 ## ISSUES
 Please report any issues and bugs with this Swift Package of STV via [https://github.com/daveguerin/STV/issues](https://github.com/daveguerin/STV/issues). 
 
-[Pull requests](https://github.com/daveguerin/STV/pulls) are much appreciated!
+[Pull requests](https://github.com/daveguerin/STV/pulls) are very much appreciated!
 
+## CHANGELOG
+CHANGELOG: [https://github.com/daveguerin/STV/tree/master/CHANGELOG.md](https://github.com/daveguerin/STV/tree/master/CHANGELOG.md)
 
 ## TODO
 * Update the documentation.
 * Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13.x?
 * Add an example, or two? Separate repository?
-
-## CHANGELOG
-
-### STV 6.0.0
-* No longer a framework, now a Swift Package.
-* Added Ozies fix for disappearing cells in iOS 11 [http://sensiblecocoa.com/community/topic/2535-stv-ios-11-issues/#entry13604](http://sensiblecocoa.com/community/topic/2535-stv-ios-11-issues/#entry13604). Thanks Ozie!
-* Added lots of `self->` to avoid an Xcode warning: "_Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behaviour_".
-* Remarked out the `-splitViewController:shouldHideViewController:inOrientation:` method as it's now deprecated.
-* The `-live` method of `SCTableViewModel` was causing an assert in iOS 13: "_Attempted to access the table view's visibleCells while they were in the process of being updated, which is not allowed_". So STV is no longer trying to count the visibleCells there, which might make it slightly less efficient, but there's no assert!
-* The `-cellAtIndexPath:` method of `SCTableViewModel` was also causing an assert in iOS 13: "_Attempted to call -cellForRowAtIndexPath: on the table view while it was in the process of updating its visible cells, which is not allowed_". This was introduced by the change in `-live`. So STV is no longer calling `-cellForRowAtIndexPath` here, which again is going to make it less efficient, but now there's no assert.
-* The `-tableView:shouldIndentWhileEditingRowAtIndexPath:` method of  `SCTableViewModel` was also causing an assert in iOS 13: "_Attempted to call -cellForRowAtIndexPath: on the table view while it was in the process of updating its visible cells, which is not allowed._" A bit of a kludge, but the method now just returns the default value, YES, here.
-* Remarked out a deprecated method `-splitViewController:shouldHideViewController:inOrientation:` in both `SCViewController` and `SCTableViewController`.
-* Fixed lots of "_This block declaration is not a prototype_" warnings from Xcode 11 with the suggested fix of adding `void`.
-* Removed all the Interface Builder/Storyboard stuff, sorry Tarek.
-* Removed the examples.
-* Removed the framework build scripts as they are no longer required.
-* Removed the install and uninstall scripts as they are no longer required.
-* Removed the Xcode templates.
-* Edited the inline documentation to fix all Xcode warnings.
-* Added STVCoreData classes to the main package. STViCloud, STVParse, and STVWebServices are not part of this package.
-* Added license files in TXT and PLIST format. The PLIST can be used in a Settings bundle.
-* Bumped the version to 6.0.0.
-* Now using iOS 13 labelColor with a fallback for earlier iOS.
-* Now using UIFontTextStyleBody as the main font.
-* Added two new cellActions: leadingSwipeActions and trailingSwipeActions. iOS 11 and up only. 
-* All UIPopoverController are now clang diagnostic ignored "-Wdeprecated-declarations"
-
-
-
-## VERSION HISTORY
-* STV 6.0.0 Nov 12 2019 - First [open source Swift Package release](https://github.com/daveguerin/STV) by [dgApps](http://dgapps.ie/).  
-* STV 5.4.0 Apr 12 2018 - First [open source release](https://github.com/wizgod/STV) by [wizgod](https://github.com/wizgod) with [permission of Sensible Cocoa/Tarek Sakr](http://sensiblecocoa.com/community/topic/2534-stv-on-github/#entry13576).  
-* STV 5.4.0 Oct 15 2016 - Last closed source release from Sensible Cocoa.  
-* STV 4.2.5 Jun 30 2015  
-* STV 3.4.2 Jul 02 2014  
-* STV 2.2.0 Sep 29 2012
