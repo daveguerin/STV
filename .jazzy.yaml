@@ -1,5 +1,5 @@
-output: docs
-clean: true
+output: ../../@Documentation/STVDocumentation/docs
+clean: false
 objc: true
 umbrella_header: ./Sources/STV/include/SensibleTableView.h
 # framework_root: 
@@ -36,6 +36,6 @@ skip_undocumented: false
 hide_documentation_coverage: false
 # custom_categories:
 # head:
-theme: apple
+theme: fullwidth
 # use_safe_filenames:
 # undocumented_text:
