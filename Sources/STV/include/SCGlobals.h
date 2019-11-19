@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 @interface NSObject (SensibleCocoa)
 
-/* 
+/**
  This method allows accessing array values in a regular key-path string by placing the array item index between brakets.
  
  Examples: 
@@ -119,13 +119,13 @@ typedef NS_ENUM(NSInteger, SCDataType)
  */
 - (instancetype)valueForSensibleKeyPath:(NSString *)keyPath;
 
-/* Similar to valueForSensibleKeyPath, this method uses a Sensible keyPath to set a value. */
+/** Similar to valueForSensibleKeyPath, this method uses a Sensible keyPath to set a value. */
 - (void)setValue:(id)value forSensibleKeyPath:(NSString *)keyPath;
 
 @end
 
 
-// For internal framework use only
+/** For internal framework use only */
 @interface UILabel (SensibleCocoa)
 
 @property (nonatomic, copy) NSString *prefix;
@@ -149,18 +149,18 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 #define  kNoInternetConnectionString @"No Internet Connection"
 
-/* This class defines a set of internal helper methods */
+/** This class defines a set of internal helper methods */
 @interface SCUtilities : NSObject
 {
 }
 
-/* Method determines the system version */
+/** Method determines the system version */
 + (double)systemVersion;
 
-/* Method determines if code is being run on an iPad */
+/** Method determines if code is being run on an iPad */
 + (BOOL)is_iPad;
 
-/* Method determines if the given view is inside a popover view */
+/** Method determines if the given view is inside a popover view */
 + (BOOL)isViewInsidePopover:(UIView *)view;
 
 + (BOOL)IsInternetConnectionAvailable;
@@ -187,14 +187,15 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 + (BOOL)propertyName:(NSString *)propertyName existsInObject:(NSObject *)object;
 
-/*  Returns the the value for the given property in the given object. 
+/**  Returns the the value for the given property in the given object.
  *	@param propertyName The name of the property whose value is requested. propertyName can be
  *	given in a key-path format (e.g.: "subObject1.subObject2.subObject3"). More than one property
  *	can be given, separated by ';' (e.g.: "property1;property2;property3").
  *	@param object The owner object of the given property.  
  *	@return Returns the value of the given property. If more than one property name is given
  *	(separated by ';'), the return value is an NSArray. Returns nil if property does not exist
- *	in object (or NSNull if more than one property name is given). */
+ *	in object (or NSNull if more than one property name is given).
+ */
 + (NSObject *)valueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
 
 + (NSString *)stringValueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
@@ -211,7 +212,7 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 + (NSString *)base64EncodedStringFromString:(NSString *)string;
 
-/* We need our own instantiator for cases where we need to port Xcode 6 view controller id naming conventions to Xcode 7 */
+/** We need our own instantiator for cases where we need to port Xcode 6 view controller id naming conventions to Xcode 7 */
 + (UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier usingStoryboard:(UIStoryboard *)storyboard;
 
 + (NSDate *)stripTimeFromDate:(NSDate *)date;
@@ -223,7 +224,7 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 @class SCTableViewModel;
 
-/* This class defines a tabel view model center.
+/** This class defines a tabel view model center.
  * IMPORTANT: This class is usually only used internally by the framework. */
 @interface SCModelCenter : NSObject
 {
