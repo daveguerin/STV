@@ -3656,13 +3656,14 @@
 		maximumSelections = 0;
 		autoDismissViewController = FALSE;
 		_selectedItemsIndexes = [[NSMutableSet alloc] init];
-        
-        _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+
         if (@available(iOS 13.0, *)) {
+            _selectedCellTextColor = [UIColor linkColor]; // dgApps
             _deselectedCellTextColor = [UIColor labelColor]; // dgApps
         }
         else {
-           _deselectedCellTextColor =  [UIColor blackColor];
+            _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+            _deselectedCellTextColor =  [UIColor blackColor];
         }
 	}
 	
@@ -4094,15 +4095,17 @@
 		maximumSelections = 0;
 		autoDismissViewController = FALSE;
         selectedItemsIndexes = [[NSMutableSet alloc] init];
-        
-        _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+
+
         if (@available(iOS 13.0, *)) {
+            _selectedCellTextColor = [UIColor linkColor]; // dgApps
             _deselectedCellTextColor = [UIColor labelColor]; // dgApps
         }
         else {
+            _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
             _deselectedCellTextColor = [UIColor blackColor];
         }
-        
+
         intermediateEntityDefinition = nil;
 	}
 	

@@ -3622,7 +3622,12 @@
 	if([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]])
 	{
 		cell.accessoryType = UITableViewCellAccessoryCheckmark;
-		cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+        if (@available(iOS 13.0, *)) {
+            cell.textLabel.textColor = [UIColor linkColor]; // dgApps
+        }
+        else {
+            cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+        }
 	}
 	else
 	{
@@ -3716,8 +3721,14 @@
 		if(boundToNSString)
 			self.boundValue = [self buildStringFromSelectedItemsIndexes];
 	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
-	selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-	
+
+    if (@available(iOS 13.0, *)) {
+        selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
+    }
+    else {
+        selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    }
+
 	[self valueChangedForSectionAtIndex:indexPath.section];
 	
 	[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
@@ -3996,7 +4007,13 @@
 	if([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]])
 	{
 		cell.accessoryType = UITableViewCellAccessoryCheckmark;
-		cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+
+        if (@available(iOS 13.0, *)) {
+            cell.textLabel.textColor = [UIColor linkColor]; // dgApps
+        }
+        else {
+            cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+        }
 	}
 	else
 	{
@@ -4094,7 +4111,13 @@
 	[self selectedItemsIndexesModified];
     
 	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
-	selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+
+    if (@available(iOS 13.0, *)) {
+        selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
+    }
+    else {
+        selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
+    }
 	
 	[self valueChangedForSectionAtIndex:indexPath.section];
 	
