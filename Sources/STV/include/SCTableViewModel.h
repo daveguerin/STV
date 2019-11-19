@@ -120,12 +120,13 @@
  */
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
-/**
- The model's pull-to-refresh view.
- 
- @warning This property has been deprecated. Use refreshControl instead.
- */
-@property (nonatomic, strong) SCPullToRefreshView *pullToRefreshView __attribute__((deprecated));
+// dgApps remarked out the deprecated method
+// /**
+// The model's pull-to-refresh view.
+//
+// @warning This property has been deprecated. Use refreshControl instead.
+// */
+//@property (nonatomic, strong) SCPullToRefreshView *pullToRefreshView __attribute__((deprecated));
 
 /**	
  When set to a valid UIBarButtonItem, SCTableViewModel automatically puts its table view
@@ -376,12 +377,13 @@
 /**	The UITableView bound to 'SCTableViewModel'. */
 @property (nonatomic, weak) UITableView *tableView;
 
-/**	
- The UITableView bound to 'SCTableViewModel'.
- 
- @warning This property has been deprecated. Use tableView instead.
- */
-@property (nonatomic, weak) UITableView *modeledTableView;
+// dgApps remarked out the deprecated property
+// /**
+// The UITableView bound to 'SCTableViewModel'.
+//
+// @warning This property has been deprecated. Use tableView instead.
+// */
+//@property (nonatomic, weak) UITableView *modeledTableView;
 
 /**	The UIViewController of tableView. */
 @property (nonatomic, readonly) UIViewController *viewController;
@@ -395,12 +397,13 @@
 /** Sets the editing mode for tableView. */
 - (void)setTableViewEditing:(BOOL)editing animated:(BOOL)animate;
 
-/** 
- Sets the editing mode for tableView.
- 
- @warning This method has been deprecated. Use setTableViewEditing:animated: instead.
- */
-- (void)setModeledTableViewEditing:(BOOL)editing animated:(BOOL)animate;
+// dgApps remarked out the deprecated method
+// /**
+// Sets the editing mode for tableView.
+//
+// @warning This method has been deprecated. Use setTableViewEditing:animated: instead.
+// */
+//- (void)setModeledTableViewEditing:(BOOL)editing animated:(BOOL)animate;
 
 
 /**
