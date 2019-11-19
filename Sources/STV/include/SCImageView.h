@@ -1,9 +1,7 @@
 /*
  *  SCImageView.h
  *  Sensible TableView
- *  Version: 6.0.0
  *
-
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
  *
  *
