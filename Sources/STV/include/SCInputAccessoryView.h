@@ -78,7 +78,7 @@
 
 
 
-/* Used internally */
+/** Used internally */
 @protocol SCInputAccessoryViewDelegate <NSObject>
 
 @optional
