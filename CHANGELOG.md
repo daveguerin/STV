@@ -1,6 +1,10 @@
 # STV CHANGELOG
 ## STV 6.0.1
+* Documentation is now in a seperate git repository.
 * All SCSelectionCell are now using linkColor for their textLabel when on iOS 13 up.
+* The pullToRefreshView property of SCTableViewModel that was marked deprecated is now remarked out.
+* The modeledTableView  property of SCTableViewModel that was marked deprecated is now remarked out.
+* The setModeledTableViewEditing:animated: method  of SCTableViewModel that was marked deprecated is now remarked out.
 
 ## STV 6.0.0
 * No longer a framework, now a Swift Package.
