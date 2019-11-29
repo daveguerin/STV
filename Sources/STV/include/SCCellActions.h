@@ -354,11 +354,12 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 
 
 // dgApps...
-/** Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
+/**
+ Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
 
  Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
 
- Return nil if you want the cell to display the default set of actions. Note it's an NSArray that is returned here, not a UISwipeActionsConfiguration.
+ @note It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
 
  @return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the leading edge of the cell.
 
@@ -396,7 +397,9 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 
 Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
 
-Return nil if you want the cell to display the default set of actions. Note it's an NSArray that is returned here, not a UISwipeActionsConfiguration.
+Return nil if you want the cell to display the default set of actions, although trailingSwipePerformsFirstActionWithFullSwipe will then always be the default of YES. You have to return your own Delete UIContextualAction, and set trailingSwipePerformsFirstActionWithFullSwipe to NO, if you want the Delete with no full swipe.
+
+@note It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
 
 @return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the trailing edge of the cell.
 
