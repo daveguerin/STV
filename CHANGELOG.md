@@ -1,4 +1,7 @@
 # STV CHANGELOG
+## STV 6.0.2
+*uiElementNibName can now use NIBs from a SwiftPM using the naming format of PACKAGE_TARGET_NIBName, and still not using including the '.xib' extension.
+
 ## STV 6.0.1
 * Documentation is now in a seperate git repository.
 * All SCSelectionCell are now using linkColor for their textLabel when on iOS 13 up.

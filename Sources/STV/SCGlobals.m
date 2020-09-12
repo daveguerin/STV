@@ -326,15 +326,68 @@
     return valid;
 }
 
-+ (NSObject *)getFirstNodeInNibWithName:(NSString *)nibName
-{
-    if(!nibName)
++ (NSObject *)getFirstNodeInNibWithName:(NSString *)nibName {
+    if (!nibName) {
         return nil;
-    
-	NSArray *topLevelNodes = [[UINib nibWithNibName:nibName bundle:[NSBundle mainBundle]] instantiateWithOwner:nil options:nil];
-    if([topLevelNodes count])
-		return [topLevelNodes objectAtIndex:0];
-	//else
+    }
+
+    NSArray *nibNameComponents = [nibName componentsSeparatedByString:@"_"];
+
+    if ([nibNameComponents count] == 1) {
+        // Just a NIB name
+        NSArray *topLevelNodes = [[UINib nibWithNibName:[nibNameComponents objectAtIndex:0] bundle:[NSBundle mainBundle]] instantiateWithOwner:nil options:nil];
+
+        if ([topLevelNodes count]) {
+            return [topLevelNodes objectAtIndex:0];
+        }
+        else {
+            return nil;
+        }
+    }
+    else if ([nibNameComponents count] == 3) {
+        // dgApps
+        // It's a SwiftPM PackageName_TargetName_NIBName
+        NSString *package = [nibNameComponents objectAtIndex:0];
+        NSString *target = [nibNameComponents objectAtIndex:1];
+        NSString *nib = [nibNameComponents objectAtIndex:2];
+        NSString *bundleName = [NSString stringWithFormat:@"%@_%@",package,target];
+        NSString *className = [NSString stringWithFormat:@"%@_SWIFTPM_MODULE_BUNDLER_FINDER",bundleName];
+        Class class = NSClassFromString(className);
+
+        /*
+         This is based on the auto generated Apple code to access a SwiftPM resource, see
+
+         resource_bundle_accessor.h
+         resource_bundle_accessor.m
+
+         which can be found in
+
+         DerivedData/​ProjectName-<random letters>/​Build/​Intermediates.noindex/​PackageName.build/​<target-platform>/​TargetName.build/​DerivedSources
+
+         */
+        NSArray<NSURL*> *candidates = @[
+            NSBundle.mainBundle.resourceURL,
+            [NSBundle bundleForClass:class].resourceURL,
+            NSBundle.mainBundle.bundleURL
+        ];
+
+        for (NSURL* candiate in candidates) {
+            NSURL *bundlePath = [candiate URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.bundle", bundleName]];
+
+            NSBundle *bundle = [NSBundle bundleWithURL:bundlePath];
+            if (bundle != nil) {
+                NSArray *topLevelNodes = [[UINib nibWithNibName:nib bundle:bundle] instantiateWithOwner:nil options:nil];
+
+                if ([topLevelNodes count]) {
+                    return [topLevelNodes objectAtIndex:0];
+                }
+                else {
+                    return nil;
+                }
+            }
+        }
+    }
+
 	return nil;
 }
 
