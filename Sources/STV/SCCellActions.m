@@ -3,7 +3,7 @@
  *  Sensible TableView
  *
  *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright © 2029 dgApps. All rights reserved.
+ *  Copyright © 2019 dgApps. All rights reserved.
  *
  */
 
