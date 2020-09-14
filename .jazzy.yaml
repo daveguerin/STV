@@ -17,5 +17,5 @@ github_file_prefix: https://github.com/daveguerin/STV/tree/main/Sources/STV/
 skip_undocumented: false
 hide_documentation_coverage: false
 theme: fullwidth
-module_version: 6.0.1(17)
-copyright: "[STV 6.0.1(17)](https://github.com/daveguerin/STV/) 20200914<br />&copy; Copyright 2010 - 2015 [Sensible Cocoa](http://sensiblecocoa.com/)<br />&copy; Copyright 2019 - 2020 [dgApps](http://dgapps.ie/)<br />[STV](https://github.com/daveguerin/STV/) and it's [Documentation](https://github.com/daveguerin/STVDocumentation/) are licensed under a [MIT License](https://github.com/daveguerin/STV/blob/master/License/STV.txt)"
+module_version: 6.0.1(18)
+copyright: "[STV 6.0.1(18)](https://github.com/daveguerin/STV/) 20200914<br />&copy; Copyright 2010 - 2015 [Sensible Cocoa](http://sensiblecocoa.com/)<br />&copy; Copyright 2019 - 2020 [dgApps](http://dgapps.ie/)<br />[STV](https://github.com/daveguerin/STV/) and it's [Documentation](https://github.com/daveguerin/STVDocumentation/) are licensed under a [MIT License](https://github.com/daveguerin/STV/blob/master/License/STV.txt)"
