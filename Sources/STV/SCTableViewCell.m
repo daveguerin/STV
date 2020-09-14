@@ -3,7 +3,7 @@
  *  Sensible TableView
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright 2019 dgApps. All rights reserved.
+ *  Copyright 2019-2020 dgApps. All rights reserved.
  *
  */
 
@@ -486,24 +486,30 @@
 }
 
 //overrides superclass
-- (void)setBackgroundColor:(UIColor *)color
-{
-	[super setBackgroundColor:color];
-	
-    if(self.cellCreatedInIB)
+- (void)setBackgroundColor:(UIColor *)color {
+    [super setBackgroundColor:color];
+
+    if (self.cellCreatedInIB) {
         return;
-    
-	if(self.selectionStyle==UITableViewCellSelectionStyleNone && !self.backgroundView)
-	{
-		// This is much more optimized than [UIColor clearColor]
-		self.textLabel.backgroundColor = color;
-		self.detailTextLabel.backgroundColor = color;
-	}
-	else
-	{
-		self.textLabel.backgroundColor = [UIColor clearColor];
-		self.detailTextLabel.backgroundColor = [UIColor clearColor];
-	}
+    }
+
+    /*
+     In iOS 14, if the color was nil, then the backgroundColor was being set to
+     black, not what was required, so we set the label backgrounds to clear to
+     make sure they will be correct for the cell backgroundColor. dgApps
+     */
+
+    //	if(self.selectionStyle==UITableViewCellSelectionStyleNone && !self.backgroundView)
+    //	{
+    //		// This is much more optimized than [UIColor clearColor]
+    //		self.textLabel.backgroundColor = color;
+    //		self.detailTextLabel.backgroundColor = color;
+    //	}
+    //	else
+    //	{
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    self.detailTextLabel.backgroundColor = [UIColor clearColor];
+    //	}
 }
 
 //overrides superclass
@@ -2532,19 +2538,18 @@
 
 
 //overrides superclass
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
     [super setBackgroundColor:backgroundColor];
     
-    if(self.cellCreatedInIB)
+    if (self.cellCreatedInIB) {
         return;
-    
-    for(UIView *subview in self.contentView.subviews)
-    {
-        if([subview isKindOfClass:[UIControl class]] || [subview isKindOfClass:[UITextView class]] || [subview isKindOfClass:[UILabel class]])
-        {
-            if(!self.backgroundView)
+    }
+
+    for (UIView *subview in self.contentView.subviews) {
+        if([subview isKindOfClass:[UIControl class]] || [subview isKindOfClass:[UITextView class]] || [subview isKindOfClass:[UILabel class]]) {
+            if (!self.backgroundView && backgroundColor) {
                 [(UIControl *)subview setBackgroundColor:backgroundColor];
+            }
         }
     }
 }
