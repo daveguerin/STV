@@ -3,13 +3,14 @@
  *  Sensible TableView
  *
  *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright 2019-2020 dgApps. All rights reserved.
  *
  *
  */
 
 
 /* Define the current STV version */
-#define kSTVCurrentVersion      @"6.0.1"
+#define kSTVCurrentVersion      @"6.0.2"
 
 // Sensible TableView
 #import "SCClassDefinition.h"
