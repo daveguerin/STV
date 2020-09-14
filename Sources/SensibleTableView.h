@@ -10,7 +10,7 @@
 
 
 /* Define the current STV version */
-#define kSTVCurrentVersion      @"6.0.2"
+#define kSTVCurrentVersion      @"6.0.3"
 
 // Sensible TableView
 #import "SCClassDefinition.h"
