@@ -1,6 +1,9 @@
 # STV CHANGELOG
 ## STV 6.0.2
-*uiElementNibName can now use NIBs from a SwiftPM using the naming format of PACKAGE_TARGET_NIBName, and still not using including the '.xib' extension.
+* uiElementNibName can now use NIBs from a SwiftPM using the naming format of `PACKAGE_TARGET_NIBName`, and still not using including the `xib` extension.
+* In iOS 14 a nil background colour was displaying as black, so all UILabel backgroundColor are now clearColor.
+* Reconfigured the SwithPM somewhat so that all the H and M files are now back together where they should be, and together in Sources not Sources/STV.
+* The main Git branch is now named `main`.
 
 ## STV 6.0.1
 * Documentation is now in a seperate git repository.
@@ -35,6 +38,8 @@
 
 
 ## VERSION HISTORY
+* STV 6.0.2 Sep 14 2020
+* STV 6.0.1 Nov 19 2019 
 * STV 6.0.0 Nov 12 2019 - First [open source Swift Package release](https://github.com/daveguerin/STV) by [dgApps](http://dgapps.ie/).  
 * STV 5.4.0 Apr 12 2018 - First [open source release](https://github.com/wizgod/STV) by [wizgod](https://github.com/wizgod) with [permission of Sensible Cocoa/Tarek Sakr](http://sensiblecocoa.com/community/topic/2534-stv-on-github/#entry13576).  
 * STV 5.4.0 Oct 15 2016 - Last closed source release from Sensible Cocoa.  
