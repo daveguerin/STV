@@ -1,4 +1,11 @@
 # STV CHANGELOG
+
+## STV 6.0.4
+SCDebugLog now logs more information.
+The default textColor of the label in a SCLabelCell is now secondaryLabelColor on iOS 13 and up..
+The default backgroundColor of the label in a SCLabelCell is now clearColor.
+The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
+
 ## STV 6.0.3
 * Reconfigured the SwithPM somewhat so that all the H and M files are now back together where they should be, and together in Sources not Sources/STV.
 * The main Git branch is now named `main`.

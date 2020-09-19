@@ -2728,13 +2728,18 @@
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
     if (@available(iOS 13.0, *)) {
-        label.textColor = [UIColor labelColor];  //dgApps
+        label.textColor = [UIColor secondaryLabelColor];  //dgApps
     }
     else {
         label.textColor =[UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
     }
-    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
-    label.backgroundColor = self.backgroundColor;
+    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
+    /*
+     If self.backgroundColor was null then iOS 14 was causing
+     label.backgroundColor to display as black. Making the defaut clearColor
+     here makes the label disply as expected. dgApps
+     */
+    label.backgroundColor = [UIColor clearColor];
     self.control = label;
 }
 
