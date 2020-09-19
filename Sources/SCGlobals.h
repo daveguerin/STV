@@ -66,7 +66,8 @@
 /* SCDebugLog definition               */
 /***************************************/
 
-#define SCDebugLog(...) NSLog(@"**STV** %@", [NSString stringWithFormat:__VA_ARGS__])
+//#define SCDebugLog(...) NSLog(@"**STV** %@", [NSString stringWithFormat:__VA_ARGS__]) // dgApps
+#define SCDebugLog( s, ... ) NSLog(@"**STV** %p (%@:%d) %s %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __FUNCTION__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 
 /***************************************/
 
