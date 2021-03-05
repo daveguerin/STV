@@ -2625,6 +2625,11 @@
             
             // TODO: replace this with actual Storyboard segue presentation data
             detailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+            if (@available(iOS 13.0, *)) {
+                detailViewController.modalInPresentation = YES;
+            } else {
+                // Fallback on earlier versions
+            }
         }
         else
             SCDebugLog(@"Warning: Could not instantiate view controller with id '%@' from Storyboard.", self.ibNewItemViewControllerIdentifier);
