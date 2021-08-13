@@ -1073,149 +1073,149 @@ When this property is set to YES, a full trailing swipe in the cell row performs
 
 
 
-
-
-/****************************************************************************************/
-/*	class SCImagePickerCell	*/
-/****************************************************************************************/ 
-/**	
- This class functions as a cell that provides the end-user with an automatically generated
- detail view of type UIImagePickerController to pick an image with. As soon as the image is picked,
- it will be saved to the Documents folder using either an auto generated name from the current time stamp,
- or a name provided through SCTableViewModelDelegate or the cell's actions. 
- The bound property of this cell must be of type NSString, and will be 
- bound to the name of the selected image. Once an image is selected, tapping an SCImagePickerCell
- will display the image in a detail view. To select a different image, the table view must be put in edit
- mode (make sure UITableView's allowsSelectionDuringEditing property is TRUE). Alternatively, make
- sure that displayClearImageButtonInDetailView property is TRUE, and the user will be able to
- tap a "Clear Image" button to clear the selected image.
- */
-@interface SCImagePickerCell : SCCustomCell <UINavigationControllerDelegate,
-												UIImagePickerControllerDelegate,
-												UIActionSheetDelegate,
-												SCViewControllerDelegate,
-                                                UIScrollViewDelegate>
-{
-	// Internal
-	UIImage *cachedImage;  
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    UIPopoverController *popover;
-#pragma clang diagnostic pop
-
-	
-	UIImagePickerController *imagePickerController;
-	NSString *placeholderImageName;
-	NSString *placeholderImageTitle;
-	BOOL displayImageNameAsCellText;
-	BOOL askForSourceType;
-	UIButton *clearImageButton;
-	BOOL displayClearImageButtonInDetailView;
-	BOOL autoPositionClearImageButton;
-	BOOL autoPositionImageView;
-	
-	CGRect textLabelFrame;
-	CGRect imageViewFrame;
-	
-	NSString *selectedImageName;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Creation and Initialization
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/** Allocates and returns an initialized SCImagePickerCell given cell text, bound object, and a bound property name. 
- *	@param cellText The text that will appear in the cell's textLabel.
- *	@param object	The cell's bound object (see SCTableViewCell class overview).
- *	@param propertyName The cell's bound property name corresponding to the cell's selected image name. Property must be a readwrite property of type NSString.
- */
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName;
-
-
-/** Returns an initialized SCImagePickerCell given cell text, bound object, and a bound property name. 
- *	@param cellText The text that will appear in the cell's textLabel.
- *	@param object	The cell's bound object (see SCTableViewCell class overview).
- *	@param propertyName The cell's bound property name corresponding to the cell's selected image name. Property must be a readwrite property of type NSString.
- */
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Configuration
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/** Set to a custom image view to use instead of the cell's default imageView control. */
-@property (nonatomic, strong) IBOutlet UIImageView *customImageView;
-
-/** The UIImagePickerController associated with the cell. Even though this property is readonly, feel free to customize any of the controller's relevant properties. 
- */
-@property (nonatomic, readonly) UIImagePickerController *imagePickerController;
-
-/** The selected image. Returns nil if no image is selected. */
-@property (nonatomic, readonly) UIImage *selectedImage;
-
-/** The name for an image in the documents folder that will be used as a placeholder if no image is selected. 
- */
-@property (nonatomic, copy) NSString *placeholderImageName;
-
-/** The title for the image specified in the placeholderImageName property. */
-@property (nonatomic, copy) NSString *placeholderImageTitle;
-
-/** If TRUE, the selected image name will be displayed in the cell's textLabel. Default: TRUE. */
-@property (nonatomic) BOOL displayImageNameAsCellText;
-
-/** 
- If TRUE, the user will be asked for the source type, otherwise, the source type will be
- determined from imagePickerController's sourceType property. Default: TRUE.
- @note If the device has no camera, setting this to TRUE automatically sets the sourceType 
- to UIImagePickerControllerSourceTypePhotoLibrary. 
- */
-@property (nonatomic) BOOL askForSourceType;
-
-/** A button that clears the currently selected image when tapped. Feel free to customize the default look and feel of this button. */
-@property (nonatomic, readonly) UIButton *clearImageButton;
-
-/** If TRUE, clearImageButton will be displayed in the cell's detail view. Default: TRUE. */
-@property (nonatomic) BOOL displayClearImageButtonInDetailView;
-
-/** If TRUE, clearImageButton will be automatically positioned in the cell's detail view. Default: TRUE. */
-@property (nonatomic) BOOL autoPositionClearImageButton;
-
-/** Set this property to customize the placement of the cell's textLabel. */
-@property (nonatomic, readwrite) CGRect textLabelFrame;
-
-/** Set this property to customize the placement of the cell's imageView. */
-@property (nonatomic, readwrite) CGRect imageViewFrame;
-
-/** The scroll view used to support pinch zoom on the detail view displayed image. This property is typically used to set values for 'maximumZoomScale'. */
-@property (nonatomic, strong, readonly) UIScrollView *pinchZoomScrollView;
-
-
-/** The name of the selected image. */
-@property (nonatomic, copy) NSString *selectedImageName;
-
-
-/** Resets the clearImageButton default layer styles such as corneRadius and borderWidth. */
-- (void)resetClearImageButtonStyles;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Internal Methods (should only be used by the framework or when subclassing)
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/** Method responsible for saving the image to the given path. */
-- (void)saveImage:(UIImage *)image toPath:(NSString *)imagePath;
-
-/** Method responsible for loading image from the given path. */
-- (UIImage *)loadImageFromPath:(NSString *)imagePath;
-
-/** Gets called when the 'Clear' button is tapped. */
-- (void)didTapClearImageButton;
-
-@end
-
-
-
+//
+//
+///****************************************************************************************/
+///*	class SCImagePickerCell	*/
+///****************************************************************************************/ 
+///**	
+// This class functions as a cell that provides the end-user with an automatically generated
+// detail view of type UIImagePickerController to pick an image with. As soon as the image is picked,
+// it will be saved to the Documents folder using either an auto generated name from the current time stamp,
+// or a name provided through SCTableViewModelDelegate or the cell's actions. 
+// The bound property of this cell must be of type NSString, and will be 
+// bound to the name of the selected image. Once an image is selected, tapping an SCImagePickerCell
+// will display the image in a detail view. To select a different image, the table view must be put in edit
+// mode (make sure UITableView's allowsSelectionDuringEditing property is TRUE). Alternatively, make
+// sure that displayClearImageButtonInDetailView property is TRUE, and the user will be able to
+// tap a "Clear Image" button to clear the selected image.
+// */
+//@interface SCImagePickerCell : SCCustomCell <UINavigationControllerDelegate,
+//												UIImagePickerControllerDelegate,
+//												UIActionSheetDelegate,
+//												SCViewControllerDelegate,
+//                                                UIScrollViewDelegate>
+//{
+//	// Internal
+//	UIImage *cachedImage;  
+//
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//    UIPopoverController *popover;
+//#pragma clang diagnostic pop
+//
+//	
+//	UIImagePickerController *imagePickerController;
+//	NSString *placeholderImageName;
+//	NSString *placeholderImageTitle;
+//	BOOL displayImageNameAsCellText;
+//	BOOL askForSourceType;
+//	UIButton *clearImageButton;
+//	BOOL displayClearImageButtonInDetailView;
+//	BOOL autoPositionClearImageButton;
+//	BOOL autoPositionImageView;
+//	
+//	CGRect textLabelFrame;
+//	CGRect imageViewFrame;
+//	
+//	NSString *selectedImageName;
+//}
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+///// @name Creation and Initialization
+////////////////////////////////////////////////////////////////////////////////////////////
+//
+///** Allocates and returns an initialized SCImagePickerCell given cell text, bound object, and a bound property name. 
+// *	@param cellText The text that will appear in the cell's textLabel.
+// *	@param object	The cell's bound object (see SCTableViewCell class overview).
+// *	@param propertyName The cell's bound property name corresponding to the cell's selected image name. Property must be a readwrite property of type NSString.
+// */
+//+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName;
+//
+//
+///** Returns an initialized SCImagePickerCell given cell text, bound object, and a bound property name. 
+// *	@param cellText The text that will appear in the cell's textLabel.
+// *	@param object	The cell's bound object (see SCTableViewCell class overview).
+// *	@param propertyName The cell's bound property name corresponding to the cell's selected image name. Property must be a readwrite property of type NSString.
+// */
+//- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName;
+//
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+///// @name Configuration
+////////////////////////////////////////////////////////////////////////////////////////////
+//
+///** Set to a custom image view to use instead of the cell's default imageView control. */
+//@property (nonatomic, strong) IBOutlet UIImageView *customImageView;
+//
+///** The UIImagePickerController associated with the cell. Even though this property is readonly, feel free to customize any of the controller's relevant properties. 
+// */
+//@property (nonatomic, readonly) UIImagePickerController *imagePickerController;
+//
+///** The selected image. Returns nil if no image is selected. */
+//@property (nonatomic, readonly) UIImage *selectedImage;
+//
+///** The name for an image in the documents folder that will be used as a placeholder if no image is selected. 
+// */
+//@property (nonatomic, copy) NSString *placeholderImageName;
+//
+///** The title for the image specified in the placeholderImageName property. */
+//@property (nonatomic, copy) NSString *placeholderImageTitle;
+//
+///** If TRUE, the selected image name will be displayed in the cell's textLabel. Default: TRUE. */
+//@property (nonatomic) BOOL displayImageNameAsCellText;
+//
+///** 
+// If TRUE, the user will be asked for the source type, otherwise, the source type will be
+// determined from imagePickerController's sourceType property. Default: TRUE.
+// @note If the device has no camera, setting this to TRUE automatically sets the sourceType 
+// to UIImagePickerControllerSourceTypePhotoLibrary. 
+// */
+//@property (nonatomic) BOOL askForSourceType;
+//
+///** A button that clears the currently selected image when tapped. Feel free to customize the default look and feel of this button. */
+//@property (nonatomic, readonly) UIButton *clearImageButton;
+//
+///** If TRUE, clearImageButton will be displayed in the cell's detail view. Default: TRUE. */
+//@property (nonatomic) BOOL displayClearImageButtonInDetailView;
+//
+///** If TRUE, clearImageButton will be automatically positioned in the cell's detail view. Default: TRUE. */
+//@property (nonatomic) BOOL autoPositionClearImageButton;
+//
+///** Set this property to customize the placement of the cell's textLabel. */
+//@property (nonatomic, readwrite) CGRect textLabelFrame;
+//
+///** Set this property to customize the placement of the cell's imageView. */
+//@property (nonatomic, readwrite) CGRect imageViewFrame;
+//
+///** The scroll view used to support pinch zoom on the detail view displayed image. This property is typically used to set values for 'maximumZoomScale'. */
+//@property (nonatomic, strong, readonly) UIScrollView *pinchZoomScrollView;
+//
+//
+///** The name of the selected image. */
+//@property (nonatomic, copy) NSString *selectedImageName;
+//
+//
+///** Resets the clearImageButton default layer styles such as corneRadius and borderWidth. */
+//- (void)resetClearImageButtonStyles;
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+///// @name Internal Methods (should only be used by the framework or when subclassing)
+////////////////////////////////////////////////////////////////////////////////////////////
+//
+///** Method responsible for saving the image to the given path. */
+//- (void)saveImage:(UIImage *)image toPath:(NSString *)imagePath;
+//
+///** Method responsible for loading image from the given path. */
+//- (UIImage *)loadImageFromPath:(NSString *)imagePath;
+//
+///** Gets called when the 'Clear' button is tapped. */
+//- (void)didTapClearImageButton;
+//
+//@end
+//
+//
+//
 
 
 
