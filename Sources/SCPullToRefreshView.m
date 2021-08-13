@@ -72,12 +72,7 @@
 		_detailTextLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_detailTextLabel];
         
-        if (@available(iOS 13.0, *)) {
-            _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
-        }
-        else {
-            _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        }
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
         _activityIndicator.hidesWhenStopped = TRUE;
         [self addSubview:_activityIndicator];
         
