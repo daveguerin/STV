@@ -941,7 +941,7 @@
             {
                 if(!cell)
                 {
-                    cell = [SCImagePickerCell cellWithText:propertyTitle boundObject:boundObj imageNamePropertyName:propertyName];
+        //TODO:            cell = [SCImagePickerCell cellWithText:propertyTitle boundObject:boundObj imageNamePropertyName:propertyName];
                 }
             }
             break;
