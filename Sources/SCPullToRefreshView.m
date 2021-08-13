@@ -142,59 +142,77 @@
 	}
 }
 
-- (void)boundScrollViewDidEndDragging
-{
-    if (_target && _boundScrollView.contentOffset.y <= -kOffsetRange && self.state!=SCPullToRefreshViewStateLoading) 
-    {
+- (void)boundScrollViewDidEndDragging {
+    if (_target && _boundScrollView.contentOffset.y <= -kOffsetRange && self.state!=SCPullToRefreshViewStateLoading) {
 		[self setState:SCPullToRefreshViewStateLoading];
-        
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		_boundScrollView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
-	}
+
+        /*
+         This used to be:
+
+         [UIView beginAnimations:nil context:NULL];
+         [UIView setAnimationDuration:0.2];
+         _boundScrollView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+         [UIView commitAnimations];
+
+         Now using the new block based methods. _boundScrollView is declared as
+         weak, and even though it's in the block I don't think there's going to
+         be any memory issues.
+
+         */
+        [UIView animateWithDuration:0.2 animations:^{
+            _boundScrollView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
+        } completion:^(BOOL finished){
+        }];
+    }
 }
 
-- (void)boundScrollViewDidFinishLoading
-{
+
+- (void)boundScrollViewDidFinishLoading {
     [self setState:SCPullToRefreshViewStatePull];
-    
-    [UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[_boundScrollView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
+
+    [UIView animateWithDuration:0.3 animations:^{
+        _boundScrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+    } completion:^(BOOL finished){
+    }];
 }
 
-- (void)setState:(SCPullToRefreshViewState)state
-{
-    switch (state) 
-    {
-		case SCPullToRefreshViewStatePull:
+- (void)setState:(SCPullToRefreshViewState)state {
+    switch (state) {
+        case SCPullToRefreshViewStatePull: {
 			
 			self.stateLabel.text = self.pullStateText;
 			[self.activityIndicator stopAnimating];
 			self.arrowImageView.hidden = NO;
             
             CGFloat duration = 0.2f;
-            if(_state == SCPullToRefreshViewStateLoading)
+            if(_state == SCPullToRefreshViewStateLoading) {
                 duration = 0.0f;
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:duration];
-            self.arrowImageView.transform = CGAffineTransformMakeRotation(0.0f);
-            [UIView commitAnimations];
-			
-			break;
-        case SCPullToRefreshViewStateRelease:
+            }
+
+            __weak __typeof (self) weakSelf = self;
+
+            [UIView animateWithDuration:duration animations:^{
+                weakSelf.arrowImageView.transform = CGAffineTransformMakeRotation(0.0f);
+            } completion:^(BOOL finished){
+            }];
+
+            break;
+        }
+
+        case SCPullToRefreshViewStateRelease: {
             self.stateLabel.text = self.releaseStateText;
             
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:0.2];
-            self.arrowImageView.transform = CGAffineTransformMakeRotation((M_PI / 180.0f) * 180.0f);
-            [UIView commitAnimations];
-			
-            
-			break;
-		case SCPullToRefreshViewStateLoading:
+            __weak __typeof (self) weakSelf = self;
+
+            [UIView animateWithDuration:0.2 animations:^{
+                weakSelf.arrowImageView.transform = CGAffineTransformMakeRotation((M_PI / 180.0f) * 180.0f);
+            } completion:^(BOOL finished){
+            }];
+
+            break;
+        }
+
+        case SCPullToRefreshViewStateLoading: {
 			
             self.arrowImageView.hidden = YES;
 			self.stateLabel.text = self.loadingStateText;
@@ -204,6 +222,7 @@
             [_target performSelector:_startLoadingAction withObject:nil afterDelay:0.01f];
             
 			break;
+        }
     }
     
     _state = state;
