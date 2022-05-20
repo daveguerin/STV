@@ -2631,7 +2631,7 @@
             // TODO: replace this with actual Storyboard segue presentation data
             detailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
             if (@available(iOS 13.0, *)) {
-                detailNavController.modalInPresentation = YES;
+                detailViewController.modalInPresentation = YES;
             } else {
                 // Fallback on earlier versions
             }
