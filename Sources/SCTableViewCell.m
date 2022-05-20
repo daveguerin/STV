@@ -1068,6 +1068,11 @@
             
             detailNavController.preferredContentSize = detailViewController.preferredContentSize;
             detailNavController.modalPresentationStyle = detailViewController.modalPresentationStyle;
+            if (@available(iOS 13.0, *)) {
+                detailNavController.modalInPresentation = YES;
+            } else {
+                // Fallback on earlier versions
+            }
         }
         
         switch (mode) {
