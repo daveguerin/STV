@@ -1852,7 +1852,7 @@
             trailingSwipeActions = section.cellActions.trailingSwipeActions(cell, indexPath);
         }
         else {
-            if(self.cellActions.leadingSwipeActions) {
+            if(self.cellActions.trailingSwipeActions) {
                 trailingSwipeActions = self.cellActions.trailingSwipeActions(cell, indexPath);
             }
         }
