@@ -748,10 +748,13 @@
 
 - (void)removeSectionAtIndex:(NSUInteger)index
 {
-	[sections removeObjectAtIndex:index];
-    
-    if(self.modelActions.didRemoveSection)
-        self.modelActions.didRemoveSection(self, index);
+    NSUInteger maxSectionIndex = [sections count] - 1;
+    if (index <= maxSectionIndex) {
+        [sections removeObjectAtIndex:index];
+        
+        if(self.modelActions.didRemoveSection)
+            self.modelActions.didRemoveSection(self, index);
+    }
 }
 
 - (void)removeAllSections
@@ -2709,6 +2712,10 @@
 		itemsArray = filteredArray;
 	else
 		itemsArray = self.items;
+    
+    if(index >= itemsArray.count) {
+        return nil;
+    }
 	
     NSObject *item = [itemsArray objectAtIndex:index];
     
