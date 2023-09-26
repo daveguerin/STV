@@ -1,8 +1,15 @@
 # STV CHANGELOG
 
+## STV 6.05
+swift-tools-version:5.3 and .iOS(.v13).
+SCImagePickerCell remarked out for now, it needs a full rewrite for iOS 13 and up.
+As we're now iOS 13 and up UIActivityIndicatorViewStyleMedium is always available.
+beginAnimations:/commitAnimations replaced with the block based animateWithDuration:animations: completion: in SCPullToRefreshView.
+cellWithCell: now forced to be requiringSecureCoding:NO so STVCell is actually a copy once more of cell and not nil in SCTableVIewCell.
+
 ## STV 6.0.4
 SCDebugLog now logs more information.
-The default textColor of the label in a SCLabelCell is now secondaryLabelColor on iOS 13 and up..
+The default textColor of the label in a SCLabelCell is now secondaryLabelColor on iOS 13 and up.
 The default backgroundColor of the label in a SCLabelCell is now clearColor.
 The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
 
@@ -47,6 +54,7 @@ The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
 
 
 ## VERSION HISTORY
+* STV 6.0.5
 * STV 6.0.3 Sep 14 2020
 * STV 6.0.2 Sep 14 2020
 * STV 6.0.1 Nov 19 2019 
