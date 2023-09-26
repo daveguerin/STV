@@ -122,21 +122,37 @@
 
     NSData *cellData = [NSKeyedArchiver archivedDataWithRootObject:cell requiringSecureCoding:NO error:&error];
     if (error) {
-        NSLog(@"%@",error);
+        SCDebugLog(@"%@",error);
         error = nil;
     }
 
-    id STVCell = [NSKeyedUnarchiver unarchivedObjectOfClass:[UITableViewCell class] fromData:cellData error:&error];
+    /*
+     dgApps: Previously STV just unarchivedObjectOfClass:fromData:error:
+    
+     id STVCell = [NSKeyedUnarchiver unarchivedObjectOfClass:[UITableViewCell class] fromData:cellData error:&error];
+     if (error) {
+        SCDebugLog(@"%@",error);
+     }
+     
+     but that now fails because requiringSecureCoding: needs to be YES and it
+     can't be, so we have to set it to be NO and STVCell is not nil anymore.
+
+     */
+
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:cellData error:&error];
+    [unarchiver setRequiresSecureCoding:NO];
     if (error) {
-        NSLog(@"%@",error);
+        SCDebugLog(@"%@",error);
     }
+
+    id STVCell = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 
     // Required to fix a suspected iOS bug where the cell's image in not correctly archived/unarchived
     [(UITableViewCell *)STVCell imageView].image = cell.imageView.image;
     
     // Restore original class value
     [NSKeyedUnarchiver setClass:originalCellClass forClassName:NSStringFromClass([cell class])];
-    
+
     return STVCell;
 }
 
