@@ -1,6 +1,6 @@
 # STV CHANGELOG
 
-## STV 6.05
+## STV 6.0.5
 swift-tools-version:5.3 and .iOS(.v13).
 SCImagePickerCell remarked out for now, it needs a full rewrite for iOS 13 and up.
 As we're now iOS 13 and up UIActivityIndicatorViewStyleMedium is always available.
@@ -55,7 +55,7 @@ The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
 
 
 ## VERSION HISTORY
-* STV 6.0.5
+* STV 6.0.5 Sep 30 2023
 * STV 6.0.3 Sep 14 2020
 * STV 6.0.2 Sep 14 2020
 * STV 6.0.1 Nov 19 2019 

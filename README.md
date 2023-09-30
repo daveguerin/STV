@@ -1,5 +1,5 @@
 # STV
-A Swift Packge of the amazing **Sensible TableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
+A Swift Package of the amazing **Sensible TableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
 
 iOS 13 compatibility, Xcode 11 compatibility, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
 
@@ -9,6 +9,9 @@ iOS 13 compatibility, Xcode 11 compatibility, and Swift Packaging by [dgApps](ht
 Based on countless user testimonials and feedback, [Sensible Cocoa](http://sensiblecocoa.com/) found that developers were saving on average about 70% of their development time when they started using STV in their apps. What this means is that an app that would normally take weeks or even months to develop alone, can now be conceived in just a matter of days using STV. Since STV keeps your code very short, simple and straight forward, maintenance suddenly becomes much easier.
 
 Unfortunley the phenomenal visual interface that [Sensible Cocoa](http://sensiblecocoa.com/) developed that worked in Interface Builder was [kiboshed by Apple with Xcode 8](http://sensiblecocoa.com/community/topic/2462-sad-news-for-stv-from-wwdc/). However all the code side of STV still works, and that's what's packaged here.
+
+## NOTE
+Version 6.0.5 does not include SCImagePickerCell as that need a full rewrite for iOS 13 and up using non deprecated classes and methods!
 
 ## LICENSE
 **SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.
