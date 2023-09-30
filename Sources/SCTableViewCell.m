@@ -113,7 +113,7 @@
 
 + (instancetype)cellWithCell:(UITableViewCell *)cell {
 	// Game plan: since UITableViewCell doesn't support NSCopying, simply archive it then unarchive it back into our object
-    
+
     // backup original class value before modifying
     Class originalCellClass = [NSKeyedUnarchiver classForClassName:NSStringFromClass([cell class])];
     [NSKeyedUnarchiver setClass:[self class] forClassName:NSStringFromClass([cell class])];
@@ -127,8 +127,8 @@
     }
 
     /*
-     dgApps: Previously STV just unarchivedObjectOfClass:fromData:error:
-    
+     Previously STV just did this...
+
      id STVCell = [NSKeyedUnarchiver unarchivedObjectOfClass:[UITableViewCell class] fromData:cellData error:&error];
      if (error) {
         SCDebugLog(@"%@",error);
@@ -136,7 +136,7 @@
      
      but that now fails because requiringSecureCoding: needs to be YES and it
      can't be, so we have to set it to be NO and STVCell is not nil anymore.
-
+     dgApps
      */
 
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:cellData error:&error];
@@ -1721,7 +1721,20 @@
         if([customControl isKindOfClass:[UILabel class]])
         {
             UILabel *label = (UILabel *)customControl;
-            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame);
+            /*
+             Depending on the contentView width and the label.text occasionally
+             the last few words of the text would not be displayed. It seems
+             that preferredMaxLayoutWidth was slightly off, and then the height
+             of the label would be off too. By using 0.95 times the calculated
+             width as the preferredMaxLayoutWidth then the text will be always
+             slightly too wide for the label. According to Apple documentation
+             "During layout, if the text extends beyond the width specified by
+             this property, the additional text flows to one or more new lines,
+             increasing the height of the label." So the text will extend beyond
+             the specified width, and the additional text flows to another line,
+             and all the text is correctly displayed. dgApps
+             */
+            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame) * 0.95f ;
         }
     }
 
