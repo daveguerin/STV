@@ -5,7 +5,8 @@ swift-tools-version:5.3 and .iOS(.v13).
 SCImagePickerCell remarked out for now, it needs a full rewrite for iOS 13 and up.
 As we're now iOS 13 and up UIActivityIndicatorViewStyleMedium is always available.
 beginAnimations:/commitAnimations replaced with the block based animateWithDuration:animations: completion: in SCPullToRefreshView.
-cellWithCell: now forced to be requiringSecureCoding:NO so STVCell is actually a copy once more of cell and not nil in SCTableVIewCell.
+cellWithCell: now forced to be requiringSecureCoding:NO so STVCell is actually a copy once more of cell and not nil in SCTableViewCell.
+When laying out subviews of a SCCustomCell 0.95 times the calculated width is now used as the preferredMaxLayoutWidth to avoid the last word or two of labels not being displayed occasionally.
 
 ## STV 6.0.4
 SCDebugLog now logs more information.
