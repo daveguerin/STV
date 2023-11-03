@@ -3822,11 +3822,20 @@
 {
     if([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:index]])
     {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+        if (self.selectedCellAccessoryView) { // dgApps
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = self.selectedCellAccessoryView;
+        }
+        else {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+
         cell.textLabel.textColor = self.selectedCellTextColor;
     }
     else
     {
+        cell.accessoryView = nil; //dgApps
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.textColor = self.deselectedCellTextColor;
     }
@@ -3942,6 +3951,7 @@
 			if(boundToNSString)
 				self.boundValue = [self buildStringFromSelectedItemsIndexes];
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
+        selectedCell.accessoryView = nil; //dgApps
 		selectedCell.textLabel.textColor = self.deselectedCellTextColor;
 		[self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
@@ -3965,20 +3975,33 @@
 		NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:oldRowIndex inSection:indexPath.section];
 		[self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
-		oldCell.accessoryType = UITableViewCellAccessoryNone;
+        oldCell.accessoryView = nil; //dgApps
+        oldCell.accessoryType = UITableViewCellAccessoryNone;
 		oldCell.textLabel.textColor = self.deselectedCellTextColor;
 	}
 	
 	//check selected cell
 	[self.selectedItemsIndexes addObject:itemIndex];
-	if(boundToNSNumber)
-		self.boundValue = self.selectedItemIndex;
-	else
-		if(boundToNSString)
-			self.boundValue = [self buildStringFromSelectedItemsIndexes];
-	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
-	selectedCell.textLabel.textColor = self.selectedCellTextColor;
-	
+
+    if(boundToNSNumber) {
+        self.boundValue = self.selectedItemIndex;
+    }
+    else {
+        if(boundToNSString) {
+            self.boundValue = [self buildStringFromSelectedItemsIndexes];
+        }
+    }
+ 
+    if (self.selectedCellAccessoryView) { // dgApps
+        selectedCell.accessoryType = UITableViewCellAccessoryNone;
+        selectedCell.accessoryView = self.selectedCellAccessoryView;
+    }
+    else {
+        selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+
+    selectedCell.textLabel.textColor = self.selectedCellTextColor;
+
 	[self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];
 	
 	[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
@@ -4259,11 +4282,19 @@
 {
     if([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:index]])
     {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        if (self.selectedCellAccessoryView) { // dgApps
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = self.selectedCellAccessoryView;
+        }
+        else {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+
         cell.textLabel.textColor = self.selectedCellTextColor;
     }
     else
     {
+        cell.accessoryView = nil; // dgApps
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.textColor = self.deselectedCellTextColor;
     }
@@ -4366,7 +4397,8 @@
 		[self.selectedItemsIndexes removeObject:itemIndex];
         [self selectedItemsIndexesModified];
 		
-		selectedCell.accessoryType = UITableViewCellAccessoryNone;
+        selectedCell.accessoryType = UITableViewCellAccessoryNone;
+        selectedCell.accessoryView = nil; // dgApps
 		selectedCell.textLabel.textColor = self.deselectedCellTextColor;
 		[self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
@@ -4392,14 +4424,22 @@
 		[self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
+        oldCell.accessoryView = nil; // dgApps
 		oldCell.textLabel.textColor = self.deselectedCellTextColor;
 	}
 	
 	//check selected cell
 	[self.selectedItemsIndexes addObject:itemIndex];
 	[self selectedItemsIndexesModified];
-    
-	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+    if (self.selectedCellAccessoryView) { // dgApps
+        selectedCell.accessoryType = UITableViewCellAccessoryNone;
+        selectedCell.accessoryView = self.selectedCellAccessoryView;
+    }
+    else {
+        selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+
 	selectedCell.textLabel.textColor = self.selectedCellTextColor;
 	
 	[self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];

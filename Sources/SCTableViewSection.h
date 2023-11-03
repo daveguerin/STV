@@ -993,6 +993,9 @@
 /** The text color of the deselected cell(s). */
 @property (nonatomic, strong) UIColor *deselectedCellTextColor;
 
+/** The accessoryView of the selected cell(s). */
+@property(nonatomic, strong) UIView *selectedCellAccessoryView;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Internal Properties & Methods (should only be used by the framework or when subclassing)
@@ -1121,6 +1124,9 @@
 
 /** The text color of the deselected cell(s). */
 @property (nonatomic, strong) UIColor *deselectedCellTextColor;
+
+/** The accessoryView of the selected cell(s). */
+@property(nonatomic, strong) UIView *selectedCellAccessoryView;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
