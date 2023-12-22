@@ -4337,604 +4337,627 @@
 
 @end
 
-//
-//
-//#pragma mark - SCImagePickerCell
-//
-//
-//
-//@interface SCImagePickerCell ()
-//{
-//    UIImageView *_detailImageView;
-//}
-//
-//@property (nonatomic, readonly) UIImageView *effectiveImageView;
-//
-//- (NSString *)selectedImagePath;
-//- (void)setCachedImage;
-//- (void)displayImagePicker;
-//- (void)displayImageInDetailView;
-//- (void)addImageViewToDetailView:(UIViewController *)detailView;
-//- (void)didTapClearImageButton;
-//
-//@end
-//
-//
-//
-//@implementation SCImagePickerCell
-//
-//@synthesize imagePickerController;
-//@synthesize placeholderImageName;
-//@synthesize placeholderImageTitle;
-//@synthesize displayImageNameAsCellText;
-//@synthesize askForSourceType;
-//@synthesize selectedImageName;
-//@synthesize clearImageButton;
-//@synthesize displayClearImageButtonInDetailView;
-//@synthesize autoPositionClearImageButton;
-//@synthesize textLabelFrame;
-//@synthesize imageViewFrame;
-//
-//+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName
-//{
-//	return [[[self class] alloc] initWithText:cellText boundObject:object imageNamePropertyName:propertyName];
-//}
-//
-//
-////overrides superclass
-//- (void)performInitialization
-//{
-//	[super performInitialization];
-//	
-//	cachedImage = nil;
-//
-//	popover = nil;
-//	
-//	imagePickerController = [[UIImagePickerController alloc] init];
-//	imagePickerController.delegate = self;
-//	
-//	placeholderImageName = nil;
-//	placeholderImageTitle = nil;
-//	displayImageNameAsCellText = TRUE;
-//	askForSourceType = TRUE;
-//	selectedImageName = nil;
-//	autoPositionImageView = TRUE;
-//	
-//	clearImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//	clearImageButton.frame = CGRectMake(0, 0, 120, 25);
-//	[clearImageButton setTitle:NSLocalizedString(@"Clear Image", @"Clear Image Button Title") forState:UIControlStateNormal];
-//	[clearImageButton addTarget:self action:@selector(didTapClearImageButton) 
-//			   forControlEvents:UIControlEventTouchUpInside];
-//	clearImageButton.backgroundColor = [UIColor grayColor];
-//	clearImageButton.layer.cornerRadius = 8.0f;
-//	clearImageButton.layer.masksToBounds = YES;
-//	clearImageButton.layer.borderWidth = 1.0f;
-//	displayClearImageButtonInDetailView = TRUE;
-//	autoPositionClearImageButton = TRUE;
-//	
-//	textLabelFrame = CGRectMake(0, 0, 0, 0);
-//	imageViewFrame = CGRectMake(0, 0, 0, 0);
-//	
-//	// Add rounded corners to the image view
-//	self.effectiveImageView.layer.masksToBounds = YES;
-//	self.effectiveImageView.layer.cornerRadius = 8.0f;
-//    
-//    _pinchZoomScrollView = [[UIScrollView alloc] init];
-//    _pinchZoomScrollView.minimumZoomScale = 0.5f;
-//    _pinchZoomScrollView.maximumZoomScale = 3.0f;
-//    _pinchZoomScrollView.delegate = self;
-//	
-//	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//}
-//
-//- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName
-//{
-//	if( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) )
-//	{
-//		self.selectedImageName = (NSString *)self.boundValue;
-//		[self setCachedImage];
-//	}
-//	return self;
-//}
-//
-//
-//- (UIImageView *)effectiveImageView
-//{
-//    if(self.customImageView)
-//        return self.customImageView;
-//    //else
-//    return self.imageView;
-//}
-//
-//
-////overrides superclass
-//- (void)setEnabled:(BOOL)_enabled
-//{
-//    return;  // does nothing, image picker cells should not be disabled since their reviel viewer when not in edit mode.
-//}
-//
-//- (void)resetClearImageButtonStyles
-//{
-//	clearImageButton.backgroundColor = [UIColor clearColor];
-//	clearImageButton.layer.cornerRadius = 0.0f;
-//	clearImageButton.layer.masksToBounds = NO;
-//	clearImageButton.layer.borderWidth = 0.0f;
-//}
-//
-//- (UIImage *)selectedImage
-//{
-//	if(self.selectedImageName && !cachedImage)
-//		[self setCachedImage];
-//	
-//	return cachedImage;
-//}
-//
-//- (void)setCachedImage
-//{
-//	cachedImage = nil;
-//	
-//    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-//    NSString *imagePath = [self selectedImagePath];
-//    UIImage *image;
-//    if(self.cellActions.loadImage)
-//        image = self.cellActions.loadImage(self, indexPath, imagePath);
-//    else
-//        if(self.ownerSection.cellActions.loadImage)
-//            image = self.ownerSection.cellActions.loadImage(self, indexPath, imagePath);
-//        else
-//            if(self.ownerTableViewModel.cellActions.loadImage)
-//                image = self.ownerTableViewModel.cellActions.loadImage(self, indexPath, imagePath);
-//    else
-//        image = [self loadImageFromPath:imagePath];
-//    
-//	if(image)
-//	{
-//		cachedImage = image;
-//	}
-//}
-//
-//- (NSString *)selectedImagePath
-//{
-//	if(!self.selectedImageName)
-//		return nil;
-//	
-//	NSString *fullName = [NSString stringWithFormat:@"Documents/%@", self.selectedImageName];
-//	
-//	return [NSHomeDirectory() stringByAppendingPathComponent:fullName];
-//}
-//
-////overrides superclass
-//- (void)layoutSubviews
-//{
-//	// call before [super layoutSubviews]
-//	if(self.selectedImageName)
-//	{
-//		if(self.displayImageNameAsCellText)
-//			self.textLabel.text = self.selectedImageName;
-//		
-//		if(!cachedImage)
-//			[self setCachedImage];
-//		
-//		self.effectiveImageView.image = cachedImage;
-//		
-//		if(cachedImage)
-//		{
-//            if(!self.customImageView)
-//            {
-//                // Set the correct frame for imageView
-//                CGRect imgframe = self.imageView.frame;
-//                imgframe.origin.x = 2;
-//                imgframe.origin.y = 3;
-//                imgframe.size.height -= 4;
-//                self.imageView.frame = imgframe;
-//            }
-//			
-//			self.effectiveImageView.image = cachedImage;
-//		}
-//	}
-//	else
-//	{
-//		if(self.displayImageNameAsCellText)
-//			self.textLabel.text = @"";
-//		
-//		if(self.placeholderImageName)
-//			self.effectiveImageView.image = [UIImage imageNamed:self.placeholderImageName];
-//		else
-//			self.effectiveImageView.image = nil;
-//	}
-//	
-//	[super layoutSubviews];
-//	
-//	if(self.textLabelFrame.size.height)
-//	{
-//		self.textLabel.frame = self.textLabelFrame;
-//	}
-//	if(self.imageViewFrame.size.height && !self.customImageView)
-//	{
-//		self.imageView.frame = self.imageViewFrame;
-//	}
-//}
-//
-////overrides superclass
-//- (void)commitChanges
-//{
-//	if(!self.needsCommit)
-//		return;
-//	
-//	self.boundValue = self.selectedImageName;
-//	
-//	[super commitChanges];
-//}
-//
-////overrides superclass
-//- (BOOL)getValueIsValid
-//{
-//	if(!self.selectedImageName && self.valueRequired)
-//		return FALSE;
-//	//else
-//	return TRUE;
-//}
-//
-////override parent's
-//- (void)didSelectCell
-//{
-//    [super didSelectCell];
-//    
-//	self.ownerTableViewModel.activeCell = self;
-//
-//	if(!self.ownerTableViewModel.tableView.editing && self.selectedImage)
-//	{
-//		[self displayImageInDetailView];
-//		return;
-//	}
-//	
-//	BOOL actionSheetDisplayed = FALSE;
-//	
-//	if(self.askForSourceType)
-//	{
-//		if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-//		{
-//			UIActionSheet *actionSheet = [[UIActionSheet alloc]
-//										 initWithTitle:nil
-//										 delegate:self
-//										 cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button Title")
-//										 destructiveButtonTitle:nil
-//										 otherButtonTitles:NSLocalizedString(@"Take Photo", @"Take Photo Button Title"),
-//										  NSLocalizedString(@"Choose Photo", @"Choose Photo Button Title"),nil];
-//			[actionSheet showInView:self.ownerTableViewModel.viewController.view];
-//			
-//			actionSheetDisplayed = TRUE;
-//		}
-//		else
-//		{
-//			self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//		}
-//	}
-//	
-//	if(!actionSheetDisplayed)
-//		[self displayImagePicker];
-//}	
-//
-//- (void)displayImageInDetailView
-//{
-//    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-//    
-//    UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
-//    
-//    
-//    [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
-//}
-//
-//// overrides superclass
-//- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath
-//{
-//    UIViewController *detailViewController = [self getDetailViewControllerForCell:self forRowAtIndexPath:indexPath allowUITableViewControllerSubclass:NO];
-//    if([detailViewController isKindOfClass:[SCViewController class]])
-//    {
-//        [(SCViewController *)detailViewController setNavigationBarType:SCNavigationBarTypeNone];
-//    }
-//    
-//    if(!self.detailViewControllerOptions.title)
-//        detailViewController.title = self.textLabel.text;
-//    if([SCUtilities is_iPad])
-//        detailViewController.view.backgroundColor = [UIColor colorWithRed:32.0f/255 green:35.0f/255 blue:42.0f/255 alpha:1];
-//    else
-//        detailViewController.view.backgroundColor = [UIColor colorWithRed:41.0f/255 green:42.0f/255 blue:57.0f/255 alpha:1];
-//    
-//    return detailViewController;
-//}
-//
-//// overrides superclass
-//- (BOOL)generatesDetailView
-//{
-//    return YES;
-//}
-//
-//- (void)addImageViewToDetailView:(UIViewController *)detailView
-//{
-//    if(_detailImageView)
-//        [_detailImageView removeFromSuperview];
-//    
-//    _detailImageView = [[UIImageView alloc] initWithImage:self.selectedImage];
-//    
-//    CGRect frame = detailView.view.frame;
-//    frame.origin.y = 0; // make sure it takes full height
-//	self.pinchZoomScrollView.frame = frame;
-//    self.pinchZoomScrollView.contentSize = self.selectedImage.size;
-//    [self.pinchZoomScrollView addSubview:_detailImageView];
-//    [detailView.view addSubview:self.pinchZoomScrollView];
-//    
-//    // The the zoom scale to display the whole image
-//    if(self.pinchZoomScrollView.contentSize.width && self.pinchZoomScrollView.contentSize.height)
-//    {
-//        CGRect scrollViewFrame = self.pinchZoomScrollView.frame;
-//        CGFloat scaleWidth = scrollViewFrame.size.width / self.pinchZoomScrollView.contentSize.width;
-//        CGFloat scaleHeight = scrollViewFrame.size.height / self.pinchZoomScrollView.contentSize.height;
-//        CGFloat minScale = fmin(scaleWidth, scaleHeight);
-//        self.pinchZoomScrollView.minimumZoomScale = minScale;
-//        self.pinchZoomScrollView.zoomScale = minScale;
-//    }
-//    
-//    // Modify _detailImageView frame to be displayed in the center of the scroll view
-//    CGSize boundsSize = self.pinchZoomScrollView.bounds.size;
-//    CGRect contentsFrame = _detailImageView.frame;
-//    if(contentsFrame.size.width < boundsSize.width)
-//        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0;
-//        else
-//            contentsFrame.origin.x = 0.0;
-//    if(contentsFrame.size.height < boundsSize.height)
-//        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0;
-//        else
-//            contentsFrame.origin.y = 0.0;
-//    //_detailImageView.frame = contentsFrame;
-//	
-//    
-//	//Add clearImageButton
-//	if(self.displayClearImageButtonInDetailView)
-//	{
-//		if(self.autoPositionClearImageButton)
-//		{
-//            CGSize detailViewSize = detailView.view.frame.size;
-//			CGRect btnFrame = self.clearImageButton.frame;
-//            CGFloat navBarHeight = 0;
-//            if(detailView.navigationController)
-//                navBarHeight = detailView.navigationController.navigationBar.frame.size.height;
-//			self.clearImageButton.frame = CGRectMake(detailViewSize.width - btnFrame.size.width - 10,
-//													 detailViewSize.height - btnFrame.size.height - navBarHeight - 30,
-//													 btnFrame.size.width, btnFrame.size.height);
-//		}
-//        
-//		[detailView.view addSubview:self.clearImageButton];
-//	}
-//}
-//
-//- (void)didTapClearImageButton
-//{
-//	self.selectedImageName = nil;
-//	cachedImage = nil;
-//	[_detailImageView removeFromSuperview];
-//    _detailImageView = nil;
-//	
-//	[self cellValueChanged];
-//}
-//
-//- (void)displayImagePicker
-//{	
-//	if([SCUtilities is_iPad])
-//	{
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-//
-//		popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
-//		[popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view
-//			   permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-//#pragma clang diagnostic pop
-//
-//	}
-//	else
-//	{
-//        [self prepareCellForDetailViewAppearing];
-//        
-//		[self.ownerTableViewModel.viewController presentViewController:self.imagePickerController animated:TRUE completion:nil];
-//	}
-//}
-//
-//
-//- (void)saveImage:(UIImage *)image toPath:(NSString *)imagePath
-//{
-//    [UIImageJPEGRepresentation(image, 80) writeToFile:imagePath atomically:YES];
-//}
-//
-//- (UIImage *)loadImageFromPath:(NSString *)imagePath
-//{
-//    return [UIImage imageWithContentsOfFile:imagePath];
-//}
-//
-//#pragma mark - UIActionSheetDelegate methods
-//
-//- (void)actionSheet:(UIActionSheet *)actionSheet
-//	clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//	BOOL cancelTapped = FALSE;
-//	switch (buttonIndex)
-//	{
-//		case 0:  // Take Photo
-//			self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-//			break;
-//		case 1:  // Choose Photo
-//			self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//			break;	
-//		default:
-//			cancelTapped = TRUE;
-//			break;
-//	}
-//	
-//	if(!cancelTapped)
-//    {
-//        // Add on main queue so as to wait until the action sheet is dismissed
-//        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//            [self displayImagePicker];
-//        }];
-//    }
-//}
-//
-//
-//#pragma mark - UIImagePickerControllerDelegate methods
-//
-//- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-//{
-//	[self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
-//	
-//	[self prepareCellForDetailViewDisappearing];
-//    
-//    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:YES doneButtonTapped:NO];
-//}
-//
-//- (void)imagePickerController:(UIImagePickerController *)picker 
-//	didFinishPickingMediaWithInfo:(NSDictionary *)info
-//{
-//	[self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
-//	
-//	if([SCUtilities is_iPad])
-//	{
-//		[popover dismissPopoverAnimated:TRUE];
-//	}
-//	else
-//	{
-//		[self prepareCellForDetailViewDisappearing];
-//	}
-//	
-//	cachedImage = nil;
-//    
-//    
-//    // Fetch the image asset then call [self imageAssetFetched] to finalize image selection
-//    ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *imageAsset)
-//    {
-//        [self imageAssetFetched:imageAsset mediaInfo:info];
-//    };
-//    ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
-//    NSURL *mediaUrl = info[UIImagePickerControllerReferenceURL];
-//    if(mediaUrl)
-//    {
-//        [assetslibrary assetForURL:mediaUrl resultBlock:resultblock failureBlock:nil];  // asynchronous call
-//    }
-//    else
-//    {
-//        // photo was just taken with the camera and no mediaUrl is available
-//        [self imageAssetFetched:nil mediaInfo:info];
-//    }
-//    
-//    
-//    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:NO doneButtonTapped:YES];
-//}
-//
-//- (void)imageAssetFetched:(ALAsset *)imageAsset mediaInfo:(NSDictionary *)info
-//{
-//    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-//    
-//    if(self.cellActions.didFinishPickingMedia)
-//    {
-//        self.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-//    }
-//    else
-//        if(self.ownerSection.cellActions.didFinishPickingMedia)
-//        {
-//            self.ownerSection.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-//        }
-//        else
-//            if(self.ownerTableViewModel.cellActions.didFinishPickingMedia)
-//            {
-//                self.ownerTableViewModel.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-//            }
-//    
-//    
-//    UIImage *image = nil;
-//    if(self.imagePickerController.allowsEditing)
-//        image = [info valueForKey:UIImagePickerControllerEditedImage];
-//    if(!image)
-//        image = [info valueForKey:UIImagePickerControllerOriginalImage];
-//    if(image)
-//    {
-//        cachedImage = image;
-//        
-//        if(self.cellActions.imageName)
-//            self.selectedImageName = self.cellActions.imageName(self, indexPath);
-//        else
-//            if(self.ownerSection.cellActions.imageName)
-//                self.selectedImageName = self.ownerSection.cellActions.imageName(self, indexPath);
-//            else
-//                if(self.ownerTableViewModel.cellActions.imageName)
-//                    self.selectedImageName = self.ownerTableViewModel.cellActions.imageName(self, indexPath);
-//                else
-//                {
-//                    // default to the original image file name if possible
-//                    if(imageAsset)
-//                    {
-//                        ALAssetRepresentation *imageRep = [imageAsset defaultRepresentation];
-//                        self.selectedImageName = [imageRep filename];
-//                    }
-//                }
-//        if(!self.selectedImageName)
-//            self.selectedImageName = [NSString stringWithFormat:@"%@", [NSDate date]];
-//        
-//        // Save the image
-//        NSString *imagePath = [self selectedImagePath];
-//        if(self.cellActions.saveImage)
-//            self.cellActions.saveImage(self, indexPath, imagePath);
-//        else
-//            if(self.ownerSection.cellActions.saveImage)
-//                self.ownerSection.cellActions.saveImage(self, indexPath, imagePath);
-//            else
-//                if(self.ownerTableViewModel.cellActions.saveImage)
-//                    self.ownerTableViewModel.cellActions.saveImage(self, indexPath, imagePath);
-//                else
-//                    [self saveImage:image toPath:imagePath];
-//        
-//        [self layoutSubviews];
-//        
-//        
-//        // reload cell
-//        if(indexPath)
-//        {
-//            NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
-//            [self.ownerTableViewModel.tableView reloadRowsAtIndexPaths:indexPaths
-//                                                      withRowAnimation:UITableViewRowAnimationNone];
-//        }
-//        
-//        [self cellValueChanged];
-//    }
-//}
-//
-//
-//- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController
-//{
-//	[self addImageViewToDetailView:detailViewController];
-//	
-//	[super handleDetailViewControllerWillPresent:detailViewController];
-//}
-//
-//
-//#pragma mark - UIScrollViewDelegate methods
-//
-//- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
-//{
-//    return _detailImageView;
-//}
-//
-//// Make sure _detailImageView is always centered
-//- (void)scrollViewDidZoom:(UIScrollView *)scrollView
-//{
-//    CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
-//    CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
-//    
-//    _detailImageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-//                                 scrollView.contentSize.height * 0.5 + offsetY);
-//}
-//
-//@end
-//
-//
-//
+
+
+#pragma mark - SCImagePickerCell
+
+
+
+@interface SCImagePickerCell () {
+    UIImageView *_detailImageView;
+}
+
+@property (nonatomic, readonly) UIImageView *effectiveImageView;
+
+- (NSString *)selectedImagePath;
+- (void)setCachedImage;
+- (void)displayImagePicker;
+- (void)displayImageInDetailView;
+- (void)addImageViewToDetailView:(UIViewController *)detailView;
+- (void)didTapClearImageButton;
+
+@end
+
+
+
+@implementation SCImagePickerCell
+
+@synthesize imagePickerController;
+@synthesize placeholderImageName;
+@synthesize placeholderImageTitle;
+@synthesize displayImageNameAsCellText;
+@synthesize askForSourceType;
+@synthesize selectedImageName;
+@synthesize clearImageButton;
+@synthesize displayClearImageButtonInDetailView;
+@synthesize autoPositionClearImageButton;
+@synthesize textLabelFrame;
+@synthesize imageViewFrame;
+
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName {
+    SCDebugLog(@"");
+    return [[[self class] alloc] initWithText:cellText boundObject:object imageNamePropertyName:propertyName];
+}
+
+
+//overrides superclass
+- (void)performInitialization {
+    [super performInitialization];
+    SCDebugLog(@"");
+
+    cachedImage = nil;
+
+    popover = nil;
+
+    imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;
+
+    placeholderImageName = nil;
+    placeholderImageTitle = nil;
+    displayImageNameAsCellText = TRUE;
+    askForSourceType = TRUE;
+    selectedImageName = nil;
+    autoPositionImageView = TRUE;
+
+    clearImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    clearImageButton.frame = CGRectMake(0, 0, 120, 25);
+    [clearImageButton setTitle:NSLocalizedString(@"Clear Image", @"Clear Image Button Title") forState:UIControlStateNormal];
+    [clearImageButton addTarget:self action:@selector(didTapClearImageButton) forControlEvents:UIControlEventTouchUpInside];
+    clearImageButton.backgroundColor = [UIColor grayColor];
+    clearImageButton.layer.cornerRadius = 8.0f;
+    clearImageButton.layer.masksToBounds = YES;
+    clearImageButton.layer.borderWidth = 1.0f;
+    displayClearImageButtonInDetailView = TRUE;
+    autoPositionClearImageButton = TRUE;
+
+    textLabelFrame = CGRectMake(0, 0, 0, 0);
+    imageViewFrame = CGRectMake(0, 0, 0, 0);
+
+    // Add rounded corners to the image view
+    self.effectiveImageView.layer.masksToBounds = YES;
+    self.effectiveImageView.layer.cornerRadius = 8.0f;
+
+    _pinchZoomScrollView = [[UIScrollView alloc] init];
+    _pinchZoomScrollView.minimumZoomScale = 0.5f;
+    _pinchZoomScrollView.maximumZoomScale = 3.0f;
+    _pinchZoomScrollView.delegate = self;
+
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+}
+
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName {
+    if( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+        self.selectedImageName = (NSString *)self.boundValue;
+        [self setCachedImage];
+    }
+    SCDebugLog(@"");
+
+    return self;
+}
+
+
+- (UIImageView *)effectiveImageView {
+    SCDebugLog(@"");
+    if (self.customImageView) {
+        return self.customImageView;
+    }
+    //else
+    return self.imageView;
+}
+
+
+//overrides superclass
+- (void)setEnabled:(BOOL)_enabled {
+    SCDebugLog(@"");
+
+    return;  // does nothing, image picker cells should not be disabled since their reviel viewer when not in edit mode.
+}
+
+- (void)resetClearImageButtonStyles {
+    SCDebugLog(@"");
+    
+    clearImageButton.backgroundColor = [UIColor clearColor];
+    clearImageButton.layer.cornerRadius = 0.0f;
+    clearImageButton.layer.masksToBounds = NO;
+    clearImageButton.layer.borderWidth = 0.0f;
+}
+
+- (UIImage *)selectedImage {
+    SCDebugLog(@"");
+
+    if  (self.selectedImageName && !cachedImage) {
+        [self setCachedImage];
+    }
+
+    return cachedImage;
+}
+
+- (void)setCachedImage {
+    SCDebugLog(@"");
+
+    cachedImage = nil;
+
+    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
+    NSString *imagePath = [self selectedImagePath];
+    UIImage *image;
+
+    if (self.cellActions.loadImage) {
+        image = self.cellActions.loadImage(self, indexPath, imagePath);
+    }
+    else {
+        if (self.ownerSection.cellActions.loadImage) {
+            image = self.ownerSection.cellActions.loadImage(self, indexPath, imagePath);
+        }
+        else {
+            if (self.ownerTableViewModel.cellActions.loadImage) {
+                image = self.ownerTableViewModel.cellActions.loadImage(self, indexPath, imagePath);
+            }
+            else {
+                image = [self loadImageFromPath:imagePath];
+            }
+        }
+    }
+
+    if (image) {
+        cachedImage = image;
+    }
+}
+
+- (NSString *)selectedImagePath {
+    SCDebugLog(@"");
+
+    if(!self.selectedImageName) {
+        return nil;
+    }
+
+    NSString *fullName = [NSString stringWithFormat:@"Documents/%@", self.selectedImageName];
+
+    return [NSHomeDirectory() stringByAppendingPathComponent:fullName];
+}
+
+//overrides superclass
+- (void)layoutSubviews {
+    // call before [super layoutSubviews]
+    if (self.selectedImageName)
+    {
+        if (self.displayImageNameAsCellText) {
+            self.textLabel.text = self.selectedImageName;
+        }
+
+        if (!cachedImage) {
+            [self setCachedImage];
+        }
+
+        self.effectiveImageView.image = cachedImage;
+
+        if (cachedImage) {
+            if(!self.customImageView) {
+                // Set the correct frame for imageView
+                CGRect imgframe = self.imageView.frame;
+                imgframe.origin.x = 2;
+                imgframe.origin.y = 3;
+                imgframe.size.height -= 4;
+                self.imageView.frame = imgframe;
+            }
+
+            self.effectiveImageView.image = cachedImage;
+        }
+    }
+    else {
+        if (self.displayImageNameAsCellText) {
+            self.textLabel.text = @"";
+        }
+
+        if (self.placeholderImageName) {
+            self.effectiveImageView.image = [UIImage imageNamed:self.placeholderImageName];
+        }
+        else {
+            self.effectiveImageView.image = nil;
+        }
+    }
+
+    [super layoutSubviews];
+
+    if (self.textLabelFrame.size.height) {
+        self.textLabel.frame = self.textLabelFrame;
+    }
+
+    if (self.imageViewFrame.size.height && !self.customImageView) {
+        self.imageView.frame = self.imageViewFrame;
+    }
+}
+
+//overrides superclass
+- (void)commitChanges {
+    if(!self.needsCommit) {
+        return;
+    }
+
+    self.boundValue = self.selectedImageName;
+
+    [super commitChanges];
+    SCDebugLog(@"");
+}
+
+//overrides superclass
+- (BOOL)getValueIsValid {
+    SCDebugLog(@"");
+    if(!self.selectedImageName && self.valueRequired) {
+        return FALSE;
+    }
+    //else
+    return TRUE;
+}
+
+//override parent's
+- (void)didSelectCell {
+    [super didSelectCell];
+    SCDebugLog(@"");
+
+    self.ownerTableViewModel.activeCell = self;
+
+    if (!self.ownerTableViewModel.tableView.editing && self.selectedImage) {
+        [self displayImageInDetailView];
+        return;
+    }
+
+    BOOL actionSheetDisplayed = FALSE;
+
+    if (self.askForSourceType) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                     delegate:self
+                                                            cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button Title")
+                                                       destructiveButtonTitle:nil
+                                                            otherButtonTitles:NSLocalizedString(@"Take Photo", @"Take Photo Button Title"), NSLocalizedString(@"Choose Photo", @"Choose Photo Button Title"),nil];
+            [actionSheet showInView:self.ownerTableViewModel.viewController.view];
+
+            actionSheetDisplayed = TRUE;
+        }
+        else {
+            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+    }
+
+    if (!actionSheetDisplayed) {
+        [self displayImagePicker];
+    }
+}
+
+- (void)displayImageInDetailView {
+    SCDebugLog(@"");
+    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
+
+    UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
+
+    [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
+}
+
+// overrides superclass
+- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
+    SCDebugLog(@"");
+
+    UIViewController *detailViewController = [self getDetailViewControllerForCell:self forRowAtIndexPath:indexPath allowUITableViewControllerSubclass:NO];
+    
+    if ([detailViewController isKindOfClass:[SCViewController class]]) {
+        [(SCViewController *)detailViewController setNavigationBarType:SCNavigationBarTypeNone];
+    }
+
+    if (!self.detailViewControllerOptions.title) {
+        detailViewController.title = self.textLabel.text;
+    }
+
+    if ([SCUtilities is_iPad]) {
+        detailViewController.view.backgroundColor = [UIColor colorWithRed:32.0f/255 green:35.0f/255 blue:42.0f/255 alpha:1];
+    }
+    else {
+        detailViewController.view.backgroundColor = [UIColor colorWithRed:41.0f/255 green:42.0f/255 blue:57.0f/255 alpha:1];
+    }
+
+    return detailViewController;
+}
+
+// overrides superclass
+- (BOOL)generatesDetailView {
+    SCDebugLog(@"");
+    return YES;
+}
+
+- (void)addImageViewToDetailView:(UIViewController *)detailView {
+    SCDebugLog(@"");
+    if(_detailImageView) {
+        [_detailImageView removeFromSuperview];
+    }
+
+    _detailImageView = [[UIImageView alloc] initWithImage:self.selectedImage];
+
+    CGRect frame = detailView.view.frame;
+    frame.origin.y = 0; // make sure it takes full height
+    self.pinchZoomScrollView.frame = frame;
+    self.pinchZoomScrollView.contentSize = self.selectedImage.size;
+    [self.pinchZoomScrollView addSubview:_detailImageView];
+    [detailView.view addSubview:self.pinchZoomScrollView];
+
+    // The the zoom scale to display the whole image
+    if (self.pinchZoomScrollView.contentSize.width && self.pinchZoomScrollView.contentSize.height) {
+        CGRect scrollViewFrame = self.pinchZoomScrollView.frame;
+        CGFloat scaleWidth = scrollViewFrame.size.width / self.pinchZoomScrollView.contentSize.width;
+        CGFloat scaleHeight = scrollViewFrame.size.height / self.pinchZoomScrollView.contentSize.height;
+        CGFloat minScale = fmin(scaleWidth, scaleHeight);
+        self.pinchZoomScrollView.minimumZoomScale = minScale;
+        self.pinchZoomScrollView.zoomScale = minScale;
+    }
+
+    // Modify _detailImageView frame to be displayed in the center of the scroll view
+    CGSize boundsSize = self.pinchZoomScrollView.bounds.size;
+    CGRect contentsFrame = _detailImageView.frame;
+    if (contentsFrame.size.width < boundsSize.width) {
+        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0;
+    }
+    else {
+        contentsFrame.origin.x = 0.0;
+    }
+
+    if (contentsFrame.size.height < boundsSize.height) {
+        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0;
+    }
+    else {
+        contentsFrame.origin.y = 0.0;
+    }
+    //_detailImageView.frame = contentsFrame;
+
+
+    //Add clearImageButton
+    if (self.displayClearImageButtonInDetailView) {
+        if (self.autoPositionClearImageButton) {
+            CGSize detailViewSize = detailView.view.frame.size;
+            CGRect btnFrame = self.clearImageButton.frame;
+            CGFloat navBarHeight = 0;
+            
+            if (detailView.navigationController) {
+                navBarHeight = detailView.navigationController.navigationBar.frame.size.height;
+            }
+
+            self.clearImageButton.frame = CGRectMake(detailViewSize.width - btnFrame.size.width - 10,
+                                                     detailViewSize.height - btnFrame.size.height - navBarHeight - 30,
+                                                     btnFrame.size.width, btnFrame.size.height);
+        }
+
+        [detailView.view addSubview:self.clearImageButton];
+    }
+}
+
+- (void)didTapClearImageButton {
+    SCDebugLog(@"");
+
+    self.selectedImageName = nil;
+    cachedImage = nil;
+    [_detailImageView removeFromSuperview];
+    _detailImageView = nil;
+
+    [self cellValueChanged];
+}
+
+- (void)displayImagePicker {
+    SCDebugLog(@"");
+
+    if([SCUtilities is_iPad]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+        popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
+        [popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+#pragma clang diagnostic pop
+    }
+    else {
+        [self prepareCellForDetailViewAppearing];
+        [self.ownerTableViewModel.viewController presentViewController:self.imagePickerController animated:TRUE completion:nil];
+    }
+}
+
+
+- (void)saveImage:(UIImage *)image toPath:(NSString *)imagePath {
+    SCDebugLog(@"");
+    [UIImageJPEGRepresentation(image, 80) writeToFile:imagePath atomically:YES];
+}
+
+- (UIImage *)loadImageFromPath:(NSString *)imagePath {
+    SCDebugLog(@"");
+    return [UIImage imageWithContentsOfFile:imagePath];
+}
+
+#pragma mark - UIActionSheetDelegate methods
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    SCDebugLog(@"");
+
+    BOOL cancelTapped = FALSE;
+    
+    switch (buttonIndex) {
+        case 0:  // Take Photo
+            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            break;
+
+        case 1:  // Choose Photo
+            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            break;
+
+        default:
+            cancelTapped = TRUE;
+            break;
+    }
+
+    if (!cancelTapped) {
+        // Add on main queue so as to wait until the action sheet is dismissed
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self displayImagePicker];
+        }];
+    }
+}
+
+
+#pragma mark - UIImagePickerControllerDelegate methods
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    SCDebugLog(@"");
+    [self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
+
+    [self prepareCellForDetailViewDisappearing];
+
+    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:YES doneButtonTapped:NO];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    SCDebugLog(@"");
+    [self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
+
+    if([SCUtilities is_iPad]) {
+        [popover dismissPopoverAnimated:TRUE];
+    }
+    else {
+        [self prepareCellForDetailViewDisappearing];
+    }
+
+    cachedImage = nil;
+
+
+    // Fetch the image asset then call [self imageAssetFetched] to finalize image selection
+    ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *imageAsset) {
+        [self imageAssetFetched:imageAsset mediaInfo:info];
+    };
+
+    ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
+    NSURL *mediaUrl = info[UIImagePickerControllerReferenceURL];
+    
+    if(mediaUrl) {
+        [assetslibrary assetForURL:mediaUrl resultBlock:resultblock failureBlock:nil];  // asynchronous call
+    }
+    else {
+        // photo was just taken with the camera and no mediaUrl is available
+        [self imageAssetFetched:nil mediaInfo:info];
+    }
+
+
+    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:NO doneButtonTapped:YES];
+}
+
+- (void)imageAssetFetched:(ALAsset *)imageAsset mediaInfo:(NSDictionary *)info {
+    SCDebugLog(@"");
+    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
+
+    if (self.cellActions.didFinishPickingMedia) {
+        self.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
+    }
+    else {
+        if (self.ownerSection.cellActions.didFinishPickingMedia) {
+            self.ownerSection.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
+        }
+        else {
+            if (self.ownerTableViewModel.cellActions.didFinishPickingMedia) {
+                self.ownerTableViewModel.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
+            }
+        }
+    }
+
+    UIImage *image = nil;
+
+    if (self.imagePickerController.allowsEditing) {
+        image = [info valueForKey:UIImagePickerControllerEditedImage];
+    }
+
+    if (!image) {
+        image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    }
+
+    if (image) {
+        cachedImage = image;
+
+        if (self.cellActions.imageName) {
+            self.selectedImageName = self.cellActions.imageName(self, indexPath);
+        }
+        else {
+            if (self.ownerSection.cellActions.imageName) {
+                self.selectedImageName = self.ownerSection.cellActions.imageName(self, indexPath);
+            }
+            else {
+                if (self.ownerTableViewModel.cellActions.imageName) {
+                    self.selectedImageName = self.ownerTableViewModel.cellActions.imageName(self, indexPath);
+                }
+                else {
+                    // default to the original image file name if possible
+                    if (imageAsset) {
+                        ALAssetRepresentation *imageRep = [imageAsset defaultRepresentation];
+                        self.selectedImageName = [imageRep filename];
+                    }
+                }
+            }
+        }
+
+
+        if (!self.selectedImageName) {
+            self.selectedImageName = [NSString stringWithFormat:@"%@", [NSDate date]];
+        }
+
+        // Save the image
+        NSString *imagePath = [self selectedImagePath];
+        if (self.cellActions.saveImage) {
+            self.cellActions.saveImage(self, indexPath, imagePath);
+        }
+        else {
+            if(self.ownerSection.cellActions.saveImage) {
+                self.ownerSection.cellActions.saveImage(self, indexPath, imagePath);
+            }
+            else {
+                if (self.ownerTableViewModel.cellActions.saveImage) {
+                    self.ownerTableViewModel.cellActions.saveImage(self, indexPath, imagePath);
+                }
+                else {
+                    [self saveImage:image toPath:imagePath];
+                }
+            }
+        }
+
+        [self layoutSubviews];
+
+        // reload cell
+        if (indexPath) {
+            NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
+            [self.ownerTableViewModel.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        }
+
+        [self cellValueChanged];
+    }
+}
+
+
+- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController {
+    SCDebugLog(@"");
+    [self addImageViewToDetailView:detailViewController];
+
+    [super handleDetailViewControllerWillPresent:detailViewController];
+}
+
+
+#pragma mark - UIScrollViewDelegate methods
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    SCDebugLog(@"");
+    return _detailImageView;
+}
+
+// Make sure _detailImageView is always centered
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    SCDebugLog(@"");
+    CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
+    CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
+
+    _detailImageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
+}
+
+@end
+
+
+
 
 #pragma mark - SCSelectionCell
 
