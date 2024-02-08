@@ -1090,31 +1090,33 @@ When this property is set to YES, a full trailing swipe in the cell row performs
  sure that displayClearImageButtonInDetailView property is TRUE, and the user will be able to
  tap a "Clear Image" button to clear the selected image.
  */
-@interface SCImagePickerCell : SCCustomCell <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SCViewControllerDelegate, UIScrollViewDelegate> {
-	// Internal
-	UIImage *cachedImage;  
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    UIPopoverController *popover;
-#pragma clang diagnostic pop
-
-	
-	UIImagePickerController *imagePickerController;
-	NSString *placeholderImageName;
-	NSString *placeholderImageTitle;
-	BOOL displayImageNameAsCellText;
-	BOOL askForSourceType;
-	UIButton *clearImageButton;
-	BOOL displayClearImageButtonInDetailView;
-	BOOL autoPositionClearImageButton;
-	BOOL autoPositionImageView;
-	
-	CGRect textLabelFrame;
-	CGRect imageViewFrame;
-	
-	NSString *selectedImageName;
-}
+@interface SCImagePickerCell : SCCustomCell <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SCViewControllerDelegate, UIScrollViewDelegate> 
+//
+//{
+//	// Internal
+//	UIImage *cachedImage;  
+//
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//    UIPopoverController *popover;
+//#pragma clang diagnostic pop
+//
+//	
+//	UIImagePickerController *imagePickerController;
+//	NSString *placeholderImageName;
+//	NSString *placeholderImageTitle;
+//	BOOL displayImageNameAsCellText;
+//	BOOL askForSourceType;
+//	UIButton *clearImageButton;
+//	BOOL displayClearImageButtonInDetailView;
+//	BOOL autoPositionClearImageButton;
+//	BOOL autoPositionImageView;
+//	
+//	CGRect textLabelFrame;
+//	CGRect imageViewFrame;
+//	
+//	NSString *selectedImageName;
+//}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Creation and Initialization
@@ -1191,7 +1193,7 @@ When this property is set to YES, a full trailing swipe in the cell row performs
 @property (nonatomic, copy) NSString *selectedImageName;
 
 
-/** Resets the clearImageButton default layer styles such as corneRadius and borderWidth. */
+/** Resets the clearImageButton default layer styles such as cornerRadius and borderWidth. */
 - (void)resetClearImageButtonStyles;
 
 //////////////////////////////////////////////////////////////////////////////////////////
