@@ -4343,9 +4343,41 @@
 
 
 
-@interface SCImagePickerCell () {
-    UIImageView *_detailImageView;
-}
+@interface SCImagePickerCell ()
+
+@property (nonatomic, strong) UIImageView *detailImageView;
+@property (nonatomic, strong) UIImage *cachedImage;
+
+
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+@property (nonatomic, strong) UIPopoverController *popover;
+//#pragma clang diagnostic pop
+//
+//
+@property (nonatomic, strong) UIImagePickerController *imagePickerController;
+//    NSString *placeholderImageName;
+//    NSString *placeholderImageTitle;
+//    BOOL displayImageNameAsCellText;
+//    BOOL askForSourceType;
+@property (nonatomic, strong, readwrite) UIButton *clearImageButton;
+//    BOOL displayClearImageButtonInDetailView;
+//    BOOL autoPositionClearImageButton;
+//    BOOL autoPositionImageView;
+//
+//    CGRect textLabelFrame;
+//    CGRect imageViewFrame;
+//
+//    NSString *selectedImageName;
+
+@property (nonatomic, strong, readwrite) UIScrollView *pinchZoomScrollView;
+
+
+
+
+
+
+
 
 @property (nonatomic, readonly) UIImageView *effectiveImageView;
 
@@ -4362,17 +4394,17 @@
 
 @implementation SCImagePickerCell
 
-@synthesize imagePickerController;
-@synthesize placeholderImageName;
-@synthesize placeholderImageTitle;
-@synthesize displayImageNameAsCellText;
-@synthesize askForSourceType;
-@synthesize selectedImageName;
-@synthesize clearImageButton;
-@synthesize displayClearImageButtonInDetailView;
-@synthesize autoPositionClearImageButton;
-@synthesize textLabelFrame;
-@synthesize imageViewFrame;
+//@synthesize imagePickerController;
+//@synthesize placeholderImageName;
+//@synthesize placeholderImageTitle;
+//@synthesize displayImageNameAsCellText;
+//@synthesize askForSourceType;
+//@synthesize selectedImageName;
+//@synthesize clearImageButton;
+//@synthesize displayClearImageButtonInDetailView;
+//@synthesize autoPositionClearImageButton;
+//@synthesize textLabelFrame;
+//@synthesize imageViewFrame;
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName {
     SCDebugLog(@"");
@@ -4385,42 +4417,42 @@
     [super performInitialization];
     SCDebugLog(@"");
 
-    cachedImage = nil;
+    self.cachedImage = nil;
 
-    popover = nil;
+    self.popover = nil;
 
-    imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.delegate = self;
+    self.imagePickerController = [[UIImagePickerController alloc] init];
+    self.imagePickerController.delegate = self;
 
-    placeholderImageName = nil;
-    placeholderImageTitle = nil;
-    displayImageNameAsCellText = TRUE;
-    askForSourceType = TRUE;
-    selectedImageName = nil;
-    autoPositionImageView = TRUE;
+    self.placeholderImageName = nil;
+    self.placeholderImageTitle = nil;
+    self.displayImageNameAsCellText = TRUE;
+    self.askForSourceType = TRUE;
+    self.selectedImageName = nil;
+//    self.autoPositionImageView = TRUE; not used
 
-    clearImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    clearImageButton.frame = CGRectMake(0, 0, 120, 25);
-    [clearImageButton setTitle:NSLocalizedString(@"Clear Image", @"Clear Image Button Title") forState:UIControlStateNormal];
-    [clearImageButton addTarget:self action:@selector(didTapClearImageButton) forControlEvents:UIControlEventTouchUpInside];
-    clearImageButton.backgroundColor = [UIColor grayColor];
-    clearImageButton.layer.cornerRadius = 8.0f;
-    clearImageButton.layer.masksToBounds = YES;
-    clearImageButton.layer.borderWidth = 1.0f;
-    displayClearImageButtonInDetailView = TRUE;
-    autoPositionClearImageButton = TRUE;
+    self.clearImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.clearImageButton.frame = CGRectMake(0, 0, 120, 25);
+    [self.clearImageButton setTitle:NSLocalizedString(@"Clear Image", @"Clear Image Button Title") forState:UIControlStateNormal];
+    [self.clearImageButton addTarget:self action:@selector(didTapClearImageButton) forControlEvents:UIControlEventTouchUpInside];
+    self.clearImageButton.backgroundColor = [UIColor grayColor];
+    self.clearImageButton.layer.cornerRadius = 8.0f;
+    self.clearImageButton.layer.masksToBounds = YES;
+    self.clearImageButton.layer.borderWidth = 1.0f;
+    self.displayClearImageButtonInDetailView = TRUE;
+    self.autoPositionClearImageButton = TRUE;
 
-    textLabelFrame = CGRectMake(0, 0, 0, 0);
-    imageViewFrame = CGRectMake(0, 0, 0, 0);
+    self.textLabelFrame = CGRectMake(0, 0, 0, 0);
+    self.imageViewFrame = CGRectMake(0, 0, 0, 0);
 
     // Add rounded corners to the image view
     self.effectiveImageView.layer.masksToBounds = YES;
     self.effectiveImageView.layer.cornerRadius = 8.0f;
 
-    _pinchZoomScrollView = [[UIScrollView alloc] init];
-    _pinchZoomScrollView.minimumZoomScale = 0.5f;
-    _pinchZoomScrollView.maximumZoomScale = 3.0f;
-    _pinchZoomScrollView.delegate = self;
+    self.pinchZoomScrollView = [[UIScrollView alloc] init];
+    self.pinchZoomScrollView.minimumZoomScale = 0.5f;
+    self.pinchZoomScrollView.maximumZoomScale = 3.0f;
+    self.pinchZoomScrollView.delegate = self;
 
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
@@ -4456,26 +4488,26 @@
 - (void)resetClearImageButtonStyles {
     SCDebugLog(@"");
     
-    clearImageButton.backgroundColor = [UIColor clearColor];
-    clearImageButton.layer.cornerRadius = 0.0f;
-    clearImageButton.layer.masksToBounds = NO;
-    clearImageButton.layer.borderWidth = 0.0f;
+    self.clearImageButton.backgroundColor = [UIColor clearColor];
+    self.clearImageButton.layer.cornerRadius = 0.0f;
+    self.clearImageButton.layer.masksToBounds = NO;
+    self.clearImageButton.layer.borderWidth = 0.0f;
 }
 
 - (UIImage *)selectedImage {
     SCDebugLog(@"");
 
-    if  (self.selectedImageName && !cachedImage) {
+    if  (self.selectedImageName && !self.cachedImage) {
         [self setCachedImage];
     }
 
-    return cachedImage;
+    return self.cachedImage;
 }
 
 - (void)setCachedImage {
     SCDebugLog(@"");
 
-    cachedImage = nil;
+    self.cachedImage = nil;
 
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     NSString *imagePath = [self selectedImagePath];
@@ -4499,7 +4531,7 @@
     }
 
     if (image) {
-        cachedImage = image;
+        self.cachedImage = image;
     }
 }
 
@@ -4518,19 +4550,18 @@
 //overrides superclass
 - (void)layoutSubviews {
     // call before [super layoutSubviews]
-    if (self.selectedImageName)
-    {
+    if (self.selectedImageName) {
         if (self.displayImageNameAsCellText) {
             self.textLabel.text = self.selectedImageName;
         }
 
-        if (!cachedImage) {
+        if (!self.cachedImage) {
             [self setCachedImage];
         }
 
-        self.effectiveImageView.image = cachedImage;
+        self.effectiveImageView.image = self.cachedImage;
 
-        if (cachedImage) {
+        if (self.cachedImage) {
             if(!self.customImageView) {
                 // Set the correct frame for imageView
                 CGRect imgframe = self.imageView.frame;
@@ -4540,7 +4571,7 @@
                 self.imageView.frame = imgframe;
             }
 
-            self.effectiveImageView.image = cachedImage;
+            self.effectiveImageView.image = self.cachedImage;
         }
     }
     else {
@@ -4729,11 +4760,10 @@
 
 - (void)didTapClearImageButton {
     SCDebugLog(@"");
-
     self.selectedImageName = nil;
-    cachedImage = nil;
-    [_detailImageView removeFromSuperview];
-    _detailImageView = nil;
+    self.cachedImage = nil;
+    [self.detailImageView removeFromSuperview];
+    self.detailImageView = nil;
 
     [self cellValueChanged];
 }
@@ -4742,12 +4772,8 @@
     SCDebugLog(@"");
 
     if([SCUtilities is_iPad]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
-        popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
-        [popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-#pragma clang diagnostic pop
+        self.popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
+        [self.popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
     else {
         [self prepareCellForDetailViewAppearing];
@@ -4812,13 +4838,13 @@
     [self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
 
     if([SCUtilities is_iPad]) {
-        [popover dismissPopoverAnimated:TRUE];
+        [self.popover dismissPopoverAnimated:TRUE];
     }
     else {
         [self prepareCellForDetailViewDisappearing];
     }
 
-    cachedImage = nil;
+    self.cachedImage = nil;
 
 
     // Fetch the image asset then call [self imageAssetFetched] to finalize image selection
@@ -4870,7 +4896,7 @@
     }
 
     if (image) {
-        cachedImage = image;
+        self.cachedImage = image;
 
         if (self.cellActions.imageName) {
             self.selectedImageName = self.cellActions.imageName(self, indexPath);
