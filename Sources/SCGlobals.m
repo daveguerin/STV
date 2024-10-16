@@ -498,10 +498,15 @@
     }
 	@catch (NSException *exception) 
     { 
-        propertyExists = FALSE; 
-        
-        SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, object);   
-    }
+        propertyExists = FALSE;
+        if (propertyName.length > 0) {
+            // substringToIndex:1 will crash if length is 0
+            if (![[propertyName substringToIndex:1] isEqualToString:@"~"]) {
+                // It's not a ~custom propertyName dgapps
+                SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, object);
+            }
+        }
+     }
     
     return propertyExists;
 }
@@ -532,7 +537,13 @@
 		}
 		@catch (NSException * e) 
 		{
-			SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, NSStringFromClass([object class]));
+            if (propertyName.length > 0) {
+                // substringToIndex:1 will crash if length is 0
+                if (![[propertyName substringToIndex:1] isEqualToString:@"~"]) {
+                    // It's not a ~custom propertyName dgapps
+                    SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, NSStringFromClass([object class]));
+                }
+            }
 		}
 		if(!value)
 			value = [NSNull null];
