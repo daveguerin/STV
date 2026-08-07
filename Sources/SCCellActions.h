@@ -9,12 +9,9 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-
 
 @class SCTableViewModel;
 @class SCTableViewCell;
-@class SCImagePickerCell;
 
 typedef void(^SCCellAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
 typedef BOOL(^SCBOOLReturnCellAction_Block)(SCTableViewCell *cell, NSIndexPath *indexPath);
@@ -51,30 +48,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 /// @name Actions
 //////////////////////////////////////////////////////////////////////////////////////////
 
-/** Action gets called before the cell gets automatically styled using the provided theme.
- 
- This action is typically used to set a custom themeStyle for the cell that is defined in the model's theme file.
- 
- Example:
- 
-    // Objective-C
-    cellActions.willStyle = ^(SCTableViewCell *cell, NSIndexPath *indexPath)
-    {
-        cell.themeStyle = @"MyCustomStyle";
-    };
- 
-    // Swift
-    cellActions.willStyle =
-    {
-        (cell, indexPath) in
- 
-        cell.themeStyle = "MyCustomStyle"
-    }
- 
- @see SCTheme 
- */
-@property (nonatomic, copy) SCCellAction_Block willStyle;
-
 /** Action gets called before the cell is configured. 
  
  This action is typically used to set any attribute that will affect the cell's configuration and layout.
@@ -86,14 +59,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     };
- 
-    // Swift
-    cellActions.willConfigure =
-    {
-        (cell, indexPath) in
- 
-        cell.selectionStyle = UITableViewCellSelectionStyleNone
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block willConfigure;
 
@@ -108,14 +73,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         cell.textLabel.frame = CGRectMake(40, 20, 100, 40);
     };
- 
-    // Swift
-    cellActions.didLayoutSubviews =
-    {
-        (cell, indexPath) in
- 
-        cell.textLabel.frame = CGRectMake(40, 20, 100, 40)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block didLayoutSubviews;
 
@@ -130,15 +87,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         cell.backgroundColor = [UIColor yellowColor];
     };
- 
-    // Swift
-    cellActions.willDisplay =
-    {
-        (cell, indexPath) in
- 
-        cell.backgroundColor = UIColor.yellowColor()
-    }
- 
  @note Changing cell properties that influence its layout (such as the cell's height) cannot be set here, and must be set in the willConfigure action instead.
  */
 @property (nonatomic, copy) SCCellAction_Block willDisplay;
@@ -154,14 +102,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         cell.imageView.image = [self retrieveImageForRowAtIndexPath:indexPath];
     };
- 
-    // Swift
-    cellActions.lazyLoad =
-    {
-        (cell, indexPath) in
- 
-        cell.imageView.image = self.retrieveImageForRowAtIndexPath(indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block lazyLoad;
 
@@ -178,16 +118,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
  
         return TRUE;
     };
- 
-    // Swift
-    cellActions.willSelect =
-    {
-        (cell, indexPath)->Bool in
- 
-        NSLog("Cell at indexPath:%@ is about to be selected.", indexPath)
- 
-        return true
-    }
  */
 @property (nonatomic, copy) SCBOOLReturnCellAction_Block willSelect;
 
@@ -200,14 +130,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         NSLog(@"Cell at indexPath:%@ has been selected.", indexPath);
     };
- 
-    // Swift
-    cellActions.didSelect =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ has been selected.", indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block didSelect;
 
@@ -224,16 +146,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
  
         return TRUE;
     };
- 
-    // Swift
-    cellActions.willDeselect =
-    {
-        (cell, indexPath)->Bool in
- 
-        NSLog("Cell at indexPath:%@ is about to be deselected.", indexPath)
- 
-        return true
-    }
  */
 @property (nonatomic, copy) SCBOOLReturnCellAction_Block willDeselect;
 
@@ -246,14 +158,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
     {
         NSLog(@"Cell at indexPath:%@ has been selected.", indexPath);
     };
- 
-    // Swift
-    cellActions.didDeselect =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ has been selected.", indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block didDeselect;
 
@@ -273,21 +177,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
         //else
         return UITableViewCellEditingStyleNone;
     };
- 
-    // Swift
-    cellActions.customEditingStyle =
-    {
-        (cell, indexPath)->UITableViewCellEditingStyle in
-        
-        // Prevent swipe-to-delete when not in editing mode.
- 
-        if(cell.ownerTableViewModel.tableView.editing)
-        {
-            return UITableViewCellEditingStyleDelete;
-        }
-        //else
-        return UITableViewCellEditingStyleNone;
-    }
  */
 @property (nonatomic, copy) SCCellCustomEditingStyleAction_Block customEditingStyle;
 
@@ -296,8 +185,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
  Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
  
  @return An array of UITableViewRowAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap.
- 
- @warning Only available in iOS 8 and later.
  
  Example:
  
@@ -321,34 +208,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
         
         return @[deleteButton, customButton];
     };
- 
-    // Swift
-    self.tableViewModel.cellActions.editActions =
-    {
-        (cell, indexPath)->[AnyObject] in
-            
-        let customButton = UITableViewRowAction(style: .Default, title: "Button", handler:
-        {
-            (action, indexPath)->Void in
-            
-            NSLog("Custom edit action button tapped!")
-            
-            cell.ownerTableViewModel.tableView.editing = false  // collapse the cell back after completing custom edit action
-        })
-        customButton.backgroundColor = UIColor.greenColor() //arbitrary color
-        
-        let deleteButton = UITableViewRowAction(style: .Default, title: "Delete", handler:
-        {
-            (action, indexPath)->Void in
-                
-            if let itemsSection = cell.ownerSection as? SCArrayOfItemsSection
-            {
-                itemsSection.dispatchEventRemoveRowAtIndexPath(indexPath)  // delete the cell
-            }
-        })
-            
-        return [deleteButton, customButton]
-    }
  */
 @property (nonatomic, copy) SCCellEditActionsAction_Block editActions;
 
@@ -362,8 +221,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
  @note It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
 
  @return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the leading edge of the cell.
-
- @warning Only available in iOS 11 and later.
 
  Example:
 
@@ -402,8 +259,6 @@ Return nil if you want the cell to display the default set of actions, although 
 @note It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
 
 @return An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the trailing edge of the cell.
-
-@warning Only available in iOS 11 and later.
 
 Example:
 
@@ -444,14 +299,6 @@ Example:
     {
         NSLog(@"Cell at indexPath:%@ has become the first responder.", indexPath);
     };
- 
-    // Swift
-    cellActions.didBecomeFirstResponder =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ has become the first responder.", indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block didBecomeFirstResponder;
 
@@ -464,14 +311,6 @@ Example:
     {
         NSLog(@"Cell at indexPath:%@ has resigned the first responder.", indexPath);
     };
- 
-    // Swift
-    cellActions.didResignFirstResponder =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ has resigned the first responder.", indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block didResignFirstResponder;
 
@@ -484,15 +323,6 @@ Example:
     {
         NSLog(@"Cell at indexPath:%@ accessory button has been tapped.", indexPath);
     };
- 
-    // Swift
-    cellActions.accessoryButtonTapped =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ accessory button has been tapped.", indexPath)
-    }
- 
  @note For this action to get called, you must first have the cell's accessory button appear by setting its accessoryType property to UITableViewCellAccessoryDetailDisclosureButton.
  */
 @property (nonatomic, copy) SCCellAction_Block accessoryButtonTapped;
@@ -509,16 +339,6 @@ Example:
         [self doMyCustomAction];
         [cell.ownerTableViewModel moveToNextCellControl:YES];
     };
- 
-    // Swift
-    cellActions.returnButtonTapped =
-    {
-        (cell, indexPath) in
- 
-        self.doMyCustomAction()
-        cell.ownerTableViewModel.moveToNextCellControl(YES)
-    }
- 
  @note Action is only applicable to cells with controls that display a keyboard.
  */
 @property (nonatomic, copy) SCCellAction_Block returnButtonTapped;
@@ -534,14 +354,6 @@ Example:
     {
         NSLog(@"Cell at indexPath:%@ value has changed to: %@.", indexPath, cell.boundValue);
     };
- 
-    // Swift
-    cellActions.valueChanged =
-    {
-        (cell, indexPath) in
- 
-        NSLog("Cell at indexPath:%@ value has changed to: %@.", indexPath, cell.boundValue)
-    }
  */
 @property (nonatomic, copy) SCCellAction_Block valueChanged;
 
@@ -569,25 +381,6 @@ Example:
  
         return valid;
     };
- 
-    // Swift
-    cellActions.valueIsValid =
-    {
-        (cell, indexPath)->Bool in
-        
-        var valid = false
-        
-        if let textFieldCell = cell as? SCTextFieldCell
-        {
-            // Make sure the password field is at least 8 characters long
-            if countElements(textFieldCell.textField.text) >= 8
-            {
-                valid = true
-            }
-        }
-        
-        return valid
-    }
  */
 @property (nonatomic, copy) SCBOOLReturnCellAction_Block valueIsValid;
 
@@ -608,20 +401,6 @@ Example:
  
         return [NSNumber numberWithFloat:time];
     };
- 
-    // Swift
-    cellActions.calculatedValue =
-    {
-        (cell, indexPath)->NSObject in
- 
-        let speed = cell.boundObject.valueForKey("speed") as! NSNumber
-        let distance = cell.boundObject.valueForKey("distance") as! NSNumber
-        var time = 0.0f
-        if(speed.floatValue != 0)
-            time = distance.floatValue()/speed.floatValue()
-        
-        return NSNumber.numberWithFloat(time)
-    }
  */
 @property (nonatomic, copy) SCCellCalculatedValueAction_Block calculatedValue;
 
@@ -641,21 +420,6 @@ Example:
  
         return trimmedString;
     };
- 
-    // Swift
-    cellActions.didLoadBoundValue =
-    {
-        (cell, indexPath, value)->NSObject in
- 
-        // Make sure all string spaces are trimmed before displaying string.
-        var trimmedString = ""
-        if let stringValue = value as? String
-        {
-            trimmedString = stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        }
-        
-        return trimmedString
-    }
  */
 @property (nonatomic, copy) SCCellBoundValueAction_Block didLoadBoundValue;
 
@@ -675,21 +439,6 @@ Example:
  
         return trimmedString;
     };
- 
-    // Swift
-    cellActions.willCommitBoundValue =
-    {
-        (cell, indexPath, value)->NSObject in
- 
-        // Make sure all string spaces are trimmed before committing the string.
-        var trimmedString = ""
-        if let stringValue = value as? String
-        {
-            trimmedString = stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        }
-        
-        return trimmedString
-    }
  */
 @property (nonatomic, copy) SCCellBoundValueAction_Block willCommitBoundValue;
 
@@ -704,14 +453,6 @@ Example:
     {
         NSLog(@"Custom button with tag:%i has been tapped for cell at indexPath:%@.", button.tag, indexPath);
     };
- 
-    // Swift
-    cellActions.customButtonTapped =
-    {
-        (cell, indexPath, button) in
- 
-        NSLog("Custom button with tag:%i has been tapped for cell at indexPath:%@.", button.tag, indexPath)
-    }
  */
 @property (nonatomic, copy) SCCellCustomButtonTappedAction_Block customButtonTapped;
 
@@ -731,14 +472,6 @@ Example:
     {
         return TRUE;
     };
- 
-    // Swift
-    cellActions.shouldShowMenu =
-    {
-        (cell, indexPath)->Bool in
- 
-        return true
-    }
  */
 @property (nonatomic, copy) SCBOOLReturnCellAction_Block shouldShowMenu;
 
@@ -756,14 +489,6 @@ Example:
     {
         return (action == @selector(copy:);  // only allow 'Copy'
     };
- 
-    // Swift
-    cellActions.canPerformAction =
-    {
-        (cell, indexPath, action, sender)->Bool in
- 
-        return true   // allow all actions
-    }
  */
 @property (nonatomic, copy) SCCellCanPerformAction_Block canPerformAction;
 
@@ -780,14 +505,6 @@ Example:
     {
         // perform operation here
     };
- 
-    // Swift
-    cellActions.performAction =
-    {
-        (cell, indexPath, action, sender) in
- 
-        // perform operation here
-    }
  */
 @property (nonatomic, copy) SCCellPerformAction_Block performAction;
 
@@ -812,17 +529,6 @@ Example:
         
         return customVC;
     };
- 
-    // Swift
-    cellActions.detailViewController =
-    {
-        (cell, indexPath)->UIViewController in
- 
-        let customVC = MyCustomViewController(nibName: "MyCustomViewController", bundle: nil)
- 
-        return customVC
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell and SCArrayOfObjectsCell.
  */
 @property (nonatomic, copy) SCCellDetailViewControllerAction_Block detailViewController;
@@ -848,20 +554,6 @@ Example:
  
         return detailModel;
     };
- 
-    // Swift
-    cellActions.detailTableViewModel =
-    {
-        (cell, indexPath)->SCTableViewModel in
- 
-        if let arrayOfObjectsCell = cell as? SCArrayOfObjectsCell
-        {
-            return SCArrayOfObjectsModel(tableView: nil)
-        }
-        // else
-        return nil
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell and SCArrayOfObjectsCell.
  */
 @property (nonatomic, copy) SCCellDetailTableViewModelAction_Block detailTableViewModel;
@@ -878,15 +570,6 @@ Example:
     {
         detailModel.tag = 100;
     };
- 
-    // Swift
-    cellActions.detailModelCreated =
-    {
-        (cell, indexPath, detailModel) in
- 
-        detailModel.tag = 100
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
  
  @see detailModelConfigured
@@ -908,19 +591,6 @@ Example:
  
         [detailModel addSection:customSection];
     };
- 
-    // Swift
-    cellActions.detailModelConfigured =
-    {
-        (cell, indexPath, detailModel) in
- 
-        let customSection = SCTableViewSection()
-        let customCell = SCCustomCell(text: "Custom Cell")
-        customSection.addCell(customCell)
- 
-        detailModel.addSection(customSection)
-    }
- 
  @note In general, it is easier (and more recommended) to add your custom sections and cells using the data definitions, instead of using this action to do so. For more information, please refer to SCDataDefinition and SCCustomPropertyDefinition.
  
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
@@ -939,15 +609,6 @@ Example:
     {
         detailModel.viewController.title = @"My custom title";
     };
- 
-    // Swift
-    cellActions.detailModelWillPresent =
-    {
-        (cell, indexPath, detailModel) in
- 
-        detailModel.viewController.title = "My custom title"
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
  
  */
@@ -962,15 +623,6 @@ Example:
     {
         NSLog(@"Detail model has been presented.");
     };
- 
-    // Swift
-    cellActions.detailModelDidPresent =
-    {
-        (cell, indexPath, detailModel) in
- 
-        NSLog("Detail model has been presented.")
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 
  */
@@ -985,15 +637,6 @@ Example:
     {
         return YES;  // allow detail model to be dismissed
     };
- 
-    // Swift
-    cellActions.detailModelShouldDismiss =
-    {
-        (cell, indexPath, detailModel)->Bool in
- 
-        return true  // allow detail model to be dismissed
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 
  */
@@ -1008,15 +651,6 @@ Example:
     {
         NSLog(@"Detail model will be dismissed.");
     };
- 
-    // Swift
-    cellActions.detailModelWillDismiss =
-    {
-        (cell, indexPath, detailModel) in
- 
-        NSLog("Detail model will be dismissed.")
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
  
  */
@@ -1031,15 +665,6 @@ Example:
     {
         NSLog(@"Detail model has been dismissed.");
     };
- 
-    // Swift
-    cellActions.detailModelDidDismiss =
-    {
-        (cell, indexPath, detailModel) in
- 
-        NSLog("Detail model has been dismissed.")
-    }
- 
  @note This action is only applicable to cells that generate detail views, such as SCSelectionCell.
  
  */
@@ -1063,24 +688,17 @@ typedef BOOL(^SCTextFieldShouldChangeCharactersInRangeAction_Block)(SCTableViewC
         
         return YES;
     };
- 
-    // Swift
-    cellActions.shouldChangeCharactersInRange = 
-    {
-        (cell, indexPath, textField, range, replacementString)->Bool in
- 
-        NSLog("shouldChangeCharactersInRange called with replacement string: %@", replacementString)
- 
-        return true
-    }
- 
  */
 @property (nonatomic, copy) SCTextFieldShouldChangeCharactersInRangeAction_Block shouldChangeCharactersInRange;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name SCImagePickerCell Specific Actions
 //////////////////////////////////////////////////////////////////////////////////////////
-
+/*
+These action types remain in source beside the excluded cell for a future
+PhotosUI redesign, but are not part of STV 7.
+*/
+#if 0
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 typedef void(^SCImagePickerDidFinishPickingMediaAction_Block)(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath, NSDictionary *mediaInfo, ALAsset *mediaAsset);
@@ -1100,17 +718,6 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
         NSDate *date = [mediaAsset valueForProperty:ALAssetPropertyDate];
         NSLog(@"Selected media date: %@", date);
     };
- 
-    // Swift
-    cellActions.didFinishPickingMedia =
-    {
-        (imagePickerCell, indexPath, mediaInfo, mediaAsset) in
- 
-        // Determine selected media date
-        let date = mediaAsset.valueForProperty(ALAssetPropertyDate)
-        NSLog("Selected media date: %@", date)
-    }
- 
  */
 @property (nonatomic, copy) SCImagePickerDidFinishPickingMediaAction_Block didFinishPickingMedia;
 
@@ -1123,15 +730,6 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
     {
         return @"My Custom Image Name";
     };
- 
-    // Swift
-    cellActions.imageName =
-    {
-        (imagePickerCell, indexPath)->String in
- 
-        return "My Custom Image Name"
-    }
- 
  */
 @property (nonatomic, copy) SCImagePickerImageNameAction_Block imageName;
 
@@ -1144,15 +742,6 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
     {
         [UIImageJPEGRepresentation(imagePickerCell.selectedImage, 80) writeToFile:imagePath atomically:YES];
     };
- 
-    // Swift
-    cellActions.saveImage =
-    {
-        (imagePickerCell, indexPath, imagePath) in
- 
-        UIImageJPEGRepresentation(imagePickerCell.selectedImage, 80).writeToFile(imagePath, atomically: true)
-    }
- 
  */
 @property (nonatomic, copy) SCImagePickerSaveImageAction_Block saveImage;
 
@@ -1165,17 +754,9 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
     {
         return [UIImage imageWithContentsOfFile:imagePath];
     };
- 
-    // Swift
-    cellActions.loadImage =
-    {
-        (imagePickerCell, indexPath, imagePath)->UIImage in
- 
-        return UIImage(contentsOfFile: imagePath)
-    }
- 
  */
 @property (nonatomic, copy) SCImagePickerLoadImageAction_Block loadImage;
+#endif
 
 
 

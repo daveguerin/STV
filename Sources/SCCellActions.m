@@ -28,8 +28,6 @@
 
 - (void)setActionsTo:(SCCellActions *)actions overrideExisting:(BOOL)override
 {
-    if((override || !self.willStyle) && actions.willStyle)
-        self.willStyle = actions.willStyle;
     if((override || !self.willConfigure) && actions.willConfigure)
         self.willConfigure = actions.willConfigure;
     if((override || !self.didLayoutSubviews) && actions.didLayoutSubviews)
@@ -101,14 +99,10 @@
     if((override || !self.shouldChangeCharactersInRange) && actions.shouldChangeCharactersInRange)
         self.shouldChangeCharactersInRange = actions.shouldChangeCharactersInRange;
     
-    if((override || !self.didFinishPickingMedia) && actions.didFinishPickingMedia)
-        self.didFinishPickingMedia = actions.didFinishPickingMedia;
-    if((override || !self.imageName) && actions.imageName)
-        self.imageName = actions.imageName;
-    if((override || !self.saveImage) && actions.saveImage)
-        self.saveImage = actions.saveImage;
-    if((override || !self.loadImage) && actions.loadImage)
-        self.loadImage = actions.loadImage;
+    /*
+    SCImagePickerCell actions are excluded from STV 7 together with the
+    deprecated cell implementation.
+    */
     
     if((override || !self.shouldShowMenu) && actions.shouldShowMenu)
         self.shouldShowMenu = actions.shouldShowMenu;
