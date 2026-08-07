@@ -321,18 +321,6 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
         NSError *error = nil;
         completionHandler(myUpdatedResultsArray, error);
     };
- 
-    // Swift
-    myDataStore.postAsynchronousFetchObjectsAction =
-    {
-        (results, completionHandler) in
- 
-        // ... load your data here asynchronously ...
-        
-        let error : NSError = nil
-        completionHandler(myUpdatedResultsArray, error);
-    }
- 
  */
 @property (nonatomic, copy) SCPostFetchAsyncronousAction_Block postAsynchronousFetchObjectsAction;
 
