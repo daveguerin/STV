@@ -154,9 +154,6 @@ typedef NS_ENUM(NSInteger, SCDataType)
 {
 }
 
-/** Method determines the system version */
-+ (double)systemVersion;
-
 /** Method determines if code is being run on an iPad */
 + (BOOL)is_iPad;
 

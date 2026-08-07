@@ -272,18 +272,9 @@
 
 @implementation SCUtilities
 
-+ (double)systemVersion
-{
-    return [[[UIDevice currentDevice] systemVersion] doubleValue];
-}
-
 + (BOOL)is_iPad
 {
-#ifdef UI_USER_INTERFACE_IDIOM
-    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-#else
-    return NO;
-#endif
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
 }
 
 + (BOOL)isViewInsidePopover:(UIView *)view
