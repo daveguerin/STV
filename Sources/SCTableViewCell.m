@@ -11,12 +11,12 @@
 
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-
 #import "SCGlobals.h"
 #import "SCTableViewModel.h"
 #import "SCStringDefinition.h"
 #import "SCArrayStore.h"
+#import "SCEntityDefinition.h"
+#import "SCCoreDataStore.h"
 #import "SCImageView.h"
 
 
@@ -84,7 +84,6 @@
 @synthesize reuseId;
 @synthesize configured;
 @synthesize isSpecialCell;
-@synthesize themeStyle;
 
 + (instancetype)cell
 {
@@ -113,45 +112,49 @@
 
 + (instancetype)cellWithCell:(UITableViewCell *)cell {
 	// Game plan: since UITableViewCell doesn't support NSCopying, simply archive it then unarchive it back into our object
+    id STVCell = nil;
+    @try
+    {
+        NSString *sourceClassName = NSStringFromClass(cell.class);
+        NSError *error = nil;
+        NSData *cellData = [NSKeyedArchiver archivedDataWithRootObject:cell requiringSecureCoding:NO error:&error];
+        if(!cellData || error)
+        {
+            SCDebugLog(@"Unable to archive table cell: %@", error);
+            return nil;
+        }
 
-    // backup original class value before modifying
-    Class originalCellClass = [NSKeyedUnarchiver classForClassName:NSStringFromClass([cell class])];
-    [NSKeyedUnarchiver setClass:[self class] forClassName:NSStringFromClass([cell class])];
+        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:cellData error:&error];
+        unarchiver.requiresSecureCoding = NO;
+        if(!unarchiver || error)
+        {
+            SCDebugLog(@"Unable to create table-cell unarchiver: %@", error);
+            return nil;
+        }
 
-    NSError *error = nil;
-
-    NSData *cellData = [NSKeyedArchiver archivedDataWithRootObject:cell requiringSecureCoding:NO error:&error];
-    if (error) {
-        SCDebugLog(@"%@",error);
-        error = nil;
+        /*
+        Scope the source-to-STV class substitution to this decoder instance so
+        unrelated process-wide unarchiving can never observe it.
+        */
+        [unarchiver setClass:self forClassName:sourceClassName];
+        STVCell = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+        [unarchiver finishDecoding];
+        if(![STVCell isKindOfClass:self])
+        {
+            SCDebugLog(@"Decoded table cell has unexpected class %@ instead of %@", [STVCell class], self);
+            STVCell = nil;
+        }
+        else
+        {
+            // Required to fix a suspected iOS bug where the cell's image is not correctly archived/unarchived.
+            [(UITableViewCell *)STVCell imageView].image = cell.imageView.image;
+        }
     }
-
-    /*
-     Previously STV just did this...
-
-     id STVCell = [NSKeyedUnarchiver unarchivedObjectOfClass:[UITableViewCell class] fromData:cellData error:&error];
-     if (error) {
-        SCDebugLog(@"%@",error);
-     }
-     
-     but that now fails because requiringSecureCoding: needs to be YES and it
-     can't be, so we have to set it to be NO and STVCell is not nil anymore.
-     dgApps
-     */
-
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:cellData error:&error];
-    [unarchiver setRequiresSecureCoding:NO];
-    if (error) {
-        SCDebugLog(@"%@",error);
+    @catch(NSException *exception)
+    {
+        SCDebugLog(@"Unable to clone table cell: %@", exception);
+        STVCell = nil;
     }
-
-    id STVCell = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-
-    // Required to fix a suspected iOS bug where the cell's image in not correctly archived/unarchived
-    [(UITableViewCell *)STVCell imageView].image = cell.imageView.image;
-    
-    // Restore original class value
-    [NSKeyedUnarchiver setClass:originalCellClass forClassName:NSStringFromClass([cell class])];
 
     return STVCell;
 }
@@ -166,16 +169,16 @@
     _isCustomBoundProperty = FALSE;
 	if(!_height)
         _height = UITableViewAutomaticDimension;
+    /*
+    STV 7 models choose the inherited policy; keeping this on the cell allows
+    fixed and legacy exceptions without subclass tests in the model.
+    */
+    _sizingMode = SCTableViewCellSizingModeInherit;
+    _estimatedHeight = 44.0;
 	selectable = TRUE;
     enabled = TRUE;
-    if (@available(iOS 13.0, *)) {
-        _disabledTextColor = [UIColor labelColor]; // dgApps
-    }
-    else {
-        _disabledTextColor = [UIColor blackColor];
-    }
-	
-	autoResignFirstResponder = TRUE;
+    _disabledTextColor = [UIColor labelColor]; // dgApps
+    autoResignFirstResponder = TRUE;
 	cellEditingStyle = UITableViewCellEditingStyleDelete;
 	autoValidateValue = TRUE;
 	commitChangesLive = TRUE;
@@ -297,7 +300,28 @@
 
 - (CGFloat)height
 {
-    if(_height!=UITableViewAutomaticDimension && _height!=44)
+    SCTableViewCellSizingMode effectiveSizingMode = _sizingMode;
+    if(effectiveSizingMode == SCTableViewCellSizingModeInherit)
+    {
+        /*
+        Detached cells use STV 7's automatic default; owned cells inherit the
+        model policy without converting it into a cached numeric height.
+        */
+        effectiveSizingMode = self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellSizingMode : SCTableViewCellSizingModeAutomatic;
+    }
+
+    /*
+    Automatic dimension must reach UITableView unchanged; STV 6 converted it
+    into a fixed number before Auto Layout could measure the cell.
+    */
+    if(_height == UITableViewAutomaticDimension && effectiveSizingMode == SCTableViewCellSizingModeAutomatic)
+        return UITableViewAutomaticDimension;
+
+    /*
+    A numeric height is always an explicit override in STV 7, including the
+    previously ambiguous value 44.
+    */
+    if(_height != UITableViewAutomaticDimension)
         return _height;
     
     CGFloat calculatedHeight = 44;
@@ -378,8 +402,6 @@
 - (void)didLayoutSubviews
 {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    
-    [self.ownerTableViewModel styleCell:self atIndexPath:indexPath onlyStylePropertyNamesInSet:[NSSet setWithObjects:@"frame", @"bounds", nil]];
     
     if(self.cellActions.didLayoutSubviews)
     {
@@ -709,19 +731,18 @@
 		[self commitChanges];
     
 	NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-	if(activeDetailModel) // a custom detail view is defined
-	{
-		NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
-        [self.ownerTableViewModel.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-	}
-    
 	[self.ownerTableViewModel valueChangedForRowAtIndexPath:indexPath];
+    /*
+    Run app callbacks first so any bound summary text is current, then
+    invalidate automatic height even though the detail model has already been
+    cleared.
+    */
+    if(self.height == UITableViewAutomaticDimension)
+        [self.ownerTableViewModel invalidateHeightForCell:self animated:NO];
 }
 
 - (void)willDisplay
 {
-    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    [self.ownerTableViewModel styleCell:self atIndexPath:indexPath onlyStylePropertyNamesInSet:nil];
 }
 
 - (void)didSelectCell
@@ -1431,7 +1452,12 @@
         if([cell isKindOfClass:[SCCustomCell class]])
         {
             cell.reuseId = nibName;
-            cell.height = cell.frame.size.height;
+            /*
+            A nib's canvas height is an estimate in STV 7; its constraints, not
+            the design-time frame, determine the runtime row height.
+            */
+            cell.estimatedHeight = MAX(cell.frame.size.height, 1.0);
+            cell.sizingMode = SCTableViewCellSizingModeAutomatic;
         }
         else 
         {
@@ -1662,6 +1688,15 @@
 //overrides superclass
 - (CGFloat)height
 {
+    CGFloat resolvedHeight = [super height];
+    /*
+    Automatic and explicit fixed rows resolve policy only; loading custom
+    bindings during a height query mutates content and can make UIKit sizing
+    non-deterministic.
+    */
+    if(_height != UITableViewAutomaticDimension || resolvedHeight == UITableViewAutomaticDimension)
+        return resolvedHeight;
+
     // Make sure the cell's height fits its controls
     if(!self.needsCommit)
     {
@@ -1669,7 +1704,7 @@
     }
     
     if((NSInteger)self.cellStyle!=-1 || !self.autoResize || [self isKindOfClass:[SCControlCell class]])  // -1 is 'Custom' cell style set in IB
-        return [super height];
+        return resolvedHeight;
     
     CGFloat staticHeight = _height;
     if(staticHeight == UITableViewAutomaticDimension)
@@ -1686,9 +1721,7 @@
     [_operationsCell loadBindingsIntoCustomControls];
     
     // Make sure _operationsCell bounds are correct (in case of UI size change)
-    CGFloat conversion = 0;
-    if([SCUtilities systemVersion] >= 8.0)
-        conversion = 10; // conversion is a needed conversion between the tableView width and the cell width starting iOS 8 (note that we can never depend on self.bounds.width here!)
+    CGFloat conversion = 10;
     _operationsCell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(self.ownerTableViewModel.tableView.bounds)-conversion, staticHeight);
     
     // Make sure all frames all calculated
@@ -1721,20 +1754,23 @@
         if([customControl isKindOfClass:[UILabel class]])
         {
             UILabel *label = (UILabel *)customControl;
-            /*
-             Depending on the contentView width and the label.text occasionally
-             the last few words of the text would not be displayed. It seems
-             that preferredMaxLayoutWidth was slightly off, and then the height
-             of the label would be off too. By using 0.95 times the calculated
-             width as the preferredMaxLayoutWidth then the text will be always
-             slightly too wide for the label. According to Apple documentation
-             "During layout, if the text extends beyond the width specified by
-             this property, the additional text flows to one or more new lines,
-             increasing the height of the label." So the text will extend beyond
-             the specified width, and the additional text flows to another line,
-             and all the text is correctly displayed. dgApps
-             */
-            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame) * 0.95f ;
+//            /*
+//             Depending on the contentView width and the label.text occasionally
+//             the last few words of the text would not be displayed. It seems
+//             that preferredMaxLayoutWidth was slightly off, and then the height
+//             of the label would be off too. By using 0.95 times the calculated
+//             width as the preferredMaxLayoutWidth then the text will be always
+//             slightly too wide for the label. According to Apple documentation
+//             "During layout, if the text extends beyond the width specified by
+//             this property, the additional text flows to one or more new lines,
+//             increasing the height of the label." So the text will extend beyond
+//             the specified width, and the additional text flows to another line,
+//             and all the text is correctly displayed. dgApps
+//             */
+//            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame) * 0.95f ;
+#warning TODO CHECK THIS
+            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame);
+
         }
     }
 
@@ -2524,6 +2560,12 @@
 - (void)performInitialization
 {
 	[super performInitialization];
+    /*
+    Generated control cells still lay out controls with frames, so they remain
+    legacy-sized until a constrained nib/storyboard cell opts into UIKit
+    self-sizing.
+    */
+    self.sizingMode = SCTableViewCellSizingModeLegacy;
     
     maxTextLabelWidth = SC_DefaultMaxTextLabelWidth;
 	controlIndentation = SC_DefaultControlIndentation;
@@ -2537,6 +2579,11 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    /*
+    Interface Builder control cells in STV 7 use their contentView constraints
+    instead of treating the design-time frame as a fixed runtime height.
+    */
+    self.sizingMode = SCTableViewCellSizingModeAutomatic;
     
     if(self.control)
         _controlCreatedInIB = YES;
@@ -2765,12 +2812,7 @@
 	
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
-    if (@available(iOS 13.0, *)) {
-        label.textColor = [UIColor secondaryLabelColor];  //dgApps
-    }
-    else {
-        label.textColor =[UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    }
+    label.textColor = [UIColor secondaryLabelColor];  //dgApps
     label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
     /*
      If self.backgroundColor was null then iOS 14 was causing
@@ -2907,12 +2949,7 @@
 	
     UITextView *textView = [[UITextView alloc] init];
     textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
-    if (@available(iOS 13.0, *)) {
-        textView.textColor = [UIColor secondaryLabelColor]; // dgApps
-    }
-    else {
-        textView.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    }
+    textView.textColor = [UIColor secondaryLabelColor]; // dgApps
     self.control = textView;
 }	
 
@@ -3260,12 +3297,7 @@
     UITextField *textField = [[UITextField alloc] init];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    if (@available(iOS 13.0, *)) {
-        textField.textColor =  [UIColor secondaryLabelColor];  // dgApps
-    }
-    else {
-        textField.textColor =  [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    }
+    textField.textColor =  [UIColor secondaryLabelColor];  //dgApps
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
     self.control = textField;
 }
@@ -4341,7 +4373,11 @@
 
 #pragma mark - SCImagePickerCell
 
-
+/*
+Keep the legacy source available for a later PhotosUI rewrite, but do not
+compile or export SCImagePickerCell in STV 7.
+*/
+#if FALSE
 
 @interface SCImagePickerCell ()
 
@@ -4981,6 +5017,7 @@
 }
 
 @end
+#endif
 
 
 
@@ -6318,6 +6355,16 @@
 	return [[[self class] alloc] initWithItems:cellItems itemsDefinition:definition];
 }
 
++ (instancetype)cellWithEntityDefinition:(SCEntityDefinition *)definition
+{
+	return [[[self class] alloc] initWithEntityDefinition:definition];
+}
+
++ (instancetype)cellWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects
+{
+	return [[[self class] alloc] initWithBoundItemsSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsObjects:ownsObjects];
+}
+
 //overrides superclass
 - (void)performInitialization
 {
@@ -6359,6 +6406,24 @@
         [self.dataStore addDataDefinition:definition];
 	}
 	return self;
+}
+
+- (instancetype)initWithEntityDefinition:(SCEntityDefinition *)definition
+{
+	SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
+
+	self = [self initWithDataStore:store];
+
+    return self;
+}
+
+- (instancetype)initWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects
+{
+	SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext boundSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsStoreObjects:ownsObjects];
+
+	self = [self initWithDataStore:store];
+
+    return self;
 }
 
 

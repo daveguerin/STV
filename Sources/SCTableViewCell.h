@@ -17,6 +17,17 @@
 
 @class SCTableViewModel;
 @class SCTableViewSection;
+@class SCEntityDefinition;
+
+/*
+STV 7 separates row-height policy from the numeric height value so UIKit's
+automatic sentinel is no longer consumed as a calculated legacy height.
+*/
+typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
+    SCTableViewCellSizingModeInherit,
+    SCTableViewCellSizingModeLegacy,
+    SCTableViewCellSizingModeAutomatic
+};
 
 
 /****************************************************************************************/
@@ -66,8 +77,6 @@
     BOOL isSpecialCell;
     
     SCDetailViewControllerOptions *detailViewControllerOptions;
-    
-    NSString *themeStyle;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +156,12 @@
 /** The height of the cell. Default: UITableViewAutomaticDimension. */
 @property (nonatomic, readwrite) CGFloat height;
 
+/** The row-height policy. STV 7 defaults models to automatic sizing; legacy/manual-layout cells may opt out. */
+@property (nonatomic, readwrite) SCTableViewCellSizingMode sizingMode;
+
+/** The estimated row height used while UIKit calculates an automatic height. Default: 44. */
+@property (nonatomic, readwrite) CGFloat estimatedHeight;
+
 /** The editable state of the cell. Default: FALSE. */
 @property (nonatomic, readwrite) BOOL editable;
 
@@ -172,15 +187,13 @@
 /**
  When this property is set to YES, a full leading swipe in the cell row performs the first UIContextualAction listed in the actions property. In a left-to-right language environment that is when the user swipes from left to right. The default value of this property is YES.
 
- @warning Only available in iOS 11 and later.
-*/
+ */
 @property (nonatomic, readwrite) BOOL leadingSwipePerformsFirstActionWithFullSwipe;
 
 /**
 When this property is set to YES, a full trailing swipe in the cell row performs the first UIContextualAction listed in the actions property.  In a left-to-right language environment that is when the user swipes from right to left.  The default value of this property is YES.
 
- @warning Only available in iOS 11 and later.
-*/
+ */
 @property (nonatomic, readwrite) BOOL trailingSwipePerformsFirstActionWithFullSwipe;
 
 
@@ -223,10 +236,6 @@ When this property is set to YES, a full trailing swipe in the cell row performs
 
 /** Options for the generated detail view controller (only applicable to subclasses with a detail view controller). */
 @property (nonatomic, readonly) SCDetailViewControllerOptions *detailViewControllerOptions;
-
-/** The theme style used to style the cell. A nil 'themeStyle' value will use the style having the same name of the cell's class name. If no style with the class name is found, the name of the super class will be used, and so on. Default: nil. */
-@property (nonatomic, copy) NSString *themeStyle;
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Managing Cell Value
@@ -1078,7 +1087,13 @@ When this property is set to YES, a full trailing swipe in the cell row performs
 /****************************************************************************************/
 /*	class SCImagePickerCell	*/
 /****************************************************************************************/ 
-/**	
+/*
+SCImagePickerCell is intentionally excluded from STV 7 until it can be rebuilt
+on PhotosUI without deprecated AssetsLibrary/UIActionSheet/UIPopoverController
+APIs.
+*/
+#if FALSE
+/**
  This class functions as a cell that provides the end-user with an automatically generated
  detail view of type UIImagePickerController to pick an image with. As soon as the image is picked,
  it will be saved to the Documents folder using either an auto generated name from the current time stamp,
@@ -1210,6 +1225,7 @@ When this property is set to YES, a full trailing swipe in the cell row performs
 - (void)didTapClearImageButton;
 
 @end
+#endif // FALSE
 
 
 
@@ -1622,6 +1638,42 @@ When this property is set to YES, a full trailing swipe in the cell row performs
  *	@param definition The class definition of the class or entity of the objects in the objects array. If the array contains more than one type of object, then their respective class definitions must be added to the itemsClassDefinitions dictionary after initialization.
  */
 - (instancetype)initWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition;
+
+/**
+ Allocates and returns an initialized SCArrayOfObjectsCell given a header title and an entity definition.
+
+ @note This method creates a cell with all the objects that exist in classDefinition's entity's managedObjectContext. To create a cell with only a subset of these objects, consider using the other cell initializers.
+
+ @param definition The entity definition of the objects in the objects set.
+ */
++ (instancetype)cellWithEntityDefinition:(SCEntityDefinition *)definition;
+
+/** Allocates and returns an initialized SCArrayOfObjectsCell given a mutable set of objects.
+
+ @warning This method should only be used to create a cell with the contents of a Core Data relationship.
+
+ @param cellItemsSet A mutable set of objects that the cell will use to generate its cells.
+ @param definition The class definition of the entity of the objects in the objects set.
+ */
++ (instancetype)cellWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
+
+/**
+ Returns an initialized SCArrayOfObjectsCell given a header title and an entity definition.
+
+ @note This method creates a cell with all the objects that exist in classDefinition's entity's managedObjectContext. To create a cell with only a subset of these objects, consider using the other cell initializers.
+
+ @param definition The entity definition of the objects in the objects set.
+ */
+- (instancetype)initWithEntityDefinition:(SCEntityDefinition *)definition;
+
+/** Returns an initialized SCArrayOfObjectsCell given a mutable set of objects.
+
+ @warning This method should only be used to create a cell with the contents of a Core Data relationship.
+
+ @param cellItemsSet A mutable set of objects that the cell will use to generate its cells.
+ @param definition The class definition of the entity of the objects in the objects set.
+ */
+- (instancetype)initWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
