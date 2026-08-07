@@ -11,13 +11,11 @@
 #import "SCUserDefaultsDefinition.h"
 #import "SCDataStore.h"
 #import "SCTableViewSection.h"
-#import "SCPullToRefreshView.h"
 #import "SCInputAccessoryView.h"
 #import "SCDetailViewControllerOptions.h"
 #import "SCModelActions.h"
-#import "SCTheme.h"
 
-
+@class SCEntityDefinition;
 /****************************************************************************************/
 /*	class SCTableViewModel	*/
 /****************************************************************************************/ 
@@ -81,8 +79,6 @@
     SCModelActions *_modelActions;
     SCSectionActions *_sectionActions;
     SCCellActions *_cellActions;
-    
-    SCTheme *_theme;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -119,15 +115,7 @@
  */
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
-// dgApps remarked out the deprecated method
-// /**
-// The model's pull-to-refresh view.
-//
-// @warning This property has been deprecated. Use refreshControl instead.
-// */
-//@property (nonatomic, strong) SCPullToRefreshView *pullToRefreshView __attribute__((deprecated));
-
-/**	
+/**
  When set to a valid UIBarButtonItem, SCTableViewModel automatically puts its table view
  in edit mode when the button is tapped. Note: Must be set if the model is to automatically
  show/hide editing mode sections.
@@ -140,6 +128,9 @@
  as UITableViewController will automatically handle the resizing. Otherwise, it defaults to TRUE.
  */
 @property (nonatomic, readwrite) BOOL autoResizeForKeyboard;
+
+/** The sizing policy inherited by cells whose sizingMode is SCTableViewCellSizingModeInherit. Default: automatic. */
+@property (nonatomic, readwrite) SCTableViewCellSizingMode defaultCellSizingMode;
 
 /**
  An array of strings that serve as the title of sections in the tableView and
@@ -191,10 +182,6 @@
  @note Cell actions defined in the model's individual cells will override any actions set here.
  */
 @property (nonatomic, readonly) SCCellActions *cellActions;
-
-/** The theme used to style the model's views. Default: nil. */
-@property (nonatomic, strong) SCTheme *theme;
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Managing Sections
@@ -369,6 +356,9 @@
 /** Reload's the model's bound values in case the associated bound objects or keys valuea has changed by means other than the cells themselves (e.g. external custom code). */
 - (void)reloadBoundValues;
 
+/** Invalidates an automatic cell's fitted height and reloads its owning row. */
+- (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated;
+
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Miscellaneous
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -505,15 +495,6 @@
 - (void)pullToRefreshDidStartLoading;
 
 /** Method called internally. */
-- (void)styleSections;
-
-/** Method called internally. */
-- (void)styleViews;
-
-/** Method called internally. */
-- (void)styleCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath onlyStylePropertyNamesInSet:(NSSet *)propertyNames;
-
-/** Method called internally. */
 - (void)configureCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 // Returns the true vtable view when the model is acting as a proxy for a UISearchController
@@ -646,19 +627,8 @@
  The search controller used to search the model values.
  
  @note: searchController only has value if enableSearchController is TRUE.
- @note: IMPORTANT: At runtime, if the device is running iOS 7.0, searchDisplayController will be used instead.
  */
 @property (nonatomic, strong, readonly) UISearchController *searchController;
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
-/**
- The search controller used to search the model values.
- 
- @note: searchDisplayController only has value if enableSearchController is TRUE.
- @note: IMPORTANT: If your deployment target is iOS 8.0 or later, use searchController instead.
- */
-@property (nonatomic, strong, readonly) UISearchDisplayController *searchDisplayController;
-#endif
 
 /** Options for the generated detail view controller. */
 @property (nonatomic, readonly) SCDetailViewControllerOptions *detailViewControllerOptions;
@@ -773,6 +743,46 @@
  @param definition The definition of the objects in the objects array.
  */
 - (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)items itemsDefinition:(SCDataDefinition *)definition;
+
+/**
+ Allocates and returns an initialized SCArrayOfObjectsModel given a UITableView
+ and an entity definition.
+
+ @note This method creates a model with all the objects that exist in the definition's managedObjectContext.
+
+ @param tableView The UITableView to be bound to the model.
+ @param definition The entity definition of the objects.
+ */
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
+
+/** Allocates and returns an initialized 'SCArrayOfObjectsModel' given a UITableView
+ and an entity definition.
+ *
+ *	@param tableView The UITableView to be bound to the model.
+ *	@param definition The entity definition of the objects.
+ *	@param predicate The predicate that will be used to filter the fetched objects.
+ */
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
+
+/**
+ Returns an initialized SCArrayOfObjectsModel given a UITableView
+ and an entity definition.
+
+ @note This method creates a model with all the objects that exist in the definition's managedObjectContext.
+
+ @param tableView The UITableView to be bound to the model.
+ @param definition The entity definition of the objects.
+ */
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
+
+/** Returns an initialized 'SCArrayOfObjectsModel' given a UITableView
+ and an entity definition.
+ *
+ *	@param tableView The UITableView to be bound to the model.
+ *	@param definition The entity definition of the objects.
+ *	@param predicate The predicate that will be used to filter the fetched objects.
+ */
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

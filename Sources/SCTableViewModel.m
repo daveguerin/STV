@@ -13,6 +13,8 @@
 
 #import "SCStringDefinition.h"
 #import "SCArrayStore.h"
+#import "SCEntityDefinition.h"
+#import "SCCoreDataStore.h"
 #import "SCUserDefaultsStore.h"
 
 
@@ -58,7 +60,6 @@
 @synthesize modelActions = _modelActions;
 @synthesize sectionActions = _sectionActions;
 @synthesize cellActions = _cellActions;
-@synthesize theme = _theme;
 
 
 + (instancetype)modelWithTableView:(UITableView *)tableView
@@ -103,6 +104,11 @@
 		
 		keyboardShown = FALSE;
 		keyboardOverlap = 0;
+        /*
+        STV 7 makes UIKit self-sizing the model default while allowing
+        manual-layout cells to opt into legacy sizing.
+        */
+        _defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
         swipeToDeleteActive = FALSE;
         
         _detailViewController = nil;
@@ -112,8 +118,6 @@
         _sectionActions = [[SCSectionActions alloc] init];
         _cellActions = [[SCCellActions alloc] init];
         
-        _theme = nil;
-		
 		// Register with the shared model center
 		[[SCModelCenter sharedModelCenter] registerModel:self];
     }
@@ -139,6 +143,8 @@
 
 - (void)setTableView:(UITableView *)tableView
 {
+    if(_tableView != tableView)
+        _tableView.refreshControl = nil;
     _tableView = tableView;
     
     if(_tableView)
@@ -159,37 +165,21 @@
     else
         self.autoResizeForKeyboard = TRUE;
     
-    if(self.enablePullToRefresh && _tableView)
-    {
-        if([self.viewController isKindOfClass:[UITableViewController class]])
-        {
-            [(UITableViewController *)self.viewController setRefreshControl:self.refreshControl];
-        }
-        else
-        {
-            [_tableView addSubview:self.refreshControl];
-        }
-    }
+    if(self.enablePullToRefresh)
+        _tableView.refreshControl = self.refreshControl;
     
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 44.0f;
 
-    if ([[_tableView class] instancesRespondToSelector:@selector(estimatedSectionHeaderHeight)])
-    {
-        /*
-         STV was having issues in iOS 11 with cells disappearing, and also
-         confusing "Add an item..." cells with newly added items in the list of
-         items to select from for a SCSelectionCell. This fix is from Ozie from
-         the STV community.
+    /*
+     STV was having issues in iOS 11 with cells disappearing, and also confusing
+     "Add an item..." cells with newly added items in the list of items to select
+     from for a SCSelectionCell. This fix is from Ozie from the STV community.
 
-         dgApps
-         */
-        _tableView.estimatedSectionHeaderHeight = 0;
-        _tableView.estimatedSectionFooterHeight = 0;
-    }
-
-
-    [self styleViews];
+     dgApps
+     */
+    _tableView.estimatedSectionHeaderHeight = 0;
+    _tableView.estimatedSectionFooterHeight = 0;
 }
 
 - (UITableView *)modeledTableView
@@ -231,29 +221,7 @@
 - (void)setEnablePullToRefresh:(BOOL)enable
 {
     enablePullToRefresh = enable;
-    
-    if(enable)
-    {
-        if([self.viewController isKindOfClass:[UITableViewController class]])
-        {
-            [(UITableViewController *)self.viewController setRefreshControl:self.refreshControl];
-        }
-        else
-        {
-            [self.tableView addSubview:self.refreshControl];
-        }
-    }    
-    else 
-    {
-        if([self.viewController isKindOfClass:[UITableViewController class]])
-        {
-            [(UITableViewController *)self.viewController setRefreshControl:nil];
-        }
-        else
-        {
-            [self.refreshControl removeFromSuperview];
-        }
-    }
+    self.tableView.refreshControl = enable ? self.refreshControl : nil;
 }
 
 - (void)setRefreshControl:(UIRefreshControl *)refreshControl
@@ -276,47 +244,7 @@
     else if([detailViewController isKindOfClass:[SCViewController class]])
         detailModel = [(SCViewController *)detailViewController tableViewModel];
     if(detailModel)
-    {
         [self configureDetailModel:detailModel];
-    }
-    else 
-    {
-        if(self.theme)
-        {
-            [self.theme styleObject:detailViewController.view usingThemeStyle:nil];
-            if(self.detailViewController.navigationController.navigationBar)
-                [self.theme styleObject:self.detailViewController.navigationController.navigationBar usingThemeStyle:nil];
-        }
-    }
-}
-
-- (void)setTheme:(SCTheme *)theme
-{
-    if(self.detailViewController)
-    {
-        SCTableViewModel *detailModel = nil;
-        if([self.detailViewController isKindOfClass:[SCTableViewController class]])
-            detailModel = [(SCTableViewController *)viewController tableViewModel];
-        else if([self.detailViewController isKindOfClass:[SCViewController class]])
-            detailModel = [(SCViewController *)viewController tableViewModel];
-        
-        if(detailModel)
-        {
-            if(detailModel.theme == _theme)
-                detailModel.theme = theme;
-        }
-        else 
-        {
-            if(theme)
-            {
-                [theme styleObject:self.detailViewController.view usingThemeStyle:nil];
-                if(self.detailViewController.navigationController.navigationBar)
-                    [theme styleObject:self.detailViewController.navigationController.navigationBar usingThemeStyle:nil];
-            }
-        }
-    }
-    
-    _theme = theme;
 }
 
 - (BOOL)live
@@ -342,33 +270,6 @@
         live = FALSE;
 
     return live;
-}
-
-- (void)styleSections
-{
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-    {
-        SCTableViewSection *section = [self sectionAtIndex:i];
-        [self.theme styleObject:section usingThemeStyle:section.themeStyle];
-    }
-}
-
-- (void)styleViews
-{
-    if(!self.theme)
-        return;
-    
-    // Style the table view
-    if(self.live)
-        [self.tableView reloadData];
-    
-    // Style other views
-    if(self.viewController)
-        [self.theme styleObject:self.viewController.view usingThemeStyle:nil];
-    if(self.viewController.navigationController.navigationBar)
-        [self.theme styleObject:self.viewController.navigationController.navigationBar usingThemeStyle:nil];
-    if(self.refreshControl)
-        [self.theme styleObject:self.refreshControl usingThemeStyle:nil];
 }
 
 - (void)enterLoadingMode
@@ -398,9 +299,6 @@
     detailModel.masterModel = self;
     
     detailModel.tag = self.tag + 1;
-    
-    if(!detailModel.theme)
-        detailModel.theme = self.theme;
 }
 
 - (NSArray *)sectionIndexTitles
@@ -456,17 +354,30 @@
     {
         if(activeCell.cellActions.willDeselect)
         {
-            cell.cellActions.willDeselect(cell, self.activeCellIndexPath);
+            /*
+            Invoke the exact block that was checked, using the cell being
+            deselected; STV 6 dereferenced the incoming cell's possibly nil
+            block.
+            */
+            activeCell.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
         }
         else
             if(activeCell.ownerSection.cellActions.willDeselect)
             {
-                activeCell.ownerSection.cellActions.willDeselect(cell, self.activeCellIndexPath);
+                /*
+                Section-level deselection callbacks describe the previous active
+                cell, so pass that cell rather than its replacement.
+                */
+                activeCell.ownerSection.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
             }
             else
-                if(activeCell.ownerTableViewModel.cellActions.willDeselect)
+                if(self.cellActions.willDeselect)
                 {
-                    self.cellActions.willDeselect(cell, self.activeCellIndexPath);
+                    /*
+                    Model-level deselection callbacks receive the cell actually
+                    being deselected.
+                    */
+                    self.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
                 }
         [activeCell willDeselectCell];
         
@@ -474,17 +385,29 @@
         
         if(activeCell.cellActions.didDeselect)
         {
-            cell.cellActions.didDeselect(cell, self.activeCellIndexPath);
+            /*
+            Deselect callbacks belong to the previous active cell, not the
+            replacement cell.
+            */
+            activeCell.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
         }
         else
             if(activeCell.ownerSection.cellActions.didDeselect)
             {
-                activeCell.ownerSection.cellActions.didDeselect(cell, self.activeCellIndexPath);
+                /*
+                Keep section callback ownership and callback arguments aligned
+                during active-cell replacement.
+                */
+                activeCell.ownerSection.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
             }
             else
-                if(activeCell.ownerTableViewModel.cellActions.didDeselect)
+                if(self.cellActions.didDeselect)
                 {
-                    self.cellActions.didDeselect(cell, self.activeCellIndexPath);
+                    /*
+                    Keep model callback ownership and callback arguments aligned
+                    during active-cell replacement.
+                    */
+                    self.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
                 }
         [activeCell didDeselectCell];
     }
@@ -501,7 +424,11 @@
         {
             if(activeCell.cellActions.willSelect)
             {
-                cell.cellActions.willSelect(cell, self.activeCellIndexPath);
+                /*
+                Call the checked active-cell block directly so the callback
+                cannot become a null block-function invocation.
+                */
+                activeCell.cellActions.willSelect(activeCell, self.activeCellIndexPath);
             }
             else
                 if(activeCell.ownerSection.cellActions.willSelect)
@@ -518,7 +445,11 @@
             
             if(activeCell.cellActions.didSelect)
             {
-                cell.cellActions.didSelect(cell, self.activeCellIndexPath);
+                /*
+                Keep callback ownership and callback arguments aligned for
+                analyzer safety and predictable selection behavior.
+                */
+                activeCell.cellActions.didSelect(activeCell, self.activeCellIndexPath);
             }
             else
                 if(activeCell.ownerSection.cellActions.didSelect)
@@ -581,7 +512,12 @@
 		return;
 	
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-	SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    /*
+    Resolve the authoritative model cell rather than asking UITableView for a
+    visible instance, which may be nil during detail dismissal and suppress
+    value callbacks.
+    */
+	SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
 	if(cell != self.activeCell)
 	{
 		if(self.activeCell.autoResignFirstResponder)
@@ -1405,47 +1341,32 @@
 		[section reloadBoundValues];
 }
 
-- (void)styleCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath onlyStylePropertyNamesInSet:(NSSet *)propertyNames
+- (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated
 {
-    if(!self.theme)
+    NSIndexPath *indexPath = [self indexPathForCell:cell];
+    if(!cell || !indexPath || !self.tableView)
         return;
-    
-    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    
-    if(cell.cellActions.willStyle)
+
+    cell.configured = FALSE;
+    UITableViewRowAnimation animation = animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone;
+
+    /*
+    Selection commits can occur while dismissal/update animations are active;
+    defer one run-loop turn instead of nesting UITableView update cycles.
+    */
+    if(self.tableView.hasUncommittedUpdates)
     {
-        cell.cellActions.willStyle(cell, indexPath);
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            NSIndexPath *currentIndexPath = [strongSelf indexPathForCell:cell];
+            if(strongSelf && currentIndexPath && !strongSelf.tableView.hasUncommittedUpdates)
+                [strongSelf.tableView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:animation];
+        });
+        return;
     }
-    else 
-        if(section.cellActions.willStyle)
-        {
-            section.cellActions.willStyle(cell, indexPath);
-        }
-        else 
-            if(self.cellActions.willStyle)
-            {
-                self.cellActions.willStyle(cell, indexPath);
-            }
-    
-    NSString *themeStyle = cell.themeStyle;
-    if(!themeStyle)
-    {
-        if(indexPath.row == 0)
-            themeStyle = section.firstCellThemeStyle;
-        else 
-        if(indexPath.row == section.cellCount-1)
-            themeStyle = section.lastCellThemeStyle;
-        
-        if(!themeStyle)
-        {
-            if(indexPath.row % 2)
-                themeStyle = section.evenCellsThemeStyle;
-            else 
-                themeStyle = section.oddCellsThemeStyle;
-        }
-    }
-    
-    [self.theme styleObject:cell usingThemeStyle:themeStyle onlyStylePropertyNamesInSet:propertyNames];
+
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:animation];
 }
 
 - (void)configureCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -1476,9 +1397,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
     [self enterLoadingMode];
-    
-    if(self.theme)
-        [self styleSections];
     
 	return self.sectionCount;
 }
@@ -1534,7 +1452,34 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    return [self cellAtIndexPath:indexPath];
+    SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+
+    /*
+    Configure all size-affecting content before UIKit performs its Auto Layout
+    fitting pass; height delegate callbacks must remain policy-only.
+    */
+    if(!cell.configured)
+    {
+        if([cell isKindOfClass:[SCCustomCell class]] && !cell.needsCommit)
+            [(SCCustomCell *)cell loadBindingsIntoCustomControls];
+
+        if([section.cellsImageViews count] > indexPath.row)
+        {
+            UIImageView *imageView = [section.cellsImageViews objectAtIndex:indexPath.row];
+            if([imageView isKindOfClass:[UIImageView class]])
+                cell.imageView.image = imageView.image;
+        }
+
+        if([section isKindOfClass:[SCSelectionSection class]])
+            [(SCSelectionSection *)section configureCellForDisplay:cell atIndex:indexPath.row];
+        else if([section isKindOfClass:[SCObjectSelectionSection class]])
+            [(SCObjectSelectionSection *)section configureCellForDisplay:cell atIndex:indexPath.row];
+
+        [self configureCell:cell atIndexPath:indexPath];
+    }
+
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1563,35 +1508,30 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self clearLastReturnedCellData];
-    
-    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    if([section isKindOfClass:[SCObjectSection class]])
-    {
-        SCTableViewCell *cell = [section cellAtIndex:indexPath.row];
-        if(![cell isKindOfClass:[SCControlCell class]])
-        {
-            if([cell isKindOfClass:[SCCustomCell class]])
-            {
-                SCCustomCell *customCell = (SCCustomCell *)cell;
-                if(!customCell.needsCommit)
-                {
-                    [customCell loadBindingsIntoCustomControls];
-                }
-            }
-            
-            CGFloat beforeConfigureHeight = cell.height;
-            [self configureCell:cell atIndexPath:indexPath];
-            
-            if(cell.height != beforeConfigureHeight)
-                return cell.height;
-            //else
-            return UITableViewAutomaticDimension;
-        }
-    }
-    
-	//else
-    
-    return [section heightForCellAtIndexPath:indexPath];
+
+    /*
+    Height resolution now chooses fixed, automatic, or legacy policy only; it no
+    longer binds, configures, clones, or measures cells as a side effect.
+    */
+    return [[self sectionAtIndex:indexPath.section] heightForCellAtIndexPath:indexPath];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    SCTableViewCell *cell = [[self sectionAtIndex:indexPath.section] cellAtIndex:indexPath.row];
+    CGFloat resolvedHeight = cell.height;
+    if(resolvedHeight != UITableViewAutomaticDimension)
+        return resolvedHeight;
+
+    /*
+    Nib/storyboard canvas heights are estimates only, giving UIKit stable
+    scrolling while preserving constraint-driven runtime sizing.
+    */
+    if(cell.estimatedHeight > 0.0)
+        return cell.estimatedHeight;
+    if(tableView.estimatedRowHeight > 0.0)
+        return tableView.estimatedRowHeight;
+    return 44.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -1808,7 +1748,7 @@
 
 
 // dgApps...
-- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *leadingSwipeActions = nil;
 
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
@@ -1838,7 +1778,7 @@
 }
 
 
-- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *trailingSwipeActions = nil;
 
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
@@ -2409,14 +2349,6 @@
     NSMutableDictionary *_sectionsCellIdentifiers;
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
-// We're creating that here since it was disabled in the header file
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-@property (nonatomic, strong) UISearchDisplayController *searchDisplayController;
-#pragma clang diagnostic pop
-#endif
-
 - (void)generateSections;
 - (NSArray *)getSectionHeaderTitles;
 - (NSString *)getHeaderTitleForItemAtIndex:(NSUInteger)index;
@@ -2471,7 +2403,6 @@
 		filteredArray = nil;
 		searchBar = nil;
         _enableSearchController = FALSE;
-        _searchDisplayController = nil;
         
         detailViewControllerOptions = nil;
         newItemDetailViewControllerOptions = nil;
@@ -2497,9 +2428,6 @@
 {
     if(self.searchController && self.searchController.active && [self.searchController.searchResultsController isKindOfClass:[UITableViewController class]])
         return [(UITableViewController *)self.searchController.searchResultsController tableView];
-    //else
-    if(self.searchDisplayController.active)
-        return self.searchDisplayController.searchResultsTableView;
     //else
     return [super tableView];
 }
@@ -2763,12 +2691,6 @@
 	searchBar = sbar;
     if(!self.searchController)
         searchBar.delegate = self;
-    
-    if(_searchDisplayController && [SCUtilities systemVersion] < 8.0)
-    {
-        // reinitialize _searchDisplayController to include the searchBar
-        [self initDisplayController];
-    }
 }
 
 - (void)setEnableSearchController:(BOOL)enable
@@ -2777,16 +2699,8 @@
     
     if(enable)
     {
-        if([SCUtilities systemVersion] >= 8.0)
-        {
-            if(!_searchController)
-                [self initDisplayController];
-        }
-        else
-        {
-            if(!_searchDisplayController)
-                [self initDisplayController];
-        }
+        if(!_searchController)
+            [self initDisplayController];
     }
     else
     {
@@ -2794,42 +2708,22 @@
             self.searchBar = nil;
         
         _searchController = nil;
-        _searchDisplayController = nil;
     }
 }
 
 - (void)initDisplayController
 {
-    if([SCUtilities systemVersion] >= 8.0)
-    {
-        SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.tableView.style];
-        resultsViewController.edgesForExtendedLayout = UIRectEdgeNone;
-        resultsViewController.tableView.dataSource = self;
-        resultsViewController.tableView.delegate = self;
-        _searchController = [[UISearchController alloc] initWithSearchResultsController:resultsViewController];
-        _searchController.searchResultsUpdater = self;
-        [_searchController.searchBar sizeToFit];
-        self.trueTableView.tableHeaderView = _searchController.searchBar;
-        
-        // We need this set to yes since viewController's navigation controller will be the one pushing resultsViewController detail views on its stack
-        self.viewController.definesPresentationContext = YES;
-    }
-    else
-    {
-        if(!self.searchBar)
-        {
-            self.searchBar = [[UISearchBar alloc] init];
-            [self.searchBar sizeToFit];
-            self.tableView.tableHeaderView = self.searchBar;
-        }
-        
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        _searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self.viewController];
-#pragma clang diagnostic pop
-        _searchDisplayController.searchResultsDataSource = self;
-        _searchDisplayController.searchResultsDelegate = self;
-    }
+    SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.tableView.style];
+    resultsViewController.edgesForExtendedLayout = UIRectEdgeNone;
+    resultsViewController.tableView.dataSource = self;
+    resultsViewController.tableView.delegate = self;
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:resultsViewController];
+    _searchController.searchResultsUpdater = self;
+    [_searchController.searchBar sizeToFit];
+    self.trueTableView.tableHeaderView = _searchController.searchBar;
+
+    // The view controller's navigation controller pushes result detail views.
+    self.viewController.definesPresentationContext = YES;
 }
 
 - (void)setPropertiesForSection:(SCArrayOfItemsSection *)section
@@ -3237,6 +3131,16 @@
 	return [[[self class] alloc] initWithTableView:tableView items:items itemsDefinition:definition];
 }
 
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition
+{
+    return [[[self class] alloc] initWithTableView:tableView entityDefinition:definition];
+}
+
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
+{
+    return [[[self class] alloc] initWithTableView:tableView entityDefinition:definition filterPredicate:predicate];
+}
+
 
 - (instancetype)init
 {
@@ -3257,6 +3161,28 @@
 	self = [self initWithTableView:tableView dataStore:store];
     
 	return self;
+}
+
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition
+{
+    return [self initWithTableView:tableView entityDefinition:definition filterPredicate:nil];
+}
+
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
+{
+    SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
+
+    self = [self initWithTableView:tableView dataStore:store];
+    if(self)
+    {
+        if(predicate)
+        {
+            self.dataFetchOptions.filter = TRUE;
+            self.dataFetchOptions.filterPredicate = predicate;
+        }
+    }
+
+    return self;
 }
 
 
@@ -3621,22 +3547,12 @@
 	if([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]])
 	{
 		cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        if (@available(iOS 13.0, *)) {
-            cell.textLabel.textColor = [UIColor linkColor]; // dgApps
-        }
-        else {
-            cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-        }
+        cell.textLabel.textColor = [UIColor linkColor]; // dgApps
 	}
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            cell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            cell.textLabel.textColor = [UIColor blackColor];
-        }
+        cell.textLabel.textColor = [UIColor labelColor]; // dgApps
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -3677,12 +3593,7 @@
 			if(boundToNSString)
 				self.boundValue = [self buildStringFromSelectedItemsIndexes];
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            selectedCell.textLabel.textColor = [UIColor blackColor];
-        }
+        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 		return;
@@ -3704,12 +3615,7 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            selectedCell.textLabel.textColor = [UIColor blackColor];
-        }
+        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
 	}
 	
 	//check selected cell
@@ -3721,12 +3627,7 @@
 			self.boundValue = [self buildStringFromSelectedItemsIndexes];
 	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    if (@available(iOS 13.0, *)) {
-        selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
-    }
-    else {
-        selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    }
+    selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
 
 	[self valueChangedForSectionAtIndex:indexPath.section];
 	
@@ -4007,22 +3908,12 @@
 	{
 		cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-        if (@available(iOS 13.0, *)) {
-            cell.textLabel.textColor = [UIColor linkColor]; // dgApps
-        }
-        else {
-            cell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-        }
+        cell.textLabel.textColor = [UIColor linkColor]; // dgApps
 	}
 	else
 	{
         cell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            cell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            cell.textLabel.textColor = [UIColor blackColor];
-        }
+        cell.textLabel.textColor = [UIColor labelColor]; // dgApps
 	}
 	cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
@@ -4069,12 +3960,7 @@
 		[self selectedItemsIndexesModified];
         
 		selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            selectedCell.textLabel.textColor = [UIColor blackColor];
-        }
+        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
 		[self valueChangedForSectionAtIndex:indexPath.section];
 		[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
         
@@ -4097,12 +3983,7 @@
         [self.selectedItemsIndexes removeAllObjects];
 		UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
 		oldCell.accessoryType = UITableViewCellAccessoryNone;
-        if (@available(iOS 13.0, *)) {
-            selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            selectedCell.textLabel.textColor = [UIColor blackColor];
-        }
+        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
 	}
 	
 	//check selected cell
@@ -4111,12 +3992,7 @@
     
 	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    if (@available(iOS 13.0, *)) {
-        selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
-    }
-    else {
-        selectedCell.textLabel.textColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-    }
+    selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
 	
 	[self valueChangedForSectionAtIndex:indexPath.section];
 	
