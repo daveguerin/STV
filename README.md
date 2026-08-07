@@ -1,7 +1,7 @@
 # STV
 A Swift Package of the amazing **Sensible TableView** framework by [Sensible Cocoa](http://sensiblecocoa.com/).
 
-iOS 13 compatibility, Xcode 11 compatibility, and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into a SPM compatible format.
+iOS compatibility and Swift Packaging by [dgApps](http://dgapps.ie/). Although it's now a Swift Package STV is still all glorious Objective-C! This version is not so much forked from the [open source version](https://github.com/wizgod/STV) from [wizgod](https://github.com/wizgod), as ripped apart and then rebuilt into an SPM-compatible format.
 
 ### What is Sensible TableView?
 **Sensible TableView** (STV) is a Swift Package that drastically simplifies iOS table view development, while focusing on delivering a simple and enjoyable developer experience. Every single thing that can be done with normal table views can still be done with STV, only a lot easier. Have a custom UITableView subclass? No problem, STV flawlessly integrates with that. A custom cell? Even better! Custom view controllers? STV’s bread and butter! STV elegantly reduces the amount of work you have to do to an absolute bare minimum!
@@ -11,19 +11,21 @@ Based on countless user testimonials and feedback, [Sensible Cocoa](http://sensi
 Unfortunley the phenomenal visual interface that [Sensible Cocoa](http://sensiblecocoa.com/) developed that worked in Interface Builder was [kiboshed by Apple with Xcode 8](http://sensiblecocoa.com/community/topic/2462-sad-news-for-stv-from-wwdc/). However all the code side of STV still works, and that's what's packaged here.
 
 ## NOTE
-Version 6.0.5 does not include SCImagePickerCell as that need a full rewrite for iOS 13 and up using non deprecated classes and methods!
+Version 7.0.0 targets iOS 16 and later. `SCImagePickerCell` is intentionally excluded until it can be redesigned around PhotosUI without deprecated APIs.
+
+STV 7 uses UIKit automatic row sizing by default. Numeric `SCTableViewCell.height` values, including `44`, remain explicit fixed-height overrides. Programmatically generated controls that still rely on manual frames use the legacy sizing mode, while XIB/storyboard cells treat their design-time height as an estimate.
 
 ## LICENSE
 **SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.
 
 ## REQUIREMENTS
-* Xcode 11 and later.
-* iOS 9 and later.
+* Xcode 15 and later.
+* iOS 16 and later.
 
 ## USAGE
-Add STV to an Xcode 11 project as simply as:
+Add STV to an Xcode project as simply as:
 
-* `File > Swift Packages >  Add Package Dependancy...`
+* `File > Add Package Dependencies...`
 * Use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/)
 * Set the version to 'Up to next major'.
 * Choose the target where you want to use it.
