@@ -12,6 +12,8 @@
 #import "SCClassDefinition.h"
 #import "SCStringDefinition.h"
 #import "SCArrayStore.h"
+#import "SCEntityDefinition.h"
+#import "SCCoreDataStore.h"
 #import "SCSectionActions.h"
 
 
@@ -475,6 +477,17 @@
                                                         allowNoSelection:allowNoSel];
 }
 
++ (instancetype)attributesWithObjectsEntityDefinition:(SCEntityDefinition *)entityDefinition
+                             usingPredicate:(NSPredicate *)predicate
+                     allowMultipleSelection:(BOOL)allowMultipleSel
+                           allowNoSelection:(BOOL)allowNoSel
+{
+	return [[[self class] alloc] initWithObjectsEntityDefinition:entityDefinition
+                                                 usingPredicate:predicate
+                                         allowMultipleSelection:allowMultipleSel
+                                               allowNoSelection:allowNoSel];
+}
+
 - (instancetype)init
 {
 	if( (self = [super init]) )
@@ -493,6 +506,26 @@
 	{
 		self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:objects] defaultDefiniton:definition];
         
+		self.allowMultipleSelection = allowMultipleSel;
+		self.allowNoSelection = allowNoSel;
+	}
+	return self;
+}
+
+- (instancetype)initWithObjectsEntityDefinition:(SCEntityDefinition *)entityDefinition
+                       usingPredicate:(NSPredicate *)predicate
+               allowMultipleSelection:(BOOL)allowMultipleSel
+                     allowNoSelection:(BOOL)allowNoSel
+{
+	if( (self=[self init]) )
+	{
+		self.selectionItemsStore = [SCCoreDataStore storeWithManagedObjectContext:entityDefinition.managedObjectContext defaultEntityDefinition:entityDefinition];
+
+        if(predicate)
+        {
+            self.selectionItemsFetchOptions.filter = YES;
+            self.selectionItemsFetchOptions.filterPredicate = predicate;
+        }
 		self.allowMultipleSelection = allowMultipleSel;
 		self.allowNoSelection = allowNoSel;
 	}

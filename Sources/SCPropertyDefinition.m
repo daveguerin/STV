@@ -165,8 +165,10 @@
             self.attributes = [SCDateAttributes attributesWithDateFormatter:dateFormatter datePickerMode:[[ibDictionary valueForKey:@"genericInt1"] integerValue] displayDatePickerAsInputAccessoryView:NO];
         }
             break;
-        case SCPropertyTypeImagePicker:
-            break;
+        /*
+        STV 7 reserves but does not expose the former image-picker property
+        type.
+        */
         case SCPropertyTypeSelection:
             self.attributes = [SCSelectionAttributes attributesWithItems:[ibDictionary valueForKey:@"stringsArray"] allowMultipleSelection:[[ibDictionary valueForKey:@"genericBool1"] boolValue] allowNoSelection:[[ibDictionary valueForKey:@"genericBool2"] boolValue] autoDismissDetailView:[[ibDictionary valueForKey:@"genericBool3"] boolValue] hideDetailViewNavigationBar:[[ibDictionary valueForKey:@"genericBool4"] boolValue]];
             break;

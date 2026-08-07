@@ -32,8 +32,10 @@ typedef NS_ENUM(NSInteger, SCPropertyType)
 	SCPropertyTypeSwitch=80,
 	/**	The object bound to the property will generate an SCDateCell interface element */
 	SCPropertyTypeDate=90,
-	/**	The object bound to the property will generate an SCImagePickerCell interface element */
-	SCPropertyTypeImagePicker=100,
+	/*
+     SCPropertyTypeImagePicker=100;
+     Intentionally left unused while SCImagePickerCell is excluded from STV 7.
+	*/
 	/**	The object bound to the property will generate an SCSelectionCell interface element */
 	SCPropertyTypeSelection=110,
 	/**	The object bound to the property will generate an SCObjectSelectionCell interface element */
