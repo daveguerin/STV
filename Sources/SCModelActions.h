@@ -63,23 +63,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
             objectsSection.dataFetchOptions = [SCCoreDataFetchOptions optionsWithSortKey:oldFetchOptions.sortKey sortAscending:FALSE filterPredicate:oldFetchOptions.filterPredicate];
         }
     };
- 
-    // Swift
-    modelActions.didAddSection =
-    {
-        (tableModel, section, sectionIndex) in
- 
-        // use custom data sorting for the first section in a Core Data SCArrayOfObjectsModel
-        if let objectsSection = section as? SCArrayOfObjectsSection
-        {
-            if sectionIndex==0
-            {
-                let oldFetchOptions = objectsSection.dataFetchOptions
-                objectsSection.dataFetchOptions = SCCoreDataFetchOptions(sortKey: oldFetchOptions.sortKey, sortAscending: false, filterPredicate: oldFetchOptions.filterPredicate)
-            }
-        }
-    }
- 
  */
 @property (nonatomic, copy) SCDidAddSectionAction_Block didAddSection;
 
@@ -92,15 +75,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"Section at index '%i' has been removed.", sectionIndex);
     };
- 
-    // Swift
-    modelActions.didRemoveSection =
-    {
-        (tableModel, sectionIndex) in
- 
-        NSLog("Section at index '%i' has been removed.", sectionIndex)
-    }
- 
  */
 @property (nonatomic, copy) SCDidRemoveSectionAction_Block didRemoveSection;
 
@@ -113,15 +87,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         // Rearrange the 'sections' mutable array here as you see fit
     };
- 
-    // Swift
-    modelActions.sortSections =
-    {
-        (tableModel, sections) in
- 
-        // Rearrange the 'sections' mutable array here as you see fit
-    }
- 
  @note To have the model automatically sort its sections alphabetically, simply set its 'autoSortSections' property to TRUE.
  
  */
@@ -139,20 +104,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
         // else return the last section index
         return tableModel.sectionCount-1;
     };
- 
-    // Swift
-    modelActions.sectionForSectionIndexTitle =
-    {
-        (tableModel, title, index)->NSInteger in
- 
-        if index < tableModel.sectionCount
-        {
-           return index
-        }
-        // else return the last section index
-        return tableModel.sectionCount-1
-    }
- 
  @note 'index' is an index number identifying a section title in the SCTableViewModel's 'sectionIndexTitles' array.
  
  */
@@ -167,15 +118,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The table view has finished loading cells.");
     };
- 
-    // Swift
-    modelActions.didFinishLoadingCells =
-    {
-        (tableModel) in
- 
-        NSLog("The table view has finished loading cells.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didFinishLoadingCells;
 
@@ -188,15 +130,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model has been refreshed.");
     };
- 
-    // Swift
-    modelActions.didRefresh =
-    {
-        (tableModel) in
- 
-        NSLog("The model has been refreshed.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didRefresh;
 
@@ -210,15 +143,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model's table view has started scrolling.");
     };
- 
-    // Swift
-    modelActions.didScroll =
-    {
-        (tableModel) in
- 
-        NSLog("The model's table view has started scrolling.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didScroll;
 
@@ -231,15 +155,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model's table view has ended dragging with decelerating=%i.", tableModel.tableView.decelerating);
     };
- 
-    // Swift
-    modelActions.didEndDragging =
-    {
-        (tableModel) in
- 
-        NSLog("The model's table view has ended dragging with decelerating=%i.", tableModel.tableView.decelerating)
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didEndDragging;
 
@@ -252,15 +167,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model's table view has ended decelerating.");
     };
- 
-    // Swift
-    modelActions.didEndDecelerating =
-    {
-        (tableModel) in
- 
-        NSLog("The model's table view has ended decelerating.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didEndDecelerating;
 
@@ -276,17 +182,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
  
         return YES;     // allow editing to begin
     };
- 
-    // Swift
-    modelActions.shouldBeginEditing =
-    {
-        (tableModel)->Bool in
- 
-        NSLog("The model is about to enter editing mode.")
- 
-        return true     // allow editing to begin
-    }
- 
  */
 @property (nonatomic, copy) SCConditionalModelAction_Block shouldBeginEditing;
 
@@ -299,15 +194,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model has entered editing mode.");
     };
- 
-    // Swift
-    modelActions.didBeginEditing =
-    {
-        (tableModel) in
- 
-        NSLog("The model has entered editing mode.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didBeginEditing;
 
@@ -322,17 +208,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
  
         return YES;     // allow editing to end
     };
- 
-    // Swift
-    modelActions.shouldEndEditing =
-    {
-        (tableModel)->Bool in
- 
-        NSLog("The model is about to exit editing mode.")
- 
-        return true     // allow editing to end
-    }
- 
  */
 @property (nonatomic, copy) SCConditionalModelAction_Block shouldEndEditing;
 
@@ -345,15 +220,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"The model has exited editing mode.");
     };
- 
-    // Swift
-    modelActions.didEndEditing =
-    {
-        (tableModel) in
- 
-        NSLog("The model has exited editing mode.")
-    }
- 
  */
 @property (nonatomic, copy) SCModelAction_Block didEndEditing;
 
@@ -367,15 +233,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         NSLog(@"A cell has been moved from:%@ to:%@.", fromIndexPath, toIndexPath);
     };
- 
-    // Swift
-    modelActions.didMoveCell =
-    {
-        (tableModel, cell, fromIndexPath, toIndexPath) in
- 
-        NSLog("A cell has been moved from:%@ to:%@.", fromIndexPath, toIndexPath)
-    }
- 
  */
 @property (nonatomic, copy) SCDidMoveCellAction_Block didMoveCell;
 
@@ -405,25 +262,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
  
         [items addObject:buttonCell];
     };
- 
-    // Swift
-    modelActions.didFetchItemsFromStore =
-    {
-        (itemsModel, items) in
- 
-        // Add a button cell at the end of the fetched items list
- 
-        let buttonCell = SCTableViewCell(text: "Tap me!", textAlignment: .Center)
-        buttonCell.cellActions.didSelect =
-        {
-            (cell, indexPath) in
-            
-            NSLog("buttonCell tapped!")
-        }
- 
-        items.addObject(buttonCell)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsModel subclasses, such as SCArrayOfObjectsModel. 
  
  */
@@ -444,17 +282,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
         // Return first charcter of objectName
         return [[objectName substringToIndex:1] uppercaseString];
     };
- 
-    // Swift
-    modelActions.sectionHeaderTitleForItem =
-    {
-        (itemsModel, item, itemIndex)->String! in
- 
-        let objectName = item.valueForKey("firstName") as! String
- 
-        // Return first charcter of objectName
-        return objectName.substringToIndex(advance(objectName.startIndex, 1)).uppercaseString
-    }
  */
  @property (nonatomic, copy) SCSectionHeaderTitleForItemAction_Block sectionHeaderTitleForItem;
 
@@ -467,14 +294,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         return @[@"Section A", @"Section B", @"Section C"];
     };
- 
-    // Swift
-    modelActions.sectionHeaderTitles =
-    {
-        (tableModel)->[AnyObject] in
-            
-        return ["Section A", "Section B", "Section C"]
-    }
  */
 @property (nonatomic, copy) SCSectionHeaderTitlesAction_Block sectionHeaderTitles;
 
@@ -490,14 +309,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
     {
         return myCustomSearchResults;
     };
- 
-    // Swift
-    modelActions.didComputeSearchResults =
-    {
-        (itemsModel, searchText, searchResults)->[AnyObject] in
- 
-        return myCustomSearchResults
-    }
  */
 @property (nonatomic, copy) SCDidComputeSearchResultsAction_Block didComputeSearchResults;
 
