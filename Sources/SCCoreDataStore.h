@@ -73,5 +73,14 @@
 /** When TRUE, objects removed from boundSet will also be removed from the data store. */
 @property (nonatomic, readonly) BOOL boundSetOwnsStoreObjects;
 
+/** The most recent Core Data commit error, or nil after a successful commit. */
+@property (nonatomic, strong, readonly) NSError *lastCommitError;
+
+/** Optional callback used by the compatibility commitData method when a save fails. */
+@property (nonatomic, copy) SCDataStoreFailure_Block commitFailure;
+
+/** Saves the managed object context and returns the failure instead of terminating the host application. */
+- (BOOL)commitDataWithError:(NSError **)error;
+
 
 @end

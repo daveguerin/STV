@@ -548,15 +548,41 @@
 // overrides superclass
 - (void)commitData
 {
-    NSError *error;
-    if (self.managedObjectContext) 
+    NSError *error = nil;
+    if(![self commitDataWithError:&error])
     {
-        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) 
-        {
-            SCDebugLog(@"Error commiting the Core Data store: %@, %@", error, [error userInfo]);
-            abort();
-        } 
+        SCDebugLog(@"Error committing the Core Data store: %@, %@", error, error.userInfo);
+        if(self.commitFailure)
+            self.commitFailure(error);
     }
+}
+
+- (BOOL)commitDataWithError:(NSError **)error
+{
+    NSManagedObjectContext *context = self.managedObjectContext;
+    if(!context)
+    {
+        _lastCommitError = nil;
+        if(error)
+            *error = nil;
+        return YES;
+    }
+
+    __block NSError *saveError = nil;
+    __block BOOL success = YES;
+    /*
+    Core Data work belongs on the context's queue; the old implementation saved
+    directly on whichever queue called commitData.
+    */
+    [context performBlockAndWait:^{
+        if(context.hasChanges)
+            success = [context save:&saveError];
+    }];
+
+    _lastCommitError = saveError;
+    if(error)
+        *error = saveError;
+    return success;
 }
 
 
