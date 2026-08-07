@@ -1,4 +1,4 @@
-# STV  6.0.3(19)
+# STV 7.0.0
 ## Documentation
 [Categories](Categories.html)
 
