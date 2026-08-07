@@ -78,22 +78,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
             cell.backgroundColor = [UIColor yellowColor];
         };
     };
- 
-    // Swift
-    myArrayOfObjectsAttributes.expandContentInCurrentView = true
-    myArrayOfObjectsAttributes.expandedContentSectionActions.didAddToModel =
-    {
-        (section, sectionIndex) in
- 
-        // set all expanded cells to a different background color
-        section.cellActions.willDisplay =
-        {
-            (cell, indexPath) in
- 
-            cell.backgroundColor = UIColor.yellowColor
-        }
-    }
- 
   */
 @property (nonatomic, copy) SCSectionAction_Block didAddToModel;
 
@@ -106,15 +90,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Header view about to be displayed for section at index '%i'", sectionIndex);
     };
- 
-    // Swift
-    sectionActions.willDisplayHeaderView =
-    {
-        (section, sectionIndex, view) in
- 
-        NSLog("Header view about to be displayed for section at index '%i'", sectionIndex)
-    }
- 
   */
 @property (nonatomic, copy) SCSectionViewAction_Block willDisplayHeaderView;
 
@@ -127,15 +102,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Footer view about to be displayed for section at index '%i'", sectionIndex);
     };
- 
-    // Swift
-    sectionActions.willDisplayFooterView =
-    {
-        (section, sectionIndex, view) in
- 
-        NSLog("Footer view about to be displayed for section at index '%i'", sectionIndex)
-    }
- 
   */
 @property (nonatomic, copy) SCSectionViewAction_Block willDisplayFooterView;
 
@@ -148,15 +114,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Value for section at index '%i' has changed to %@", sectionIndex, section.boundValue);
     };
- 
-    // Swift
-    sectionActions.valueChanged =
-    {
-        (section, sectionIndex) in
- 
-        NSLog("Value for section at index '%i' has changed to %@", sectionIndex, section.boundValue)
-    }
- 
  */
 @property (nonatomic, copy) SCSectionAction_Block valueChanged;
 
@@ -176,15 +133,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         detailModel.tag = 100;
     };
- 
-    // Swift
-    sectionActions.detailModelCreated =
-    {
-        (section, detailModel, indexPath) in
- 
-        detailModel.tag = 100
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -208,19 +156,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         [detailModel addSection:customSection];
     };
- 
-    // Swift
-    sectionActions.detailModelConfigured =
-    {
-        (section, detailModel, indexPath) in
- 
-        let customSection = SCTableViewSection()
-        let customCell = SCCustomCell(text: "Custom Cell")
-        customSection.addCell(customCell)
- 
-        detailModel.addSection(customSection)
-    }
- 
  @note In general, it is easier (and more recommended) to add your custom sections and cells using the data definitions, instead of using this action to do so. For more information, please refer to SCDataDefinition and SCCustomPropertyDefinition.
  
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
@@ -239,16 +174,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
         UIViewController *detailViewController = detailModel.viewController;
         [myNavigationController pushViewController:detailViewController animated:YES];
     };
- 
-    // Swift
-    sectionActions.customPresentDetailModel =
-    {
-        (section, detailModel, indexPath) in
- 
-        let detailViewController = detailModel.viewController
-        myNavigationController?.pushViewController(detailViewController, animated:true)
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -266,15 +191,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         detailModel.viewController.title = @"My custom title";
     };
- 
-    // Swift
-    sectionActions.detailModelWillPresent =
-    {
-        (section, detailModel, indexPath) in
- 
-        detailModel.viewController.title = "My custom title"
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -290,15 +206,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Detail model has been presented.");
     };
- 
-    // Swift
-    sectionActions.detailModelDidPresent =
-    {
-        (section, detailModel, indexPath) in
- 
-        NSLog("Detail model has been presented.")
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -314,15 +221,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         return YES;  // allow detail model to be dismissed
     };
- 
-    // Swift
-    sectionActions.detailModelShouldDismiss =
-    {
-        (section, detailModel, indexPath)->Bool in
- 
-        return true  // allow detail model to be dismissed
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -338,15 +236,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Detail model will be dismissed.");
     };
- 
-    // Swift
-    sectionActions.detailModelWillDismiss =
-    {
-        (section, detailModel, indexPath) in
- 
-        NSLog("Detail model will be dismissed.")
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -362,15 +251,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Detail model has been dismissed.");
     };
- 
-    // Swift
-    sectionActions.detailModelDidDismiss =
-    {
-        (section, detailModel, indexPath) in
- 
-        NSLog("Detail model has been dismissed.")
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection. 
  
  @warning In the case where the detail model is not associated with an existing row (such as the case when 'SCArrayOfObjectsSection' creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
@@ -392,17 +272,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return customVC;
     };
- 
-    // Swift
-    sectionActions.detailViewController =
-    {
-        (section, indexPath)->UIViewController in
- 
-        let customVC = MyCustomViewController(nibName: "MyCustomViewController", bundle: nil)
- 
-        return customVC
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
  */
 @property (nonatomic, copy) SCDetailViewControllerForRowAtIndexPathAction_Block detailViewControllerForRowAtIndexPath;
@@ -422,15 +291,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         return myCustomTableViewModel;
     };
- 
-    // Swift
-    sectionActions.detailTableViewModelForRowAtIndexPath =
-    {
-        (section, indexPath)->SCTableViewModel in
- 
-        return myCustomTableViewModel
-    }
- 
     @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
  */
 @property (nonatomic, copy) SCDetailTableViewModelForRowAtIndexPathAction_Block detailTableViewModelForRowAtIndexPath;
@@ -457,21 +317,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return customCell;
     };
- 
-    // Swift
-    sectionActions.cellForRowAtIndexPath =
-    {
-        (itemsSection, indexPath) in
- 
-        // '1' and '2' are the tags of the labels corresponding to 
-        // the firstName and lastName object properties
-        let bindingsString = "1:firstName;2:lastName"
- 
-        let customCell = SCCustomCell(text:nil objectBindingsString:bindingsString nibName:"MyCustomCell")
- 
-        return customCell
-    }
- 
  @warning If more than one type of custom cell is returned (e.g.: depending on the indexPath), then you *must* also use the reuseIdentifierForRowAtIndexPath action to return a unique reuse id for each different cell you return. Otherwise, there is no need to set the reuseIdentifierForRowAtIndexPath action.
  
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
@@ -509,41 +354,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return reuseId;
     };
- 
-    // Swift
-    sectionActions.cellForRowAtIndexPath =
-    {
-        (itemsSection, indexPath)->SCCustomCell in
- 
-        var customCell : SCCustomCell
-        if indexPath.row%2 != 0
-        {
-            customCell = MyCustomOddCell()
-        }
-        else
-        {
-            customCell = MyCustomEvenCell()
-        }
-        
-        return customCell
-    }
-    sectionActions.reuseIdentifierForRowAtIndexPath =
-    {
-        (itemsSection, indexPath)->String in
- 
-        var reuseId : String
-        if indexPath.row%2 != 0
-        {
-            reuseId = "OddCell"
-        }
-        else
-        {
-            reuseId = "EvenCell"
-        }
-        
-        return reuseId
-    }
- 
  @note This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
  */
 @property (nonatomic, copy) SCReuseIdForRowAtIndexPathAction_Block reuseIdentifierForRowAtIndexPath;
@@ -565,25 +375,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return cellHeight;
     };
- 
-    // Swift
-    sectionActions.customHeightForRowAtIndexPath =
-    {
-        (itemsSection, indexPath)->CGFloat in
- 
-        var cellHeight : CGFloat
-        if indexPath.row%2 != 0
-        {
-            cellHeight = 44
-        }
-        else
-        {
-            cellHeight = 60
-        }
-        
-        return cellHeight
-    }
- 
  @note Implement this action only if you would like to the cell height directly instead of having the framework automatically calculate it for you.
  
  */
@@ -607,25 +398,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         [items addObject:buttonCell];
     };
- 
-    // Swift
-    sectionActions.didFetchItemsFromStore =
-    {
-        (itemsSection, items) in
- 
-        // Add a button cell at the end of the items list
- 
-        let buttonCell = SCTableViewCell(text: "Tap me!", textAlignment: .Center)
-        buttonCell.cellActions.didSelect =
-        {
-            (cell, indexPath) in
-            
-            NSLog("buttonCell tapped!")
-        }
- 
-        items.addObject(buttonCell)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection. 
  
  */
@@ -642,15 +414,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
      {
           NSLog(@"Failed retrieving section items with error: %@", error);
      };
- 
-    // Swift
-    sectionActions.fetchItemsFromStoreFailed =
-    {
-        (itemsSection, error) in
- 
-        NSLog("Failed retrieving section items with error: %@", error)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -668,16 +431,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
         // Set an initial value for startDate
         [item setValue:[NSDate date] forKey:@"startDate"];
     };
- 
-    // Swift
-    sectionActions.didCreateItem =
-    {
-        (itemsSection, item) in
- 
-        // Set an initial value for startDate
-        item.setValue(NSDate(), forKey:@"startDate")
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -699,22 +452,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
         // Accept insert
         return TRUE;
     };
- 
-    // Swift
-    sectionActions.willInsertItem =
-    {
-        (itemsSection, item, itemModel)->Bool in
- 
-        // Set a default description if no description is set
-        if item.valueForKey("description") == nil
-        {
-            item.setValue("My default description", forKey: "description")
-        }
- 
-        // Accept insert
-        return true
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -733,17 +470,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return YES;  // try again later
     };
- 
-    // Swift
-    sectionActions.insertItemNoConnection =
-    {
-        (itemsSection, item)->Bool in
- 
-        NSLog("No connection available for current operation. Will try again later.")
- 
-        return true  // try again later
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -760,15 +486,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Operation failed with error: %@", error);
     };
- 
-    // Swift
-    sectionActions.insertItemFailed =
-    {
-        (itemsSection, item, error) in
- 
-        NSLog("Operation failed with error: %@", error)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -785,15 +502,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"New item inserted at indexPath: %@", indexPath);
     };
- 
-    // Swift
-    sectionActions.didInsertItem =
-    {
-        (itemsSection, item, indexPath) in
- 
-        NSLog("New item inserted at indexPath: %@", indexPath)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -813,20 +521,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
         //else
         return FALSE; // Reject update
     };
- 
-    // Swift
-    sectionActions.willUpdateItem =
-    {
-        (itemsSection, item, indexPath, itemModel)->Bool in
- 
-        if myCondition==true
-        {
-            return true
-        }
-        // else
-        return false
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -845,17 +539,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return YES;  // try again later
     };
- 
-    // Swift
-    sectionActions.updateItemNoConnection =
-    {
-        (itemsSection, item)->Bool in
- 
-        NSLog("No connection available for current operation. Will try again later.")
- 
-        return true  // try again later
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -872,15 +555,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Operation failed with error: %@", error);
     };
- 
-    // Swift
-    sectionActions.updateItemFailed =
-    {
-        (itemsSection, item, error) in
- 
-        NSLog("Operation failed with error: %@", error)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -899,19 +573,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
         if(![item valueForKey:@"description"])
             [item setValue:@"My default description" forKey:@"description"];
     };
- 
-    // Swift
-    sectionActions.didUpdateItem =
-    {
-        (itemsSection, item, indexPath) in
- 
-        // Set a default description if no description is set
-        if item.valueForKey("description") == nil
-        {
-            item.setValue("My default description", forKey: "description")
-        }
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -935,26 +596,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return deleteItem;
     };
- 
-    // Swift
-    sectionActions.willDeleteItem =
-    {
-        (itemsSection, item, indexPath)->Bool in
- 
-        var deleteItem : Bool
- 
-        if myCondition==true
-        {
-            deleteItem = true
-        }
-        else
-        {
-            deleteItem = false
-        }
- 
-        return deleteItem
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -973,17 +614,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         return YES;  // try again later
     };
- 
-    // Swift
-    sectionActions.deleteItemNoConnection =
-    {
-        (itemsSection, item)->Bool in
- 
-        NSLog("No connection available for current operation. Will try again later.")
- 
-        return true  // try again later
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -1000,15 +630,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Operation failed with error: %@", error);
     };
- 
-    // Swift
-    sectionActions.deleteItemFailed =
-    {
-        (itemsSection, item, error) in
- 
-        NSLog("Operation failed with error: %@", error)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -1025,15 +646,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
     {
         NSLog(@"Item at indexPath: %@ has been deleted.", indexPath);
     };
- 
-    // Swift
-    sectionActions.didDeleteItem =
-    {
-        (itemsSection, indexPath) in
- 
-        NSLog("Item at indexPath: %@ has been deleted.", indexPath)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
  
  */
@@ -1058,25 +670,6 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
  
         [items addObject:buttonCell];
     };
- 
-    // Swift
-    sectionActions.didAddSpecialCells =
-    {
-        (itemsSection, items) in
- 
-        // Add a button cell at the end of the items list
- 
-        let buttonCell = SCTableViewCell(text: "Tap me!", textAlignment: .Center)
-        buttonCell.cellActions.didSelect =
-        {
-            (cell, indexPath) in
-            
-            NSLog("buttonCell tapped!")
-        }
- 
-        items.addObject(buttonCell)
-    }
- 
  @note This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection. 
  */
 @property (nonatomic, copy) SCDidAddSpecialCellsAction_Block didAddSpecialCells;
