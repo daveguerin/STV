@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "STV",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v16)
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
@@ -29,6 +29,12 @@ let package = Package(
             sources: ["Sources"],
             publicHeadersPath: "Sources",
             cSettings: [.headerSearchPath("Sources")]
+        ),
+        .testTarget(
+            name: "STVTests",
+            dependencies: ["STV"],
+            path: "Tests/STVTests",
+            resources: [.process("TestResources")]
         )
     ]
 )
