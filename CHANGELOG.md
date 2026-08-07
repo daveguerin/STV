@@ -1,5 +1,21 @@
 # STV CHANGELOG
 
+## STV 7.0.0
+* Requires iOS 16 or later and Swift tools 5.9.
+* Uses UIKit automatic row sizing by default, with explicit automatic, inherited, legacy, and fixed-height policies.
+* Treats XIB/storyboard canvas heights as estimates instead of fixed row heights.
+* Keeps every numeric cell height, including 44 points, as an intentional fixed override.
+* Moves cell configuration out of height delegate queries and adds centralized, update-safe height invalidation.
+* Adds per-cell estimated heights and invalidates object-selection summary rows after value changes.
+* Prevents mismatched selection action-block invocation and reports Core Data commit errors instead of terminating the host application.
+* Excludes the deprecated `SCImagePickerCell` and its AssetsLibrary-based public API pending a PhotosUI redesign.
+* Removes the obsolete CSS-like theming API and related cell and section styling properties.
+* Removes the obsolete custom pull-to-refresh view; pull-to-refresh continues through UIKit's `UIRefreshControl`.
+* Removes pre-iOS-16 availability branches, version checks, and the obsolete `UISearchDisplayController` fallback.
+* Integrates the four `STVCoreData` categories into their owning classes while preserving their public APIs and documentation.
+* Keeps public header documentation focused on Objective-C examples.
+* Adds Objective-C XCTest coverage for sizing, invalidation, selection callbacks, Core Data failure handling, and excluded APIs.
+
 ## STV 6.0.5
 swift-tools-version:5.3 and .iOS(.v13).
 SCImagePickerCell remarked out for now, it needs a full rewrite for iOS 13 and up.
@@ -55,6 +71,7 @@ The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
 
 
 ## VERSION HISTORY
+* STV 7.0.0 Aug 06 2026
 * STV 6.0.5 Sep 30 2023
 * STV 6.0.3 Sep 14 2020
 * STV 6.0.2 Sep 14 2020
