@@ -192,9 +192,6 @@
     // Preserve the detailViewController when applicable
     if(_tableViewModel.detailViewController && !model.detailViewController)
         model.detailViewController = _tableViewModel.detailViewController;
-    // Preserve the theme when applicable
-    if(_tableViewModel.theme && !model.theme)
-        model.theme = _tableViewModel.theme;
     
     // Disconnect old model from table view
     _tableViewModel.tableView = nil;
@@ -519,7 +516,13 @@
                         customCell = [SCCustomCell cellWithCell:ibCell];
                     }
                     customCell.cellCreatedInIB = YES;
-                    customCell.height = cellHeight;
+                    /*
+                    Static Interface Builder heights are estimates in STV 7; an
+                    explicit runtime height remains available through
+                    cell.height.
+                    */
+                    customCell.estimatedHeight = cellHeight;
+                    customCell.sizingMode = SCTableViewCellSizingModeAutomatic;
                     customCell.boundObjectStore = objectSection.boundObjectStore;
                     customCell.boundObject = objectSection.boundObject;
                     SCPropertyDefinition *propertyDefinition = nil;
@@ -646,7 +649,13 @@
                                 customCell = [SCCustomCell cellWithCell:ibCell];
                             }
                             customCell.cellCreatedInIB = YES;
-                            customCell.height = cellHeight;
+                            /*
+                            Repeated storyboard prototypes self-size from
+                            constraints instead of freezing the prototype's
+                            design height.
+                            */
+                            customCell.estimatedHeight = cellHeight;
+                            customCell.sizingMode = SCTableViewCellSizingModeAutomatic;
                             
                             return customCell;
                         };
@@ -686,7 +695,12 @@
                 else
                     STVCell = [SCCustomCell cellWithCell:ibCell];
                 STVCell.cellCreatedInIB = YES;
-                STVCell.height = [self tableView:self.tableView heightForRowAtIndexPath:indexPath];
+                /*
+                Keep the storyboard row height as an estimate and let UIKit fit
+                the converted STV cell.
+                */
+                STVCell.estimatedHeight = [self tableView:self.tableView heightForRowAtIndexPath:indexPath];
+                STVCell.sizingMode = SCTableViewCellSizingModeAutomatic;
                 [section addCell:STVCell];
             }
         }
@@ -829,8 +843,6 @@
                 self.tableView.backgroundColor = self.tableViewModel.masterModel.tableView.backgroundColor;
             }
         }
-        
-        [self.tableViewModel styleViews];
         
         [self connectAddButtonToModelObjectsIfNeeded];
     }
