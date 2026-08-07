@@ -17,6 +17,8 @@
 #import "SCExpandCollapseCell.h"
 #import "SCFetchItemsCell.h"
 
+@class SCEntityDefinition;
+
 
 /****************************************************************************************/
 /*	class SCTableViewSection	*/
@@ -51,12 +53,6 @@
     
     SCDetailViewControllerOptions *detailViewControllerOptions;
     SCDetailViewControllerOptions *newItemDetailViewControllerOptions;
-    
-    NSString *themeStyle;
-    NSString *firstCellThemeStyle;
-    NSString *evenCellsThemeStyle;
-    NSString *oddCellsThemeStyle;
-    NSString *lastCellThemeStyle;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -145,25 +141,6 @@
  *  @note Setting this property automatically adds expandCollapseCell to the section at index 0, making it the first cell.
  */
 @property (nonatomic, strong) SCExpandCollapseCell *expandCollapseCell;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Configuring Theme Styles
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/** The theme style of the section. */
-@property (nonatomic, copy) NSString *themeStyle;
-
-/** The theme style of the first cell in the section. */
-@property (nonatomic, copy) NSString *firstCellThemeStyle;
-
-/** The theme style of the even cells in the section. */
-@property (nonatomic, copy) NSString *evenCellsThemeStyle;
-
-/** The theme style of the odd cells in the section. */
-@property (nonatomic, copy) NSString *oddCellsThemeStyle;
-
-/** The theme style of the last cell in the section. */
-@property (nonatomic, copy) NSString *lastCellThemeStyle;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Managing Cells
@@ -758,6 +735,48 @@
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle
                     items:(NSMutableArray *)sectionItems
           itemsDefinition:(SCDataDefinition *)definition;
+
+/**
+ Allocates and returns an initialized 'SCArrayOfObjectsSection' given a header title and
+ an entity definition.
+
+ @note This method creates a section with all the objects that
+ exist in classDefinition's entity's managedObjectContext. To create a section with only a subset
+ of these objects, consider using the other section initializers.
+
+ @param sectionHeaderTitle A header title for the section.
+ @param definition The entity definition of the objects to fetch.
+ */
++ (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition;
+
+/** Allocates and returns an initialized 'SCArrayOfObjectsSection' given a header title, an entity definition, and an NSPredicate.
+ *
+ *	@param sectionHeaderTitle A header title for the section.
+ *	@param definition The entity definition of the objects to fetch.
+ *	@param predicate The predicate that will be used to filter the fetched objects.
+ */
++ (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
+
+/**
+ Returns an initialized 'SCArrayOfObjectsSection' given a header title and
+ an entity definition.
+
+ @note This method creates a section with all the objects that
+ exist in classDefinition's entity's managedObjectContext. To create a section with only a subset
+ of these objects, consider using the other section initializers.
+
+ @param sectionHeaderTitle A header title for the section.
+ @param definition The entity definition of the objects to fetch.
+ */
+- (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition;
+
+/** Returns an initialized 'SCArrayOfObjectsSection' given a header title, an entity definition, and an NSPredicate.
+ *
+ *	@param sectionHeaderTitle A header title for the section.
+ *	@param definition The entity definition of the objects to fetch.
+ *	@param predicate The predicate that will be used to filter the fetched objects.
+ */
+- (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
 
 @end
 

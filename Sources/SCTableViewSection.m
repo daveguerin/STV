@@ -13,6 +13,8 @@
 #import "SCClassDefinition.h"
 #import "SCStringDefinition.h"
 #import "SCArrayStore.h"
+#import "SCEntityDefinition.h"
+#import "SCCoreDataStore.h"
 #import <objc/runtime.h>
 
 
@@ -43,11 +45,6 @@
 @synthesize cellActions;
 @synthesize cellsImageViews;
 @synthesize expandCollapseCell;
-@synthesize themeStyle;
-@synthesize firstCellThemeStyle;
-@synthesize evenCellsThemeStyle;
-@synthesize oddCellsThemeStyle;
-@synthesize lastCellThemeStyle;
 
 + (instancetype)section
 {
@@ -89,12 +86,6 @@
         
         detailViewControllerOptions = nil;
         newItemDetailViewControllerOptions = nil;
-        
-        themeStyle = nil;
-        firstCellThemeStyle = nil;
-        evenCellsThemeStyle = nil;
-        oddCellsThemeStyle = nil;
-        lastCellThemeStyle = nil;
 	}
 	return self;
 }
@@ -370,13 +361,6 @@
 {
     SCTableViewCell *cell = [self.ownerTableViewModel cellAtIndexPath:indexPath];
 	
-    if(!cell.configured)
-    {
-        // only style the 'height' property for now, then style the whole cell after layoutSubviews
-        [self.ownerTableViewModel styleCell:cell atIndexPath:indexPath onlyStylePropertyNamesInSet:[NSSet setWithObject:@"height"]];
-        [self.ownerTableViewModel configureCell:cell atIndexPath:indexPath];
-    }
-    
     CGFloat cellHeight = cell.height;
     // Check if the cell has an image in its section and resize accordingly
     if([self.cellsImageViews count] > indexPath.row)
@@ -384,7 +368,11 @@
         UIImageView *imageView = [self.cellsImageViews objectAtIndex:indexPath.row];
         if([imageView isKindOfClass:[UIImageView class]])
         {
-            if(cellHeight < imageView.image.size.height)
+            /*
+            UIKit measures images as part of automatic cell layout; only
+            legacy/fixed rows need STV's numeric image-height floor.
+            */
+            if(cellHeight != UITableViewAutomaticDimension && cellHeight < imageView.image.size.height)
                 cellHeight = imageView.image.size.height;
         }
     }
@@ -748,7 +736,15 @@
             [customCell configureCustomControls];
             customCell.textLabel.text = propertyDefinition.title;
             if(customCell.frame.size.height)
-                customCell.height = customCell.frame.size.height;
+            {
+                /*
+                Property-definition nibs now preserve their canvas height only
+                as an estimate so contentView constraints can grow and shrink
+                the row.
+                */
+                customCell.estimatedHeight = customCell.frame.size.height;
+                customCell.sizingMode = SCTableViewCellSizingModeAutomatic;
+            }
         }
     }
     
@@ -934,17 +930,10 @@
                 }
             }
             break;
-        case SCPropertyTypeImagePicker:
-            if(!readOnlyProperty &&
-               (propertyDataType==SCDataTypeNSString || propertyDataType==SCDataTypeDictionaryItem
-                || propertyDataType==SCDataTypeTransformable))
-            {
-                if(!cell)
-                {
-        //TODO:            cell = [SCImagePickerCell cellWithText:propertyTitle boundObject:boundObj imageNamePropertyName:propertyName];
-                }
-            }
-            break;
+        /*
+        STV 7 deliberately has no image-picker property case; a future PhotosUI
+        implementation can reuse the reserved numeric value 100.
+        */
         case SCPropertyTypeSelection:
             if(!cell)
             {
@@ -1879,16 +1868,11 @@
 - (SCTableViewCell *)cellAtIndex:(NSUInteger)index
 {
     SCTableViewCell *cell = [self unconfiguredCellAtIndex:index];
-	
-    if(!cell.configured)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:[self.ownerTableViewModel indexForSection:self]];
-        
-        // only style the 'height' property for now, then style the whole cell after layoutSubviews
-        [self.ownerTableViewModel styleCell:cell atIndexPath:indexPath onlyStylePropertyNamesInSet:[NSSet setWithObject:@"height"]];
-        [self.ownerTableViewModel configureCell:cell atIndexPath:indexPath];
-    }
-    
+    /*
+    Array retrieval must remain preparation-free; the model's cellForRow path
+    loads bindings, applies size-affecting configuration, and only then marks
+    the cell configured for UIKit fitting.
+    */
     return cell;
 }
 
@@ -3340,6 +3324,16 @@
 	return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle items:sectionItems itemsDefinition:definition];
 }
 
++ (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition
+{
+    return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle entityDefinition:definition];
+}
+
++ (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
+{
+    return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle entityDefinition:definition filterPredicate:predicate];
+}
+
 
 - (instancetype)init
 {
@@ -3358,6 +3352,26 @@
     self = [self initWithHeaderTitle:sectionHeaderTitle dataStore:arrayStore];
     
 	return self;
+}
+
+- (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition
+{
+    return [self initWithHeaderTitle:sectionHeaderTitle entityDefinition:definition filterPredicate:nil];
+}
+
+- (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
+{
+    SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
+
+    if( (self = [self initWithHeaderTitle:sectionHeaderTitle dataStore:store]) )
+    {
+        if(predicate)
+        {
+            self.dataFetchOptions.filter = TRUE;
+            self.dataFetchOptions.filterPredicate = predicate;
+        }
+    }
+    return self;
 }
 
 
@@ -3655,15 +3669,8 @@
 		maximumSelections = 0;
 		autoDismissViewController = FALSE;
 		_selectedItemsIndexes = [[NSMutableSet alloc] init];
-
-        if (@available(iOS 13.0, *)) {
-            _selectedCellTextColor = [UIColor linkColor]; // dgApps
-            _deselectedCellTextColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-            _deselectedCellTextColor =  [UIColor blackColor];
-        }
+        _selectedCellTextColor = [UIColor linkColor]; // dgApps
+        _deselectedCellTextColor = [UIColor labelColor]; // dgApps
 	}
 	
 	return self;
@@ -4117,16 +4124,8 @@
 		maximumSelections = 0;
 		autoDismissViewController = FALSE;
         selectedItemsIndexes = [[NSMutableSet alloc] init];
-
-
-        if (@available(iOS 13.0, *)) {
-            _selectedCellTextColor = [UIColor linkColor]; // dgApps
-            _deselectedCellTextColor = [UIColor labelColor]; // dgApps
-        }
-        else {
-            _selectedCellTextColor = [UIColor colorWithRed:50.0f/255 green:79.0f/255 blue:133.0f/255 alpha:1];
-            _deselectedCellTextColor = [UIColor blackColor];
-        }
+        _selectedCellTextColor = [UIColor linkColor]; // dgApps
+        _deselectedCellTextColor = [UIColor labelColor]; // dgApps
 
         intermediateEntityDefinition = nil;
 	}
