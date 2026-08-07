@@ -46,7 +46,7 @@
     BOOL _rightBarButtonItemInitialEnabledState;
 }
 
-/** Receives the ibSTVSectionsString from IB **/
+/// Receives the ibSTVSectionsString from IB *
 @property (nonatomic, copy) NSString *ibSTVSectionsString;
 
 // Actual Data definitions converted from _STV_ibDataDefinitions NSDictionary objects

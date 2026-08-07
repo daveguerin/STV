@@ -10,29 +10,21 @@
 #import "SCDataDefinition.h"
 
 
-/****************************************************************************************/
-/*	class SCDateDefinition	*/
-/****************************************************************************************/ 
-/**	
- This class functions as a means to represent the definition of an NSDate class.
- 
- This class is typically used when you need to work with a collection of NSDate objects in classes like SCArrayOfObjectsSection and SCArrayOfObjectsModel. The class automatically generates only one property definition representing how the NSDate automatically generated UI should be defined.
- */
+#pragma mark - SCDateDefinition
+/// This class functions as a means to represent the definition of an NSDate class.
+///
+/// This class is typically used when you need to work with a collection of NSDate objects in classes like SCArrayOfObjectsSection and SCArrayOfObjectsModel. The class automatically generates only one property definition representing how the NSDate automatically generated UI should be defined.
 
 @interface SCDateDefinition : SCDataDefinition
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Creation and Initialization
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Creation and Initialization
 
-/** Allocates and returns an initialized SCDateDefinition. */
+/// Allocates and returns an initialized SCDateDefinition.
 + (instancetype)definition;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Configuration
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Configuration
 
-/** The property definition representing the NSDate automatically generated UI element. */
+/// The property definition representing the NSDate automatically generated UI element.
 @property (nonatomic, readonly) SCPropertyDefinition *datePropertyDefinition;
 
 

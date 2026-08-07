@@ -15,223 +15,184 @@
 @class SCTableViewController;
 
 
-/****************************************************************************************/
-/*	class SCViewController	*/
-/****************************************************************************************/ 
-/**
- This class functions as a means to simplify development with SCTableViewModel.
- 
- SCViewController conveniently provides several ready made navigation
- bar types based on SCNavigationBarType, provided that it is a subview of a navigation controller. 
- 'SCViewController' also defines placeholders for a tableView and a tableViewModel that
- the user can allocate and assign. If a tableViewModel is defined, SCViewController also
- connects its doneButton (if present) to tableViewModel's commitButton automatically.
- 
- In addition, SCViewController fully manages memory warnings and makes sure the assigned table view is released once a memory warning occurs and reloaded once the view controller is loaded once more.
- 
- Finally, SCViewController provides several useful actions (SCViewControllerActions) and delegate methods (SCViewControllerDelegate) that notify the delegate object of events like the view appearing or disappearing.
- 
- @note You do NOT have to use 'SCViewController' in order to be able to use SCTableViewModel, but it's highly recommended that you do so whenever you need a UIViewController.
- 
- */
+#pragma mark - SCViewController
+/// This class functions as a means to simplify development with SCTableViewModel.
+///
+/// SCViewController conveniently provides several ready made navigation
+/// bar types based on SCNavigationBarType, provided that it is a subview of a navigation controller.
+/// `SCViewController` also defines placeholders for a tableView and a tableViewModel that
+/// the user can allocate and assign. If a tableViewModel is defined, SCViewController also
+/// connects its doneButton (if present) to tableViewModel's commitButton automatically.
+///
+/// In addition, SCViewController fully manages memory warnings and makes sure the assigned table view is released once a memory warning occurs and reloaded once the view controller is loaded once more.
+///
+/// Finally, SCViewController provides several useful actions (SCViewControllerActions) and delegate methods (SCViewControllerDelegate) that notify the delegate object of events like the view appearing or disappearing.
+///
+/// - Note: You do NOT have to use `SCViewController` in order to be able to use SCTableViewModel, but it's highly recommended that you do so whenever you need a UIViewController.
 @interface SCViewController : UIViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 {
     @protected
     UITableView *_tableView;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Configuration
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Configuration
 
-/** 
- Set this outlet to the table view that will be associated with tableViewModel. Once a valid table view is set, it will automatically be associated with tableViewModel.
- @note If the table view is added programmatically, then the user must also add it to the view controller's view. */
+/// Set this outlet to the table view that will be associated with tableViewModel. Once a valid table view is set, it will automatically be associated with tableViewModel.
+/// - Note: If the table view is added programmatically, then the user must also add it to the view controller's view.
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-/** Contains a valid SCTableViewModel that is associated with tableView and ready to use. If this model is replaced by a custom one, the class will automatically take care of associating it with tableView. */
+/// Contains a valid SCTableViewModel that is associated with tableView and ready to use. If this model is replaced by a custom one, the class will automatically take care of associating it with tableView.
 @property (nonatomic, strong) SCTableViewModel *tableViewModel;
 
-/** The type of the navigation bar. */
+/// The type of the navigation bar.
 @property (nonatomic, readwrite) SCNavigationBarType navigationBarType;
 
-/** The navigation bar's Add button. Only contains a value if the button exists on the bar. */
+/// The navigation bar's Add button. Only contains a value if the button exists on the bar.
 @property (nonatomic, readonly) UIBarButtonItem *addButton;
 
-/** The editButtonItem of SCViewController's superclass. */
+/// The editButtonItem of SCViewController's superclass.
 @property (nonatomic, readonly) UIBarButtonItem *editButton;
 
-/** The navigation bar's Cancel button. Only contains a value if the button exists on the bar. */
+/// The navigation bar's Cancel button. Only contains a value if the button exists on the bar.
 @property (nonatomic, readonly) UIBarButtonItem *cancelButton;
 
-/** Set to TRUE to allow the cancel button to appear when entering editing mode. Default: TRUE.
- @note: Only applicable if navigationBarType == SCNavigationBarTypeEditRight. */
+/// Set to TRUE to allow the cancel button to appear when entering editing mode. Default: TRUE.
+/// - Note: Only applicable if navigationBarType == SCNavigationBarTypeEditRight.
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
-/** The navigation bar's Done button. Only contains a value if the button exists on the bar. */
+/// The navigation bar's Done button. Only contains a value if the button exists on the bar.
 @property (nonatomic, readonly) UIBarButtonItem	*doneButton;
 
-/** If the view controller is presented from within a popover controller, this property must be set to it. When set, the view controller takes over the delegate of the popover controller. */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+/// The popover controller associated with the view controller. Set this property when presenting the view controller from a popover. The view controller takes over the popover controller's delegate while associated with it.
 @property (nonatomic, strong) UIPopoverController *popoverController;
 #pragma clang diagnostic pop
 
-/** The set of view controller action blocks. */
+/// The set of view controller action blocks.
 @property (nonatomic, readonly) SCViewControllerActions *actions;
 
-/** The current state of the view controller. */
+/// The current state of the view controller.
 @property (nonatomic, readonly) SCViewControllerState state;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Managing Button Events
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Managing Button Events
 
-/** 
- Property is TRUE if the view controller have been dismissed due to the user tapping the
- Cancel button. This property is useful if you do not with to subclass this view controller. 
- See also SCViewControllerDelegate to get notified when the view controller is dismissed. 
- */
+/// Property is TRUE if the view controller have been dismissed due to the user tapping the
+/// Cancel button. This property is useful if you do not with to subclass this view controller.
+/// See also SCViewControllerDelegate to get notified when the view controller is dismissed.
 @property (nonatomic, readonly) BOOL cancelButtonTapped;
 
-/** 
- Property is TRUE if the view controller have been dismissed due to the user tapping the
- Done button. This property is useful if you do not with to subclass this view controller. 
- See also SCViewControllerDelegate to get notified when the view controller is dismissed.
- */
+/// Property is TRUE if the view controller have been dismissed due to the user tapping the
+/// Done button. This property is useful if you do not with to subclass this view controller.
+/// See also SCViewControllerDelegate to get notified when the view controller is dismissed.
 @property (nonatomic, readonly) BOOL doneButtonTapped;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Managing Contained View Controller
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Managing Contained View Controller
 
-/**
- *  This property is automatically set to the contained child view controller, allowing the view controller to act as a proxy for this child. When acting as a proxy, both the view controller's tableView and tableViewModel will return the child's instead of its own.
- *
- *  @note If your view controller has more than once contained view controller child, you may manually assign this property to the child of your choice.
- */
+///  This property is automatically set to the contained child view controller, allowing the view controller to act as a proxy for this child. When acting as a proxy, both the view controller's tableView and tableViewModel will return the child's instead of its own.
+///
+/// - Note: If your view controller has more than once contained view controller child, you may manually assign this property to the child of your choice.
 @property (nonatomic, weak) SCTableViewController *containedViewController;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Managing Delegate
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Managing Delegate
 
-/** The object that acts as the delegate of 'SCViewController'. The object must adopt the SCViewControllerDelegate protocol. */
+/// The object that acts as the delegate of `SCViewController`. The object must adopt the SCViewControllerDelegate protocol.
 @property (nonatomic, weak) id delegate;
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Internal Properties & Methods (should only be used by the framework or when subclassing)
-//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
-/** Returns TRUE if the view controller currently has been given focus by its master model. */
+/// Returns TRUE if the view controller currently has been given focus by its master model.
 @property (nonatomic, readonly) BOOL hasFocus;
 
-/** Method should be overridden by subclasses to perform any required initialization.
- @warning Subclasses must call [super performInitialization] from within the method's implementation.
- */
+/// Method should be overridden by subclasses to perform any required initialization.
+/// - Warning: Subclasses must call [super performInitialization] from within the method's implementation.
 - (void)performInitialization;
 
-/** 
- Method gets called when the Cancel button is tapped. If what you want is to get notified
- when the Cancel button gets tapped without subclassing 'SCViewController', consider
- using SCViewControllerDelegate. 
- */
+/// Method gets called when the Cancel button is tapped. If what you want is to get notified
+/// when the Cancel button gets tapped without subclassing `SCViewController`, consider
+/// using SCViewControllerDelegate.
 - (void)cancelButtonAction;
 
-/** 
- Method gets called when the Done button is tapped. If what you want is to get notified
- when the Cancel button gets tapped without subclassing 'SCViewController', consider
- using SCViewControllerDelegate.
- */
+/// Method gets called when the Done button is tapped. If what you want is to get notified
+/// when the Cancel button gets tapped without subclassing `SCViewController`, consider
+/// using SCViewControllerDelegate.
 - (void)doneButtonAction;
 
-/** Method gets called when the Edit button is tapped. */
+/// Method gets called when the Edit button is tapped.
 - (void)editButtonAction;
 
-/** Method gets called when the Cancel button is tapped while the table view is in editing mode. */
+/// Method gets called when the Cancel button is tapped while the table view is in editing mode.
 - (void)editingModeCancelButtonAction;
 
-/** Dismisses the view controller with the specified values for cancel and done. */
+/// Dismisses the view controller with the specified values for cancel and done.
+/// - Parameter cancelValue: Whether the cancel button was selected.
+/// - Parameter doneValue: Whether the done button was selected.
 - (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue;
 
-/** Called by master model to have the view controller gain focus. */
+/// Called by master model to have the view controller gain focus.
 - (void)gainFocus;
 
-/** Called by master model to have the view controller lose focus. */
+/// Called by master model to have the view controller lose focus.
 - (void)loseFocus;
 
 @end
 
 
 
-/****************************************************************************************/
-/*	protocol SCViewControllerDelegate	*/
-/****************************************************************************************/ 
-/**
- This protocol should be adopted by objects that want to mediate as a delegate for 
- SCViewController. All methods for this protocol are optional.
- */
+#pragma mark - SCViewControllerDelegate
+/// This protocol should be adopted by objects that want to mediate as a delegate for
+/// SCViewController. All methods for this protocol are optional.
 @protocol SCViewControllerDelegate
 
 @optional
 
-/** Notifies the delegate that the view controller's view has been loaded.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller's view has been loaded.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerViewDidLoad:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller will appear.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller will appear.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerWillAppear:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller has appeared.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller has appeared.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerDidAppear:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller will disappear.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller will disappear.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerWillDisappear:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller has disappeared.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller has disappeared.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerDidDisappear:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller will be presented.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller will be presented.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerWillPresent:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller has been presented.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller has been presented.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerDidPresent:(SCViewController *)viewController;
 
-/** Asks the delegate if the view controller should be dismissed.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to dismiss the view controller.
- *	@param doneTapped TRUE if Done button has been tapped to dismiss the view controller.
- *  @return Retrun TRUE to have the view controller dismissed, otherwise return FALSE.
- */
+/// Asks the delegate if the view controller should be dismissed.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
+/// - Returns: Retrun TRUE to have the view controller dismissed, otherwise return FALSE.
 - (BOOL)viewControllerShouldDismiss:(SCViewController *)viewController
                  cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
-/** Notifies the delegate that the view controller will be dismissed.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to dismiss the view controller.
- *	@param doneTapped TRUE if Done button has been tapped to dismiss the view controller.
- */
+/// Notifies the delegate that the view controller will be dismissed.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
 - (void)viewControllerWillDismiss:(SCViewController *)viewController
                cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
-/** Notifies the delegate that the view controller has been dismissed.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to dismiss the view controller.
- *	@param doneTapped TRUE if Done button has been tapped to dismiss the view controller.
- */
+/// Notifies the delegate that the view controller has been dismissed.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
 - (void)viewControllerDidDismiss:(SCViewController *)viewController
               cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
@@ -239,40 +200,36 @@
 
 // Internal
 
-/** Notifies the delegate that the view controller will gain focus from master model.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller will gain focus from master model.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerWillGainFocus:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller did gain focus from master model.
- *	@param viewController The view controller informing the delegate of the event.
- */
+/// Notifies the delegate that the view controller did gain focus from master model.
+/// - Parameter viewController: The view controller informing the delegate of the event.
 - (void)viewControllerDidGainFocus:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller will lose focus to its master model.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to dismiss the view controller.
- *	@param doneTapped TRUE if Done button has been tapped to dismiss the view controller.
- */
+/// Notifies the delegate that the view controller will lose focus to its master model.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
 - (void)viewControllerWillLoseFocus:(SCViewController *)viewController
                  cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
-/** Notifies the delegate that the view controller did lose focus to its master model.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to dismiss the view controller.
- *	@param doneTapped TRUE if Done button has been tapped to dismiss the view controller.
- */
+/// Notifies the delegate that the view controller did lose focus to its master model.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
 - (void)viewControllerDidLoseFocus:(SCViewController *)viewController
                  cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
-/** Notifies the delegate that the view controller did enter editing mode. */
+/// Notifies the delegate that the view controller did enter editing mode.
+/// - Parameter viewController: The view controller associated with the operation.
 - (void)viewControllerDidEnterEditingMode:(SCViewController *)viewController;
 
-/** Notifies the delegate that the view controller did exit editing mode.
- *	@param viewController The view controller informing the delegate of the event.
- *	@param cancelTapped TRUE if Cancel button has been tapped to exit editing mode.
- *	@param doneTapped TRUE if Done button has been tapped to exit editing mode.
- */
+/// Notifies the delegate that the view controller did exit editing mode.
+/// - Parameter viewController: The view controller informing the delegate of the event.
+/// - Parameter cancelTapped: TRUE if Cancel button has been tapped to exit editing mode.
+/// - Parameter doneTapped: TRUE if Done button has been tapped to exit editing mode.
 - (void)viewControllerDidExitEditingMode:(SCViewController *)viewController
                       cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 

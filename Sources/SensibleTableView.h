@@ -13,6 +13,7 @@
  Define the current STV version and ensure to keep the runtime version in step
  with the STV 7 package and documentation.
 */
+/// The current STV framework version.
 #define kSTVCurrentVersion      @"7.0.0"
 
 // Sensible TableView
