@@ -9,34 +9,27 @@
  */
 
 
-/* Define the current STV version */
-#define kSTVCurrentVersion      @"6.0.3"
+/*
+ Define the current STV version and ensure to keep the runtime version in step
+ with the STV 7 package and documentation.
+*/
+#define kSTVCurrentVersion      @"7.0.0"
 
 // Sensible TableView
-#import "SCClassDefinition.h"
-#import "SCStringDefinition.h"
-#import "SCNumberDefinition.h"
-#import "SCDateDefinition.h"
-#import "SCDictionaryDefinition.h"
-#import "SCUserDefaultsDefinition.h"
 
 #import "SCArrayStore.h"
-#import "SCUserDefaultsStore.h"
-
-#import "SCTableViewModel.h"
-
-#import "SCViewController.h"
-#import "SCSearchViewController.h"
-#import "SCTableViewController.h"
-
-#import "SCTheme.h"
-
-// STVCoreData
-#import "SCEntityDefinition.h"
+#import "SCClassDefinition.h"
 #import "SCCoreDataFetchOptions.h"
 #import "SCCoreDataStore.h"
-#import "SCObjectSelectionAttributes+CoreData.h"
-#import "SCArrayOfObjectsCell+CoreData.h"
-#import "SCArrayOfObjectsSection+CoreData.h"
-#import "SCArrayOfObjectsModel+CoreData.h"
+#import "SCDateDefinition.h"
+#import "SCDictionaryDefinition.h"
+#import "SCEntityDefinition.h"
+#import "SCNumberDefinition.h"
+#import "SCSearchViewController.h"
+#import "SCStringDefinition.h"
+#import "SCTableViewController.h"
+#import "SCTableViewModel.h"
+#import "SCUserDefaultsDefinition.h"
+#import "SCUserDefaultsStore.h"
+#import "SCViewController.h"
 
