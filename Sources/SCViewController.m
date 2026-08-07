@@ -114,9 +114,7 @@
     _hasFocus = FALSE;
     
     _actions = [[SCViewControllerActions alloc] init];
-    
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-        self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
 }
 
 
@@ -176,7 +174,6 @@
     [super loadView];
     
     self.tableViewModel.tableView = self.tableView;
-    [self.tableViewModel styleViews];
     
     // Call viewDidLoad delegate method
     if([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
@@ -213,7 +210,6 @@
             }
         }
         
-        [self.tableViewModel styleViews];
     }
 	
 	_cancelButtonTapped = FALSE;
