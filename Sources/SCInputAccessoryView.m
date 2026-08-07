@@ -82,10 +82,6 @@
     _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneTapped)];
     
     _toolbar = [[UIToolbar alloc] initWithFrame:self.frame];
-    if([SCUtilities systemVersion] < 7.0)
-    {
-        _toolbar.barStyle = UIBarStyleBlack;
-    }
     _toolbar.translucent = TRUE;
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _toolbar.items = [NSArray arrayWithObjects:segmentedItem, spacerItem, _doneButton, nil];
