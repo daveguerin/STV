@@ -17,7 +17,7 @@
 /**
  This class functions as a means to simplify creating view controllers dedicated to searching data within a table view.
  
- In addition to all the features provided by its SCViewController superclass, SCSeachViewController conveniently provides a UISearchBar control and a UITableView control aligned under each other. In addition, SCSearchViewController defaults to automatically displaying a UISearchDisplayController when a search is performed.
+ In addition to all the features provided by its SCViewController superclass, SCSearchViewController conveniently provides a UISearchBar control and a UITableView control aligned under each other. It uses UISearchController to display search results.
  
  @note Both the UISearchBar and UITableView controls can still be created in Interface Builder and assigned to their respective outlets. In case no outlets are assigned, SCSearchViewController will automatically create the missing control(s).
  

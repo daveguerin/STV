@@ -79,9 +79,7 @@
     
     if(_searchBarNeedsLayout)
     {
-        // In case of iOS 7 & later, make sure to work inside the available view edges only (as apposed to the full layout)
-        if([self respondsToSelector:@selector(setEdgesForExtendedLayout:)])
-            [self setEdgesForExtendedLayout:UIRectEdgeNone];
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
         
         // set searchBar height
         CGRect searchBarFrame = self.searchBar.frame;
@@ -105,9 +103,7 @@
     
     if(_tableViewNeedsLayout)
     {
-        // In case of iOS 7 & later, make sure to work inside the available view edges only (as apposed to the full layout)
-        if([self respondsToSelector:@selector(setEdgesForExtendedLayout:)])
-            [self setEdgesForExtendedLayout:UIRectEdgeNone];
+        [self setEdgesForExtendedLayout:UIRectEdgeNone];
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
         
