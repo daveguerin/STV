@@ -31,7 +31,7 @@ destinations.
 - `Tests/STVTests/` — Objective-C XCTest coverage and test resources.
 - `Documentation/STV.docc/STV.md` — authored DocC module main page.
 - `Documentation/STV.doccarchive/` — generated DocC archive.
-- `Scripts/build-documentation.command` — reproducible ExtractAPI and DocC build.
+- `Scripts/Build STV Documentation.command` — reproducible ExtractAPI and DocC build.
 - `README.md` — consumer requirements, installation, and usage.
 - `CHANGELOG.md` — release history and behavior changes.
 - `License/` — package license resources.
@@ -233,7 +233,7 @@ Public Objective-C API comments use DocC-compatible `///` Markdown.
 Build the documentation with:
 
 ```sh
-Scripts/build-documentation.command
+Scripts/Build STV Documentation.command
 ```
 
 The module main page is authored in `Documentation/STV.docc/STV.md`. Keep its
@@ -284,7 +284,7 @@ xcodebuild \
   build
 ```
 
-For documentation changes, run `Scripts/build-documentation.command` and verify
+For documentation changes, run `Scripts/Build STV Documentation.command` and verify
 that `Documentation/STV.doccarchive/metadata.json` and the archive indexes exist.
 
 ## Repository Hygiene
