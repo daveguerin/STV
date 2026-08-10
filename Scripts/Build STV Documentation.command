@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SOURCES_DIR="$ROOT_DIR/Sources"
 DOCUMENTATION_DIR="$ROOT_DIR/Documentation"
-DOCC_CATALOG="$DOCUMENTATION_DIR/STV.docc"
+DOCC_CATALOG="$ROOT_DIR/STV.docc"
 BUILD_DIR="$ROOT_DIR/.build/documentation"
 SYMBOL_GRAPH_DIR="$BUILD_DIR/symbol-graphs"
 ARCHIVE_PATH="$DOCUMENTATION_DIR/STV.doccarchive"
