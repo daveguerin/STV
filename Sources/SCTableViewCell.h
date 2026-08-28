@@ -30,7 +30,9 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
     /// Uses STV's legacy manual-frame sizing behavior.
     SCTableViewCellSizingModeLegacy,
     /// Uses UIKit automatic row sizing.
-    SCTableViewCellSizingModeAutomatic
+    SCTableViewCellSizingModeAutomatic,
+    /// Uses the owning model's default fixed row height.
+    SCTableViewCellSizingModeFixed
 };
 
 
@@ -170,10 +172,11 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// The cell's bound property name (see class overview).
 @property (nonatomic, copy) IBInspectable NSString *boundPropertyName;
 
-/// The height of the cell. Default: UITableViewAutomaticDimension.
+/// An explicit row height. The stored default is UITableViewAutomaticDimension;
+/// inherited cells resolve through their owning model's sizing policy.
 @property (nonatomic, readwrite) CGFloat height;
 
-/// The row-height policy. STV 7 defaults models to automatic sizing; legacy/manual-layout cells may opt out.
+/// The row-height policy. Cells default to SCTableViewCellSizingModeInherit.
 @property (nonatomic, readwrite) SCTableViewCellSizingMode sizingMode;
 
 /// The estimated row height used while UIKit calculates an automatic height. Default: 44.

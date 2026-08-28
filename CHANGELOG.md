@@ -2,7 +2,8 @@
 
 ## STV 7.0.0
 * Requires iOS 16 or later and Swift tools 5.9.
-* Uses UIKit automatic row sizing by default, with explicit automatic, inherited, legacy, and fixed-height policies.
+* Defaults models to fixed 44-point rows for STV 6 compatibility, with explicit automatic, inherited, legacy, and fixed-height policies.
+* Adds `SCTableViewModel.defaultCellHeight` for model-wide fixed row heights.
 * Treats XIB/storyboard canvas heights as estimates instead of fixed row heights.
 * Keeps every numeric cell height, including 44 points, as an intentional fixed override.
 * Moves cell configuration out of height delegate queries and adds centralized, update-safe height invalidation.

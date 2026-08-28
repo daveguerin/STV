@@ -13,7 +13,13 @@ Unfortunley the phenomenal visual interface that [Sensible Cocoa](http://sensibl
 ## NOTE
 Version 7.0.0 targets iOS 16 and later. `SCImagePickerCell` is intentionally excluded until it can be redesigned around PhotosUI without deprecated APIs.
 
-STV 7 uses UIKit automatic row sizing by default. Numeric `SCTableViewCell.height` values, including `44`, remain explicit fixed-height overrides. Programmatically generated controls that still rely on manual frames use the legacy sizing mode, while XIB/storyboard cells treat their design-time height as an estimate.
+STV 7 defaults models to fixed 44-point rows for compatibility with STV 6 and
+earlier. Set `SCTableViewModel.defaultCellHeight` to change that model-wide
+height, or set `defaultCellSizingMode` to automatic for UIKit self-sizing.
+Numeric `SCTableViewCell.height` values remain explicit per-cell overrides.
+Programmatically generated controls use legacy manual sizing when their model
+opts into automatic sizing, while XIB/storyboard cells treat their design-time
+height as an estimate.
 
 ## LICENSE
 **SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.

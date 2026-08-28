@@ -137,8 +137,11 @@
 /// as UITableViewController will automatically handle the resizing. Otherwise, it defaults to TRUE.
 @property (nonatomic, readwrite) BOOL autoResizeForKeyboard;
 
-/// The sizing policy inherited by cells whose sizingMode is SCTableViewCellSizingModeInherit. Default: automatic.
+/// The sizing policy inherited by cells whose sizingMode is SCTableViewCellSizingModeInherit. Default: fixed.
 @property (nonatomic, readwrite) SCTableViewCellSizingMode defaultCellSizingMode;
+
+/// The fixed height inherited by cells when defaultCellSizingMode is SCTableViewCellSizingModeFixed. Default: 44 points.
+@property (nonatomic, readwrite) CGFloat defaultCellHeight;
 
 /// An array of strings that serve as the title of sections in the tableView and
 /// appear in the index list on the right side of the tableView. tableView

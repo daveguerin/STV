@@ -110,19 +110,89 @@
     XCTAssertEqual(cell.height, 44.0);
 }
 
-- (void)testModelDefaultsInheritedCellsToAutomaticSizing
+- (void)testModelDefaultsInheritedCellsToFixedFortyFourPointHeight
 {
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
     SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
     SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
-    SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Automatic"];
+    SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Fixed"];
     [section addCell:cell];
     [model addSection:section];
 
     CGFloat height = [model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
 
-    XCTAssertEqual(model.defaultCellSizingMode, SCTableViewCellSizingModeAutomatic);
-    XCTAssertEqual(height, UITableViewAutomaticDimension);
+    XCTAssertEqual(model.defaultCellSizingMode, SCTableViewCellSizingModeFixed);
+    XCTAssertEqual(model.defaultCellHeight, 44.0);
+    XCTAssertEqual(height, 44.0);
+}
+
+- (void)testModelFixedHeightAppliesToStandardCells
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellHeight = 52.0;
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
+    SCTableViewCell *standardCell = [[SCTableViewCell alloc] initWithText:@"Standard"];
+    [section addCell:standardCell];
+    [model addSection:section];
+
+    XCTAssertEqualWithAccuracy([model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]], 52.0, 0.001);
+}
+
+- (void)testGeneratedControlCellsInheritModelFixedHeight
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellHeight = 52.0;
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
+    SCControlCell *controlCell = [[SCControlCell alloc] initWithText:@"Control"];
+    [section addCell:controlCell];
+    [model addSection:section];
+
+    XCTAssertEqualWithAccuracy([model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]], 52.0, 0.001);
+    XCTAssertEqual(controlCell.sizingMode, SCTableViewCellSizingModeInherit);
+}
+
+- (void)testCellFixedSizingUsesModelDefaultHeight
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
+    model.defaultCellHeight = 52.0;
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
+    SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Fixed"];
+    cell.sizingMode = SCTableViewCellSizingModeFixed;
+    [section addCell:cell];
+    [model addSection:section];
+
+    XCTAssertEqualWithAccuracy([model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]], 52.0, 0.001);
+}
+
+- (void)testExplicitCellHeightOverridesModelFixedHeight
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellHeight = 52.0;
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
+    SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Explicit"];
+    cell.height = 61.0;
+    [section addCell:cell];
+    [model addSection:section];
+
+    XCTAssertEqualWithAccuracy([model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]], 61.0, 0.001);
+}
+
+- (void)testExplicitAutomaticCellOverridesModelFixedSizing
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
+    SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Automatic"];
+    cell.sizingMode = SCTableViewCellSizingModeAutomatic;
+    [section addCell:cell];
+    [model addSection:section];
+
+    XCTAssertEqual([model tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]], UITableViewAutomaticDimension);
 }
 
 - (void)testCellConfigurationOccursDuringCellPreparationNotHeightResolution
@@ -148,18 +218,28 @@
 
 - (void)testControlCellsKeepLegacyManualLayoutUntilLoadedFromInterfaceBuilder
 {
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
+    SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
+    SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
     SCControlCell *cell = [[SCControlCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    XCTAssertEqual(cell.sizingMode, SCTableViewCellSizingModeLegacy);
+    [section addCell:cell];
+    [model addSection:section];
+
+    XCTAssertEqual(cell.sizingMode, SCTableViewCellSizingModeInherit);
+    XCTAssertEqual(cell.height, 44.0);
 
     [cell awakeFromNib];
 
     XCTAssertEqual(cell.sizingMode, SCTableViewCellSizingModeAutomatic);
+    XCTAssertEqual(cell.height, UITableViewAutomaticDimension);
 }
 
 - (void)testAutomaticCellsExposeTheirEstimatedHeightToUITableView
 {
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
     SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
+    model.defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
     SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
     SCTableViewCell *cell = [[SCTableViewCell alloc] initWithText:@"Estimate"];
     cell.estimatedHeight = 123.0;

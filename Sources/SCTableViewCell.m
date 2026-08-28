@@ -31,6 +31,7 @@
 
 @property (nonatomic, strong) NSObject *initialBoundValue;
 
+- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing;
 
 - (void)setActiveDetailModel:(SCTableViewModel *)model;
 
@@ -304,10 +305,13 @@
     if(effectiveSizingMode == SCTableViewCellSizingModeInherit)
     {
         /*
-        Detached cells use STV 7's automatic default; owned cells inherit the
-        model policy without converting it into a cached numeric height.
+        hermes:
+        Detached cells use STV's historical fixed default; owned cells inherit
+        the model policy without caching the model's numeric height.
         */
-        effectiveSizingMode = self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellSizingMode : SCTableViewCellSizingModeAutomatic;
+        effectiveSizingMode = self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellSizingMode : SCTableViewCellSizingModeFixed;
+        if(effectiveSizingMode == SCTableViewCellSizingModeAutomatic)
+            effectiveSizingMode = [self sizingModeForInheritedAutomaticSizing];
     }
 
     /*
@@ -323,6 +327,9 @@
     */
     if(_height != UITableViewAutomaticDimension)
         return _height;
+
+    if(effectiveSizingMode == SCTableViewCellSizingModeFixed)
+        return self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellHeight : 44.0;
     
     CGFloat calculatedHeight = 44;
     
@@ -355,6 +362,11 @@
         calculatedHeight = 44;
     
     return calculatedHeight;
+}
+
+- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing
+{
+    return SCTableViewCellSizingModeAutomatic;
 }
 
 
@@ -2560,12 +2572,6 @@
 - (void)performInitialization
 {
 	[super performInitialization];
-    /*
-    Generated control cells still lay out controls with frames, so they remain
-    legacy-sized until a constrained nib/storyboard cell opts into UIKit
-    self-sizing.
-    */
-    self.sizingMode = SCTableViewCellSizingModeLegacy;
     
     maxTextLabelWidth = SC_DefaultMaxTextLabelWidth;
 	controlIndentation = SC_DefaultControlIndentation;
@@ -2573,6 +2579,16 @@
     
     if(!self.controlCreatedInIB)
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
+}
+
+- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing
+{
+    /*
+    hermes:
+    Programmatic control cells inherit fixed model heights, but fall back to
+    legacy frame sizing when their model explicitly enables automatic sizing.
+    */
+    return SCTableViewCellSizingModeLegacy;
 }
 
 //overrides superclass

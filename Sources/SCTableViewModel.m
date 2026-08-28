@@ -105,10 +105,12 @@
 		keyboardShown = FALSE;
 		keyboardOverlap = 0;
         /*
-        STV 7 makes UIKit self-sizing the model default while allowing
-        manual-layout cells to opt into legacy sizing.
+        hermes:
+        STV 7 keeps the historical 44-point row default while allowing models
+        and individual cells to opt into automatic or legacy sizing.
         */
-        _defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
+        _defaultCellSizingMode = SCTableViewCellSizingModeFixed;
+        _defaultCellHeight = 44.0;
         swipeToDeleteActive = FALSE;
         
         _detailViewController = nil;
