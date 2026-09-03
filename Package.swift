@@ -19,7 +19,7 @@ let package = Package(
             name: "STV",
             dependencies: [],
             path: ".",
-            exclude: ["AGENTS.md","README.md","CHANGELOG.md","Documentation","License","Scripts","Tests","STV.docc"],
+            exclude: ["AGENTS.md","README.md","CHANGELOG.md","License","Scripts","Tests"],
             sources: ["Sources"],
             publicHeadersPath: "Sources",
             cSettings: [.headerSearchPath("Sources")]

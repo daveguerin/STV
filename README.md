@@ -50,10 +50,9 @@ Add STV to an Xcode project as simply as:
 
 6.x Docset Feed: [https://daveguerin.github.io/STVDocumentation/docsets/STV.xml](https://daveguerin.github.io/STVDocumentation/docsets/STV.xml)  
 
-The Docset Feeds are for [Dash](https://kapeli.com/dash) and other documentation browsers.
+7.x Documentation is comimg soon!
 
-## FORUM
-Forum: [http://sensiblecocoa.com/community](http://sensiblecocoa.com/community)
+The Docset Feeds are for [Dash](https://kapeli.com/dash) and other documentation browsers.
 
 ## ISSUES
 Please report any issues and bugs with this Swift Package of STV via [https://github.com/daveguerin/STV/issues](https://github.com/daveguerin/STV/issues). 
@@ -62,8 +61,3 @@ Please report any issues and bugs with this Swift Package of STV via [https://gi
 
 ## CHANGELOG
 CHANGELOG: [https://github.com/daveguerin/STV/tree/master/CHANGELOG.md](https://github.com/daveguerin/STV/tree/master/CHANGELOG.md)
-
-## TODO
-* Update the documentation.
-* Getting started documentation. Update the STV 3.x Introduction PDF for STV 6.x and iOS 13.x?
-* Add an example, or two? Separate repository?
