@@ -44,18 +44,17 @@
 
 - (instancetype)init
 {
-    self = [super init];
-    if(self) 
-    {
-        self.frame = CGRectMake(0, 0, 320, 44);
-        [self performInitialization];
-    }
-    return self;
+    return [self initWithFrame:CGRectZero];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
+    return [self initWithFrame:frame inputViewStyle:UIInputViewStyleKeyboard];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle
+{
+    self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
     if(self) 
     {
         [self performInitialization];
@@ -65,6 +64,14 @@
 
 - (void)performInitialization
 {
+    self.allowsSelfSizing = YES;
+    /*
+    hermes:
+    UIKit requires this native input-root hint to use the intrinsic height.
+    Without it the keyboard reserves zero height despite valid constraints.
+    The toolbar itself uses constraints; STV never assigns either frame.
+    */
+    self.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _delegate = nil;
     _rewind = YES;
     _showPrevNextButtons = TRUE;
@@ -81,22 +88,32 @@
     
     _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneTapped)];
     
-    _toolbar = [[UIToolbar alloc] initWithFrame:self.frame];
+    _toolbar = [[UIToolbar alloc] init];
     _toolbar.translucent = TRUE;
-    _toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _toolbar.translatesAutoresizingMaskIntoConstraints = NO;
     _toolbar.items = [NSArray arrayWithObjects:segmentedItem, spacerItem, _doneButton, nil];
     [self addSubview:_toolbar];
+    /*
+    hermes:
+    The keyboard owns the accessory width. Constraints fit its toolbar in
+    local coordinates, including when the accessory has a nonzero origin.
+    */
+    [NSLayoutConstraint activateConstraints:@[
+        [_toolbar.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_toolbar.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_toolbar.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_toolbar.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+        [_toolbar.heightAnchor constraintGreaterThanOrEqualToConstant:44.0]
+    ]];
     
     NSString *clearTitle = NSLocalizedString(@"Clear", @"Clear Button Title");
     _clearButton = [[UIBarButtonItem alloc] initWithTitle:clearTitle style:UIBarButtonItemStylePlain target:self action:@selector(clearTapped)];
 }
 
-// overrides superclass
-- (void)setFrame:(CGRect)frame
+- (CGSize)intrinsicContentSize
 {
-    [super setFrame:frame];
-    
-    self.toolbar.frame = self.frame;
+    return CGSizeMake(UIViewNoIntrinsicMetric,
+                      MAX(44.0, self.toolbar.intrinsicContentSize.height));
 }
 
 - (void)setShowPrevNextButtons:(BOOL)show

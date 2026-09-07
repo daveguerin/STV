@@ -46,12 +46,12 @@
         self.didDeselect = actions.didDeselect;
     if((override || !self.editActions) && actions.editActions)
         self.editActions = actions.editActions;
-    if ((override || !self.leadingSwipeActions) && actions.leadingSwipeActions) {       // dgApps
-        self.leadingSwipeActions = actions.leadingSwipeActions;                         // dgApps
-    }                                                                                   // dgApps
-    if ((override || !self.trailingSwipeActions) && actions.trailingSwipeActions) {     // dgApps
-        self.trailingSwipeActions = actions.trailingSwipeActions;                       // dgApps
-    }                                                                                   // dgApps
+    if ((override || !self.leadingSwipeActions) && actions.leadingSwipeActions) {
+        self.leadingSwipeActions = actions.leadingSwipeActions;
+    }
+    if ((override || !self.trailingSwipeActions) && actions.trailingSwipeActions) {
+        self.trailingSwipeActions = actions.trailingSwipeActions;
+    }
     if((override || !self.customEditingStyle) && actions.customEditingStyle)
         self.customEditingStyle = actions.customEditingStyle;
     if((override || !self.didBecomeFirstResponder) && actions.didBecomeFirstResponder)

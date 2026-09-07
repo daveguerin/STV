@@ -74,17 +74,9 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 
 /// Action gets called after the cell has laid out all its subviews.
 ///
-/// This action is typically used to change the subviews' layout.
-///
-/// Example:
-///
-/// ```objective-c
-/// // Objective-C
-/// cellActions.didLayoutSubviews = ^(SCTableViewCell *cell, NSIndexPath *indexPath)
-/// {
-///     cell.textLabel.frame = CGRectMake(40, 20, 100, 40);
-/// };
-/// ```
+/// Use this callback to observe the completed layout or update drawing.
+/// Install constraints once when constructing custom content, rather than
+/// adding constraints or assigning subview frames in this repeatable callback.
 @property (nonatomic, copy) SCCellAction_Block didLayoutSubviews;
 
 /// Action gets called before the cell is displayed.

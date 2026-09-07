@@ -40,15 +40,19 @@
 	
 	/// The section header title.
 	NSString *headerTitle;
-	/// The section header height.
+	/// An optional fixed header content-height constraint; defaults to Automatic.
 	CGFloat headerHeight;
-	/// The section header view. This can be any subclass of UIView (e.g. UILabel or UIImageView). The section automatically adjusts the height of its header to accommodate this view.
+	/// Custom header content with intrinsic size or a complete constraint chain.
+/// UIKit measures it in a header/footer container; frame height is not sizing
+/// policy. A UITableViewHeaderFooterView is used directly.
 	UIView *headerView;
 	/// The section footer title.
 	NSString *footerTitle;
-	/// The section footer height.
+	/// An optional fixed footer content-height constraint; defaults to Automatic.
 	CGFloat footerHeight;
-	/// The section footer view. This can be any subclass of UIView (e.g. UILabel or UIImageView). The section automatically adjusts the height of its footer to accommodate this view.
+	/// Custom footer content with intrinsic size or a complete constraint chain.
+/// UIKit measures it in a header/footer container; frame height is not sizing
+/// policy. A UITableViewHeaderFooterView is used directly.
 	UIView *footerView;
 	
     /// The set of section action blocks.
@@ -106,19 +110,23 @@
 /// The section header title.
 @property (nonatomic, copy) NSString *headerTitle;
 
-/// The section header height.
+/// An optional fixed header content-height constraint; defaults to Automatic.
 @property (nonatomic) CGFloat headerHeight;
 
-/// The section header view. This can be any subclass of UIView (e.g. UILabel or UIImageView). The section automatically adjusts the height of its header to accommodate this view.
+/// Custom header content with intrinsic size or a complete constraint chain.
+/// UIKit measures it in a header/footer container; frame height is not sizing
+/// policy. A UITableViewHeaderFooterView is used directly.
 @property (nonatomic, strong) UIView *headerView;
 
 /// The section footer title.
 @property (nonatomic, copy) NSString *footerTitle;
 
-/// The section footer height.
+/// An optional fixed footer content-height constraint; defaults to Automatic.
 @property (nonatomic) CGFloat footerHeight;
 
-/// The section footer view. This can be any subclass of UIView (e.g. UILabel or UIImageView). The section automatically adjusts the height of its footer to accommodate this view.
+/// Custom footer content with intrinsic size or a complete constraint chain.
+/// UIKit measures it in a header/footer container; frame height is not sizing
+/// policy. A UITableViewHeaderFooterView is used directly.
 @property (nonatomic, strong) UIView *footerView;
 
 /// The set of section action blocks.
@@ -214,7 +222,9 @@
 /// Provides subclasses with the framework to bind an SCTableViewSection to a value
 @property (nonatomic, strong) NSObject *boundValue;
 
-/// Called internally by the framework to determine the cell height at the specified indexPath.
+/// Compatibility sizing query; always returns UITableViewAutomaticDimension.
+/// Row measurement belongs to UIKit. Numeric sizing callbacks are applied as
+/// content constraints during cell preparation, not from this query.
 /// - Parameter indexPath: The row index path.
 - (CGFloat)heightForCellAtIndexPath:(NSIndexPath *)indexPath;
 

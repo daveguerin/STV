@@ -23,6 +23,8 @@
 @interface SCTableViewSection ()
 
 @property (nonatomic, strong) NSMutableArray *cells;
+@property (nonatomic, strong) UITableViewHeaderFooterView *headerContainer;
+@property (nonatomic, strong) UITableViewHeaderFooterView *footerContainer;
 
 @end
 
@@ -71,10 +73,10 @@
 		boundPropertyName = nil;
 		commitCellChangesLive = TRUE;
 		headerTitle = nil;
-		headerHeight = -1;	// This will set the default header height
+		headerHeight = UITableViewAutomaticDimension;
 		headerView = nil;
 		footerTitle = nil;
-		footerHeight = -1;	// This will set the default footer height
+		footerHeight = UITableViewAutomaticDimension;
 		footerView = nil;
         
         sectionActions = [[SCSectionActions alloc] init];
@@ -109,6 +111,80 @@
 	return self;
 }
 
+
+- (void)invalidateCellSizingPolicy
+{
+    /*
+    hermes:
+    Access only materialized cells: an array section's cells getter may fetch
+    data. New cells inherit current model policy when they are prepared.
+    */
+    for(SCTableViewCell *cell in cells)
+    {
+        [cell setNeedsUpdateConstraints];
+        [cell updateConstraintsIfNeeded];
+    }
+}
+
+- (UITableViewHeaderFooterView *)supplementaryViewForHeader:(BOOL)isHeader hideTitle:(BOOL)hideTitle
+{
+    UIView *customView = isHeader ? self.headerView : self.footerView;
+    NSString *title = hideTitle ? nil : (isHeader ? self.headerTitle : self.footerTitle);
+    CGFloat fixedHeight = isHeader ? self.headerHeight : self.footerHeight;
+    UITableViewHeaderFooterView *container = isHeader ? self.headerContainer : self.footerContainer;
+    if([customView isKindOfClass:[UITableViewHeaderFooterView class]])
+        container = (UITableViewHeaderFooterView *)customView;
+    else
+    {
+        if(!container || container == self.headerView || container == self.footerView)
+            container = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:nil];
+        UIView *contentView = container.contentView;
+        for(UIView *subview in contentView.subviews.copy)
+            [subview removeFromSuperview];
+        UIView *content = customView;
+        if(!content && title.length)
+        {
+            UILabel *label = [[UILabel alloc] init];
+            label.text = isHeader ? title.uppercaseString : title;
+            label.numberOfLines = 0;
+            label.font = [UIFont preferredFontForTextStyle:isHeader ? UIFontTextStyleHeadline : UIFontTextStyleFootnote];
+            label.adjustsFontForContentSizeCategory = YES;
+            label.textColor = [UIColor secondaryLabelColor];
+            content = label;
+        }
+        if(content)
+        {
+            content.translatesAutoresizingMaskIntoConstraints = NO;
+            [contentView addSubview:content];
+            CGFloat horizontalInset = customView ? 0 : 16;
+            CGFloat verticalInset = customView ? 0 : 8;
+            [NSLayoutConstraint activateConstraints:@[
+                [content.leadingAnchor constraintEqualToAnchor:contentView.leadingAnchor constant:horizontalInset],
+                [content.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor constant:-horizontalInset],
+                [content.topAnchor constraintEqualToAnchor:contentView.topAnchor constant:verticalInset],
+                [content.bottomAnchor constraintEqualToAnchor:contentView.bottomAnchor constant:-verticalInset]
+            ]];
+        }
+    }
+    for(NSLayoutConstraint *constraint in container.contentView.constraints.copy)
+        if([constraint.identifier isEqualToString:@"STV.supplementaryHeight"])
+            constraint.active = NO;
+    if(fixedHeight >= 0)
+    {
+        NSLayoutConstraint *height = [container.contentView.heightAnchor constraintEqualToConstant:fixedHeight];
+        height.identifier = @"STV.supplementaryHeight";
+        height.priority = UILayoutPriorityRequired - 1;
+        height.active = YES;
+    }
+    if(container != customView)
+    {
+        if(isHeader)
+            self.headerContainer = container;
+        else
+            self.footerContainer = container;
+    }
+    return container;
+}
 
 - (void)setOwnerTableViewModel:(SCTableViewModel *)ownerTableViewModel
 {
@@ -359,25 +435,7 @@
 
 - (CGFloat)heightForCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    SCTableViewCell *cell = [self.ownerTableViewModel cellAtIndexPath:indexPath];
-	
-    CGFloat cellHeight = cell.height;
-    // Check if the cell has an image in its section and resize accordingly
-    if([self.cellsImageViews count] > indexPath.row)
-    {
-        UIImageView *imageView = [self.cellsImageViews objectAtIndex:indexPath.row];
-        if([imageView isKindOfClass:[UIImageView class]])
-        {
-            /*
-            UIKit measures images as part of automatic cell layout; only
-            legacy/fixed rows need STV's numeric image-height floor.
-            */
-            if(cellHeight != UITableViewAutomaticDimension && cellHeight < imageView.image.size.height)
-                cellHeight = imageView.image.size.height;
-        }
-    }
-    
-    return cellHeight;
+    return UITableViewAutomaticDimension;
 }
 
 - (void)editingModeWillChange
@@ -1385,27 +1443,6 @@
 
 
 // overrides superclass
-- (CGFloat)heightForCellAtIndexPath:(NSIndexPath *)indexPath
-{
-    CGFloat cellHeight = UITableViewAutomaticDimension;
-    if(self.sectionActions.customHeightForRowAtIndexPath)
-    {
-        cellHeight = self.sectionActions.customHeightForRowAtIndexPath(self, indexPath);
-    }
-    else
-        if(self.ownerTableViewModel.sectionActions.customHeightForRowAtIndexPath)
-        {
-            cellHeight = self.ownerTableViewModel.sectionActions.customHeightForRowAtIndexPath(self, indexPath);
-        }
-    if(cellHeight != UITableViewAutomaticDimension)
-        return cellHeight;
-    
-    cellHeight = [super heightForCellAtIndexPath:indexPath];
-    
-    return cellHeight;
-}
-
-// overrides superclass
 - (void)setExpanded:(BOOL)expanded
 {
     itemsInSync = FALSE;
@@ -2366,16 +2403,7 @@
         
         switch (mode) {
             case SCPresentationModePush:
-                if(detailViewController.navigationController)  // this case would normally occur in a collaped UISplitViewController
-                {
-                    if([detailViewController respondsToSelector:@selector(gainFocus)])
-                        [(id)detailViewController gainFocus];
-                    [navController pushViewController:detailViewController.navigationController animated:YES];
-                }
-                else
-                {
-                    [navController pushViewController:detailViewController animated:YES];
-                }
+                [navController pushViewController:detailViewController animated:YES];
                 break;
             case SCPresentationModeModal:
             {

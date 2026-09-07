@@ -789,6 +789,7 @@
 - (void)registerForKeyboardNotifications;
 - (void)unregisterKeyboardNotifications;
 - (void)keyboardWillShow:(NSNotification *)aNotification;
+- (void)keyboardWillChangeFrame:(NSNotification *)aNotification;
 - (void)keyboardWillHide:(NSNotification *)aNotification;
 
 @end
@@ -832,6 +833,8 @@
 
 - (void)registerForKeyboardNotifications
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:)
+                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) 
 												 name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) 
@@ -851,6 +854,15 @@
 	for(SCTableViewModel *model in (__bridge id)modelsSet)
 		if(model.viewController == self.keyboardIssuer)
 			[model keyboardWillShow:aNotification];
+}
+
+- (void)keyboardWillChangeFrame:(NSNotification *)aNotification
+{
+    if(!self.keyboardIssuer)
+        return;
+    for(SCTableViewModel *model in (__bridge id)modelsSet)
+        if(model.viewController == self.keyboardIssuer)
+            [model keyboardWillChangeFrame:aNotification];
 }
 
 - (void)keyboardWillHide:(NSNotification *)aNotification

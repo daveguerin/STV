@@ -29,7 +29,7 @@
 /// Finally, SCViewController provides several useful actions (SCViewControllerActions) and delegate methods (SCViewControllerDelegate) that notify the delegate object of events like the view appearing or disappearing.
 ///
 /// - Note: You do NOT have to use `SCViewController` in order to be able to use SCTableViewModel, but it's highly recommended that you do so whenever you need a UIViewController.
-@interface SCViewController : UIViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
+@interface SCViewController : UIViewController <UIPopoverControllerDelegate>
 {
     @protected
     UITableView *_tableView;
@@ -124,7 +124,8 @@
 /// Method gets called when the Cancel button is tapped while the table view is in editing mode.
 - (void)editingModeCancelButtonAction;
 
-/// Dismisses the view controller with the specified values for cancel and done.
+/// Ends focused detail editing, or dismisses an ordinary pushed/modal editor.
+/// Focused detail controllers remain hosted after losing model focus.
 /// - Parameter cancelValue: Whether the cancel button was selected.
 /// - Parameter doneValue: Whether the done button was selected.
 - (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue;

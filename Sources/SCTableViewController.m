@@ -268,23 +268,21 @@
                 self.tableViewModel.masterBoundObjectStore = parentViewController.tableViewModel.masterBoundObjectStore;
             }
             
-            if(![self isDetailOfSplitViewController:parentViewController])
-            {
-                [self addStaticContentToModel];
-                
-                if(!self.tableViewModel.sectionCount)
-                    for(NSInteger i=0; i<parentViewController.tableViewModel.sectionCount; i++)
-                    {
-                        [self.tableViewModel addSection:[parentViewController.tableViewModel sectionAtIndex:i]];
-                    }
-            }
+            [self addStaticContentToModel];
+
+            if(!self.tableViewModel.sectionCount)
+                for(NSInteger i=0;
+                    i<parentViewController.tableViewModel.sectionCount; i++)
+                {
+                    [self.tableViewModel addSection:
+                        [parentViewController.tableViewModel sectionAtIndex:i]];
+                }
             
             
             parentViewController.containedViewController = self;
         }
     }
     
-    [self setupDetailViewControllerIfNeeded];
 }
 
 - (void)removeFromParentViewController
@@ -311,11 +309,15 @@
     self.tableViewModel.tableView = self.tableView;
     
     
-    if(!self.ibEmbedded && ![self isDetailOfSplitViewController:self])   // addStaticContentToModel will be called at the right time (after master is loaded)
+    /*
+    hermes:
+    Embedded tables wait for explicit parent model configuration. Standalone
+    tables load their own content without inferring a container's columns.
+    */
+    if(!self.ibEmbedded)
         [self addStaticContentToModel];
     
     
-    [self setupDetailViewControllerIfNeeded];
     
     // Call viewDidLoad delegate method
     if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
@@ -331,68 +333,6 @@
     
     if(self.actions.viewDidLoad)
         self.actions.viewDidLoad(self);
-}
-
-- (void)setupDetailViewControllerIfNeeded
-{
-    // Automatically detect detailViewController presence
-    if(!self.tableViewModel.detailViewController && [self isMasterOfSplitViewController:self])
-    {
-        UIViewController *detailController = nil;
-        if(self.splitViewController.viewControllers.count > 1)
-        {
-            detailController = [self.splitViewController.viewControllers objectAtIndex:1];
-        }
-        else
-            if(self.splitViewController.delegate && self.splitViewController.delegate!=self)
-                detailController = (UIViewController *)self.splitViewController.delegate;
-        
-        if(detailController)
-        {
-            if([detailController isKindOfClass:[SCTableViewController class]] || [detailController isKindOfClass:[SCViewController class]])
-            {
-                if([detailController isKindOfClass:[SCTableViewController class]])
-                {
-                    SCTableViewController *detailTableViewController = (SCTableViewController *)detailController;
-                    
-                    detailTableViewController.tableViewModel.masterModel = self.tableViewModel;
-                    [detailTableViewController addStaticContentToModel];
-                    [detailTableViewController configureAllObjectSections];
-                    
-                    detailTableViewController.autoDisableNavigationButtonsUntilViewAppears = self.autoDisableNavigationButtonsUntilViewAppears;
-                    
-                    [detailTableViewController loseFocus];
-                }
-                else
-                    if([detailController isKindOfClass:[SCViewController class]])
-                    {
-                        SCViewController *detailViewController = (SCViewController *)detailController;
-                        
-                        detailViewController.tableViewModel.masterModel = self.tableViewModel;
-                        if(detailViewController.containedViewController)
-                        {
-                            [detailViewController.containedViewController addStaticContentToModel];
-                            [detailViewController.containedViewController configureAllObjectSections];
-                        }
-                        
-                        [detailViewController loseFocus];
-                    }
-                
-                self.tableViewModel.detailViewController = detailController;
-                
-                if(!detailController.navigationController)
-                {
-                    UINavigationController *detailNavController = [[UINavigationController alloc] initWithRootViewController:detailController];
-                    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.splitViewController.viewControllers];
-                    if(viewControllers.count>2)
-                        [viewControllers replaceObjectAtIndex:1 withObject:detailNavController];
-                    else
-                        [viewControllers addObject:detailNavController];
-                    self.splitViewController.viewControllers = viewControllers;
-                }
-            }
-        }
-    }
 }
 
 - (void)invalidateStaticContent
@@ -716,29 +656,6 @@
     }
     
     _staticContentAddedToModel = YES;
-}
-
-- (BOOL)isMasterOfSplitViewController:(UIViewController *)viewController
-{
-    if([viewController isKindOfClass:[SCTableViewController class]])
-    {
-        SCTableViewController *tableViewController = (SCTableViewController *)viewController;
-        if(tableViewController.ibEmbedded && tableViewController.parentViewController)
-            viewController = tableViewController.parentViewController;
-    }
-    
-    if(viewController.navigationController && [[viewController.navigationController viewControllers] objectAtIndex:0]==viewController)
-        viewController = viewController.navigationController;
-    
-    return (viewController.splitViewController!=nil && viewController.splitViewController.viewControllers.count && [viewController.splitViewController.viewControllers objectAtIndex:0]==viewController);
-}
-
-- (BOOL)isDetailOfSplitViewController:(UIViewController *)viewController
-{
-    if(viewController.navigationController && [[viewController.navigationController viewControllers] objectAtIndex:0]==viewController)
-        viewController = viewController.navigationController;
-    
-    return (viewController.splitViewController!=nil && viewController.splitViewController.viewControllers.count>1 && [viewController.splitViewController.viewControllers objectAtIndex:1]==viewController);
 }
 
 - (SCDataDefinition *)dataDefinitionWithIBName:(NSString *)ibName
@@ -1367,10 +1284,13 @@
     
     if(_hasFocus)
     {
+        /*
+        hermes:
+        Explicitly configured detail models end their editing focus without
+        dismissing their host controller. Container topology is irrelevant.
+        */
         [self loseFocus];
-        
-        if(!self.navigationController.navigationController)  // this happens on a collapsed UISplitViewController
-            return;
+        return;
     }
     
     _state = SCViewControllerStateDismissed;
@@ -1387,14 +1307,7 @@
             // check if self is the root controller on the navigation stack
             if([self.navigationController.viewControllers objectAtIndex:0] == self)
             {
-                if(self.navigationController.navigationController)  // this happens on a collapsed UISplitViewController
-                {
-                    [self.navigationController.navigationController popToRootViewControllerAnimated:YES];
-                }
-                else
-                {
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                }
+                [self dismissViewControllerAnimated:YES completion:nil];
             }
             else
                 [self.navigationController popViewControllerAnimated:YES];
@@ -1473,71 +1386,6 @@
     if([sender isKindOfClass:[SCCustomCell class]])
         return NO;  // framework will handle these
     
-    return YES;
-}
-
-
-#pragma mark -
-#pragma mark UISplitViewControllerDelegate methods
-
-
-/*
- Remarked out a deprecated method
-
- dgApps
- */
-//- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
-//{
-//    return NO;
-//}
-
-- (UIViewController *)splitViewController:(UISplitViewController *)splitViewController separateSecondaryViewControllerFromPrimaryViewController:(UIViewController *)primaryViewController
-{
-    if(self.tableViewModel.masterModel && self.tableViewModel.masterModel.activeDetailModel==self.tableViewModel)
-    {
-        // There seems to be an iOS 8 bug that is preventing the following code from working properly (the cell actually gets selected the second time the device is rotated but never from the first time). This selection bug is also present in Apple's own "Adaptice Code" project sample.
-        // ** Code removed to prevent inconsistency **
-        /*
-        // Detemine selected cell indexPath and in collaped mode select it in expanded mode
-        NSIndexPath *selectedCellIndexPath = nil;
-        for(NSInteger i=0; i<self.tableViewModel.masterModel.sectionCount; i++)
-        {
-            SCTableViewSection *section = [self.tableViewModel.masterModel sectionAtIndex:i];
-            if([section isKindOfClass:[SCArrayOfItemsSection class]])
-            {
-                SCArrayOfItemsSection *itemsSection = (SCArrayOfItemsSection *)section;
-                if(itemsSection.selectedCellIndexPath)
-                {
-                    selectedCellIndexPath = itemsSection.selectedCellIndexPath;
-                    break;
-                }
-            }
-        }
-        if(selectedCellIndexPath)
-        {
-            UITableViewCell *selectedCell = [self.tableViewModel.masterModel.tableView cellForRowAtIndexPath:selectedCellIndexPath];
-            selectedCell.selected = YES;
-        }
-         */
-        
-        _state = SCViewControllerStateActive;
-    }
-    else
-    {
-        [self loseFocus];
-    }
-    
-    return nil;  // use default behavior
-}
-
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController
-{
-    if(self.tableViewModel.masterModel && self.hasFocus)
-    {
-        return NO;
-    }
-    // else
-    _state = SCViewControllerStateInactive;
     return YES;
 }
 

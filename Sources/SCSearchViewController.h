@@ -12,11 +12,15 @@
 
 
 #pragma mark - SCSearchViewController
-/// This class functions as a means to simplify creating view controllers dedicated to searching data within a table view.
+/// A controller dedicated to searching data in a table view.
 ///
-/// In addition to all the features provided by its SCViewController superclass, SCSearchViewController conveniently provides a UISearchBar control and a UITableView control aligned under each other. It uses UISearchController to display search results.
+/// Provides a search bar above a table view, using safe-area constraints and
+/// the search bar's intrinsic height for generated controls. Array models use
+/// UISearchController to display search results.
 ///
-/// - Note: Both the UISearchBar and UITableView controls can still be created in Interface Builder and assigned to their respective outlets. In case no outlets are assigned, SCSearchViewController will automatically create the missing control(s).
+/// - Note: Interface Builder may supply either control through its outlet.
+///   Supplied controls keep their existing layout; missing controls are created
+///   and constrained automatically.
 @interface SCSearchViewController : SCViewController
 {
     @protected
@@ -25,7 +29,8 @@
 
 #pragma mark - Configuration
 
-/// The search bar control associated with the view controller. Unless assigned in Interface Builder, this property will automatically create a UISearch when accessed.
+/// The search bar associated with the controller. Access creates a constrained
+/// UISearchBar when Interface Builder has not supplied one.
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 
 @end

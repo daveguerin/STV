@@ -22,7 +22,7 @@
 /// ```
 ///
 /// - SeeAlso: ``SCTableViewModel``
-@interface SCInputAccessoryView : UIView
+@interface SCInputAccessoryView : UIInputView
 
 
 #pragma mark - Configuration

@@ -31,7 +31,7 @@
 /// Finally, SCTableViewController provides several useful actions (SCTableViewControllerActions) that notify the delegate object of events like the view appearing or disappearing.
 
 
-@interface SCTableViewController : UITableViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
+@interface SCTableViewController : UITableViewController <UIPopoverControllerDelegate>
 {
 }
 
@@ -164,7 +164,8 @@
 /// Method gets called when the Cancel button is tapped while the table view is in editing mode.
 - (void)editingModeCancelButtonAction;
 
-/// Dismisses the view controller with the specified values for cancel and done.
+/// Ends focused detail editing, or dismisses an ordinary pushed/modal editor.
+/// Focused detail controllers remain hosted after losing model focus.
 /// - Parameter cancelValue: Whether the cancel button was selected.
 /// - Parameter doneValue: Whether the done button was selected.
 - (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue;

@@ -18,10 +18,47 @@
 #import "SCUserDefaultsStore.h"
 
 
+@interface SCTableViewSection (SCSupplementaryLayout)
+- (UITableViewHeaderFooterView *)supplementaryViewForHeader:(BOOL)isHeader hideTitle:(BOOL)hideTitle;
+- (void)invalidateCellSizingPolicy;
+@end
+
+@interface SCModelGeometryObserver : UIView
+@property (nonatomic, copy) void (^geometryDidChange)(void);
+@end
+
+@implementation SCModelGeometryObserver
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if(self.geometryDidChange)
+        self.geometryDidChange();
+}
+- (void)safeAreaInsetsDidChange
+{
+    [super safeAreaInsetsDidChange];
+    if(self.geometryDidChange)
+        self.geometryDidChange();
+}
+@end
+
 @interface SCTableViewModel ()
 {
     BOOL _loading;
+    __weak UITableView *_keyboardInsetTable;
+    CGRect _keyboardEndFrame;
+    SCModelGeometryObserver *_keyboardGeometryObserver;
+    BOOL _reconcilingKeyboardInset;
+    NSMutableSet<SCTableViewCell *> *_pendingHeightCells;
+    BOOL _heightUpdateScheduled;
+    BOOL _pendingHeightAnimation;
 }
+
+- (void)removeKeyboardInset;
+- (void)reconcileKeyboardInset;
+- (void)scheduleHeightUpdates;
+- (void)applyPendingHeightUpdates;
+- (void)prepareCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 - (void)prepareSectionForOwnership:(SCTableViewSection *)section;
 - (void)callDidAddSectionActionsForSection:(SCTableViewSection *)section;
@@ -106,10 +143,10 @@
 		keyboardOverlap = 0;
         /*
         hermes:
-        STV 7 keeps the historical 44-point row default while allowing models
-        and individual cells to opt into automatic or legacy sizing.
+        UIKit owns row measurement; numeric height options configure content
+        constraints rather than replacing automatic table sizing.
         */
-        _defaultCellSizingMode = SCTableViewCellSizingModeFixed;
+        _defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
         _defaultCellHeight = 44.0;
         swipeToDeleteActive = FALSE;
         
@@ -138,6 +175,7 @@
 
 - (void)dealloc
 {
+    [self removeKeyboardInset];
 	// Unregister from the shared model center
     [[SCModelCenter sharedModelCenter] unregisterModel:self];
 }
@@ -146,7 +184,10 @@
 - (void)setTableView:(UITableView *)tableView
 {
     if(_tableView != tableView)
+    {
+        [self removeKeyboardInset];
         _tableView.refreshControl = nil;
+    }
     _tableView = tableView;
     
     if(_tableView)
@@ -171,17 +212,49 @@
         _tableView.refreshControl = self.refreshControl;
     
     _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.selfSizingInvalidation = UITableViewSelfSizingInvalidationEnabledIncludingConstraints;
     _tableView.estimatedRowHeight = 44.0f;
 
-    /*
-     STV was having issues in iOS 11 with cells disappearing, and also confusing
-     "Add an item..." cells with newly added items in the list of items to select
-     from for a SCSelectionCell. This fix is from Ozie from the STV community.
+    _tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
+    _tableView.sectionFooterHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedSectionHeaderHeight = 28.0;
+    _tableView.estimatedSectionFooterHeight = 28.0;
+    [self reconcileKeyboardInset];
+}
 
-     dgApps
-     */
-    _tableView.estimatedSectionHeaderHeight = 0;
-    _tableView.estimatedSectionFooterHeight = 0;
+- (void)setDefaultCellHeight:(CGFloat)height
+{
+    _defaultCellHeight = height;
+    self.defaultCellSizingMode = height > 0 ? SCTableViewCellSizingModeFixed : SCTableViewCellSizingModeAutomatic;
+}
+
+- (void)setDefaultCellSizingMode:(SCTableViewCellSizingMode)mode
+{
+    _defaultCellSizingMode = mode;
+    for(SCTableViewSection *section in sections)
+        [section invalidateCellSizingPolicy];
+    for(SCTableViewCell *cell in self.tableView.visibleCells)
+    {
+        [cell setNeedsUpdateConstraints];
+        [cell updateConstraintsIfNeeded];
+    }
+    [self reloadAfterSizingPolicyChange];
+}
+
+- (void)reloadAfterSizingPolicyChange
+{
+    UITableView *tableView = self.tableView;
+    if(!tableView)
+        return;
+    if(tableView.hasUncommittedUpdates)
+    {
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf reloadAfterSizingPolicyChange];
+        });
+        return;
+    }
+    [tableView reloadData];
 }
 
 - (UITableView *)modeledTableView
@@ -1343,32 +1416,83 @@
 		[section reloadBoundValues];
 }
 
+- (BOOL)sc_viewContainsActiveInput:(UIView *)view
+{
+    if(view.isFirstResponder ||
+       ([view isKindOfClass:[UIControl class]] && [(UIControl *)view isTracking]))
+        return YES;
+    for(UIView *subview in view.subviews)
+        if([self sc_viewContainsActiveInput:subview])
+            return YES;
+    return NO;
+}
+
 - (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated
 {
-    NSIndexPath *indexPath = [self indexPathForCell:cell];
-    if(!cell || !indexPath || !self.tableView)
+    if(!cell || ![self indexPathForCell:cell] || !self.tableView)
         return;
+    if(!_pendingHeightCells)
+        _pendingHeightCells = [NSMutableSet set];
+    [_pendingHeightCells addObject:cell];
+    _pendingHeightAnimation |= animated;
+    [self scheduleHeightUpdates];
+}
 
-    cell.configured = FALSE;
-    UITableViewRowAnimation animation = animated ? UITableViewRowAnimationAutomatic : UITableViewRowAnimationNone;
+- (void)scheduleHeightUpdates
+{
+    if(_heightUpdateScheduled || !_pendingHeightCells.count)
+        return;
+    _heightUpdateScheduled = YES;
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf applyPendingHeightUpdates];
+    });
+}
 
-    /*
-    Selection commits can occur while dismissal/update animations are active;
-    defer one run-loop turn instead of nesting UITableView update cycles.
-    */
-    if(self.tableView.hasUncommittedUpdates)
+- (void)applyPendingHeightUpdates
+{
+    _heightUpdateScheduled = NO;
+    UITableView *table = self.tableView;
+    if(table.hasUncommittedUpdates)
     {
-        __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            NSIndexPath *currentIndexPath = [strongSelf indexPathForCell:cell];
-            if(strongSelf && currentIndexPath && !strongSelf.tableView.hasUncommittedUpdates)
-                [strongSelf.tableView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:animation];
-        });
+        [self scheduleHeightUpdates];
         return;
     }
-
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:animation];
+    NSArray *cells = _pendingHeightCells.allObjects;
+    [_pendingHeightCells removeAllObjects];
+    BOOL animated = _pendingHeightAnimation;
+    _pendingHeightAnimation = NO;
+    if(!table)
+        return;
+    /*
+    hermes:
+    Static rows must not be both the old and new reload-animation participant.
+    Refit the existing cells in one update cycle. Active editors keep their
+    bindings, marked text, selection and control identity throughout the fit.
+    */
+    void (^update)(void) = ^{
+        for(SCTableViewCell *cell in cells)
+        {
+            NSIndexPath *path = [self indexPathForCell:cell];
+            if(!path)
+                continue;
+            if(![self sc_viewContainsActiveInput:cell])
+            {
+                cell.configured = NO;
+                [self prepareCell:cell atIndexPath:path];
+            }
+            [cell setNeedsUpdateConstraints];
+            [cell updateConstraintsIfNeeded];
+            [cell.contentView invalidateIntrinsicContentSize];
+            [cell invalidateIntrinsicContentSize];
+        }
+        [table beginUpdates];
+        [table endUpdates];
+    };
+    if(animated)
+        update();
+    else
+        [UIView performWithoutAnimation:update];
 }
 
 - (void)configureCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -1412,15 +1536,17 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-   if(self.hideSectionHeaderTitles)
-		return nil;
-	//else
-	return [self sectionAtIndex:section].headerTitle;
+    /*
+    hermes:
+    Our constrained supplementary view owns its label. Returning a title here
+    also makes UIKit populate the native label, drawing the title twice.
+    */
+    return nil;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [self sectionAtIndex:section].footerTitle;;
+    return nil;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -1455,6 +1581,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
+    [self prepareCell:cell atIndexPath:indexPath];
+    return cell;
+}
+
+- (void)prepareCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
 
     /*
@@ -1463,8 +1595,13 @@
     */
     if(!cell.configured)
     {
-        if([cell isKindOfClass:[SCCustomCell class]] && !cell.needsCommit)
-            [(SCCustomCell *)cell loadBindingsIntoCustomControls];
+        if(!cell.needsCommit && ![self sc_viewContainsActiveInput:cell])
+        {
+            if([cell isKindOfClass:[SCControlCell class]])
+                [(SCControlCell *)cell loadBoundValueIntoControl];
+            if([cell isKindOfClass:[SCCustomCell class]])
+                [(SCCustomCell *)cell loadBindingsIntoCustomControls];
+        }
 
         if([section.cellsImageViews count] > indexPath.row)
         {
@@ -1481,7 +1618,16 @@
         [self configureCell:cell atIndexPath:indexPath];
     }
 
-    return cell;
+    CGFloat resolvedHeight = UITableViewAutomaticDimension;
+    if([section isKindOfClass:[SCArrayOfItemsSection class]])
+    {
+        SCArrayOfItemsSection *itemsSection = (SCArrayOfItemsSection *)section;
+        if(section.sectionActions.customHeightForRowAtIndexPath)
+            resolvedHeight = section.sectionActions.customHeightForRowAtIndexPath(itemsSection, indexPath);
+        else if(self.sectionActions.customHeightForRowAtIndexPath)
+            resolvedHeight = self.sectionActions.customHeightForRowAtIndexPath(itemsSection, indexPath);
+    }
+    [cell sc_setResolvedHeightConstraint:resolvedHeight];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1509,22 +1655,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self clearLastReturnedCellData];
-
-    /*
-    Height resolution now chooses fixed, automatic, or legacy policy only; it no
-    longer binds, configures, clones, or measures cells as a side effect.
-    */
-    return [[self sectionAtIndex:indexPath.section] heightForCellAtIndexPath:indexPath];
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SCTableViewCell *cell = [[self sectionAtIndex:indexPath.section] cellAtIndex:indexPath.row];
-    CGFloat resolvedHeight = cell.height;
-    if(resolvedHeight != UITableViewAutomaticDimension)
-        return resolvedHeight;
-
     /*
     Nib/storyboard canvas heights are estimates only, giving UIKit stable
     scrolling while preserving constraint-driven runtime sizing.
@@ -1536,82 +1672,53 @@
     return 44.0;
 }
 
+- (BOOL)sectionHidesSupplementaryViews:(SCTableViewSection *)section
+{
+    return [section isKindOfClass:[SCArrayOfItemsSection class]] &&
+        [(SCArrayOfItemsSection *)section hideWhenEmpty] && !section.cellCount;
+}
+
+- (BOOL)section:(SCTableViewSection *)section hasSupplementaryHeader:(BOOL)isHeader
+{
+    if([self sectionHidesSupplementaryViews:section])
+        return NO;
+    if(isHeader)
+        return section.headerView || (!self.hideSectionHeaderTitles && section.headerTitle.length) || section.headerHeight > 0;
+    return section.footerView || section.footerTitle.length || section.footerHeight > 0;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    SCTableViewSection *scSection = [self sectionAtIndex:section];
-    
-    if([scSection isKindOfClass:[SCArrayOfItemsSection class]])
-    {
-        SCArrayOfItemsSection  *itemsSection = (SCArrayOfItemsSection *)scSection;
-        if(itemsSection.hideWhenEmpty && !itemsSection.cellCount)
-            return 0.001;  // zero just uses default height
-    }
-    
-    if(scSection.headerHeight >= 0)
-        return scSection.headerHeight;
-    
-    if(scSection.headerView)
-        return scSection.headerView.frame.size.height;
-    
-    // else return default height
-    return -1;
+    /*
+    hermes:
+    UIKit treats zero as its default spacing, not a hidden supplementary view.
+    A least-positive height with a nil view suppresses absent section content.
+    Visible content is always measured by UIKit from constraints.
+    */
+    return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:YES] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    SCTableViewSection *scSection = [self sectionAtIndex:section];
-    
-    if([scSection isKindOfClass:[SCArrayOfItemsSection class]])
-    {
-        SCArrayOfItemsSection  *itemsSection = (SCArrayOfItemsSection *)scSection;
-        if(itemsSection.hideWhenEmpty && !itemsSection.cellCount)
-            return 0.001;  // zero just uses default height
-    }
-	
-    if(scSection.footerHeight >= 0)
-        return scSection.footerHeight;
-    
-    if(scSection.footerView)
-        return scSection.footerView.frame.size.height;
-    
-    // else return default height
-    return -1;
+    return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:NO] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    // End optimization here (at end of delegate cycle)
     [self exitLoadingMode];
-    
-    
     SCTableViewSection *scSection = [self sectionAtIndex:section];
-    
-    if([scSection isKindOfClass:[SCArrayOfItemsSection class]])
-    {
-        SCArrayOfItemsSection  *itemsSection = (SCArrayOfItemsSection *)scSection;
-        if(itemsSection.hideWhenEmpty && !itemsSection.cellCount)
-            return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-
-    return scSection.headerView;
+    if(![self section:scSection hasSupplementaryHeader:YES])
+        return nil;
+    return [scSection supplementaryViewForHeader:YES hideTitle:self.hideSectionHeaderTitles];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    // End optimization here (at end of delegate cycle)
     [self exitLoadingMode];
-    
-    
     SCTableViewSection *scSection = [self sectionAtIndex:section];
-    
-    if([scSection isKindOfClass:[SCArrayOfItemsSection class]])
-    {
-        SCArrayOfItemsSection  *itemsSection = (SCArrayOfItemsSection *)scSection;
-        if(itemsSection.hideWhenEmpty && !itemsSection.cellCount)
-            return [[UIView alloc] initWithFrame:CGRectZero];
-    }
-
-	return scSection.footerView;
+    if(![self section:scSection hasSupplementaryHeader:NO])
+        return nil;
+    return [scSection supplementaryViewForHeader:NO hideTitle:NO];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -2227,104 +2334,119 @@
 #pragma mark -
 #pragma mark Keyboard methods
 
+- (void)removeKeyboardInset
+{
+    [_keyboardGeometryObserver removeFromSuperview];
+    _keyboardGeometryObserver = nil;
+    UITableView *table = _keyboardInsetTable;
+    UIEdgeInsets content = table.contentInset;
+    UIEdgeInsets indicators = table.verticalScrollIndicatorInsets;
+    content.bottom -= keyboardOverlap;
+    indicators.bottom -= keyboardOverlap;
+    keyboardOverlap = 0;
+    _keyboardInsetTable = nil;
+    table.contentInset = content;
+    table.verticalScrollIndicatorInsets = indicators;
+}
+
+- (void)reconcileKeyboardInset
+{
+    if(_reconcilingKeyboardInset)
+        return;
+    _reconcilingKeyboardInset = YES;
+    UITableView *table = self.tableView;
+    if(_keyboardInsetTable != table)
+        [self removeKeyboardInset];
+    UIResponder *owner = table.nextResponder;
+    while(owner && ![owner isKindOfClass:[UIViewController class]])
+        owner = owner.nextResponder;
+    BOOL nativeAvoidance = [owner isKindOfClass:[UITableViewController class]] &&
+        [(UITableViewController *)owner tableView] == table;
+    if(!keyboardShown || !self.autoResizeForKeyboard || !table || nativeAvoidance)
+    {
+        [self removeKeyboardInset];
+        _reconcilingKeyboardInset = NO;
+        return;
+    }
+    if(!_keyboardGeometryObserver)
+    {
+        /*
+        hermes:
+        A noninteractive constrained observer follows the viewport, not scroll
+        content. Layout and safe-area callbacks recompute our inset delta;
+        neither the observer nor the model writes the table's frame.
+        */
+        _keyboardGeometryObserver = [[SCModelGeometryObserver alloc] init];
+        _keyboardGeometryObserver.userInteractionEnabled = NO;
+        _keyboardGeometryObserver.translatesAutoresizingMaskIntoConstraints = NO;
+        [table addSubview:_keyboardGeometryObserver];
+        UILayoutGuide *viewport = table.frameLayoutGuide;
+        [NSLayoutConstraint activateConstraints:@[
+            [_keyboardGeometryObserver.leadingAnchor constraintEqualToAnchor:viewport.leadingAnchor],
+            [_keyboardGeometryObserver.trailingAnchor constraintEqualToAnchor:viewport.trailingAnchor],
+            [_keyboardGeometryObserver.topAnchor constraintEqualToAnchor:viewport.topAnchor],
+            [_keyboardGeometryObserver.bottomAnchor constraintEqualToAnchor:viewport.bottomAnchor]
+        ]];
+        __weak typeof(self) weakSelf = self;
+        _keyboardGeometryObserver.geometryDidChange = ^{ [weakSelf reconcileKeyboardInset]; };
+    }
+    CGRect keyboardRect = [table.superview convertRect:_keyboardEndFrame fromView:nil];
+    CGRect intersection = CGRectIntersection(table.frame, keyboardRect);
+    CGFloat overlap = 0;
+    if(!CGRectIsNull(intersection) && CGRectGetMaxY(keyboardRect) >= CGRectGetMaxY(table.frame))
+        overlap = CGRectGetHeight(intersection);
+    CGFloat automaticInset = table.adjustedContentInset.bottom - table.contentInset.bottom;
+    overlap = MAX(0, overlap - automaticInset);
+    UIEdgeInsets content = table.contentInset;
+    UIEdgeInsets indicators = table.verticalScrollIndicatorInsets;
+    content.bottom += overlap - keyboardOverlap;
+    indicators.bottom += overlap - keyboardOverlap;
+    keyboardOverlap = overlap;
+    _keyboardInsetTable = table;
+    table.contentInset = content;
+    table.verticalScrollIndicatorInsets = indicators;
+    _reconcilingKeyboardInset = NO;
+}
+
+- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView
+{
+    if(scrollView == _keyboardInsetTable)
+        [self reconcileKeyboardInset];
+}
+
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+    [self keyboardWillShow:notification];
+}
+
 - (void)keyboardWillShow:(NSNotification *)aNotification
 {
-    if(!self.autoResizeForKeyboard || keyboardShown) 
-		return;
-	
-	keyboardShown = YES;
-	
-    // Get the keyboard size
-    UIScrollView *tableView;
-    if([self.tableView.superview isKindOfClass:[UIScrollView class]])
-        tableView = (UIScrollView *)self.tableView.superview;
-    else
-        tableView = self.tableView;
-    NSDictionary *userInfo = [aNotification userInfo];
-    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-	CGRect keyboardRect = [tableView.superview convertRect:[aValue CGRectValue] fromView:nil];
-    
-    // Get the keyboard's animation details
-    NSTimeInterval animationDuration;
-	[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-	UIViewAnimationCurve animationCurve;
-	[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-	
-	// Determine how much overlap exists between tableView and the keyboard
-    CGRect tableFrame = tableView.frame;
-    CGFloat tableLowerYCoord = tableFrame.origin.y + tableFrame.size.height;
-	keyboardOverlap = tableLowerYCoord - keyboardRect.origin.y;
-	if(self.inputAccessoryView && keyboardOverlap>0)
-    {
-        CGFloat accessoryHeight = self.inputAccessoryView.frame.size.height;
-        keyboardOverlap -= accessoryHeight;
-        
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, accessoryHeight, 0);
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, accessoryHeight, 0);
-    }
-    
-	if(keyboardOverlap < 0)
-		keyboardOverlap = 0;
-	
-	if(keyboardOverlap != 0)
-	{
-		tableFrame.size.height -= keyboardOverlap;
-		
-		NSTimeInterval delay = 0;
-		if(keyboardRect.size.height)
-		{
-			delay = (1 - keyboardOverlap/keyboardRect.size.height)*animationDuration;
-			animationDuration = animationDuration * keyboardOverlap/keyboardRect.size.height;
-		}
-		
-        [UIView animateWithDuration:animationDuration delay:delay 
-							options:UIViewAnimationOptionBeginFromCurrentState 
-						 animations:^{ tableView.frame = tableFrame; } 
-						 completion:^(BOOL finished){ [self tableAnimationEnded:nil finished:nil contextInfo:nil]; }];
-	}
+    NSValue *frame = aNotification.userInfo[UIKeyboardFrameEndUserInfoKey];
+    if(!frame)
+        return;
+    _keyboardEndFrame = frame.CGRectValue;
+    keyboardShown = YES;
+    NSDictionary *info = aNotification.userInfo;
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState |
+        ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
+    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          delay:0 options:options animations:^{
+        [self reconcileKeyboardInset];
+    } completion:^(BOOL finished) {
+        [self tableAnimationEnded:nil finished:nil contextInfo:nil];
+    }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)aNotification
 {
-	if(!self.autoResizeForKeyboard || !keyboardShown)
-		return;
-	
-	keyboardShown = NO;
-    
-    UIScrollView *tableView;
-    if([self.tableView.superview isKindOfClass:[UIScrollView class]])
-        tableView = (UIScrollView *)self.tableView.superview;
-    else
-        tableView = self.tableView;
-    if(self.inputAccessoryView)
-    {
-        tableView.contentInset = UIEdgeInsetsZero;
-        tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
-    }
-	
-	if(keyboardOverlap == 0)
-		return;
-    
-	// Get the size & animation details of the keyboard
-    NSDictionary *userInfo = [aNotification userInfo];
-    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-	CGRect keyboardRect = [tableView.superview convertRect:[aValue CGRectValue] fromView:nil];
-	
-    NSTimeInterval animationDuration;
-	[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
-	UIViewAnimationCurve animationCurve;
-	[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
-	
-	CGRect tableFrame = tableView.frame; 
-	tableFrame.size.height += keyboardOverlap;
-	
-	if(keyboardRect.size.height)
-		animationDuration = animationDuration * keyboardOverlap/keyboardRect.size.height;
-	
-    [UIView animateWithDuration:animationDuration delay:0 
-						options:UIViewAnimationOptionBeginFromCurrentState 
-					 animations:^{ tableView.frame = tableFrame; } 
-					 completion:nil];
+    keyboardShown = NO;
+    NSDictionary *info = aNotification.userInfo;
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState |
+        ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
+    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          delay:0 options:options animations:^{
+        [self removeKeyboardInset];
+    } completion:nil];
 }
 
 - (void) tableAnimationEnded:(NSString*)animationID finished:(NSNumber *)finished contextInfo:(void *)context
@@ -2346,10 +2468,18 @@
 
 
 
-@interface SCArrayOfItemsModel ()
+@interface SCArrayOfItemsModel () <UISearchControllerDelegate>
 {
     NSMutableDictionary *_sectionsCellIdentifiers;
+    __weak UITableView *_searchAttachedTable;
+    __weak UIViewController *_searchAttachedController;
+    NSArray<NSLayoutConstraint *> *_searchAttachmentConstraints;
+    BOOL _searchHostDefinedPresentationContext;
+    BOOL _searchAttachedToNavigationItem;
 }
+
+- (void)detachSearchController;
+- (void)attachSearchController;
 
 - (void)generateSections;
 - (NSArray *)getSectionHeaderTitles;
@@ -2691,41 +2821,108 @@
 - (void)setSearchBar:(UISearchBar *)sbar
 {
 	searchBar = sbar;
-    if(!self.searchController)
+    if(sbar != self.searchController.searchBar)
         searchBar.delegate = self;
+}
+
+- (void)setTableView:(UITableView *)tableView
+{
+    [self detachSearchController];
+    [super setTableView:tableView];
+    [self attachSearchController];
 }
 
 - (void)setEnableSearchController:(BOOL)enable
 {
     _enableSearchController = enable;
-    
     if(enable)
     {
         if(!_searchController)
             [self initDisplayController];
+        [self attachSearchController];
     }
     else
     {
+        _searchController.active = NO;
+        [self detachSearchController];
         if(_searchController)
             self.searchBar = nil;
-        
         _searchController = nil;
     }
 }
 
 - (void)initDisplayController
 {
-    SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.tableView.style];
+    SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.trueTableView.style];
     resultsViewController.edgesForExtendedLayout = UIRectEdgeNone;
     resultsViewController.tableView.dataSource = self;
     resultsViewController.tableView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:resultsViewController];
     _searchController.searchResultsUpdater = self;
-    [_searchController.searchBar sizeToFit];
-    self.trueTableView.tableHeaderView = _searchController.searchBar;
+    _searchController.delegate = self;
+    if(!self.searchBar)
+        self.searchBar = _searchController.searchBar;
+}
 
-    // The view controller's navigation controller pushes result detail views.
-    self.viewController.definesPresentationContext = YES;
+- (void)detachSearchController
+{
+    [NSLayoutConstraint deactivateConstraints:_searchAttachmentConstraints];
+    _searchAttachmentConstraints = nil;
+    if(_searchAttachedController.navigationItem.searchController == _searchController)
+        _searchAttachedController.navigationItem.searchController = nil;
+    if(_searchAttachedTable.tableHeaderView == _searchController.searchBar)
+        _searchAttachedTable.tableHeaderView = nil;
+    if(_searchAttachedTable)
+        [_searchController.searchBar removeFromSuperview];
+    if(_searchAttachedController)
+        _searchAttachedController.definesPresentationContext = _searchHostDefinedPresentationContext;
+    _searchAttachedTable = nil;
+    _searchAttachedController = nil;
+    _searchAttachedToNavigationItem = NO;
+}
+
+- (void)attachSearchController
+{
+    UITableView *table = self.trueTableView;
+    if(!_enableSearchController || !_searchController || !table)
+        return;
+    // A supplied inline bar already has an owner and filters through its delegate.
+    if(self.searchBar != _searchController.searchBar)
+        return;
+    UIViewController *controller = self.viewController;
+    UINavigationController *navigation = controller.navigationController;
+    /*
+     hermes:
+     A hidden navigation bar cannot host visible search. Reevaluate the mode
+     on attachment without changing the application's navigation-bar policy.
+     */
+    BOOL useNavigationItem = !navigation.navigationBarHidden
+        && [navigation.viewControllers containsObject:controller];
+    if(_searchAttachedTable == table && _searchAttachedController == controller
+       && _searchAttachedToNavigationItem == useNavigationItem)
+        return;
+    [self detachSearchController];
+    _searchAttachedTable = table;
+    _searchAttachedController = controller;
+    _searchAttachedToNavigationItem = useNavigationItem;
+    _searchHostDefinedPresentationContext = _searchAttachedController.definesPresentationContext;
+    _searchAttachedController.definesPresentationContext = YES;
+    UISearchBar *bar = _searchController.searchBar;
+    if(useNavigationItem)
+    {
+        bar.translatesAutoresizingMaskIntoConstraints = YES;
+        _searchAttachedController.navigationItem.searchController = _searchController;
+    }
+    else
+    {
+        bar.translatesAutoresizingMaskIntoConstraints = NO;
+        table.tableHeaderView = bar;
+        _searchAttachmentConstraints = @[
+            [bar.widthAnchor constraintEqualToAnchor:table.widthAnchor],
+            [bar.heightAnchor constraintEqualToConstant:bar.intrinsicContentSize.height]
+        ];
+        [NSLayoutConstraint activateConstraints:_searchAttachmentConstraints];
+    }
 }
 
 - (void)setPropertiesForSection:(SCArrayOfItemsSection *)section
@@ -3106,8 +3303,24 @@
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
+    [self reconcileKeyboardInset];
     // Call the correspoding searchBar delegate
     [self searchBar:searchController.searchBar textDidChange:searchController.searchBar.text];
+}
+
+- (void)willPresentSearchController:(UISearchController *)searchController
+{
+    [self removeKeyboardInset];
+}
+
+- (void)didPresentSearchController:(UISearchController *)searchController
+{
+    [self reconcileKeyboardInset];
+}
+
+- (void)didDismissSearchController:(UISearchController *)searchController
+{
+    [self reconcileKeyboardInset];
 }
 
 @end

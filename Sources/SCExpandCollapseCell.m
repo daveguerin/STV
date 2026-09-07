@@ -14,70 +14,44 @@
 
 
 
-@interface SCExpandCollapseAccessoryView : UIView
-
+/// Intrinsically sized disclosure artwork placed by UITableView itself.
+@interface SCExpandCollapseAccessoryView : UIImageView
 @property (nonatomic, weak) SCExpandCollapseCell *ownerExpandCollapseCell;
-
+- (void)updateDirection;
 @end
 
 @implementation SCExpandCollapseAccessoryView
 
-@synthesize ownerExpandCollapseCell = _ownerExpandCollapseCell;
-
 - (instancetype)init
 {
-    if( (self=[super init]) )
+    UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration
+        configurationWithPointSize:12 weight:UIImageSymbolWeightBold];
+    self = [super initWithImage:[UIImage systemImageNamed:@"chevron.down"
+                                      withConfiguration:configuration]];
+    if(self)
     {
-        _ownerExpandCollapseCell = nil;
-        self.frame = CGRectMake(0.0f, 0.0f, 15.0f, 15.0f);
-        self.backgroundColor = [UIColor clearColor];
+        self.tintColor = UIColor.secondaryLabelColor;
+        self.contentMode = UIViewContentModeCenter;
+        /*
+        hermes:
+        UIKit owns the accessory root's placement. UIImageView supplies its
+        intrinsic size; disabling the root's autoresizing translation would
+        detach it from UITableView's accessory layout.
+        */
     }
     return self;
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)updateDirection
 {
-    // draw the arrow
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    
-    CGFloat arrowRadius = 4.5f;
-    CGFloat x = CGRectGetMaxX(self.bounds) - 7.0f;
-    
-    if(self.ownerExpandCollapseCell.ownerSectionExpanded)
-    {
-        CGFloat y = CGRectGetMinY(self.bounds) + 5.0f;
-        
-        CGContextMoveToPoint(context, x-arrowRadius, y+arrowRadius);
-        CGContextAddLineToPoint(context, x, y);
-        CGContextAddLineToPoint(context, x+arrowRadius, y+arrowRadius);
-    }
-    else 
-    {
-        CGFloat y = CGRectGetMaxY(self.bounds) - 5.0f;
-        
-        CGContextMoveToPoint(context, x-arrowRadius, y-arrowRadius);
-        CGContextAddLineToPoint(context, x, y);
-        CGContextAddLineToPoint(context, x+arrowRadius, y-arrowRadius);
-    }
-    
-    CGContextSetLineWidth(context, 3.0f);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetLineJoin(context, kCGLineJoinMiter);
-    [[UIColor grayColor] setStroke];
-    CGContextStrokePath(context);
-    
-    CGContextRestoreGState(context);
+    NSString *name = self.ownerExpandCollapseCell.ownerSectionExpanded
+        ? @"chevron.up" : @"chevron.down";
+    self.image = [UIImage systemImageNamed:name withConfiguration:
+        [UIImageSymbolConfiguration configurationWithPointSize:12
+                                        weight:UIImageSymbolWeightBold]];
 }
 
 @end
-
-
-
-
-
-
 
 @implementation SCExpandCollapseCell
 
@@ -128,7 +102,10 @@
         self.textLabel.text = self.collapseText;
     else 
         self.textLabel.text = self.expandText;
-    [self.accessoryView setNeedsDisplay];
+    if([self.accessoryView isKindOfClass:[SCExpandCollapseAccessoryView class]])
+        [(SCExpandCollapseAccessoryView *)self.accessoryView updateDirection];
+    else
+        [self.accessoryView setNeedsDisplay];
     
     [self.ownerSection setExpanded:expanded];
 }

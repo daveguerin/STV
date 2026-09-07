@@ -25,7 +25,14 @@
     [super performInitialization];
     _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
 
+    _activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_activityIndicator];
+    [NSLayoutConstraint activateConstraints:@[
+        [_activityIndicator.centerXAnchor
+            constraintEqualToAnchor:self.contentView.centerXAnchor],
+        [_activityIndicator.centerYAnchor
+            constraintEqualToAnchor:self.contentView.centerYAnchor]
+    ]];
     
     _autoFetchItems = FALSE;
     _autoHide = TRUE;
@@ -33,13 +40,6 @@
 
 
 
-// overrides superclass
-- (void)layoutSubviews
-{
-    _activityIndicator.frame = self.contentView.bounds;
-    
-    [super layoutSubviews];
-}
 
 // overrides superclass
 - (void)willDisplay

@@ -54,8 +54,8 @@
     if(!_searchBar)
     {
         _searchBar = [[UISearchBar alloc] init];
+        _searchBarNeedsLayout = YES;
         [self.view addSubview:_searchBar];
-        _searchBarNeedsLayout = TRUE;
     }
     
     return _searchBar;
@@ -65,60 +65,72 @@
 {
     if(!_tableView)
     {
+        _tableViewNeedsLayout = YES;
         [super setTableView:[[UITableView alloc] init]];
-        _tableViewNeedsLayout = TRUE;
     }
     
     return _tableView;
 }
 
-// overrides superclass
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self layoutGeneratedControls];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if(_searchBarNeedsLayout)
-    {
-        [self setEdgesForExtendedLayout:UIRectEdgeNone];
-        
-        // set searchBar height
-        CGRect searchBarFrame = self.searchBar.frame;
-        if(!searchBarFrame.size.height)
-        {
-            searchBarFrame.size.height = 44.0f;
-            self.searchBar.frame = searchBarFrame;
-        }
-        
-        self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        // add searchBar constrainsts
-        NSLayoutConstraint *searchBarLeftConstraint =[NSLayoutConstraint constraintWithItem:self.searchBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
-        NSLayoutConstraint *searchBarRightConstraint =[NSLayoutConstraint constraintWithItem:self.searchBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
-        NSLayoutConstraint *searchBarTopConstraint =[NSLayoutConstraint constraintWithItem:self.searchBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
-        [self.view addConstraints:@[searchBarLeftConstraint, searchBarRightConstraint, searchBarTopConstraint]];
-        
-        _searchBarNeedsLayout = FALSE;
-    }
-    
-    
-    if(_tableViewNeedsLayout)
-    {
-        [self setEdgesForExtendedLayout:UIRectEdgeNone];
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        // add tableView constrainsts
-        NSLayoutConstraint *tableViewLeftConstraint =[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
-        NSLayoutConstraint *tableViewRightConstraint =[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
-        NSLayoutConstraint *tableViewTopConstraint =[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.searchBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
-        NSLayoutConstraint *tableViewBottomConstraint =[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
-        [self.view addConstraints:@[tableViewLeftConstraint, tableViewRightConstraint, tableViewTopConstraint, tableViewBottomConstraint]];
-        
-        _tableViewNeedsLayout = FALSE;
-    }
-     
+
+    [self layoutGeneratedControls];
 }
 
+- (void)layoutGeneratedControls
+{
+    UISearchBar *searchBar = self.searchBar;
+    UITableView *tableView = self.tableView;
+    UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
+
+    /*
+    hermes:
+    Generated controls fit the safe area from their first layout. The search
+    bar supplies its intrinsic height; no frame seed or appearance-time size
+    correction is needed. Interface Builder retains supplied-view layout.
+    */
+    if(_searchBarNeedsLayout)
+    {
+        if(!searchBar.superview)
+            [self.view addSubview:searchBar];
+        searchBar.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [searchBar.leadingAnchor
+                constraintEqualToAnchor:safeArea.leadingAnchor],
+            [searchBar.trailingAnchor
+                constraintEqualToAnchor:safeArea.trailingAnchor],
+            [searchBar.topAnchor constraintEqualToAnchor:safeArea.topAnchor]
+        ]];
+        _searchBarNeedsLayout = NO;
+    }
+
+    if(_tableViewNeedsLayout)
+    {
+        if(!tableView.superview)
+            [self.view addSubview:tableView];
+        tableView.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [tableView.leadingAnchor
+                constraintEqualToAnchor:safeArea.leadingAnchor],
+            [tableView.trailingAnchor
+                constraintEqualToAnchor:safeArea.trailingAnchor],
+            [tableView.topAnchor
+                constraintEqualToAnchor:searchBar.bottomAnchor],
+            [tableView.bottomAnchor
+                constraintEqualToAnchor:safeArea.bottomAnchor]
+        ]];
+        _tableViewNeedsLayout = NO;
+    }
+}
 
 @end
 

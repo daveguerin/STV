@@ -57,7 +57,7 @@
 	__weak UITableView *_tableView;
 	/// When set to a valid UIBarButtonItem, SCTableViewModel automatically puts its table view in edit mode when the button is tapped. Note: Must be set if the model is to automatically show/hide editing mode sections.
 	UIBarButtonItem *editButtonItem;
-	/// If TRUE, SCTableViewModel will automatically resize its tableView when the keyboard appears. Property defualts to FALSE if viewController is a UITableViewController subclass, as UITableViewController will automatically handle the resizing. Otherwise, it defaults to TRUE.
+	/// Enables keyboard avoidance through scroll insets, never frame resizing.
 	BOOL autoResizeForKeyboard;
 	/// Whether the keyboard is currently shown.
 	BOOL keyboardShown;
@@ -132,15 +132,18 @@
 /// show/hide editing mode sections.
 @property (nonatomic, strong) UIBarButtonItem *editButtonItem;
 
-/// If TRUE, SCTableViewModel will automatically resize its tableView when the
-/// keyboard appears. Property defualts to FALSE if viewController is a UITableViewController subclass,
-/// as UITableViewController will automatically handle the resizing. Otherwise, it defaults to TRUE.
+/// Adjusts content and indicator insets for keyboard avoidance without changing
+/// the table frame. Defaults to NO for UITableViewController owners, which manage
+/// keyboard avoidance themselves, and YES for other owners.
 @property (nonatomic, readwrite) BOOL autoResizeForKeyboard;
 
-/// The sizing policy inherited by cells whose sizingMode is SCTableViewCellSizingModeInherit. Default: fixed.
+/// The content-constraint policy inherited by cells whose sizingMode is Inherit.
+/// Default: Automatic. UITableView always measures rows using Auto Layout.
 @property (nonatomic, readwrite) SCTableViewCellSizingMode defaultCellSizingMode;
 
-/// The fixed height inherited by cells when defaultCellSizingMode is SCTableViewCellSizingModeFixed. Default: 44 points.
+/// The fixed content height inherited by cells in Fixed mode. Stored default: 44.
+/// Assigning a positive value selects Fixed mode and updates existing constraints;
+/// assigning a nonpositive value selects Automatic. Explicit cell policy wins.
 @property (nonatomic, readwrite) CGFloat defaultCellHeight;
 
 /// An array of strings that serve as the title of sections in the tableView and
@@ -166,9 +169,8 @@
 /// An integer that you can use to identify different table view models in your application. Any detail model automatically gets its tag set to be the value of its parent model's tag plus one. Default: 0.
 @property (nonatomic, readwrite) NSInteger tag;
 
-/// The detail view controller used to display all of the model's automatically generated detail views. This property is typically used in iPad applications where the model and its detailViewController co-exist in a UISplitViewController.
-///
-/// - Note: STV automatically attempts to set this property when the model is the master view controller of a UISplitViewController.
+/// An explicitly supplied controller for the model's generated detail views.
+/// The application owns its containment and presentation arrangement.
 ///
 /// - Warning: detailViewController must be of type SCViewController or SCTableViewController only.
 @property (nonatomic, strong) UIViewController *detailViewController;
@@ -350,9 +352,11 @@
 /// Reload's the model's bound values in case the associated bound objects or keys valuea has changed by means other than the cells themselves (e.g. external custom code).
 - (void)reloadBoundValues;
 
-/// Invalidates an automatic cell's fitted height and reloads its owning row.
-/// - Parameter cell: The cell to configure.
-/// - Parameter animated: The animated.
+/// Coalesces an in-place row refit after pending table updates finish. Inactive
+/// cells are prepared again; active editors retain their uncommitted input,
+/// selection and composition. This does not reload or replace the row.
+/// - Parameter cell: The cell whose content or constraints changed.
+/// - Parameter animated: Whether to animate the resulting height change.
 - (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated;
 
 #pragma mark - Miscellaneous
@@ -450,6 +454,9 @@
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter aNotification: The a notification.
 - (void)keyboardWillShow:(NSNotification *)aNotification;
+
+/// Reconciles keyboard avoidance when only the keyboard's frame changes.
+- (void)keyboardWillChangeFrame:(NSNotification *)aNotification;
 
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter aNotification: The a notification.
@@ -620,6 +627,8 @@
 @property (nonatomic, strong) UISearchBar *searchBar;
 
 /// Set to TRUE to use a search controller to perform searches. Default: FALSE.
+/// Creation is safe before table attachment. The same controller moves with the
+/// model until disabled; supplied inline search bars retain their host layout.
 @property (nonatomic, readwrite) BOOL enableSearchController;
 
 /// The search controller used to search the model values.

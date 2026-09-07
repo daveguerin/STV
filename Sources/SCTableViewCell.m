@@ -31,7 +31,19 @@
 
 @property (nonatomic, strong) NSObject *initialBoundValue;
 
-- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing;
+@property (nonatomic, strong) NSLayoutConstraint *sc_heightConstraint;
+@property (nonatomic) CGFloat sc_resolvedHeight;
+@property (nonatomic, strong) NSArray<NSLayoutConstraint *> *sc_labelConstraints;
+@property (nonatomic, strong) NSArray<NSLayoutConstraint *> *sc_authoredContentBadgeConstraints;
+@property (nonatomic) BOOL sc_authoredContentBadgeVisible;
+- (void)sc_installBadgeConstraintsForAuthoredContent;
+@property (nonatomic, copy) NSString *sc_layoutKey;
+@property (nonatomic, strong) UILayoutGuide *sc_textGroup;
+@property (nonatomic, strong) UILayoutGuide *sc_controlGroup;
+- (UILayoutGuide *)sc_controlGuideAddingConstraints:(NSMutableArray *)constraints;
+@property (nonatomic) UITableViewCellStyle sc_nativeStyle;
+- (void)sc_updateHeightConstraint;
+- (void)sc_installContentConstraints;
 
 - (void)setActiveDetailModel:(SCTableViewModel *)model;
 
@@ -207,6 +219,7 @@
         
         // The following decodings are required to be able to utilize the method [self cellWithCell:] with cells created in IB (only properties used in IB need to be here)
         
+        self.cellCreatedInIB = YES;
         self.boundPropertyName = [aDecoder decodeObjectForKey:kBoundPropertyNameKey];
         self.ibDetailViewControllerIdentifier = [aDecoder decodeObjectForKey:KibDetailViewControllerIdentifier];
     }
@@ -229,6 +242,11 @@
 	if( (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) )
 	{
 		[self performInitialization];
+        self.sc_nativeStyle = style;
+        self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        self.textLabel.adjustsFontForContentSizeCategory = YES;
+        self.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
+        self.detailTextLabel.adjustsFontForContentSizeCategory = YES;
         
         if(reuseIdentifier)
             reuseId = [reuseIdentifier copy];
@@ -301,74 +319,49 @@
 
 - (CGFloat)height
 {
-    SCTableViewCellSizingMode effectiveSizingMode = _sizingMode;
-    if(effectiveSizingMode == SCTableViewCellSizingModeInherit)
-    {
-        /*
-        hermes:
-        Detached cells use STV's historical fixed default; owned cells inherit
-        the model policy without caching the model's numeric height.
-        */
-        effectiveSizingMode = self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellSizingMode : SCTableViewCellSizingModeFixed;
-        if(effectiveSizingMode == SCTableViewCellSizingModeAutomatic)
-            effectiveSizingMode = [self sizingModeForInheritedAutomaticSizing];
-    }
-
-    /*
-    Automatic dimension must reach UITableView unchanged; STV 6 converted it
-    into a fixed number before Auto Layout could measure the cell.
-    */
-    if(_height == UITableViewAutomaticDimension && effectiveSizingMode == SCTableViewCellSizingModeAutomatic)
-        return UITableViewAutomaticDimension;
-
-    /*
-    A numeric height is always an explicit override in STV 7, including the
-    previously ambiguous value 44.
-    */
-    if(_height != UITableViewAutomaticDimension)
-        return _height;
-
-    if(effectiveSizingMode == SCTableViewCellSizingModeFixed)
-        return self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellHeight : 44.0;
-    
-    CGFloat calculatedHeight = 44;
-    
-    switch (self.cellStyle)
-    {
-        case UITableViewCellStyleDefault:
-        case UITableViewCellStyleValue1:
-        case UITableViewCellStyleValue2:
-        {
-            if([self.textLabel.text length])
-                calculatedHeight = self.textLabel.font.lineHeight + 10;
-        }
-            break;
-        
-        case UITableViewCellStyleSubtitle:
-        {
-            CGFloat textLabelHeight = 0;
-            CGFloat detailTextLabelHeight = 0;
-            if([self.textLabel.text length])
-                textLabelHeight = self.textLabel.font.lineHeight;
-            if([self.detailTextLabel.text length])
-                detailTextLabelHeight = self.detailTextLabel.font.lineHeight;
-            
-            calculatedHeight = textLabelHeight + detailTextLabelHeight + 10;
-        }
-            break;
-    }
-    
-    if(calculatedHeight < 46)  // stay within standard height even if we're off by two points
-        calculatedHeight = 44;
-    
-    return calculatedHeight;
+    return UITableViewAutomaticDimension;
 }
 
-- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing
+- (void)setHeight:(CGFloat)value
 {
-    return SCTableViewCellSizingModeAutomatic;
+    _height = value;
+    [self setNeedsUpdateConstraints];
+    [self sc_updateHeightConstraint];
 }
 
+- (void)setSizingMode:(SCTableViewCellSizingMode)value
+{
+    _sizingMode = value;
+    [self setNeedsUpdateConstraints];
+    [self sc_updateHeightConstraint];
+}
+
+- (void)sc_setResolvedHeightConstraint:(CGFloat)value
+{
+    self.sc_resolvedHeight = value;
+    [self sc_updateHeightConstraint];
+}
+
+- (void)sc_updateHeightConstraint
+{
+    CGFloat value = self.sc_resolvedHeight;
+    if(value <= 0)
+        value = _height;
+    SCTableViewCellSizingMode mode = self.sizingMode;
+    if(mode == SCTableViewCellSizingModeInherit)
+        mode = self.ownerTableViewModel.defaultCellSizingMode;
+    if(value <= 0 && mode == SCTableViewCellSizingModeFixed)
+        value = self.ownerTableViewModel ? self.ownerTableViewModel.defaultCellHeight : 44;
+    if(!self.sc_heightConstraint)
+    {
+        self.sc_heightConstraint = [self.contentView.heightAnchor constraintEqualToConstant:44];
+        self.sc_heightConstraint.priority = 999;
+        self.sc_heightConstraint.identifier = @"STV.explicitContentHeight";
+    }
+    self.sc_heightConstraint.active = value > 0;
+    if(value > 0)
+        self.sc_heightConstraint.constant = value;
+}
 
 - (void)setDisabledTextColor:(UIColor *)disabledTextColor
 {
@@ -483,65 +476,273 @@
 }
 
 //overrides superclass
-- (void)layoutSubviews
+- (void)updateConstraints
 {
-	[super layoutSubviews];
-    
-    // Resize textLabel & detailTextLabel to take full width (when applicable)
-    UITableViewCellStyle style = self.cellStyle;
-    if( (style==UITableViewCellStyleDefault || style==UITableViewCellStyleSubtitle) && ![self isKindOfClass:[SCControlCell class]] )
+    [self sc_updateHeightConstraint];
+    [self sc_installBadgeConstraintsForAuthoredContent];
+    [self sc_installContentConstraints];
+    [super updateConstraints];
+}
+
+- (void)sc_installBadgeConstraintsForAuthoredContent
+{
+    BOOL authoredContent = self.cellCreatedInIB ||
+        ([self isKindOfClass:[SCControlCell class]] && [(SCControlCell *)self controlCreatedInIB]);
+    if(!authoredContent)
+        return;
+    BOOL visible = self.badgeView.text.length && !self.badgeView.hidden;
+    if(self.sc_authoredContentBadgeConstraints && self.sc_authoredContentBadgeVisible == visible)
+        return;
+    [NSLayoutConstraint deactivateConstraints:self.sc_authoredContentBadgeConstraints];
+    self.sc_authoredContentBadgeVisible = visible;
+    /*
+    hermes:
+    STV creates this badge after decoding; only the caller's authored views
+    retain Interface Builder layout ownership.
+    */
+    SCBadgeView *badge = self.badgeView;
+    badge.translatesAutoresizingMaskIntoConstraints = NO;
+    UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
+    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[
+        [badge.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+        [badge.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+    ]];
+    if(visible)
     {
-        if(self.textLabel.text)
+        [constraints addObject:[badge.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor]];
+        NSLayoutConstraint *top = [badge.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+        NSLayoutConstraint *bottom = [badge.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+        top.priority = bottom.priority = 750;
+        [constraints addObjectsFromArray:@[top, bottom]];
+    }
+    else
+        [constraints addObjectsFromArray:@[
+            [badge.widthAnchor constraintEqualToConstant:0],
+            [badge.heightAnchor constraintEqualToConstant:0]
+        ]];
+    self.sc_authoredContentBadgeConstraints = constraints;
+    [NSLayoutConstraint activateConstraints:constraints];
+}
+
+- (void)sc_installContentConstraints
+{
+    if(self.cellCreatedInIB || [self isKindOfClass:[SCControlCell class]])
+        return;
+    BOOL titleVisible = self.textLabel.text.length && !self.textLabel.hidden;
+    BOOL detailVisible = self.detailTextLabel.text.length && !self.detailTextLabel.hidden;
+    BOOL imageVisible = self.imageView.image && !self.imageView.hidden;
+    BOOL badgeVisible = self.badgeView.text.length && !self.badgeView.hidden;
+    NSString *key = [NSString stringWithFormat:@"%d-%d-%p-%d-%ld",
+        titleVisible, detailVisible, imageVisible ? self.imageView.image : nil,
+        badgeVisible, (long)self.sc_nativeStyle];
+    if([self.sc_layoutKey isEqualToString:key])
+        return;
+    self.sc_layoutKey = key;
+    [NSLayoutConstraint deactivateConstraints:self.sc_labelConstraints];
+    if(!self.sc_textGroup)
+    {
+        self.sc_textGroup = [[UILayoutGuide alloc] init];
+        [self.contentView addLayoutGuide:self.sc_textGroup];
+    }
+    UILayoutGuide *group = self.sc_textGroup;
+    UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
+    NSMutableArray *constraints = [NSMutableArray array];
+    NSLayoutConstraint *minimum = [self.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:44];
+    minimum.priority = 750;
+    [constraints addObject:minimum];
+    NSArray *views = @[self.textLabel ?: [NSNull null], self.detailTextLabel ?: [NSNull null], self.imageView, self.badgeView];
+    NSArray *visibility = @[@(titleVisible), @(detailVisible), @(imageVisible), @(badgeVisible)];
+    for(NSUInteger index = 0; index < views.count; index++)
+    {
+        if(views[index] == [NSNull null])
+            continue;
+        UIView *view = views[index];
+        if(!view.superview)
         {
-            CGRect textLabelFrame = self.textLabel.frame;
-            textLabelFrame.size.width = self.contentView.frame.size.width - textLabelFrame.origin.x - 15;
-            self.textLabel.frame = textLabelFrame;
+            if(![visibility[index] boolValue])
+                continue;
+            [self.contentView addSubview:view];
         }
-        if(self.detailTextLabel.text)
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+        if(![visibility[index] boolValue])
+            [constraints addObjectsFromArray:@[
+                [view.widthAnchor constraintEqualToConstant:0],
+                [view.heightAnchor constraintEqualToConstant:0],
+                [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+                [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]
+            ]];
+    }
+    [constraints addObject:[group.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
+    NSLayoutConstraint *top = [group.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+    NSLayoutConstraint *bottom = [group.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+    top.priority = bottom.priority = 750;
+    [constraints addObjectsFromArray:@[top, bottom]];
+    NSLayoutXAxisAnchor *leading = margins.leadingAnchor;
+    if(imageVisible)
+    {
+        UIImageView *image = self.imageView;
+        image.contentMode = UIViewContentModeScaleAspectFit;
+        CGFloat ratio = image.image.size.width / MAX(image.image.size.height, 1);
+        [constraints addObjectsFromArray:@[
+            [image.leadingAnchor constraintEqualToAnchor:leading],
+            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+            [image.widthAnchor constraintLessThanOrEqualToConstant:44],
+            [image.heightAnchor constraintLessThanOrEqualToConstant:44],
+            [image.widthAnchor constraintEqualToAnchor:image.heightAnchor multiplier:ratio]
+        ]];
+        NSLayoutConstraint *imageTop = [image.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+        NSLayoutConstraint *imageBottom = [image.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+        imageTop.priority = imageBottom.priority = 750;
+        [constraints addObjectsFromArray:@[imageTop, imageBottom]];
+        leading = image.trailingAnchor;
+    }
+    [constraints addObject:[group.leadingAnchor constraintEqualToAnchor:leading constant:imageVisible ? 8 : 0]];
+    if(badgeVisible)
+    {
+        [self.badgeView setContentHuggingPriority:252 forAxis:UILayoutConstraintAxisHorizontal];
+        [self.badgeView setContentCompressionResistancePriority:999 forAxis:UILayoutConstraintAxisHorizontal];
+        [constraints addObjectsFromArray:@[
+            [group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8],
+            [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+            [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+        ]];
+        NSLayoutConstraint *badgeTop = [self.badgeView.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+        NSLayoutConstraint *badgeBottom = [self.badgeView.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+        badgeTop.priority = badgeBottom.priority = 750;
+        [constraints addObjectsFromArray:@[badgeTop, badgeBottom]];
+    }
+    else
+        [constraints addObject:[group.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
+    if(titleVisible && detailVisible)
+    {
+        UILabel *title = self.textLabel;
+        UILabel *detail = self.detailTextLabel;
+        [title setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal];
+        [constraints addObjectsFromArray:@[
+            [title.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
+            [detail.trailingAnchor constraintEqualToAnchor:group.trailingAnchor]
+        ]];
+        if(self.sc_nativeStyle == UITableViewCellStyleSubtitle)
         {
-            CGRect detailTextLabelFrame = self.detailTextLabel.frame;
-            detailTextLabelFrame.size.width = self.contentView.frame.size.width - detailTextLabelFrame.origin.x - 15;
-            self.detailTextLabel.frame = detailTextLabelFrame;
+            [constraints addObjectsFromArray:@[
+                [title.trailingAnchor constraintEqualToAnchor:group.trailingAnchor],
+                [detail.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
+                [title.topAnchor constraintEqualToAnchor:group.topAnchor],
+                [detail.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:2],
+                [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
+            ]];
+        }
+        else
+        {
+            [constraints addObjectsFromArray:@[
+                [detail.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:8],
+                [title.topAnchor constraintEqualToAnchor:group.topAnchor],
+                [title.bottomAnchor constraintEqualToAnchor:group.bottomAnchor],
+                [detail.topAnchor constraintEqualToAnchor:group.topAnchor],
+                [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
+            ]];
         }
     }
-    
-	if(self.badgeView.text)
-	{
-		// Set the badgeView frame
-		CGFloat margin;
-        if(self.accessoryType == UITableViewCellAccessoryNone)
-            margin = 10;
-        else
-            margin = 2;
-        [self.badgeView sizeToFit];
-		CGFloat badgeHeight = self.badgeView.frame.size.height;
-        CGFloat badgeWidth = self.badgeView.frame.size.width;
-		CGRect badgeFrame = CGRectMake(self.contentView.frame.size.width - badgeWidth - margin,
-									   (self.contentView.frame.size.height - badgeHeight)/2 - 0.5,
-									   badgeWidth, badgeHeight);
-		self.badgeView.frame = badgeFrame;
-		[self.badgeView setNeedsDisplay];
-		
-		// Resize textLabel if needed
-		if((self.textLabel.frame.origin.x + self.textLabel.frame.size.width) >= badgeFrame.origin.x)
-		{
-			CGFloat badgeWidth = self.textLabel.frame.size.width - badgeFrame.size.width - margin;
-			
-			self.textLabel.frame = CGRectMake(self.textLabel.frame.origin.x, self.textLabel.frame.origin.y, 
-                                              badgeWidth, self.textLabel.frame.size.height);
-		}
-		
-		// Resize detailTextLabel if needed
-		if((self.detailTextLabel.frame.origin.x + self.detailTextLabel.frame.size.width) >= badgeFrame.origin.x)
-		{
-			CGFloat badgeWidth = self.detailTextLabel.frame.size.width - badgeFrame.size.width - margin;
-			
-			self.detailTextLabel.frame = CGRectMake(self.detailTextLabel.frame.origin.x, self.detailTextLabel.frame.origin.y, 
-													badgeWidth, self.detailTextLabel.frame.size.height);
-		}
-	}
-	
-	[self didLayoutSubviews];
+    else if(titleVisible || detailVisible)
+    {
+        UILabel *label = titleVisible ? self.textLabel : self.detailTextLabel;
+        [constraints addObjectsFromArray:@[
+            [label.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
+            [label.trailingAnchor constraintEqualToAnchor:group.trailingAnchor],
+            [label.topAnchor constraintEqualToAnchor:group.topAnchor],
+            [label.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
+        ]];
+    }
+    else
+        [constraints addObject:[group.heightAnchor constraintEqualToConstant:0]];
+    self.sc_labelConstraints = constraints;
+    [NSLayoutConstraint activateConstraints:constraints];
+}
+
+- (UILayoutGuide *)sc_controlGuideAddingConstraints:(NSMutableArray *)constraints
+{
+    if(!self.sc_controlGroup)
+    {
+        self.sc_controlGroup = [[UILayoutGuide alloc] init];
+        [self.contentView addLayoutGuide:self.sc_controlGroup];
+    }
+    UILayoutGuide *group = self.sc_controlGroup;
+    UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
+    [constraints addObjectsFromArray:@[
+        [group.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
+        [group.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor]
+    ]];
+    BOOL imageVisible = self.imageView.image && !self.imageView.hidden;
+    BOOL badgeVisible = self.badgeView.text.length && !self.badgeView.hidden;
+    NSArray *views = @[self.imageView, self.badgeView, self.textLabel];
+    NSArray *visibility = @[@(imageVisible), @(badgeVisible),
+        @(self.textLabel.text.length && !self.textLabel.hidden)];
+    for(NSUInteger index = 0; index < views.count; index++)
+    {
+        UIView *view = views[index];
+        if(!view.superview)
+        {
+            if(![visibility[index] boolValue])
+                continue;
+            [self.contentView addSubview:view];
+        }
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+        if(![visibility[index] boolValue])
+            [constraints addObjectsFromArray:@[
+                [view.widthAnchor constraintEqualToConstant:0],
+                [view.heightAnchor constraintEqualToConstant:0],
+                [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+                [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]
+            ]];
+    }
+    if(imageVisible)
+    {
+        UIImageView *image = self.imageView;
+        image.contentMode = UIViewContentModeScaleAspectFit;
+        CGFloat ratio = image.image.size.width / MAX(image.image.size.height, 1);
+        [constraints addObjectsFromArray:@[
+            [image.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+            [image.widthAnchor constraintLessThanOrEqualToConstant:44],
+            [image.heightAnchor constraintLessThanOrEqualToConstant:44],
+            [image.widthAnchor constraintEqualToAnchor:image.heightAnchor multiplier:ratio],
+            [group.leadingAnchor constraintEqualToAnchor:image.trailingAnchor constant:8]
+        ]];
+    }
+    else
+        [constraints addObject:[group.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor]];
+    if(badgeVisible)
+    {
+        [self.badgeView setContentHuggingPriority:252 forAxis:UILayoutConstraintAxisHorizontal];
+        [self.badgeView setContentCompressionResistancePriority:999 forAxis:UILayoutConstraintAxisHorizontal];
+        [constraints addObjectsFromArray:@[
+            [group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8],
+            [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+            [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+        ]];
+    }
+    else
+        [constraints addObject:[group.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
+    for(UIView *view in @[self.imageView, self.badgeView])
+    {
+        if((view == self.imageView && !imageVisible) || (view == self.badgeView && !badgeVisible))
+            continue;
+        NSLayoutConstraint *top = [view.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+        NSLayoutConstraint *bottom = [view.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+        top.priority = bottom.priority = 750;
+        [constraints addObjectsFromArray:@[top, bottom]];
+    }
+    return group;
+}
+
+- (void)layoutSubviews
+{
+    [self sc_installBadgeConstraintsForAuthoredContent];
+    [self sc_installContentConstraints];
+    [super layoutSubviews];
+    [self.contentView setNeedsLayout];
+    [self.contentView layoutIfNeeded];
+    [self didLayoutSubviews];
 }
 
 //overrides superclass
@@ -1420,7 +1621,7 @@
 {
     NSMutableDictionary *_initialControlValues;  // used during rollback operations
     
-    SCCustomCell *_operationsCell;  // used for cell resizing operations
+
 }
 
 // determines if the custom control is bound to either an object or a key
@@ -1698,96 +1899,10 @@
 }
 
 //overrides superclass
-- (CGFloat)height
-{
-    CGFloat resolvedHeight = [super height];
-    /*
-    Automatic and explicit fixed rows resolve policy only; loading custom
-    bindings during a height query mutates content and can make UIKit sizing
-    non-deterministic.
-    */
-    if(_height != UITableViewAutomaticDimension || resolvedHeight == UITableViewAutomaticDimension)
-        return resolvedHeight;
 
-    // Make sure the cell's height fits its controls
-    if(!self.needsCommit)
-    {
-        [self loadBindingsIntoCustomControls];
-    }
-    
-    if((NSInteger)self.cellStyle!=-1 || !self.autoResize || [self isKindOfClass:[SCControlCell class]])  // -1 is 'Custom' cell style set in IB
-        return resolvedHeight;
-    
-    CGFloat staticHeight = _height;
-    if(staticHeight == UITableViewAutomaticDimension)
-        staticHeight = 44;
-    
-    if(!_operationsCell)
-    {
-        _operationsCell = [[self class] cellWithCell:self];
-        _operationsCell.boundObject = self.boundObject;
-        _operationsCell.boundObjectStore = self.boundObjectStore;
-        _operationsCell.boundPropertyName = self.boundPropertyName;
-    }
-    
-    [_operationsCell loadBindingsIntoCustomControls];
-    
-    // Make sure _operationsCell bounds are correct (in case of UI size change)
-    CGFloat conversion = 10;
-    _operationsCell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(self.ownerTableViewModel.tableView.bounds)-conversion, staticHeight);
-    
-    // Make sure all frames all calculated
-    [_operationsCell setNeedsLayout];
-    [_operationsCell layoutIfNeeded];
-    
-    CGFloat calculatedheight = [_operationsCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + 1; // +1 since contentView is one point less in height than cell (due to separator)
-    
-    if(calculatedheight == 1)  // no autolayout constraints were used
-        calculatedheight = staticHeight;
-    
-    if(calculatedheight < 44)
-        calculatedheight = 44;
-    
-    return calculatedheight;
-}
 
 //overrides superclass
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    // Make sure all subviews have their frames set
-    [self.contentView setNeedsLayout];
-    [self.contentView layoutIfNeeded];
-    
-    // Set the correct preferredMaxLayoutWidth for all custom cell labels
-    for(UIView *customControl in self.contentView.subviews)
-    {
-        if([customControl isKindOfClass:[UILabel class]])
-        {
-            UILabel *label = (UILabel *)customControl;
-//            /*
-//             Depending on the contentView width and the label.text occasionally
-//             the last few words of the text would not be displayed. It seems
-//             that preferredMaxLayoutWidth was slightly off, and then the height
-//             of the label would be off too. By using 0.95 times the calculated
-//             width as the preferredMaxLayoutWidth then the text will be always
-//             slightly too wide for the label. According to Apple documentation
-//             "During layout, if the text extends beyond the width specified by
-//             this property, the additional text flows to one or more new lines,
-//             increasing the height of the label." So the text will extend beyond
-//             the specified width, and the additional text flows to another line,
-//             and all the text is correctly displayed. dgApps
-//             */
-//            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame) * 0.95f ;
-#warning TODO CHECK THIS
-            label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame);
 
-        }
-    }
-
-    [self didLayoutSubviews];
-}
 
 //override superclass
 - (void)willDisplay
@@ -2581,15 +2696,7 @@
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
 }
 
-- (SCTableViewCellSizingMode)sizingModeForInheritedAutomaticSizing
-{
-    /*
-    hermes:
-    Programmatic control cells inherit fixed model heights, but fall back to
-    legacy frame sizing when their model explicitly enables automatic sizing.
-    */
-    return SCTableViewCellSizingModeLegacy;
-}
+
 
 //overrides superclass
 - (void)awakeFromNib
@@ -2677,60 +2784,70 @@
 
 
 //overrides superclass
-- (CGFloat)height
-{
-    if(!self.needsCommit)
-    {
-        [self loadBoundValueIntoControl];
-    }
-    
-    return [super height];
-}
+
 
 //overrides superclass
-- (void)layoutSubviews
+- (void)sc_installContentConstraints
 {
-	[super layoutSubviews];
-	
-	if(!self.controlCreatedInIB)
+    if(self.controlCreatedInIB || self.cellCreatedInIB || !self.control)
+        return;
+    NSString *key = [NSString stringWithFormat:@"%p-%d-%g-%g-%g",
+        self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0, self.maxTextLabelWidth,
+        self.controlMargin, self.controlIndentation];
+    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d",
+        self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0,
+        self.badgeView.hidden];
+    if([self.sc_layoutKey isEqualToString:key])
+        return;
+    self.sc_layoutKey = key;
+    [NSLayoutConstraint deactivateConstraints:self.sc_labelConstraints];
+    NSMutableArray *constraints = [NSMutableArray array];
+    UILayoutGuide *margins = [self sc_controlGuideAddingConstraints:constraints];
+    UIView *control = self.control;
+    control.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *minimum = [self.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:44];
+    minimum.priority = 750;
+    [constraints addObject:minimum];
+    [constraints addObject:[control.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
+    [constraints addObject:[control.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
+    NSLayoutConstraint *top = [control.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+    NSLayoutConstraint *bottom = [control.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+    NSLayoutConstraint *controlMinimum = [control.heightAnchor constraintGreaterThanOrEqualToConstant:20];
+    top.priority = bottom.priority = controlMinimum.priority = 750;
+    [constraints addObjectsFromArray:@[top, bottom, controlMinimum]];
+    if((self.textLabel.text.length && !self.textLabel.hidden))
     {
-        CGRect textLabelFrame;
-        if([self.textLabel.text length])
-            textLabelFrame = self.textLabel.frame;
-        else
-            textLabelFrame = CGRectMake(0, kYMargin, 0, kDefaultTitleLabelHeight);
-        
-        // Modify the textLabel frame to take only it's text width instead of the full cell width
-        if([self.textLabel.text length])
-        {
-            CGSize constraintSize = CGSizeMake(self.maxTextLabelWidth, MAXFLOAT);
-            CGFloat textLabelFrameWidth = [self.textLabel.text boundingRectWithSize:constraintSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.textLabel.font} context:nil].size.width;
-            textLabelFrame.size.width = ceilf(textLabelFrameWidth);  // ceilf is needed starting iOS 7
-        }
-        
-        self.textLabel.frame = textLabelFrame;
-        
-        // Layout the control next to self.textLabel, with it's same yCoord & height
-        CGFloat indentation = self.controlIndentation;
-        if(textLabelFrame.size.width == 0)
-        {
-            indentation = 0;
-            if(self.imageView.image)
-                textLabelFrame = self.imageView.frame;
-        }
-        
-        CGSize contentViewSize = self.contentView.bounds.size;
-        CGFloat controlXCoord = textLabelFrame.origin.x+textLabelFrame.size.width+self.controlMargin;
-        if(controlXCoord < indentation)
-            controlXCoord = indentation;
-        CGRect controlFrame = CGRectMake(controlXCoord,
-                                         textLabelFrame.origin.y, 
-                                         contentViewSize.width - controlXCoord - self.controlMargin, 
-                                         textLabelFrame.size.height);
-        self.control.frame = controlFrame;
+        UILabel *title = self.textLabel;
+        title.translatesAutoresizingMaskIntoConstraints = NO;
+        title.adjustsFontForContentSizeCategory = YES;
+        [title setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal];
+        [constraints addObjectsFromArray:@[
+            [title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+            [title.centerYAnchor constraintEqualToAnchor:control.centerYAnchor],
+            [title.widthAnchor constraintLessThanOrEqualToConstant:self.maxTextLabelWidth],
+            [title.widthAnchor constraintLessThanOrEqualToAnchor:margins.widthAnchor multiplier:0.45],
+            [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:title.trailingAnchor constant:self.controlMargin]
+        ]];
+        NSLayoutConstraint *spacing = [control.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:self.controlMargin];
+        spacing.priority = 749;
+        NSLayoutConstraint *indent = [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor constant:self.controlIndentation];
+        indent.priority = 750;
+        NSLayoutConstraint *titleTop = [title.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
+        NSLayoutConstraint *titleBottom = [title.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+        titleTop.priority = titleBottom.priority = 750;
+        [constraints addObjectsFromArray:@[spacing, indent, titleTop, titleBottom]];
     }
-	
-	[self didLayoutSubviews];
+    else if([control isKindOfClass:[UISwitch class]])
+        [constraints addObject:[control.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor]];
+    else
+        [constraints addObject:[control.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor]];
+    if([control isKindOfClass:[UISwitch class]])
+    {
+        [control setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        [control setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+    }
+    self.sc_labelConstraints = constraints;
+    [NSLayoutConstraint activateConstraints:constraints];
 }
 
 //override superclass
@@ -2764,14 +2881,19 @@
         return;
     }
     
-    if(_control)
+    if(_control != control)
+    {
+        [NSLayoutConstraint deactivateConstraints:self.sc_labelConstraints];
+        self.sc_labelConstraints = nil;
         [_control removeFromSuperview];
-    
+    }
     _control = control;
     if(_control && !_control.superview)
         [self.contentView addSubview:_control];
     
     [self configureControl];
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
 }
 
 - (Class)expectedControlClass
@@ -2836,6 +2958,7 @@
      here makes the label disply as expected. dgApps
      */
     label.backgroundColor = [UIColor clearColor];
+    label.adjustsFontForContentSizeCategory = YES;
     self.control = label;
 }
 
@@ -2880,20 +3003,7 @@
 }
 
 //overrides superclass
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-	
-    if(!self.controlCreatedInIB)
-    {
-        // Adjust label position
-        CGRect labelFrame = self.label.frame;
-        labelFrame.size.height -= 1;
-        self.label.frame = labelFrame;
-    }
-    
-    [self didLayoutSubviews];
-}
+
 
 //overrides superclass
 - (NSObject *)controlValue
@@ -2941,6 +3051,53 @@
 
 
 
+/*
+hermes:
+A scrolling editor exposes UIKit's already-calculated content size as its
+intrinsic height. Constraints cap the viewport without measuring text,
+rejecting input, or replacing the user's selection. UIKit owns text layout.
+*/
+@interface SCIntrinsicTextView : UITextView
+@property (nonatomic) CGFloat sc_previousWidth;
+@end
+
+@implementation SCIntrinsicTextView
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    [self invalidateIntrinsicContentSize];
+}
+
+- (void)setAttributedText:(NSAttributedString *)text
+{
+    [super setAttributedText:text];
+    [self invalidateIntrinsicContentSize];
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(UIViewNoIntrinsicMetric, self.contentSize.height);
+}
+
+- (void)setContentSize:(CGSize)size
+{
+    BOOL changed = !CGSizeEqualToSize(size, self.contentSize);
+    [super setContentSize:size];
+    if(changed)
+        [self invalidateIntrinsicContentSize];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if(self.sc_previousWidth != CGRectGetWidth(self.bounds))
+    {
+        self.sc_previousWidth = CGRectGetWidth(self.bounds);
+        [self invalidateIntrinsicContentSize];
+    }
+}
+@end
+
 @implementation SCTextViewCell
 
 @synthesize minimumHeight;
@@ -2963,7 +3120,11 @@
     minimumHeight = kMinTextViewHeight;
     maximumHeight = kMaxTextViewHeight;
 	
-    UITextView *textView = [[UITextView alloc] init];
+    UITextView *textView = [[SCIntrinsicTextView alloc] init];
+    textView.adjustsFontForContentSizeCategory = YES;
+    textView.scrollEnabled = YES;
+    [textView setContentCompressionResistancePriority:249 forAxis:UILayoutConstraintAxisVertical];
+    [textView setContentHuggingPriority:249 forAxis:UILayoutConstraintAxisVertical];
     textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
     textView.textColor = [UIColor secondaryLabelColor]; // dgApps
     self.control = textView;
@@ -2986,7 +3147,8 @@
 {
     [super setControl:control];
     
-    self.textView.scrollEnabled = !self.autoResize;
+    if([self.textView isKindOfClass:[SCIntrinsicTextView class]])
+        self.textView.scrollEnabled = YES;
     
     _initialControlColor = self.textView.textColor;
 }
@@ -3003,8 +3165,24 @@
 - (void)setAutoResize:(BOOL)autoResize
 {
     _autoResize = autoResize;
-    
-    self.textView.scrollEnabled = !autoResize;
+    if([self.textView isKindOfClass:[SCIntrinsicTextView class]])
+        self.textView.scrollEnabled = YES;
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)setMinimumHeight:(CGFloat)value
+{
+    minimumHeight = MAX(0, value);
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)setMaximumHeight:(CGFloat)value
+{
+    maximumHeight = value;
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
 }
 
 //overrides superclass
@@ -3016,110 +3194,6 @@
         self.textView.textColor = _initialControlColor;
     else
         self.textView.textColor = self.disabledTextColor;
-}
-
-- (CGFloat)textLabelYCoord
-{
-    if(self.controlCreatedInIB)
-        return 0;  // no textLabel
-    
-    CGFloat yCoord;
-    
-    BOOL textLabelExists = [self.textLabel.text length]!=0;
-    if(textLabelExists)
-    {
-        yCoord = kYMargin;
-    }
-    else
-    {
-        yCoord = 0;
-    }
-    
-    return yCoord;
-}
-
-- (CGFloat)textLabelHeight
-{
-    if(self.controlCreatedInIB || [self.textLabel.text length]==0)
-        return 0;  // no textLabel
-    
-    CGFloat textLabelHeight = [self.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.textLabel.font}].height;
-    
-    return ceil(textLabelHeight);
-}
-
-- (CGFloat)textViewXCoord
-{
-    CGFloat xCoord;
-    
-    if(self.controlCreatedInIB)
-    {
-        [self.contentView layoutIfNeeded];  // make sure text view has the correct frame
-        
-        xCoord = self.textView.frame.origin.x;
-    }
-    else
-    {
-        xCoord = kTextViewXMargin + 1;      // +1 is a needed fix for runtime generation
-    }
-    
-    return xCoord;
-}
-
-- (CGFloat)textViewYCoord
-{
-    CGFloat yCoord;
-    
-    if(self.controlCreatedInIB)
-    {
-        yCoord = self.textView.frame.origin.y;
-    }
-    else
-    {
-        yCoord = [self textLabelYCoord] + [self textLabelHeight];
-    }
-    
-    return yCoord;
-}
-
-- (CGFloat)textViewWidth
-{
-    CGFloat textViewWidth;
-    
-    if(self.controlCreatedInIB)
-    {
-        textViewWidth = self.textView.frame.size.width;
-    }
-    else
-    {
-        textViewWidth = self.ownerTableViewModel.tableView.frame.size.width - [self textViewXCoord] - kTextViewMargin;
-    }
-    
-    return ceil(textViewWidth);
-}
-
-- (CGFloat)textViewHeight
-{
-    if(!self.autoResize)
-        return self.minimumHeight;
-    
-    [self loadBoundValueIntoControl];  // make sure to fill textView with its contents
-    CGFloat textViewHeight = [self.textView sizeThatFits:CGSizeMake([self textViewWidth], MAXFLOAT)].height;
-    
-    if(textViewHeight < self.minimumHeight)
-    {
-        textViewHeight = self.minimumHeight;
-    }
-    
-    return ceil(textViewHeight);
-}
-
-//overrides superclass
-- (CGFloat)height
-{
-    CGFloat cellHeight = [self textViewYCoord] + [self textViewHeight] + kTextViewMargin;
-    
-    return ceil(cellHeight);
 }
 
 //overrides superclass
@@ -3147,22 +3221,57 @@
 }
 
 //overrides superclass
-- (void)layoutSubviews
-{	
-	[super layoutSubviews];
-	
-    // don't check for self.controlCreatedInIB here as it's already taken care of in the textView size methods
-    
-    self.textView.frame = CGRectMake([self textViewXCoord], [self textViewYCoord], [self textViewWidth], [self textViewHeight]);
-    
-    if([self.textLabel.text length])
+- (void)sc_installContentConstraints
+{
+    if(self.controlCreatedInIB || self.cellCreatedInIB || !self.control)
+        return;
+    NSString *key = [NSString stringWithFormat:@"text-%p-%d-%g-%g-%d",
+        self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0,
+        self.minimumHeight, self.maximumHeight, self.autoResize];
+    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d",
+        self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0,
+        self.badgeView.hidden];
+    if([self.sc_layoutKey isEqualToString:key])
+        return;
+    self.sc_layoutKey = key;
+    [NSLayoutConstraint deactivateConstraints:self.sc_labelConstraints];
+    NSMutableArray *constraints = [NSMutableArray array];
+    UILayoutGuide *margins = [self sc_controlGuideAddingConstraints:constraints];
+    UITextView *editor = self.textView;
+    editor.translatesAutoresizingMaskIntoConstraints = NO;
+    [constraints addObjectsFromArray:@[
+        [editor.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+        [editor.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]
+    ]];
+    NSLayoutConstraint *bottom = [editor.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+    bottom.priority = 750;
+    [constraints addObject:bottom];
+    if((self.textLabel.text.length && !self.textLabel.hidden))
     {
-        CGRect textLabelFrame = self.textLabel.frame;
-        textLabelFrame.origin.y = [self textLabelYCoord];
-        self.textLabel.frame = textLabelFrame;
+        UILabel *title = self.textLabel;
+        title.translatesAutoresizingMaskIntoConstraints = NO;
+        title.adjustsFontForContentSizeCategory = YES;
+        [constraints addObjectsFromArray:@[
+            [title.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8],
+            [title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+            [title.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+            [editor.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:4]
+        ]];
     }
-    
-	[self didLayoutSubviews];
+    else
+        [constraints addObject:[editor.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8]];
+    NSLayoutConstraint *minimum = [editor.heightAnchor constraintGreaterThanOrEqualToConstant:self.minimumHeight];
+    minimum.priority = 750;
+    [constraints addObject:minimum];
+    if(!self.autoResize || self.maximumHeight > 0)
+    {
+        CGFloat limit = self.autoResize ? MAX(self.minimumHeight, self.maximumHeight) : self.minimumHeight;
+        NSLayoutConstraint *maximum = [editor.heightAnchor constraintLessThanOrEqualToConstant:limit];
+        maximum.priority = 999;
+        [constraints addObject:maximum];
+    }
+    self.sc_labelConstraints = constraints;
+    [NSLayoutConstraint activateConstraints:constraints];
 }
 
 
@@ -3214,8 +3323,7 @@
     if(textViewAttributes.minimumHeight > 0)
     {
         self.minimumHeight = textViewAttributes.minimumHeight;
-        if(!self.autoResize)
-            self.height = self.minimumHeight;
+
     }
 	if(textViewAttributes.maximumHeight > 0)
 		self.maximumHeight = textViewAttributes.maximumHeight;
@@ -3249,17 +3357,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    BOOL shouldChange = YES;
-    
-    if([self textViewHeight] > self.maximumHeight)
-    {
-        shouldChange = NO;
-        
-        // remove last added character (usually a return key)
-        self.textView.text = [self.textView.text substringToIndex:[self.textView.text length] - 1];
-    }
-    
-    return shouldChange;
+    return YES;
 }
 
 - (void)textViewDidChange:(UITextView *)_textView
@@ -3279,9 +3377,8 @@
     // Resize cell if needed
     if(self.autoResize)
     {
-        [self.ownerTableViewModel.tableView beginUpdates];
-        [self.ownerTableViewModel.tableView endUpdates];
-        
+        [self.textView invalidateIntrinsicContentSize];
+        [self setNeedsUpdateConstraints];
         [self scrollToFocusCaretForTextView:self.textView];
     }
 }
@@ -3315,6 +3412,7 @@
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.textColor =  [UIColor secondaryLabelColor];  //dgApps
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
+    textField.adjustsFontForContentSizeCategory = YES;
     self.control = textField;
 }
 
@@ -3390,21 +3488,7 @@
 }
 
 //override's superclass
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-	
-	// Adjust height & yCoord
-    if(!self.controlCreatedInIB)
-    {
-        CGRect textFieldFrame = self.textField.frame;
-        textFieldFrame.origin.y = ceilf((self.contentView.frame.size.height - SC_DefaultTextFieldHeight)/2);
-        textFieldFrame.size.height = SC_DefaultTextFieldHeight;
-        self.textField.frame = textFieldFrame;
-    }
-	
-	[self didLayoutSubviews];
-}
+
 
 //overrides superclass
 - (NSObject *)controlValue
@@ -3804,21 +3888,7 @@
 
 
 //override's superclass
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-	
-	// Adjust height & yCoord
-    if(!self.controlCreatedInIB)
-    {
-        CGRect segmentedFrame = self.segmentedControl.frame;
-        segmentedFrame.origin.y = (self.contentView.frame.size.height - kDefaultSegmentedHeight)/2;
-        segmentedFrame.size.height = kDefaultSegmentedHeight;
-        self.segmentedControl.frame = segmentedFrame;
-    }
-	
-	[self didLayoutSubviews];
-}
+
 
 //overrides superclass
 - (NSObject *)controlValue
@@ -3980,21 +4050,7 @@
 
 
 //overrides superclass
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-	
-    if(!self.controlCreatedInIB)
-    {
-        CGSize contentViewSize = self.contentView.bounds.size;
-        CGRect switchFrame = self.switchControl.frame;
-        switchFrame.origin.x = contentViewSize.width - switchFrame.size.width - 10;
-        switchFrame.origin.y = (contentViewSize.height-switchFrame.size.height)/2;
-        self.switchControl.frame = switchFrame;
-    }
-	
-	[self didLayoutSubviews];
-}
+
 
 //overrides superclass
 - (NSObject *)controlValue
@@ -4042,7 +4098,6 @@
 
 
 
-#define kDefaultEmbeddedDatePickerHeight    163
 
 #pragma mark - SCDateCell
 
@@ -4053,6 +4108,8 @@
     BOOL _embeddedPickerVisible;
     BOOL _dateCleared;
 }
+
+@property (nonatomic, strong) NSArray<NSLayoutConstraint *> *sc_pickerConstraints;
 
 - (void)pickerValueChanged;
 - (void)deviceOrientationDidChange:(NSNotification *)notification;
@@ -4089,7 +4146,14 @@
 	_pickerField = [[UITextField alloc] initWithFrame:CGRectZero];
 	_pickerField.delegate = self;
 	_pickerField.inputView = datePicker;
-	[self.contentView addSubview:_pickerField];
+    [self.contentView addSubview:_pickerField];
+    _pickerField.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_pickerField.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
+        [_pickerField.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
+        [_pickerField.widthAnchor constraintEqualToConstant:0],
+        [_pickerField.heightAnchor constraintEqualToConstant:0]
+    ]];
 	
 	dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setDateFormat:@"MMM d  hh:mm a"];
@@ -4162,26 +4226,27 @@
 {
     if(_embeddedPickerVisible)
         return;
-    
     _embeddedPickerVisible = YES;
-    
-    [self.ownerTableViewModel.tableView reloadData];
-    
     if(!self.datePicker.superview)
         [self.contentView addSubview:self.datePicker];
+    [self setNeedsUpdateConstraints];
+    [self sc_installContentConstraints];
+    [self.ownerTableViewModel invalidateHeightForCell:self animated:YES];
 }
 
 - (void)hideEmbeddedDatePicker
 {
     if(!_embeddedPickerVisible)
         return;
-    
     _embeddedPickerVisible = NO;
-    
+    [NSLayoutConstraint deactivateConstraints:self.sc_pickerConstraints];
+    self.sc_pickerConstraints = nil;
     if(self.datePicker.superview == self.contentView)
         [self.datePicker removeFromSuperview];
-    
-    [self.ownerTableViewModel.tableView reloadData];
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
+    [self sc_installContentConstraints];
+    [self.ownerTableViewModel invalidateHeightForCell:self animated:YES];
 }
 
 //overrides superclass
@@ -4200,16 +4265,6 @@
 //overrides superclass
 - (void)loadBoundValueIntoLabel
 {
-    // Set the picker's frame before setting its value (required for iPad compatability)
-	CGRect pickerFrame = CGRectZero;
-
-	if([SCUtilities is_iPad])
-		pickerFrame.size.width = self.ownerTableViewModel.viewController.preferredContentSize.width;
-	else
-		pickerFrame.size.width = self.ownerTableViewModel.viewController.view.frame.size.width;
-	pickerFrame.size.height = 216;
-	self.datePicker.frame = pickerFrame;
-	
 	NSDate *date = nil;
 	if(self.boundPropertyName && [self.boundValue isKindOfClass:[NSDate class]])
 	{
@@ -4228,42 +4283,49 @@
 }
 
 //override superclass
-- (CGFloat)height
-{
-    CGFloat cellHeight = [super height];
-    
-    if(_embeddedPickerVisible)
-        cellHeight += kDefaultEmbeddedDatePickerHeight;
-    
-    return cellHeight;
-}
+
 
 //override superclass
-- (void)layoutSubviews
+- (void)sc_installContentConstraints
 {
-	[super layoutSubviews];
-	
-	if(_embeddedPickerVisible)
+    NSArray<NSLayoutConstraint *> *previousRowConstraints = self.sc_labelConstraints;
+    [super sc_installContentConstraints];
+    if(!_embeddedPickerVisible)
+        return;
+    if(previousRowConstraints != self.sc_labelConstraints)
     {
-        CGRect pickerFrame = CGRectMake(kDefaultControlMargin, [super height], self.ownerTableViewModel.tableView.frame.size.width - 2*kDefaultControlMargin, kDefaultEmbeddedDatePickerHeight);
-        self.datePicker.frame = pickerFrame;
-        
-        if(!self.controlCreatedInIB)
-        {
-            if([self.textLabel.text length])
-            {
-                CGRect textLabelFrame = self.textLabel.frame;
-                textLabelFrame.origin.y = kYMargin + 1;
-                self.textLabel.frame = textLabelFrame;
-            }
-            
-            CGRect labelFrame = self.label.frame;
-            labelFrame.origin.y = kYMargin + 1;
-            self.label.frame = labelFrame;
-        }
-        
-        [self didLayoutSubviews];
+        /*
+        hermes:
+        The expanded row must follow the current control/title topology after
+        the base installer rebuilds it, rather than retaining stale anchors.
+        */
+        [NSLayoutConstraint deactivateConstraints:self.sc_pickerConstraints];
+        self.sc_pickerConstraints = nil;
     }
+    if(self.sc_pickerConstraints)
+        return;
+    for(NSLayoutConstraint *constraint in self.sc_labelConstraints)
+        if(constraint.firstItem == self.control && constraint.firstAttribute == NSLayoutAttributeCenterY)
+            constraint.active = NO;
+    UIDatePicker *picker = self.datePicker;
+    picker.translatesAutoresizingMaskIntoConstraints = NO;
+    UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
+    NSLayoutConstraint *rowTop = [self.control.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8];
+    rowTop.priority = 749;
+    NSLayoutConstraint *pickerTop = [picker.topAnchor constraintEqualToAnchor:self.control.bottomAnchor constant:8];
+    pickerTop.priority = 749;
+    NSLayoutConstraint *bottom = [picker.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+    bottom.priority = 750;
+    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[
+        rowTop, pickerTop, bottom,
+        [picker.topAnchor constraintGreaterThanOrEqualToAnchor:self.control.bottomAnchor constant:8],
+        [picker.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
+        [picker.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]
+    ]];
+    if(self.textLabel.text.length && !self.controlCreatedInIB)
+        [constraints addObject:[picker.topAnchor constraintGreaterThanOrEqualToAnchor:self.textLabel.bottomAnchor constant:8]];
+    self.sc_pickerConstraints = constraints;
+    [NSLayoutConstraint activateConstraints:constraints];
 }
 
 //override superclass
@@ -4384,657 +4446,6 @@
 }
 
 @end
-
-
-
-#pragma mark - SCImagePickerCell
-
-/*
-Keep the legacy source available for a later PhotosUI rewrite, but do not
-compile or export SCImagePickerCell in STV 7.
-*/
-#if FALSE
-
-@interface SCImagePickerCell ()
-
-@property (nonatomic, strong) UIImageView *detailImageView;
-@property (nonatomic, strong) UIImage *cachedImage;
-
-
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-@property (nonatomic, strong) UIPopoverController *popover;
-//#pragma clang diagnostic pop
-//
-//
-@property (nonatomic, strong) UIImagePickerController *imagePickerController;
-//    NSString *placeholderImageName;
-//    NSString *placeholderImageTitle;
-//    BOOL displayImageNameAsCellText;
-//    BOOL askForSourceType;
-@property (nonatomic, strong, readwrite) UIButton *clearImageButton;
-//    BOOL displayClearImageButtonInDetailView;
-//    BOOL autoPositionClearImageButton;
-//    BOOL autoPositionImageView;
-//
-//    CGRect textLabelFrame;
-//    CGRect imageViewFrame;
-//
-//    NSString *selectedImageName;
-
-@property (nonatomic, strong, readwrite) UIScrollView *pinchZoomScrollView;
-
-
-
-
-
-
-
-
-@property (nonatomic, readonly) UIImageView *effectiveImageView;
-
-- (NSString *)selectedImagePath;
-- (void)setCachedImage;
-- (void)displayImagePicker;
-- (void)displayImageInDetailView;
-- (void)addImageViewToDetailView:(UIViewController *)detailView;
-- (void)didTapClearImageButton;
-
-@end
-
-
-
-@implementation SCImagePickerCell
-
-//@synthesize imagePickerController;
-//@synthesize placeholderImageName;
-//@synthesize placeholderImageTitle;
-//@synthesize displayImageNameAsCellText;
-//@synthesize askForSourceType;
-//@synthesize selectedImageName;
-//@synthesize clearImageButton;
-//@synthesize displayClearImageButtonInDetailView;
-//@synthesize autoPositionClearImageButton;
-//@synthesize textLabelFrame;
-//@synthesize imageViewFrame;
-
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName {
-    SCDebugLog(@"");
-    return [[[self class] alloc] initWithText:cellText boundObject:object imageNamePropertyName:propertyName];
-}
-
-
-//overrides superclass
-- (void)performInitialization {
-    [super performInitialization];
-    SCDebugLog(@"");
-
-    self.cachedImage = nil;
-
-    self.popover = nil;
-
-    self.imagePickerController = [[UIImagePickerController alloc] init];
-    self.imagePickerController.delegate = self;
-
-    self.placeholderImageName = nil;
-    self.placeholderImageTitle = nil;
-    self.displayImageNameAsCellText = TRUE;
-    self.askForSourceType = TRUE;
-    self.selectedImageName = nil;
-//    self.autoPositionImageView = TRUE; not used
-
-    self.clearImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.clearImageButton.frame = CGRectMake(0, 0, 120, 25);
-    [self.clearImageButton setTitle:NSLocalizedString(@"Clear Image", @"Clear Image Button Title") forState:UIControlStateNormal];
-    [self.clearImageButton addTarget:self action:@selector(didTapClearImageButton) forControlEvents:UIControlEventTouchUpInside];
-    self.clearImageButton.backgroundColor = [UIColor grayColor];
-    self.clearImageButton.layer.cornerRadius = 8.0f;
-    self.clearImageButton.layer.masksToBounds = YES;
-    self.clearImageButton.layer.borderWidth = 1.0f;
-    self.displayClearImageButtonInDetailView = TRUE;
-    self.autoPositionClearImageButton = TRUE;
-
-    self.textLabelFrame = CGRectMake(0, 0, 0, 0);
-    self.imageViewFrame = CGRectMake(0, 0, 0, 0);
-
-    // Add rounded corners to the image view
-    self.effectiveImageView.layer.masksToBounds = YES;
-    self.effectiveImageView.layer.cornerRadius = 8.0f;
-
-    self.pinchZoomScrollView = [[UIScrollView alloc] init];
-    self.pinchZoomScrollView.minimumZoomScale = 0.5f;
-    self.pinchZoomScrollView.maximumZoomScale = 3.0f;
-    self.pinchZoomScrollView.delegate = self;
-
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-}
-
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object imageNamePropertyName:(NSString *)propertyName {
-    if( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
-        self.selectedImageName = (NSString *)self.boundValue;
-        [self setCachedImage];
-    }
-    SCDebugLog(@"");
-
-    return self;
-}
-
-
-- (UIImageView *)effectiveImageView {
-    SCDebugLog(@"");
-    if (self.customImageView) {
-        return self.customImageView;
-    }
-    //else
-    return self.imageView;
-}
-
-
-//overrides superclass
-- (void)setEnabled:(BOOL)_enabled {
-    SCDebugLog(@"");
-
-    return;  // does nothing, image picker cells should not be disabled since their reviel viewer when not in edit mode.
-}
-
-- (void)resetClearImageButtonStyles {
-    SCDebugLog(@"");
-    
-    self.clearImageButton.backgroundColor = [UIColor clearColor];
-    self.clearImageButton.layer.cornerRadius = 0.0f;
-    self.clearImageButton.layer.masksToBounds = NO;
-    self.clearImageButton.layer.borderWidth = 0.0f;
-}
-
-- (UIImage *)selectedImage {
-    SCDebugLog(@"");
-
-    if  (self.selectedImageName && !self.cachedImage) {
-        [self setCachedImage];
-    }
-
-    return self.cachedImage;
-}
-
-- (void)setCachedImage {
-    SCDebugLog(@"");
-
-    self.cachedImage = nil;
-
-    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    NSString *imagePath = [self selectedImagePath];
-    UIImage *image;
-
-    if (self.cellActions.loadImage) {
-        image = self.cellActions.loadImage(self, indexPath, imagePath);
-    }
-    else {
-        if (self.ownerSection.cellActions.loadImage) {
-            image = self.ownerSection.cellActions.loadImage(self, indexPath, imagePath);
-        }
-        else {
-            if (self.ownerTableViewModel.cellActions.loadImage) {
-                image = self.ownerTableViewModel.cellActions.loadImage(self, indexPath, imagePath);
-            }
-            else {
-                image = [self loadImageFromPath:imagePath];
-            }
-        }
-    }
-
-    if (image) {
-        self.cachedImage = image;
-    }
-}
-
-- (NSString *)selectedImagePath {
-    SCDebugLog(@"");
-
-    if(!self.selectedImageName) {
-        return nil;
-    }
-
-    NSString *fullName = [NSString stringWithFormat:@"Documents/%@", self.selectedImageName];
-
-    return [NSHomeDirectory() stringByAppendingPathComponent:fullName];
-}
-
-//overrides superclass
-- (void)layoutSubviews {
-    // call before [super layoutSubviews]
-    if (self.selectedImageName) {
-        if (self.displayImageNameAsCellText) {
-            self.textLabel.text = self.selectedImageName;
-        }
-
-        if (!self.cachedImage) {
-            [self setCachedImage];
-        }
-
-        self.effectiveImageView.image = self.cachedImage;
-
-        if (self.cachedImage) {
-            if(!self.customImageView) {
-                // Set the correct frame for imageView
-                CGRect imgframe = self.imageView.frame;
-                imgframe.origin.x = 2;
-                imgframe.origin.y = 3;
-                imgframe.size.height -= 4;
-                self.imageView.frame = imgframe;
-            }
-
-            self.effectiveImageView.image = self.cachedImage;
-        }
-    }
-    else {
-        if (self.displayImageNameAsCellText) {
-            self.textLabel.text = @"";
-        }
-
-        if (self.placeholderImageName) {
-            self.effectiveImageView.image = [UIImage imageNamed:self.placeholderImageName];
-        }
-        else {
-            self.effectiveImageView.image = nil;
-        }
-    }
-
-    [super layoutSubviews];
-
-    if (self.textLabelFrame.size.height) {
-        self.textLabel.frame = self.textLabelFrame;
-    }
-
-    if (self.imageViewFrame.size.height && !self.customImageView) {
-        self.imageView.frame = self.imageViewFrame;
-    }
-}
-
-//overrides superclass
-- (void)commitChanges {
-    if(!self.needsCommit) {
-        return;
-    }
-
-    self.boundValue = self.selectedImageName;
-
-    [super commitChanges];
-    SCDebugLog(@"");
-}
-
-//overrides superclass
-- (BOOL)getValueIsValid {
-    SCDebugLog(@"");
-    if(!self.selectedImageName && self.valueRequired) {
-        return FALSE;
-    }
-    //else
-    return TRUE;
-}
-
-//override parent's
-- (void)didSelectCell {
-    [super didSelectCell];
-    SCDebugLog(@"");
-
-    self.ownerTableViewModel.activeCell = self;
-
-    if (!self.ownerTableViewModel.tableView.editing && self.selectedImage) {
-        [self displayImageInDetailView];
-        return;
-    }
-
-    BOOL actionSheetDisplayed = FALSE;
-
-    if (self.askForSourceType) {
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                     delegate:self
-                                                            cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button Title")
-                                                       destructiveButtonTitle:nil
-                                                            otherButtonTitles:NSLocalizedString(@"Take Photo", @"Take Photo Button Title"), NSLocalizedString(@"Choose Photo", @"Choose Photo Button Title"),nil];
-            [actionSheet showInView:self.ownerTableViewModel.viewController.view];
-
-            actionSheetDisplayed = TRUE;
-        }
-        else {
-            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
-    }
-
-    if (!actionSheetDisplayed) {
-        [self displayImagePicker];
-    }
-}
-
-- (void)displayImageInDetailView {
-    SCDebugLog(@"");
-    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-
-    UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
-
-    [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
-}
-
-// overrides superclass
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
-    SCDebugLog(@"");
-
-    UIViewController *detailViewController = [self getDetailViewControllerForCell:self forRowAtIndexPath:indexPath allowUITableViewControllerSubclass:NO];
-    
-    if ([detailViewController isKindOfClass:[SCViewController class]]) {
-        [(SCViewController *)detailViewController setNavigationBarType:SCNavigationBarTypeNone];
-    }
-
-    if (!self.detailViewControllerOptions.title) {
-        detailViewController.title = self.textLabel.text;
-    }
-
-    if ([SCUtilities is_iPad]) {
-        detailViewController.view.backgroundColor = [UIColor colorWithRed:32.0f/255 green:35.0f/255 blue:42.0f/255 alpha:1];
-    }
-    else {
-        detailViewController.view.backgroundColor = [UIColor colorWithRed:41.0f/255 green:42.0f/255 blue:57.0f/255 alpha:1];
-    }
-
-    return detailViewController;
-}
-
-// overrides superclass
-- (BOOL)generatesDetailView {
-    SCDebugLog(@"");
-    return YES;
-}
-
-- (void)addImageViewToDetailView:(UIViewController *)detailView {
-    SCDebugLog(@"");
-    if(_detailImageView) {
-        [_detailImageView removeFromSuperview];
-    }
-
-    _detailImageView = [[UIImageView alloc] initWithImage:self.selectedImage];
-
-    CGRect frame = detailView.view.frame;
-    frame.origin.y = 0; // make sure it takes full height
-    self.pinchZoomScrollView.frame = frame;
-    self.pinchZoomScrollView.contentSize = self.selectedImage.size;
-    [self.pinchZoomScrollView addSubview:_detailImageView];
-    [detailView.view addSubview:self.pinchZoomScrollView];
-
-    // The the zoom scale to display the whole image
-    if (self.pinchZoomScrollView.contentSize.width && self.pinchZoomScrollView.contentSize.height) {
-        CGRect scrollViewFrame = self.pinchZoomScrollView.frame;
-        CGFloat scaleWidth = scrollViewFrame.size.width / self.pinchZoomScrollView.contentSize.width;
-        CGFloat scaleHeight = scrollViewFrame.size.height / self.pinchZoomScrollView.contentSize.height;
-        CGFloat minScale = fmin(scaleWidth, scaleHeight);
-        self.pinchZoomScrollView.minimumZoomScale = minScale;
-        self.pinchZoomScrollView.zoomScale = minScale;
-    }
-
-    // Modify _detailImageView frame to be displayed in the center of the scroll view
-    CGSize boundsSize = self.pinchZoomScrollView.bounds.size;
-    CGRect contentsFrame = _detailImageView.frame;
-    if (contentsFrame.size.width < boundsSize.width) {
-        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0;
-    }
-    else {
-        contentsFrame.origin.x = 0.0;
-    }
-
-    if (contentsFrame.size.height < boundsSize.height) {
-        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0;
-    }
-    else {
-        contentsFrame.origin.y = 0.0;
-    }
-    //_detailImageView.frame = contentsFrame;
-
-
-    //Add clearImageButton
-    if (self.displayClearImageButtonInDetailView) {
-        if (self.autoPositionClearImageButton) {
-            CGSize detailViewSize = detailView.view.frame.size;
-            CGRect btnFrame = self.clearImageButton.frame;
-            CGFloat navBarHeight = 0;
-            
-            if (detailView.navigationController) {
-                navBarHeight = detailView.navigationController.navigationBar.frame.size.height;
-            }
-
-            self.clearImageButton.frame = CGRectMake(detailViewSize.width - btnFrame.size.width - 10,
-                                                     detailViewSize.height - btnFrame.size.height - navBarHeight - 30,
-                                                     btnFrame.size.width, btnFrame.size.height);
-        }
-
-        [detailView.view addSubview:self.clearImageButton];
-    }
-}
-
-- (void)didTapClearImageButton {
-    SCDebugLog(@"");
-    self.selectedImageName = nil;
-    self.cachedImage = nil;
-    [self.detailImageView removeFromSuperview];
-    self.detailImageView = nil;
-
-    [self cellValueChanged];
-}
-
-- (void)displayImagePicker {
-    SCDebugLog(@"");
-
-    if([SCUtilities is_iPad]) {
-        self.popover = [[UIPopoverController alloc] initWithContentViewController:self.imagePickerController];
-        [self.popover presentPopoverFromRect:self.frame inView:self.ownerTableViewModel.viewController.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    }
-    else {
-        [self prepareCellForDetailViewAppearing];
-        [self.ownerTableViewModel.viewController presentViewController:self.imagePickerController animated:TRUE completion:nil];
-    }
-}
-
-
-- (void)saveImage:(UIImage *)image toPath:(NSString *)imagePath {
-    SCDebugLog(@"");
-    [UIImageJPEGRepresentation(image, 80) writeToFile:imagePath atomically:YES];
-}
-
-- (UIImage *)loadImageFromPath:(NSString *)imagePath {
-    SCDebugLog(@"");
-    return [UIImage imageWithContentsOfFile:imagePath];
-}
-
-#pragma mark - UIActionSheetDelegate methods
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    SCDebugLog(@"");
-
-    BOOL cancelTapped = FALSE;
-    
-    switch (buttonIndex) {
-        case 0:  // Take Photo
-            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-            break;
-
-        case 1:  // Choose Photo
-            self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            break;
-
-        default:
-            cancelTapped = TRUE;
-            break;
-    }
-
-    if (!cancelTapped) {
-        // Add on main queue so as to wait until the action sheet is dismissed
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [self displayImagePicker];
-        }];
-    }
-}
-
-
-#pragma mark - UIImagePickerControllerDelegate methods
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    SCDebugLog(@"");
-    [self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
-
-    [self prepareCellForDetailViewDisappearing];
-
-    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:YES doneButtonTapped:NO];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    SCDebugLog(@"");
-    [self.imagePickerController dismissViewControllerAnimated:TRUE completion:nil];
-
-    if([SCUtilities is_iPad]) {
-        [self.popover dismissPopoverAnimated:TRUE];
-    }
-    else {
-        [self prepareCellForDetailViewDisappearing];
-    }
-
-    self.cachedImage = nil;
-
-
-    // Fetch the image asset then call [self imageAssetFetched] to finalize image selection
-    ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *imageAsset) {
-        [self imageAssetFetched:imageAsset mediaInfo:info];
-    };
-
-    ALAssetsLibrary* assetslibrary = [[ALAssetsLibrary alloc] init];
-    NSURL *mediaUrl = info[UIImagePickerControllerReferenceURL];
-    
-    if(mediaUrl) {
-        [assetslibrary assetForURL:mediaUrl resultBlock:resultblock failureBlock:nil];  // asynchronous call
-    }
-    else {
-        // photo was just taken with the camera and no mediaUrl is available
-        [self imageAssetFetched:nil mediaInfo:info];
-    }
-
-
-    [self handleDetailViewControllerDidDismiss:self.imagePickerController cancelButtonTapped:NO doneButtonTapped:YES];
-}
-
-- (void)imageAssetFetched:(ALAsset *)imageAsset mediaInfo:(NSDictionary *)info {
-    SCDebugLog(@"");
-    NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-
-    if (self.cellActions.didFinishPickingMedia) {
-        self.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-    }
-    else {
-        if (self.ownerSection.cellActions.didFinishPickingMedia) {
-            self.ownerSection.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-        }
-        else {
-            if (self.ownerTableViewModel.cellActions.didFinishPickingMedia) {
-                self.ownerTableViewModel.cellActions.didFinishPickingMedia(self, indexPath, info, imageAsset);
-            }
-        }
-    }
-
-    UIImage *image = nil;
-
-    if (self.imagePickerController.allowsEditing) {
-        image = [info valueForKey:UIImagePickerControllerEditedImage];
-    }
-
-    if (!image) {
-        image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    }
-
-    if (image) {
-        self.cachedImage = image;
-
-        if (self.cellActions.imageName) {
-            self.selectedImageName = self.cellActions.imageName(self, indexPath);
-        }
-        else {
-            if (self.ownerSection.cellActions.imageName) {
-                self.selectedImageName = self.ownerSection.cellActions.imageName(self, indexPath);
-            }
-            else {
-                if (self.ownerTableViewModel.cellActions.imageName) {
-                    self.selectedImageName = self.ownerTableViewModel.cellActions.imageName(self, indexPath);
-                }
-                else {
-                    // default to the original image file name if possible
-                    if (imageAsset) {
-                        ALAssetRepresentation *imageRep = [imageAsset defaultRepresentation];
-                        self.selectedImageName = [imageRep filename];
-                    }
-                }
-            }
-        }
-
-
-        if (!self.selectedImageName) {
-            self.selectedImageName = [NSString stringWithFormat:@"%@", [NSDate date]];
-        }
-
-        // Save the image
-        NSString *imagePath = [self selectedImagePath];
-        if (self.cellActions.saveImage) {
-            self.cellActions.saveImage(self, indexPath, imagePath);
-        }
-        else {
-            if(self.ownerSection.cellActions.saveImage) {
-                self.ownerSection.cellActions.saveImage(self, indexPath, imagePath);
-            }
-            else {
-                if (self.ownerTableViewModel.cellActions.saveImage) {
-                    self.ownerTableViewModel.cellActions.saveImage(self, indexPath, imagePath);
-                }
-                else {
-                    [self saveImage:image toPath:imagePath];
-                }
-            }
-        }
-
-        [self layoutSubviews];
-
-        // reload cell
-        if (indexPath) {
-            NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
-            [self.ownerTableViewModel.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-        }
-
-        [self cellValueChanged];
-    }
-}
-
-
-- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController {
-    SCDebugLog(@"");
-    [self addImageViewToDetailView:detailViewController];
-
-    [super handleDetailViewControllerWillPresent:detailViewController];
-}
-
-
-#pragma mark - UIScrollViewDelegate methods
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    SCDebugLog(@"");
-    return _detailImageView;
-}
-
-// Make sure _detailImageView is always centered
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    SCDebugLog(@"");
-    CGFloat offsetX = MAX((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5, 0.0);
-    CGFloat offsetY = MAX((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5, 0.0);
-
-    _detailImageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
-}
-
-@end
-#endif
-
 
 
 
@@ -5201,8 +4612,12 @@ compile or export SCImagePickerCell in STV 7.
                 if(!_activityIndicator)
                 {
                     _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
-                    _activityIndicator.frame = self.contentView.bounds;
+                    _activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.contentView addSubview:_activityIndicator];
+                    [NSLayoutConstraint activateConstraints:@[
+                        [_activityIndicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+                        [_activityIndicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
+                    ]];
                 }
                 [_activityIndicator startAnimating];
                 [self.selectionItemsStore asynchronousFetchObjectsWithOptions:self.selectionItemsFetchOptions
@@ -5277,13 +4692,7 @@ compile or export SCImagePickerCell in STV 7.
 }
 
 //overrides superclass
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    if(_activityIndicator)
-        _activityIndicator.frame = self.contentView.bounds;
-}
+
 
 //overrides superclass
 - (void)setEnabled:(BOOL)_enabled
