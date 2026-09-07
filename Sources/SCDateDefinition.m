@@ -16,7 +16,6 @@
 
 @implementation SCDateDefinition
 
-@synthesize datePropertyDefinition = _datePropertyDefinition;
 
 
 + (instancetype)definition

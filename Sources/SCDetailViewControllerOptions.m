@@ -27,13 +27,6 @@
 
 @implementation SCDetailViewControllerOptions
 
-@synthesize presentationMode = _presentationMode;
-@synthesize modalPresentationStyle = _modalPresentationStyle;
-@synthesize navigationBarType = _navigationBarType;
-@synthesize allowEditingModeCancelButton = _allowEditingModeCancelButton;
-@synthesize title = _title;
-@synthesize tableViewStyle = _tableViewStyle;
-@synthesize hidesBottomBarWhenPushed = _hidesBottomBarWhenPushed;
 
 
 - (instancetype)init

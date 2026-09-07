@@ -32,14 +32,6 @@
 
 @implementation SCInputAccessoryView
 
-@synthesize delegate = _delegate;
-@synthesize toolbar = _toolbar;
-@synthesize previousNextSegmentedControl = _previousNextSegmentedControl;
-@synthesize doneButton = _doneButton;
-@synthesize showPrevNextButtons = _showPrevNextButtons;
-@synthesize showClearButton = _showClearButton;
-@synthesize clearButton = _clearButton;
-@synthesize rewind = _rewind;
 
 
 - (instancetype)init

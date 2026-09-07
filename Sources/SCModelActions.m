@@ -15,12 +15,7 @@
 
 @implementation SCModelActions
 
-@synthesize didAddSection = _didAddSection;
-@synthesize sortSections = _sortSections;
-@synthesize didRefresh = _didRefresh;
 @synthesize didFetchItemsFromStore = _itemsFetchedFromStore;
-@synthesize sectionHeaderTitleForItem = _sectionHeaderTitleForItem;
-@synthesize ownerTableViewModel = _ownerTableViewModel;
 
 - (instancetype)init
 {

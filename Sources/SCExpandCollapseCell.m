@@ -55,9 +55,6 @@
 
 @implementation SCExpandCollapseCell
 
-@synthesize expandText = _expandText;
-@synthesize collapseText = _collapseText;
-@synthesize ownerSectionExpanded = _ownerSectionExpanded;
 
 
 + (instancetype)cellWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded

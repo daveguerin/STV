@@ -58,19 +58,6 @@
 
 @implementation SCTableViewController
 
-@synthesize tableViewModel = _tableViewModel;
-@synthesize delegate = _delegate;
-@synthesize navigationBarType = _navigationBarType;
-@synthesize addButton = _addButton;
-@synthesize cancelButton = _cancelButton;
-@synthesize allowEditingModeCancelButton = _allowEditingModeCancelButton;
-@synthesize doneButton = _doneButton;
-@synthesize cancelButtonTapped = _cancelButtonTapped;
-@synthesize doneButtonTapped = _doneButtonTapped;
-@synthesize popoverController = _popoverController;
-@synthesize actions = _actions;
-@synthesize state = _state;
-@synthesize hasFocus = _hasFocus;
 @synthesize ibDataDefinitions = _ibDataDefinitions;
 
 - (instancetype)init

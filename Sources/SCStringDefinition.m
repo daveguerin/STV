@@ -16,7 +16,6 @@
 
 @implementation SCStringDefinition
 
-@synthesize stringPropertyDefinition = _stringPropertyDefinition;
 
 
 + (instancetype)definition

@@ -23,7 +23,6 @@
 @synthesize imageView;
 @synthesize imageViewArray;
 @synthesize expandContentInCurrentView;
-@synthesize expandedContentSectionActions = _expandedContentSectionActions;
 
 - (instancetype)init
 {
@@ -602,7 +601,6 @@
 @synthesize addNewObjectuiElement;
 @synthesize addNewObjectuiElementExistsInNormalMode;
 @synthesize addNewObjectuiElementExistsInEditingMode;
-@synthesize sectionActions = _sectionActions;
 
 
 + (instancetype)attributesWithObjectDefinition:(SCDataDefinition *)definition

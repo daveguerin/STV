@@ -25,7 +25,6 @@
 @synthesize descriptionPropertyName;
 @synthesize defaultPropertyGroup;
 @synthesize propertyGroups;
-@synthesize cellActions = _cellActions;
 
 
 

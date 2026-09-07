@@ -14,10 +14,6 @@ NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification = @"SCDa
 
 @implementation SCDataStore
 
-@synthesize storeMode = _storeMode;
-@synthesize storedData = _storedData;
-@synthesize defaultDataDefinition = _defaultDataDefinition;
-@synthesize defaultsDictionary = _defaultsDictionary;
 
 + (instancetype)storeWithDefaultDataDefinition:(SCDataDefinition *)definition;
 {

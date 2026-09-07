@@ -80,7 +80,6 @@
 
 @synthesize masterModel;
 @synthesize activeDetailModel;
-@synthesize tableView = _tableView;
 @synthesize viewController;
 @synthesize editButtonItem;
 @synthesize autoResizeForKeyboard;
@@ -93,14 +92,9 @@
 @synthesize activeCell;
 @synthesize activeCellIndexPath;
 @synthesize activeCellControl;
-@synthesize inputAccessoryView = _inputAccessoryView;
 @synthesize commitButton;
 @synthesize swipeToDeleteActive;
 @synthesize enablePullToRefresh;
-@synthesize detailViewController = _detailViewController;
-@synthesize modelActions = _modelActions;
-@synthesize sectionActions = _sectionActions;
-@synthesize cellActions = _cellActions;
 
 
 + (instancetype)modelWithTableView:(UITableView *)tableView

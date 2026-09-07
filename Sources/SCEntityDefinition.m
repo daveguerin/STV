@@ -19,9 +19,6 @@
 
 @implementation SCEntityDefinition
 
-@synthesize entity = _entity;
-@synthesize managedObjectContext = _managedObjectContext;
-@synthesize orderAttributeName = _orderAttributeName;
 
 + (instancetype)definitionWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate
 {

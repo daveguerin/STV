@@ -16,7 +16,6 @@
 
 @implementation SCNumberDefinition
 
-@synthesize numberPropertyDefinition = _numberPropertyDefinition;
 
 
 + (instancetype)definition

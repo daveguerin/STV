@@ -74,7 +74,6 @@
 
 @synthesize ownerTableViewModel;
 @synthesize ownerSection;
-@synthesize cellActions = _cellActions;
 @synthesize boundPropertyDataType;
 @synthesize height = _height;
 @synthesize editable;
@@ -1694,9 +1693,6 @@
 
 @implementation SCCustomCell
 
-@synthesize objectBindings = _objectBindings;
-@synthesize autoResize = _autoResize;
-@synthesize showClearButtonInInputAccessoryView = _showClearButtonInInputAccessoryView;
 
 
 + (instancetype)cellWithText:(NSString *)cellText objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName
@@ -6078,7 +6074,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @synthesize addNewItemCell;
 @synthesize addNewItemCellExistsInNormalMode;
 @synthesize addNewItemCellExistsInEditingMode;
-@synthesize detailSectionActions = _detailSectionActions;
 
 
 + (instancetype)cellWithDataStore:(SCDataStore *)store

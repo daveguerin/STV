@@ -33,7 +33,6 @@
 @synthesize uiElementClass;
 @synthesize uiElementNibName;
 @synthesize objectBindings;
-@synthesize cellActions = _cellActions;
 
 
 + (instancetype)definitionWithName:(NSString *)propertyName

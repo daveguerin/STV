@@ -15,8 +15,6 @@
 
 @implementation SCFetchItemsCell
 
-@synthesize autoFetchItems = _autoFetchItems;
-@synthesize autoHide = _autoHide;
 
 
 // overrides supercall

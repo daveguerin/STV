@@ -12,14 +12,6 @@
 
 @implementation SCDataFetchOptions
 
-@synthesize sort = _sort;
-@synthesize sortKey = _sortKey;
-@synthesize sortAscending = _sortAscending;
-@synthesize filter = _filter;
-@synthesize filterPredicate = _filterPredicate;
-@synthesize batchSize = _batchSize;
-@synthesize batchStartingOffset = _batchStartingOffset;
-@synthesize batchCurrentOffset = _batchCurrentOffset;
 
 + (instancetype)options
 {

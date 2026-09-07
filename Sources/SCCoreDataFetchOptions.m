@@ -11,7 +11,6 @@
 
 @implementation SCCoreDataFetchOptions
 
-@synthesize orderAttributeName = _orderAttributeName;
 
 
 - (instancetype)init
