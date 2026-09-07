@@ -241,6 +241,15 @@
     if ( (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) ) {
         [self performInitialization];
         self.sc_nativeStyle = style;
+        /*
+        hermes:
+        Keep spare row width in the text/control gap, not in the image. Native
+        fixed-width controls must not stretch an icon and thereby grow the row.
+        Image constraints use UIImageView's intrinsic alignment size, including
+        SF Symbol insets, rather than a bitmap ratio or a fixed maximum size.
+        Set the default here so callers can still choose another priority.
+        */
+        [self.imageView setContentHuggingPriority:751 forAxis:UILayoutConstraintAxisHorizontal];
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         self.textLabel.adjustsFontForContentSizeCategory = YES;
         self.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
@@ -613,13 +622,9 @@
     if (imageVisible) {
         UIImageView *image = self.imageView;
         image.contentMode = UIViewContentModeScaleAspectFit;
-        CGFloat ratio = image.image.size.width / MAX(image.image.size.height, 1);
         [constraints addObjectsFromArray:@[
             [image.leadingAnchor constraintEqualToAnchor:leading],
-            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-            [image.widthAnchor constraintLessThanOrEqualToConstant:44],
-            [image.heightAnchor constraintLessThanOrEqualToConstant:44],
-            [image.widthAnchor constraintEqualToAnchor:image.heightAnchor multiplier:ratio]
+            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
         ]];
         NSLayoutConstraint *imageTop = [image.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
         NSLayoutConstraint *imageBottom = [image.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
@@ -738,13 +743,9 @@
     if (imageVisible) {
         UIImageView *image = self.imageView;
         image.contentMode = UIViewContentModeScaleAspectFit;
-        CGFloat ratio = image.image.size.width / MAX(image.image.size.height, 1);
         [constraints addObjectsFromArray:@[
             [image.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
             [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-            [image.widthAnchor constraintLessThanOrEqualToConstant:44],
-            [image.heightAnchor constraintLessThanOrEqualToConstant:44],
-            [image.widthAnchor constraintEqualToAnchor:image.heightAnchor multiplier:ratio],
             [group.leadingAnchor constraintEqualToAnchor:image.trailingAnchor constant:8]
         ]];
     }
@@ -2923,8 +2924,15 @@
     [constraints addObject:minimum];
     [constraints addObject:[control.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
     [constraints addObject:[control.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
-    NSLayoutConstraint *top = [control.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
-    NSLayoutConstraint *bottom = [control.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
+    /*
+    hermes:
+    Native controls include their own internal vertical padding. A compact
+    inset lets switches, sliders and segments share the standard row minimum
+    without compressing their intrinsic height. Labels retain the text inset.
+    */
+    CGFloat controlInset = [control isKindOfClass:[UIControl class]] ? 4 : 8;
+    NSLayoutConstraint *top = [control.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:controlInset];
+    NSLayoutConstraint *bottom = [control.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-controlInset];
     NSLayoutConstraint *controlMinimum = [control.heightAnchor constraintGreaterThanOrEqualToConstant:20];
     top.priority = bottom.priority = controlMinimum.priority = 750;
     [constraints addObjectsFromArray:@[top, bottom, controlMinimum]];
