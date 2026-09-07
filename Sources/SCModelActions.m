@@ -15,8 +15,6 @@
 
 @implementation SCModelActions
 
-@synthesize didFetchItemsFromStore = _itemsFetchedFromStore;
-
 - (instancetype)init
 {
     if ( (self=[super init]) ) {

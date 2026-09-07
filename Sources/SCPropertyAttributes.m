@@ -20,17 +20,13 @@
 
 @implementation SCPropertyAttributes
 
-@synthesize imageView;
-@synthesize imageViewArray;
-@synthesize expandContentInCurrentView;
-
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        imageView = nil;
-        imageViewArray = nil;
+        _imageView = nil;
+        _imageViewArray = nil;
         
-        expandContentInCurrentView = FALSE;
+        _expandContentInCurrentView = FALSE;
         _expandedContentSectionActions = [[SCSectionActions alloc] init];
     }
 
@@ -49,12 +45,6 @@
 
 @implementation SCTextViewAttributes
 
-@synthesize minimumHeight;
-@synthesize maximumHeight;
-@synthesize autoResize;
-@synthesize editable;
-
-
 + (instancetype)attributesWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight
 					   autoResize:(BOOL)_autoResize editable:(BOOL)_editable
 {
@@ -64,10 +54,10 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        minimumHeight = FLT_MIN;		// will be ignored
-        maximumHeight = FLT_MIN;		// will be ignored
-        autoResize = TRUE;
-        editable = TRUE;
+        _minimumHeight = FLT_MIN;		// will be ignored
+        _maximumHeight = FLT_MIN;		// will be ignored
+        _autoResize = TRUE;
+        _editable = TRUE;
     }
 
     return self;
@@ -97,11 +87,6 @@
 
 @implementation SCTextFieldAttributes
 
-@synthesize placeholder;
-@synthesize secureTextEntry;
-@synthesize autocorrectionType;
-@synthesize autocapitalizationType;
-
 + (instancetype)attributesWithPlaceholder:(NSString *)_placeholder
 {
 	return [[[self class] alloc] initWithPlaceholder:_placeholder];
@@ -115,10 +100,10 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        placeholder = nil;		// will be ignored
-        secureTextEntry = FALSE;
-        autocorrectionType = UITextAutocorrectionTypeDefault;
-        autocapitalizationType = UITextAutocapitalizationTypeSentences;
+        _placeholder = nil;		// will be ignored
+        _secureTextEntry = FALSE;
+        _autocorrectionType = UITextAutocorrectionTypeDefault;
+        _autocapitalizationType = UITextAutocapitalizationTypeSentences;
     }
 
     return self;
@@ -156,11 +141,6 @@
 
 @implementation SCNumericTextFieldAttributes
 
-@synthesize minimumValue;
-@synthesize maximumValue;
-@synthesize allowFloatValue;
-@synthesize numberFormatter;
-
 + (instancetype)attributesWithMinimumValue:(NSNumber *)minValue maximumValue:(NSNumber *)maxValue
 				 allowFloatValue:(BOOL)allowFloat
 {
@@ -178,12 +158,12 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        minimumValue = nil;		// will be ignored
-        maximumValue = nil;		// will be ignored
-        allowFloatValue = TRUE;
+        _minimumValue = nil;		// will be ignored
+        _maximumValue = nil;		// will be ignored
+        _allowFloatValue = TRUE;
         
-        numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        _numberFormatter = [[NSNumberFormatter alloc] init];
+        [_numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     }
 
     return self;
@@ -224,9 +204,6 @@
 
 @implementation SCSliderAttributes
 
-@synthesize minimumValue;
-@synthesize maximumValue;
-
 + (instancetype)attributesWithMinimumValue:(float)minValue maximumValue:(float)maxValue
 {
 	return [[[self class] alloc] initWithMinimumValue:minValue maximumValue:maxValue];
@@ -235,8 +212,8 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        minimumValue = FLT_MIN;		// will be ignored
-        maximumValue = FLT_MIN;		// will be ignored
+        _minimumValue = FLT_MIN;		// will be ignored
+        _maximumValue = FLT_MIN;		// will be ignored
     }
 
     return self;
@@ -263,8 +240,6 @@
 
 @implementation SCSegmentedAttributes
 
-@synthesize segmentTitlesArray;
-
 + (instancetype)attributesWithSegmentTitlesArray:(NSArray *)titles
 {
 	return [[[self class] alloc] initWithSegmentTitlesArray:titles];
@@ -273,7 +248,7 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        segmentTitlesArray = nil;		// will be ignored
+        _segmentTitlesArray = nil;		// will be ignored
     }
 
     return self;
@@ -298,10 +273,6 @@
 
 @implementation SCDateAttributes
 
-@synthesize dateFormatter;
-@synthesize datePickerMode;
-@synthesize displayDatePickerAsInputAccessoryView;
-
 + (instancetype)attributesWithDateFormatter:(NSDateFormatter *)formatter
 {
 	return [[[self class] alloc] initWithDateFormatter:formatter];
@@ -319,9 +290,9 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        dateFormatter = nil;		// will be ignored
-        datePickerMode = UIDatePickerModeDateAndTime;
-        displayDatePickerAsInputAccessoryView = FALSE;
+        _dateFormatter = nil;		// will be ignored
+        _datePickerMode = UIDatePickerModeDateAndTime;
+        _displayDatePickerAsInputAccessoryView = FALSE;
     }
 
     return self;
@@ -359,20 +330,6 @@
 
 @implementation SCSelectionAttributes
 
-@synthesize selectionItemsStore;
-@synthesize selectionItemsFetchOptions;
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissDetailView;
-@synthesize hideDetailViewNavigationBar;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditingItems;
-@synthesize addNewObjectuiElement;
-@synthesize placeholderuiElement;
-
 + (instancetype)attributesWithItems:(NSArray *)items allowMultipleSelection:(BOOL)allowMultipleSel
 		 allowNoSelection:(BOOL)allowNoSel
 {
@@ -393,22 +350,22 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        selectionItemsStore = nil;
-        selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
+        _selectionItemsStore = nil;
+        _selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
         
-        allowMultipleSelection = FALSE;
-        allowNoSelection = FALSE;
-        maximumSelections = 0;
-        autoDismissDetailView = FALSE;
-        hideDetailViewNavigationBar = FALSE;
+        _allowMultipleSelection = FALSE;
+        _allowNoSelection = FALSE;
+        _maximumSelections = 0;
+        _autoDismissDetailView = FALSE;
+        _hideDetailViewNavigationBar = FALSE;
         
-        allowAddingItems = FALSE;
-        allowDeletingItems = FALSE;
-        allowMovingItems = FALSE;
-        allowEditingItems = FALSE;
+        _allowAddingItems = FALSE;
+        _allowDeletingItems = FALSE;
+        _allowMovingItems = FALSE;
+        _allowEditingItems = FALSE;
         
-        addNewObjectuiElement = nil;
-        placeholderuiElement = nil;
+        _addNewObjectuiElement = nil;
+        _placeholderuiElement = nil;
     }
 
     return self;
@@ -442,9 +399,9 @@
 
 - (void)setSelectionItemsStore:(SCDataStore *)store
 {
-    selectionItemsStore = store;
+    _selectionItemsStore = store;
     
-    selectionItemsFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
+    _selectionItemsFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
 }
 
 - (NSArray *)items
@@ -460,10 +417,6 @@
 
 
 @implementation SCObjectSelectionAttributes
-
-@synthesize intermediateEntityDefinition;
-
-
 
 + (instancetype)attributesWithSelectionObjects:(NSArray *)objects
                    objectsDefinition:(SCDataDefinition *)definition
@@ -490,7 +443,7 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        intermediateEntityDefinition = nil;
+        _intermediateEntityDefinition = nil;
     }
 
     return self;
@@ -541,8 +494,6 @@
 
 @implementation SCObjectAttributes
 
-@synthesize objectDefinition;
-
 + (instancetype)attributesWithObjectDefinition:(SCDataDefinition *)definition
 {
 	return [[[self class] alloc] initWithObjectDefinition:definition];
@@ -556,7 +507,7 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        objectDefinition = nil;
+        _objectDefinition = nil;
     }
 
     return self;
@@ -589,19 +540,13 @@
 
 
 
+@interface SCArrayOfObjectsAttributes ()
+{
+    BOOL addNewObjectuiElementExistsInEdtingMode;
+}
+@end
+
 @implementation SCArrayOfObjectsAttributes
-
-@synthesize defaultObjectsDefinition;
-@synthesize objectsFetchOptions;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditingItems;
-@synthesize placeholderuiElement;
-@synthesize addNewObjectuiElement;
-@synthesize addNewObjectuiElementExistsInNormalMode;
-@synthesize addNewObjectuiElementExistsInEditingMode;
-
 
 + (instancetype)attributesWithObjectDefinition:(SCDataDefinition *)definition
 						 allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting
@@ -635,17 +580,17 @@
 - (instancetype)init
 {
     if ( (self = [super init]) ) {
-        defaultObjectsDefinition = nil;
-        objectsFetchOptions = nil; // will be re-initialized when defaultObjectsDefinition is set
+        _defaultObjectsDefinition = nil;
+        _objectsFetchOptions = nil; // will be re-initialized when defaultObjectsDefinition is set
         
-        allowAddingItems = TRUE;
-        allowDeletingItems = TRUE;
-        allowMovingItems = TRUE;
-        allowEditingItems = TRUE;
-        placeholderuiElement = nil;
-        addNewObjectuiElement = nil;
-        addNewObjectuiElementExistsInNormalMode = TRUE;
-        addNewObjectuiElementExistsInEditingMode = TRUE;
+        _allowAddingItems = TRUE;
+        _allowDeletingItems = TRUE;
+        _allowMovingItems = TRUE;
+        _allowEditingItems = TRUE;
+        _placeholderuiElement = nil;
+        _addNewObjectuiElement = nil;
+        _addNewObjectuiElementExistsInNormalMode = TRUE;
+        _addNewObjectuiElementExistsInEditingMode = TRUE;
         
         _sectionActions = [[SCSectionActions alloc] init];
     }
@@ -660,9 +605,9 @@
     if ( (self=[self init]) ) {
         self.defaultObjectsDefinition = definition;
         
-        allowAddingItems = allowAdding;
-        allowDeletingItems = allowDeleting;
-        allowMovingItems = allowMoving;
+        _allowAddingItems = allowAdding;
+        _allowDeletingItems = allowDeleting;
+        _allowMovingItems = allowMoving;
     }
 
     return self;
@@ -690,9 +635,9 @@ addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode
 
 - (void)setDefaultObjectsDefinition:(SCDataDefinition *)definition
 {
-    defaultObjectsDefinition = definition;
+    _defaultObjectsDefinition = definition;
     
-    objectsFetchOptions = [definition generateCompatibleDataFetchOptions];
+    _objectsFetchOptions = [definition generateCompatibleDataFetchOptions];
 }
 
 @end

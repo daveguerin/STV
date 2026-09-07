@@ -15,6 +15,8 @@
 #import "SCDetailViewControllerOptions.h"
 #import "SCModelActions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCEntityDefinition;
 #pragma mark - SCTableViewModel
 /// This class is the master mind behind all of Sensible TableView's functionality.
@@ -38,67 +40,9 @@
 
 @interface SCTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, SCInputAccessoryViewDelegate>
 {
-	//internal
-    /// The index path of the most recently returned cell.
-    NSIndexPath *lastReturnedCellIndexPath;     // used for optimization
-    /// The most recently returned table-view cell.
-    SCTableViewCell *lastReturnedCell;          // used for optimization
-    /// The index path of the last visible cell.
-    NSIndexPath *lastVisibleCellIndexPath;      // user for optimization
-	/// The target that receives the control action.
-	__weak id target;
-	/// The selector sent for the control action.
-	SEL action;
-	/// Property is used internally by the framework to set the master model in a master-detail relationship.
-	__weak SCTableViewModel *masterModel;
-    /// Holds the currently active detail model.
-    __weak SCTableViewModel *activeDetailModel;
-	
-	__weak UITableView *_tableView;
-	/// When set to a valid UIBarButtonItem, SCTableViewModel automatically puts its table view in edit mode when the button is tapped. Note: Must be set if the model is to automatically show/hide editing mode sections.
-	UIBarButtonItem *editButtonItem;
-	/// Enables keyboard avoidance through scroll insets, never frame resizing.
-	BOOL autoResizeForKeyboard;
-	/// Whether the keyboard is currently shown.
-	BOOL keyboardShown;
-	/// The amount by which the keyboard overlaps the table view.
-	CGFloat keyboardOverlap;
-    SCInputAccessoryView *_inputAccessoryView;
-	
-	/// The model's table-view sections.
-	NSMutableArray *sections;
-	
-	/// An array of strings that serve as the title of sections in the tableView and appear in the index list on the right side of the tableView. tableView must be in plain style for the index to appear.
-	NSArray *sectionIndexTitles;
-	/// If TRUE, SCTableViewModel will automatically generate the sectionIndexTitles array from the first letter of each section's header title. Default: FALSE.
-	BOOL autoGenerateSectionIndexTitles;
-	/// If TRUE, SCTableViewModel will automatically sort its sections alphabetically according to their header title value. Default: FALSE.
-	BOOL autoSortSections;
-	/// If TRUE, all section header titles will be hidden. Default: FALSE.
-	BOOL hideSectionHeaderTitles;
-	/// If TRUE, SCTableViewModel will prevent any cell from being selected. Default: FALSE.
-	BOOL lockCellSelection;
-	/// An integer that you can use to identify different table view models in your application. Any detail model automatically gets its tag set to be the value of its parent model's tag plus one. Default: 0.
-	NSInteger tag;
-    
-    /// Set to TRUE to enable pull-to-refresh functionality on the table view. Default: FALSE.
-    BOOL enablePullToRefresh;
-    
-    /// The current active cell. A cell becomes active if it is selected or if its value changes.
-    SCTableViewCell *activeCell;
-    /// The indexPath of activeCell.
-    NSIndexPath *activeCellIndexPath;
-    /// The current active input control.
-    UIResponder *activeCellControl;
-    
-	/// `SCTableViewModel` will automatically enable/disable the commitButton based on the valuesAreValid property, where commitButton is enabled if valuesAreValid is TRUE.
-	UIBarButtonItem *commitButton;
-    /// Property is used internally by the framework to determine if the table view is in swipe-to-delete editing mode.
-    BOOL swipeToDeleteActive;
-    
-    SCModelActions *_modelActions;
-    SCSectionActions *_sectionActions;
-    SCCellActions *_cellActions;
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
+    NSMutableArray<SCTableViewSection *> *sections;
 }
 
 #pragma mark - Creation and Initialization
@@ -108,14 +52,14 @@
 /// Upon the model's initialization, the model sets itself as the table view's dataSource and delegate, and starts providing it with its sections and cells.
 ///
 /// - Parameter tableView: The UITableView to be bound to the model. It's ok for this value to be nil if the table view is not yet available when the model is created.
-+ (instancetype)modelWithTableView:(UITableView *)tableView;
++ (instancetype)modelWithTableView:(nullable UITableView *)tableView;
 
 /// Returns an initialized `SCTableViewModel` bound to a UITableView.
 ///
 /// Upon the model's initialization, the model sets itself as the table view's dataSource and delegate, and starts providing it with its sections and cells.
 ///
 /// - Parameter tableView: The UITableView to be bound to the model. It's ok for this value to be nil if the table view is not yet available when the model is created.
-- (instancetype)initWithTableView:(UITableView *)tableView;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView;
 
 #pragma mark - Configuration
 
@@ -125,12 +69,12 @@
 
 /// Contains a UIRefreshControl that automatically provides pull-to-refresh functionality to the table view.
 /// - Note: enablePullToRefresh must be set to TRUE for this view to take effect.
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, nullable, strong) UIRefreshControl *refreshControl;
 
 /// When set to a valid UIBarButtonItem, SCTableViewModel automatically puts its table view
 /// in edit mode when the button is tapped. Note: Must be set if the model is to automatically
 /// show/hide editing mode sections.
-@property (nonatomic, strong) UIBarButtonItem *editButtonItem;
+@property (nonatomic, nullable, strong) UIBarButtonItem *editButtonItem;
 
 /// Adjusts content and indicator insets for keyboard avoidance without changing
 /// the table frame. Defaults to NO for UITableViewController owners, which manage
@@ -149,7 +93,7 @@
 /// An array of strings that serve as the title of sections in the tableView and
 /// appear in the index list on the right side of the tableView. tableView
 /// must be in plain style for the index to appear.
-@property (nonatomic, strong) NSArray *sectionIndexTitles;
+@property (nonatomic, nullable, strong) NSArray<NSString *> *sectionIndexTitles;
 
 /// If TRUE, SCTableViewModel will automatically generate the sectionIndexTitles array from
 /// the first letter of each section's header title. Default: FALSE.
@@ -173,7 +117,7 @@
 /// The application owns its containment and presentation arrangement.
 ///
 /// - Warning: detailViewController must be of type SCViewController or SCTableViewController only.
-@property (nonatomic, strong) UIViewController *detailViewController;
+@property (nonatomic, nullable, strong) UIViewController *detailViewController;
 
 /// The set of model action blocks.
 @property (nonatomic, readonly) SCModelActions *modelActions;
@@ -202,11 +146,11 @@
 
 /// Returns the section at the specified index.
 /// - Parameter index: Must be less than the total number of sections.
-- (SCTableViewSection *)sectionAtIndex:(NSUInteger)index;
+- (nullable SCTableViewSection *)sectionAtIndex:(NSUInteger)index;
 
 /// Returns the first section with the specified header title.
 /// - Parameter title: The header title.
-- (SCTableViewSection *)sectionWithHeaderTitle:(NSString *)title;
+- (nullable SCTableViewSection *)sectionWithHeaderTitle:(nullable NSString *)title;
 
 /// Returns the index of the specified section.
 /// - Parameter section: Must be a valid non nil SCTableViewSection.
@@ -224,25 +168,25 @@
 /// - Parameter object: The object that the sections will be generated for.
 /// - Parameter definition: The object's definition.
 /// - Warning: Important: definition must be the data definition representing the given object.
-- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition;
+- (void)generateSectionsForObject:(nullable NSObject *)object withDefinition:(SCDataDefinition *)definition;
 
 /// Generates sections using the given object and its data definition. The method fully utilizes the definition's groups feature by generating a section for each group.
 /// - Parameter object: The object that the sections will be generated for.
 /// - Parameter definition: The object's definition.
 /// - Parameter newObject: Set to TRUE if the generated sections are used represent a newly created fresh object, otherwise set to FALSE.
 /// - Warning: Important: definition must be the data definition representing the given object.
-- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition newObject:(BOOL)newObject;
+- (void)generateSectionsForObject:(nullable NSObject *)object withDefinition:(SCDataDefinition *)definition newObject:(BOOL)newObject;
 
 /// Generates sections using the given object and its data store.
 /// - Parameter object: The object that the sections will be generated for.
 /// - Parameter store: The object's data store.
-- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store;
+- (void)generateSectionsForObject:(nullable NSObject *)object withDataStore:(nullable SCDataStore *)store;
 
 /// Generates sections using the given object and its data store.
 /// - Parameter object: The object that the sections will be generated for.
 /// - Parameter store: The object's data store.
 /// - Parameter newObject: Set to TRUE if the generated sections are used represent a newly created fresh object, otherwise set to FALSE.
-- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store newObject:(BOOL)newObject;
+- (void)generateSectionsForObject:(nullable NSObject *)object withDataStore:(nullable SCDataStore *)store newObject:(BOOL)newObject;
 
 /// Generates sections using a user defaults definition.
 /// - Parameter userDefaultsDefinition: The user defaults definition.
@@ -251,74 +195,74 @@
 #pragma mark - Managing Cells
 
 /// The current active cell. A cell becomes active if it is selected or if its value changes.
-@property (nonatomic, readonly) SCTableViewCell *activeCell;
+@property (nonatomic, nullable, readonly) SCTableViewCell *activeCell;
 
 /// The indexPath of activeCell.
-@property (nonatomic, readonly) NSIndexPath *activeCellIndexPath;
+@property (nonatomic, nullable, readonly) NSIndexPath *activeCellIndexPath;
 
 /// The current active input control.
-@property (nonatomic, readonly) UIResponder *activeCellControl;
+@property (nonatomic, nullable, readonly) UIResponder *activeCellControl;
 
 /// Assigns the given object (given it's data definition) to be the bound object in all of the model's cells. *
 /// - Parameter boundObject: The object bound to the section.
 /// - Parameter dataDefinition: The data definition.
-- (void)setBoundObjectForAllCells:(NSObject *)boundObject dataDefinition:(SCDataDefinition *)dataDefinition;
+- (void)setBoundObjectForAllCells:(nullable NSObject *)boundObject dataDefinition:(SCDataDefinition *)dataDefinition;
 
 /// Assigns the given object (given it's data store) to be the bound object in all of the model's cells. *
 /// - Parameter boundObject: The object bound to the section.
 /// - Parameter boundObjectStore: The data store for the bound object.
-- (void)setBoundObjectForAllCells:(NSObject *)boundObject boundObjectStore:(SCDataStore *)boundObjectStore;
+- (void)setBoundObjectForAllCells:(nullable NSObject *)boundObject boundObjectStore:(nullable SCDataStore *)boundObjectStore;
 
 /// Returns the cell at the specified indexPath.
 /// - Parameter indexPath: Must be a valid non nil NSIndexPath.
-- (SCTableViewCell *)cellAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable SCTableViewCell *)cellAtIndexPath:(nullable NSIndexPath *)indexPath;
 
 /// Returns the index path for the specified cell.
 /// - Parameter cell: Must be a valid non nil SCTableViewCell.
 /// - Returns: If cell is not found, method returns NSNotFound.
-- (NSIndexPath *)indexPathForCell:(SCTableViewCell *)cell;
+- (nullable NSIndexPath *)indexPathForCell:(nullable SCTableViewCell *)cell;
 
 /// Returns the first cell with the given bound property name. *
 /// - Parameter boundPropertyName: The bound property name.
-- (SCTableViewCell *)cellWithBoundPropertyName:(NSString *)boundPropertyName;
+- (nullable SCTableViewCell *)cellWithBoundPropertyName:(NSString *)boundPropertyName;
 
 /// Returns the indexPath of the cell that comes after the specified cell in the model.
 /// - Parameter indexPath: The indexPath of the current cell.
 /// - Parameter rewind: If TRUE and cell is the very last cell in the model, method returns the indexPath of the cell at the very top.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
-- (NSIndexPath *)indexPathForCellAfterCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind;
+- (nullable NSIndexPath *)indexPathForCellAfterCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind;
 
 /// Returns the indexPath of the cell that comes after the specified cell in the model.
 /// - Parameter cell: Must be a valid non nil SCTableViewCell.
 /// - Parameter rewind: If TRUE and cell is the very last cell in the model, method returns the indexPath of the cell at the very top.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
-- (NSIndexPath *)indexPathForCellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
+- (nullable NSIndexPath *)indexPathForCellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
 
 /// Returns the cell that comes after the specified cell in the model.
 /// - Parameter cell: Must be a valid non nil SCTableViewCell.
 /// - Parameter rewind: If TRUE and cell is the very last cell in the model, method returns the cell at the very top.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
-- (SCTableViewCell *)cellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
+- (nullable SCTableViewCell *)cellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
 
 /// Returns the indexPath of the cell that comes before the specified cell in the model.
 /// - Parameter indexPath: The indexPath of the current cell.
 /// - Parameter rewind: If TRUE and cell is the very first cell in the model, method returns the indexPath of the last cell.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
-- (NSIndexPath *)indexPathForCellBeforeCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind;
+- (nullable NSIndexPath *)indexPathForCellBeforeCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind;
 
 /// Returns the indexPath of the cell that comes before the specified cell in the model.
 /// - Parameter cell: Must be a valid non nil SCTableViewCell.
 /// - Parameter rewind: If TRUE and cell is the very first cell in the model, method returns the indexPath of the last cell.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
 /// - SeeAlso: ``moveToNextCellControl:``
-- (NSIndexPath *)indexPathForCellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
+- (nullable NSIndexPath *)indexPathForCellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
 
 /// Returns the cell that comes before the specified cell in the model.
 /// - Parameter cell: Must be a valid non nil SCTableViewCell.
 /// - Parameter rewind: If TRUE and cell is the very first cell in the model, method returns the last cell.
 /// - Returns: Returns nil if cell is the last cell in the model and rewind is FALSE, or if cell does not exist in the model.
 /// - SeeAlso: ``moveToPreviousCellControl:``
-- (SCTableViewCell *)cellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
+- (nullable SCTableViewCell *)cellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind;
 
 /// Moves the first responder to the next cell control, automatically scrolling the table view as needed. If rewind is TRUE, the first responder is moved to the very first cell after the last cell has been reached.
 /// - Note: This method is typically used when you're overriding the framework's automatic handling of the keyboard's `Return` button.
@@ -344,7 +288,7 @@
 @property (nonatomic, readonly) BOOL needsCommit;
 
 /// `SCTableViewModel` will automatically enable/disable the commitButton based on the valuesAreValid property, where commitButton is enabled if valuesAreValid is TRUE.
-@property (nonatomic, strong) UIBarButtonItem *commitButton;
+@property (nonatomic, nullable, strong) UIBarButtonItem *commitButton;
 
 /// Forces the commit of all section and cell values into their respective bound objects. There is usually no need to call this method manually as it's typically called by the framework when the user is ready to commit changes.
 - (void)commitChanges;
@@ -357,12 +301,12 @@
 /// selection and composition. This does not reload or replace the row.
 /// - Parameter cell: The cell whose content or constraints changed.
 /// - Parameter animated: Whether to animate the resulting height change.
-- (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated;
+- (void)invalidateHeightForCell:(nullable SCTableViewCell *)cell animated:(BOOL)animated;
 
 #pragma mark - Miscellaneous
 
 /// 	The UITableView bound to `SCTableViewModel`.
-@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, nullable, weak) UITableView *tableView;
 
 // dgApps remarked out the deprecated property
 // /**
@@ -373,10 +317,10 @@
 //@property (nonatomic, weak) UITableView *modeledTableView;
 
 /// 	The UIViewController of tableView.
-@property (nonatomic, readonly) UIViewController *viewController;
+@property (nonatomic, nullable, readonly) UIViewController *viewController;
 
 /// The keyboard input accessory view responsible for providing keyboard navigation between the different responders. Set to a valid SCInputAccessoryView to enable the accessory view functionality.
-@property (nonatomic, strong) SCInputAccessoryView *inputAccessoryView;
+@property (nonatomic, nullable, strong) SCInputAccessoryView *inputAccessoryView;
 
 /// Clears all contents of the model.
 - (void)clear;
@@ -399,7 +343,7 @@
 ///
 /// - Note: This method is typically used to implement 3D Touch Peek and Pop.
 /// - Parameter indexPath: The row index path.
-- (UIViewController *)detailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable UIViewController *)detailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath;
 
 
  
@@ -412,17 +356,17 @@
 @property (nonatomic, readonly) BOOL swipeToDeleteActive;
 
 /// Property is used internally by the framework to set the master model in a master-detail relationship.
-@property (nonatomic, weak) SCTableViewModel *masterModel;
+@property (nonatomic, nullable, weak) SCTableViewModel *masterModel;
 
 /// Property is used internally by the framework to set the master boundObject in a master-detail relationship.
-@property (nonatomic, weak) NSObject *masterBoundObject;
+@property (nonatomic, nullable, weak) NSObject *masterBoundObject;
 
 /// Property is used internally by the framework to set the master boundObject store in a master-detail relationship.
-@property (nonatomic, weak) SCDataStore *masterBoundObjectStore;
+@property (nonatomic, nullable, weak) SCDataStore *masterBoundObjectStore;
 
 /// Holds the currently active detail model.
 /// - Warning: Property must only be set internally by the framework.
-@property (nonatomic, weak) SCTableViewModel *activeDetailModel;
+@property (nonatomic, nullable, weak) SCTableViewModel *activeDetailModel;
 
 /// Called internally to rollback to initial cell bound values when their bound object was first assigned.
 - (void)rollbackToInitialCellValues;
@@ -432,11 +376,11 @@
 
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter cell: The cell to configure.
-- (void)setActiveCell:(SCTableViewCell *)cell;
+- (void)setActiveCell:(nullable SCTableViewCell *)cell;
 
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter control: The control to initialize.
-- (void)setActiveCellControl:(UIResponder *)control;
+- (void)setActiveCellControl:(nullable UIResponder *)control;
 
 /// Warning: Method must only be called internally by the framework.
 - (void)enterLoadingMode;
@@ -449,7 +393,7 @@
 
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter detailModel: The detail table-view model.
-- (void)configureDetailModel:(SCTableViewModel *)detailModel;
+- (void)configureDetailModel:(nullable SCTableViewModel *)detailModel;
 
 /// Warning: Method must only be called internally by the framework.
 /// - Parameter aNotification: The a notification.
@@ -488,7 +432,7 @@
 /// Method used internally by the framework to monitor model modification events.
 /// - Parameter _target: The target.
 /// - Parameter _action: The action.
-- (void)setTargetForModelModifiedEvent:(id)_target action:(SEL)_action;
+- (void)setTargetForModelModifiedEvent:(nullable id)_target action:(nullable SEL)_action;
 
 /// Subclasses should override this method to handle when editButtonItem is tapped.
 - (void)didTapEditButtonItem;
@@ -503,7 +447,7 @@
 
 // Returns the true vtable view when the model is acting as a proxy for a UISearchController
 /// The underlying table view managed by the model.
-@property (nonatomic, readonly) UITableView *trueTableView;
+@property (nonatomic, nullable, readonly) UITableView *trueTableView;
 
 @end
 
@@ -524,47 +468,16 @@
 /// - SeeAlso: ``SCArrayOfStringsModel``, ``SCArrayOfObjectsModel``, ``SCArrayOfStringsSection``, ``SCArrayOfObjectsSection``.
 @interface SCArrayOfItemsModel : SCTableViewModel <SCTableViewControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating>
 {
-	/// The section temporarily being edited.
-	SCArrayOfItemsSection *tempSection;		//internal
-	/// The items currently retained by the active filter.
-	NSArray *filteredArray;					//internal
-	
-	/// The data store that's used to store and fetch the model's items.
-	SCDataStore *dataStore;
-    /// The options used to fetch the model's items from dataStore.
-    SCDataFetchOptions *dataFetchOptions;
-    
-    BOOL _loadingContents;
-    /// Whether generated sections match the backing items.
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
+    NSArray<id> * _Nullable filteredArray;
+    SCDataStore * _Nullable _dataStore;
     BOOL sectionsInSync;
-    /// The items fetched from dataStore.
-    NSMutableArray *items;
-    /// Set to FALSE to disable the section from automatically fetching its items from dataStore. Default: TRUE.
-    BOOL autoFetchItems;
-    /// Whether the current items match the data store.
-    BOOL itemsInSync;
-    /// The accessory type of the generated cells.
-    UITableViewCellAccessoryType itemsAccessoryType;
-	/// Allows/disables adding new cells/items to the items array. Default: TRUE.
-	BOOL allowAddingItems;
-	/// Allows/disables deleting new cells/items from the items array. Default: TRUE.
-	BOOL allowDeletingItems;
-	/// Allows/disables moving cells/items from one row to another. Default: FALSE.
-	BOOL allowMovingItems;
-	/// Allows/disables a detail view for editing items' values. Default: TRUE.
-	BOOL allowEditDetailView;
-	/// Allows/disables row selection. Default: TRUE.
-	BOOL allowRowSelection;
-	/// Allows/disables automatic cell selection of newly created items. Default: TRUE.
-	BOOL autoSelectNewItemCell;
-
-	/// Options for the generated detail view controller.
-	SCDetailViewControllerOptions *detailViewControllerOptions;
-    /// Options for the generated detail view controller for new items.
-    SCDetailViewControllerOptions *newItemDetailViewControllerOptions;
-    
-	/// The search bar associated with the model. Once set to a valid UISearchBar, the model will automatically filter its items based on the user's typed search term.
-	UISearchBar *searchBar;
+    UITableViewCellAccessoryType _itemsAccessoryType;
+    BOOL _allowAddingItems;
+    BOOL _allowDeletingItems;
+    BOOL _allowMovingItems;
+    BOOL _allowEditDetailView;
 }
 
 #pragma mark - Creation and Initialization
@@ -573,18 +486,18 @@
 ///
 /// - Parameter tableView: The UITableView to be bound to the model.
 /// - Parameter store: The data store containing the model's items.
-- (instancetype)initWithTableView:(UITableView *)tableView dataStore:(SCDataStore *)store;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView dataStore:(nullable SCDataStore *)store;
 
 #pragma mark - Configuration
 
 /// The data store that's used to store and fetch the model's items.
-@property (nonatomic, strong) SCDataStore *dataStore;
+@property (nonatomic, nullable, strong) SCDataStore *dataStore;
 
 /// The options used to fetch the model's items from dataStore.
-@property (nonatomic, strong) SCDataFetchOptions *dataFetchOptions;
+@property (nonatomic, nullable, strong) SCDataFetchOptions *dataFetchOptions;
 
 /// The items fetched from dataStore.
-@property (nonatomic, readonly) NSArray *items;
+@property (nonatomic, nullable, readonly) NSArray<id> *items;
 
 /// Set to FALSE to disable the section from automatically fetching its items from dataStore. Default: TRUE.
 @property (nonatomic, readwrite) BOOL autoFetchItems;
@@ -620,11 +533,11 @@
 /// Set this property to a valid UIBarButtonItem. When addButtonItem is tapped and allowAddingItems
 /// is TRUE, a detail view is automatically generated for the user to enter the new items
 /// properties. If the properties are commited, a new item is added to the array.
-@property (nonatomic, strong) UIBarButtonItem *addButtonItem;
+@property (nonatomic, nullable, strong) UIBarButtonItem *addButtonItem;
 
 /// The search bar associated with the model. Once set to a valid UISearchBar, the model will
 /// automatically filter its items based on the user's typed search term.
-@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, nullable, strong) UISearchBar *searchBar;
 
 /// Set to TRUE to use a search controller to perform searches. Default: FALSE.
 /// Creation is safe before table attachment. The same controller moves with the
@@ -634,7 +547,7 @@
 /// The search controller used to search the model values.
 ///
 /// - Note: `searchController` only has a value if `enableSearchController` is `TRUE`.
-@property (nonatomic, strong, readonly) UISearchController *searchController;
+@property (nonatomic, nullable, strong, readonly) UISearchController *searchController;
 
 /// Options for the generated detail view controller.
 @property (nonatomic, readonly) SCDetailViewControllerOptions *detailViewControllerOptions;
@@ -661,7 +574,7 @@
 
 /* For internal use only. */
 /// The Interface Builder identifier for the new-item view controller.
-@property (nonatomic, copy) NSString *ibNewItemViewControllerIdentifier;
+@property (nonatomic, nullable, copy) NSString *ibNewItemViewControllerIdentifier;
 
 /* For internal use only. */
 /// Configures the model using an existing array-of-items section.
@@ -670,16 +583,16 @@
 
 /* Used internally by the framework. */
 /// Returns the model's mutable backing items.
-- (NSMutableArray *)mutableItems;
+- (nullable NSMutableArray<id> *)mutableItems;
 
 /* Used internally by the framework. */
 /// Replaces the model's mutable backing items.
 /// - Parameter mutableItems: The replacement mutable items.
-- (void)setMutableItems:(NSMutableArray *)mutableItems;
+- (void)setMutableItems:(nullable NSMutableArray<id> *)mutableItems;
 
 /// Subclasses should override this method to handle section creation.
 /// - Parameter title: The title.
-- (SCArrayOfItemsSection *)createSectionWithHeaderTitle:(NSString *)title;
+- (SCArrayOfItemsSection *)createSectionWithHeaderTitle:(nullable NSString *)title;
 
 /// Subclasses should override this method to set additional section properties after creation.
 /// - Parameter section: The section used to configure the model.
@@ -711,11 +624,11 @@
 
 /// Method called internally.
 /// - Parameter options: The detail-view-controller options.
-- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options;
+- (void)setDetailViewControllerOptions:(nullable SCDetailViewControllerOptions *)options;
 
 /// Method called internally.
 /// - Parameter options: The detail-view-controller options.
-- (void)setNewItemDetailViewControllerOptions:(SCDetailViewControllerOptions *)options;
+- (void)setNewItemDetailViewControllerOptions:(nullable SCDetailViewControllerOptions *)options;
 
 @end
 
@@ -729,10 +642,7 @@
 ///
 /// `SCArrayOfItemsModel` will automatically generate a set of SCArrayOfObjectsSection(s) if the sectionHeaderTitleForItem modelAction is implemented, otherwise it will only generate a single SCArrayOfObjectsSection.
 @interface SCArrayOfObjectsModel : SCArrayOfItemsModel
-{
-	/// The name of the object's property that the value of which will be used to search the items array when the user types a search term inside the model's associated search bar. To search more than one property value, separate the property names by a semi-colon (e.g.: @"firstName;lastName"). To search all properties in the object's class definition, set the property to an astrisk (e.g.: @"*"). If the property is not set, it defaults to the value of the object's class definition titlePropertyName property.
-	NSString *searchPropertyName;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -743,7 +653,7 @@
 ///   This array must be of type NSMutableArray, as it must support the model's add, delete, and
 ///   move operations.
 /// - Parameter definition: The definition of the objects in the objects array.
-+ (instancetype)modelWithTableView:(UITableView *)tableView items:(NSMutableArray *)items itemsDefinition:(SCDataDefinition *)definition;
++ (instancetype)modelWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items itemsDefinition:(SCDataDefinition *)definition;
    
 
 /// Returns an initialized `SCArrayOfObjectsModel` given a UITableView and an array of objects.
@@ -753,7 +663,7 @@
 ///   This array must be of type NSMutableArray, as it must support the model's add, delete, and
 ///   move operations.
 /// - Parameter definition: The definition of the objects in the objects array.
-- (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)items itemsDefinition:(SCDataDefinition *)definition;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items itemsDefinition:(SCDataDefinition *)definition;
 
 /// Allocates and returns an initialized SCArrayOfObjectsModel given a UITableView
 /// and an entity definition.
@@ -762,7 +672,7 @@
 ///
 /// - Parameter tableView: The UITableView to be bound to the model.
 /// - Parameter definition: The entity definition of the objects.
-+ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
++ (instancetype)modelWithTableView:(nullable UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
 
 /// Allocates and returns an initialized `SCArrayOfObjectsModel` given a UITableView
 /// and an entity definition.
@@ -770,7 +680,7 @@
 /// - Parameter tableView: The UITableView to be bound to the model.
 /// - Parameter definition: The entity definition of the objects.
 /// - Parameter predicate: The predicate that will be used to filter the fetched objects.
-+ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
++ (instancetype)modelWithTableView:(nullable UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(nullable NSPredicate *)predicate;
 
 /// Returns an initialized SCArrayOfObjectsModel given a UITableView
 /// and an entity definition.
@@ -779,7 +689,7 @@
 ///
 /// - Parameter tableView: The UITableView to be bound to the model.
 /// - Parameter definition: The entity definition of the objects.
-- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition;
 
 /// Returns an initialized `SCArrayOfObjectsModel` given a UITableView
 /// and an entity definition.
@@ -787,7 +697,7 @@
 /// - Parameter tableView: The UITableView to be bound to the model.
 /// - Parameter definition: The entity definition of the objects.
 /// - Parameter predicate: The predicate that will be used to filter the fetched objects.
-- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(nullable NSPredicate *)predicate;
 
 
 #pragma mark - Configuration
@@ -797,7 +707,7 @@
 /// value, separate the property names by a semi-colon (e.g.: @"firstName;lastName"). To search all
 /// properties in the object's class definition, set the property to an astrisk (e.g.: @"*").
 /// If the property is not set, it defaults to the value of the object's class definition titlePropertyName property.
-@property (nonatomic, copy) NSString *searchPropertyName;
+@property (nonatomic, nullable, copy) NSString *searchPropertyName;
 
 @end
 
@@ -822,7 +732,7 @@
 /// - Parameter items: An array of NSStrings that the model will use to generate its cells.
 ///   This array must be of type NSMutableArray, as it must support the model's add, delete, and
 ///   move operations.
-+ (instancetype)modelWithTableView:(UITableView *)tableView items:(NSMutableArray *)items;
++ (instancetype)modelWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items;
 
 /// Returns an initialized `SCArrayOfStringsModel` given a UITableView and an array of NSString objects.
 ///
@@ -830,7 +740,7 @@
 /// - Parameter items: An array of NSStrings that the model will use to generate its cells.
 ///   This array must be of type NSMutableArray, as it must support the model's add, delete, and
 ///   move operations.
-- (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)items;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items;
 
 @end
 
@@ -859,32 +769,7 @@
 ///
 /// - SeeAlso: ``SCSelectionSection``.
 @interface SCSelectionModel : SCArrayOfStringsModel
-{	
-    //internal
-	/// Whether the value is bound to an `NSNumber` object.
-	BOOL boundToNSNumber;	
-	/// Whether the value is bound to an `NSString` object.
-	BOOL boundToNSString;	
-	/// The index path of the most recently selected row.
-	NSIndexPath *lastSelectedRowIndexPath; 
-	
-    /// The model's bound object.
-    NSObject *boundObject;
-    /// The model's bound object store.
-    SCDataStore *boundObjectStore;
-	/// The model's bound property name.
-	NSString *boundPropertyName;
-    
-	/// If TRUE, the section allows multiple selection. Default: FALSE.
-	BOOL allowMultipleSelection;
-	/// If TRUE, the section allows no selection at all. Default: FALSE.
-	BOOL allowNoSelection;
-	/// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
-	NSUInteger maximumSelections;
-	/// If TRUE, the section automatically dismisses the current view controller when a value is selected. Default: FALSE.
-	BOOL autoDismissViewController;
-	NSMutableSet *_selectedItemsIndexes;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -900,10 +785,10 @@
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectedIndexPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView
+            boundObject:(nullable NSObject *)object
+    selectedIndexPropertyName:(nullable NSString *)propertyName
+                  items:(nullable NSArray<id> *)sectionItems;
 
 /// Returns an initialized `SCSelectionModel` given a table view, a bound object,
 /// a bound property name, an array of selection items, and whether to allow multiple selection.
@@ -917,10 +802,10 @@
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectedIndexesPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems 
+- (instancetype)initWithTableView:(nullable UITableView *)tableView
+            boundObject:(nullable NSObject *)object
+    selectedIndexesPropertyName:(nullable NSString *)propertyName
+                  items:(nullable NSArray<id> *)sectionItems
  allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Returns an initialized `SCSelectionModel` given a table view, a bound object,
@@ -934,25 +819,25 @@
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectionStringPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView
+            boundObject:(nullable NSObject *)object
+    selectionStringPropertyName:(nullable NSString *)propertyName
+                  items:(nullable NSArray<id> *)sectionItems;
 
 
 #pragma mark - Configuration
 
 /// The model's bound object.
-@property (nonatomic, readonly) NSObject *boundObject;
+@property (nonatomic, nullable, readonly) NSObject *boundObject;
 
 /// The model's bound object store.
-@property (nonatomic, strong) SCDataStore *boundObjectStore;
+@property (nonatomic, nullable, strong) SCDataStore *boundObjectStore;
 
 /// The model's bound property name.
-@property (nonatomic, readonly) NSString *boundPropertyName;
+@property (nonatomic, nullable, readonly) NSString *boundPropertyName;
 
 /// The model's bound value.
-@property (nonatomic, strong) NSObject *boundValue;
+@property (nonatomic, nullable, strong) NSObject *boundValue;
 
 /// This property reflects the current section's selection. You can set this property
 /// to define the section's selection.
@@ -967,7 +852,7 @@
 ///
 /// - Note: If you have bound this section to an object or a key, you can define the section's selection
 ///   using either the bound property value or the key value, respectively.
-@property (nonatomic, readonly) NSMutableSet *selectedItemsIndexes;
+@property (nonatomic, nullable, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
 /// If TRUE, the section allows multiple selection. Default: FALSE.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
@@ -1009,28 +894,7 @@
 ///
 /// - SeeAlso: ``SCObjectSelectionSection``.
 @interface SCObjectSelectionModel : SCArrayOfObjectsModel
-{
-	/// The index path of the most recently selected row.
-	NSIndexPath *lastSelectedRowIndexPath; //internal
-    
-    /// The model's bound object.
-    NSObject *boundObject;
-    /// The model's bound object store.
-    SCDataStore *boundObjectStore;
-	/// The model's bound property name.
-	NSString *boundPropertyName;
-	
-    /// This property reflects the current model selection(s). You can add index(es) to the set to define the section's selection.
-    NSMutableSet *selectedItemsIndexes;
-	/// If TRUE, the model allows multiple selection. Default: FALSE.
-	BOOL allowMultipleSelection;
-	/// If TRUE, the model allows no selection at all. Default: FALSE.
-	BOOL allowNoSelection;
-	/// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
-	NSUInteger maximumSelections;
-	/// If TRUE, the model automatically dismisses the current view controller when a value is selected. Default: FALSE.
-	BOOL autoDismissViewController;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -1040,9 +904,9 @@
 /// - Parameter object: The object the model will bind to.
 /// - Parameter propertyName: The model's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName
-    selectionItemsStore:(SCDataStore *)store;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView
+            boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
+    selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized `SCObjectSelectionModel` given a table view, bound object, a bound property name, and an array of selection items.
 /// - Parameter tableView: The model's table view.
@@ -1050,25 +914,25 @@
 /// - Parameter propertyName: The model's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter selectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
 /// - Parameter definition: The definition of the selection items.
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName
-                  items:(NSArray *)selectionItems itemsDefintion:(SCDataDefinition *)definition;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView
+            boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
+                  items:(nullable NSArray<id> *)selectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration
 
 
 /// The model's bound object.
-@property (nonatomic, strong) NSObject *boundObject;
+@property (nonatomic, nullable, strong) NSObject *boundObject;
 
 /// The model's bound object store.
-@property (nonatomic, strong) SCDataStore *boundObjectStore;
+@property (nonatomic, nullable, strong) SCDataStore *boundObjectStore;
 
 /// The model's bound property name.
-@property (nonatomic, copy) NSString *boundPropertyName;
+@property (nonatomic, nullable, copy) NSString *boundPropertyName;
 
 /// The model's bound value.
-@property (nonatomic, strong) NSObject *boundValue;
+@property (nonatomic, nullable, strong) NSObject *boundValue;
 
 /// This property reflects the current model selection. You can set this property
 /// to define the model's selection.
@@ -1078,7 +942,7 @@
 
 /// This property reflects the current model selection(s). You can add index(es) to the set
 /// to define the section's selection.
-@property (nonatomic, readonly) NSMutableSet *selectedItemsIndexes;
+@property (nonatomic, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
 /// If TRUE, the model allows multiple selection. Default: FALSE.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
@@ -1096,6 +960,4 @@
 
 @end
 
-
-
-
+NS_ASSUME_NONNULL_END

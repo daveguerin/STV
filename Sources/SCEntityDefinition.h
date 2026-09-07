@@ -13,6 +13,8 @@
 #import "SCDataDefinition.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCEntityDefinition
 /// This class functions as a means to further extend the definition of user-defined Core Data entities.
 /// Using entity definitions, classes like SCObjectCell and SCObjectSection
@@ -36,7 +38,7 @@
 /// descPropertyDef.type = SCPropertyTypeTextView;
 /// SCPropertyDefinition *categoryPropertyDef = [taskDef propertyDefinitionWithName:@"category"];
 /// categoryPropertyDef.type = SCPropertyTypeSelection;
-/// NSArray *categoryItems = [NSArray arrayWithObjects:@"Home", @"Work", @"Other", nil];
+/// NSArray<NSString *> *categoryItems = [NSArray arrayWithObjects:@"Home", @"Work", @"Other", nil];
 /// categoryPropertyDef.attributes = [SCSelectionAttributes attributesWithItems:categoryItems
 ///     allowMultipleSelection:NO allowNoSelection:NO];
 /// ```
@@ -73,7 +75,7 @@
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
 ///
 /// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use definitionWithEntityName:managedObjectContext:propertyNamesString: instead.
-+ (instancetype)definitionWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString;
++ (instancetype)definitionWithEntityName:(NSString *)entityName propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity's properties.
 ///
@@ -99,7 +101,7 @@
 /// Property names string syntax options:
 ///     @"property1;property2;property3;..."
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString;
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.
 ///
@@ -110,7 +112,7 @@
 /// - Parameter entityName: The name of the entity for which the definition will be extended.
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames;
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Allocates and returns an initialized `SCEntityDefinition` given a Core Data entity name, an array of
 /// the property names to generate property definitions for, and array of titles
@@ -120,14 +122,14 @@
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
 /// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles;
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.
 ///
 /// - Parameter entityName: The name of the entity for which the definition will be extended.
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter groups: A collection of property groups.
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups;
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity's properties.
@@ -156,7 +158,7 @@
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
 ///
 /// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use initWithEntityName:managedObjectContext:propertyNamesString: instead.
-- (instancetype)initWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString;
+- (instancetype)initWithEntityName:(NSString *)entityName propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity's properties.
 ///
@@ -182,7 +184,7 @@
 /// Property names string syntax options:
 ///     @"property1;property2;property3;..."
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString;
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.
 ///
@@ -193,7 +195,7 @@
 /// - Parameter entityName: The name of the entity for which the definition will be extended.
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames;
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name, an array of
 /// the property names to generate property definitions for, and array of titles
@@ -203,22 +205,22 @@
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
 /// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles;
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.
 ///
 /// - Parameter entityName: The name of the entity for which the definition will be extended.
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter groups: A collection of property groups.
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups;
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 #pragma mark - Configuration
 
 /// The entity associated with the definition.
-@property (nonatomic, readonly, strong) NSEntityDescription *entity;
+@property (nonatomic, readonly, strong, nullable) NSEntityDescription *entity;
 
 /// The managed object context of the entity associated with the definition.
-@property (nonatomic, readonly, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readonly, strong, nullable) NSManagedObjectContext *managedObjectContext;
 
 /// 	The name of the entity attribute that will be used to store the display order of its objects.
 ///
@@ -226,7 +228,9 @@
 /// user interface elements representing the Core Data objects (e.g. custom re-ordering of cells).
 /// Setting this property overrides the value set for the keyPropertyName property.
 /// - Warning: Important: This Core Data attribute must be of integer type.
-@property (nonatomic, copy) NSString *orderAttributeName;
+@property (nonatomic, copy, nullable) NSString *orderAttributeName;
 
 
 @end
+
+NS_ASSUME_NONNULL_END

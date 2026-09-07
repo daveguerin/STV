@@ -10,6 +10,8 @@
 #import "SCDataStore.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCArrayStore
 /// SCArrayStore is an SCDataStore subclass that encapsulates NSArray memory storage, providing means for the SC framework to communicate with this array storage to fetch, add, update and remove data objects.
 ///
@@ -24,15 +26,15 @@
 /// Allocates and returns an initialized SCArrayStore given an array of objects and their default data definition.
 /// - Parameter array: The mutable array to process.
 /// - Parameter definition: The data definition involved in the operation.
-+ (instancetype)storeWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition;
++ (instancetype)storeWithObjectsArray:(nullable NSMutableArray<id> *)array defaultDefiniton:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized SCArrayStore given an array of objects and their default data definition.
 /// - Parameter array: The mutable array to process.
 /// - Parameter definition: The data definition involved in the operation.
-- (id)initWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition;
+- (id)initWithObjectsArray:(nullable NSMutableArray<id> *)array defaultDefiniton:(nullable SCDataDefinition *)definition;
 
 /// The objects array storage managed by the memory store.
-@property (nonatomic, strong) NSMutableArray *objectsArray;
+@property (nonatomic, strong, nullable) NSMutableArray<id> *objectsArray;
 
 @end
 
@@ -44,5 +46,4 @@
 /// A convenience alias for `SCArrayStore`.
 #define SCMemoryStore   SCArrayStore
 
-
-
+NS_ASSUME_NONNULL_END

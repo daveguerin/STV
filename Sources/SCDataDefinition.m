@@ -17,30 +17,18 @@
 
 @implementation SCDataDefinition
 
-
-@synthesize requireEditingModeToEditPropertyValues;
-@synthesize keyPropertyName;
-@synthesize titlePropertyName;
-@synthesize titlePropertyNameDelimiter;
-@synthesize descriptionPropertyName;
-@synthesize defaultPropertyGroup;
-@synthesize propertyGroups;
-
-
-
-
 - (instancetype) init
 {
     if ( (self = [super init]) ) {
         propertyDefinitions = [[NSMutableArray alloc] init];
-        requireEditingModeToEditPropertyValues = FALSE;
-        keyPropertyName = nil;
-        titlePropertyName = nil;
-        titlePropertyNameDelimiter = @" ";
-        descriptionPropertyName = nil;
+        _requireEditingModeToEditPropertyValues = FALSE;
+        _keyPropertyName = nil;
+        _titlePropertyName = nil;
+        _titlePropertyNameDelimiter = @" ";
+        _descriptionPropertyName = nil;
 		
-        defaultPropertyGroup = [[SCPropertyGroup alloc] init];
-        propertyGroups = [[SCPropertyGroupArray alloc] init];
+        _defaultPropertyGroup = [[SCPropertyGroup alloc] init];
+        _propertyGroups = [[SCPropertyGroupArray alloc] init];
         
         _cellActions = [[SCCellActions alloc] init];
     }
@@ -152,11 +140,11 @@
 - (void)setKeyPropertyName:(NSString *)propertyName
 {
     if ([self isValidPropertyName:propertyName]) {
-        if (![self.titlePropertyName length] || [self.titlePropertyName isEqualToString:keyPropertyName]) {
+        if (![self.titlePropertyName length] || [self.titlePropertyName isEqualToString:_keyPropertyName]) {
             self.titlePropertyName = propertyName;
         }
 
-        keyPropertyName = [propertyName copy];
+        _keyPropertyName = [propertyName copy];
     }
 
     else {
@@ -387,9 +375,9 @@
     for(SCPropertyDefinition *propertyDef in propertyDefinitions)
     {
         BOOL propertyHasGroup = FALSE;
-        for(NSInteger i=0; i<propertyGroups.groupCount; i++)
+        for(NSInteger i=0; i<_propertyGroups.groupCount; i++)
         {
-            SCPropertyGroup *propertyGroup = [propertyGroups groupAtIndex:i];
+            SCPropertyGroup *propertyGroup = [_propertyGroups groupAtIndex:i];
             if ([propertyGroup containsPropertyName:propertyDef.name]) {
                 propertyHasGroup = TRUE;
                 break;

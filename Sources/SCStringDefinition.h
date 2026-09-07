@@ -10,6 +10,8 @@
 #import "SCDataDefinition.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCStringDefinition
 /// This class functions as a means to represent the definition of an NSString class.
 ///
@@ -29,3 +31,5 @@
 
 
 @end
+
+NS_ASSUME_NONNULL_END

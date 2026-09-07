@@ -15,8 +15,8 @@
 
 @interface SCCoreDataStore ()
 
-@property (nonatomic, strong, readwrite) NSMutableSet *boundSet;
-@property (nonatomic, strong, readwrite) NSMutableOrderedSet *boundOrderedSet;
+@property (nonatomic, strong, readwrite, nullable) NSMutableSet<NSManagedObject *> *boundSet;
+@property (nonatomic, strong, readwrite, nullable) NSMutableOrderedSet<NSManagedObject *> *boundOrderedSet;
 @property (nonatomic, readwrite) BOOL boundSetOwnsStoreObjects;
 
 - (void)willSaveContext;
@@ -88,7 +88,7 @@
 // overrides superclass
 - (NSObject *)createNewObjectWithDefinition:(SCDataDefinition *)definition
 {
-    NSObject *object = nil;
+    NSManagedObject *object = nil;
 
     if ([definition isKindOfClass:[SCEntityDefinition class]]) {
         SCEntityDefinition *entityDefinition = (SCEntityDefinition *)definition;
@@ -111,11 +111,11 @@
 
         object = [NSEntityDescription insertNewObjectForEntityForName:entityDefinition.entity.name inManagedObjectContext:self.managedObjectContext];
         if (self.boundSet) {
-            [self.boundSet addObject:object];
+            [self.boundSet addObject:(NSManagedObject *)object];
         }
 
         else if (self.boundOrderedSet) {
-            [self.boundOrderedSet addObject:object];
+            [self.boundOrderedSet addObject:(NSManagedObject *)object];
         }
 
         if (order != NSNotFound) {
@@ -168,11 +168,11 @@
     if ([_uninsertedObjects indexOfObjectIdenticalTo:object] != NSNotFound) {
         [self.managedObjectContext insertObject:(NSManagedObject *)object];
         if (self.boundSet) {
-            [self.boundSet addObject:object];
+            [self.boundSet addObject:(NSManagedObject *)object];
         }
 
         else if (self.boundOrderedSet) {
-            [self.boundOrderedSet addObject:object];
+            [self.boundOrderedSet addObject:(NSManagedObject *)object];
         }
 
     }
@@ -185,7 +185,7 @@
 - (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray *)subsetArray
 {
     if (self.boundOrderedSet) {
-        NSInteger objectIndex = [self.boundOrderedSet indexOfObject:object];
+        NSInteger objectIndex = [self.boundOrderedSet indexOfObject:(NSManagedObject *)object];
         if (objectIndex == NSNotFound) {
             return FALSE;
         }
@@ -288,11 +288,11 @@
 - (BOOL)deleteObject:(NSObject *)object
 {
     if (self.boundSet) {
-        [self.boundSet removeObject:object];
+        [self.boundSet removeObject:(NSManagedObject *)object];
     }
 
     else if (self.boundOrderedSet) {
-        [self.boundOrderedSet removeObject:object];
+        [self.boundOrderedSet removeObject:(NSManagedObject *)object];
     }
 
     if ( (!self.boundSet && !self.boundOrderedSet) || _boundSetOwnsStoreObjects) {

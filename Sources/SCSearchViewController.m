@@ -23,6 +23,7 @@
 
 @implementation SCSearchViewController
 
+// Custom accessors disable autosynthesis; create backing storage and its V attribute.
 @synthesize searchBar = _searchBar;
 
 // overrides superclass

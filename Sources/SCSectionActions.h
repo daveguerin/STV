@@ -10,6 +10,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @class SCTableViewModel;
 @class SCTableViewSection;
@@ -22,30 +24,35 @@ typedef void(^SCSectionAction_Block)(SCTableViewSection *section, NSUInteger sec
 typedef void(^SCSectionViewAction_Block)(SCTableViewSection *section, NSUInteger sectionIndex, UIView *view);
 
 /// A block invoked with a table-view section and its detail model.
-typedef void(^SCDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel *detailModel, NSIndexPath *indexPath);
+/// The model can be nil for a custom controller without an STV model. The
+/// index path can be nil during new-item configuration; other new-item events
+/// use an index path whose row is NSNotFound.
+typedef void(^SCDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel * _Nullable detailModel, NSIndexPath * _Nullable indexPath);
 /// A block that returns a Boolean decision for a section's detail model.
-typedef BOOL(^SCConditionalDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel *detailModel, NSIndexPath *indexPath);
+typedef BOOL(^SCConditionalDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel * _Nullable detailModel, NSIndexPath * _Nullable indexPath);
 
 /// A block invoked after a section fetches its items.
-typedef void(^SCDidFetchSectionItemsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray *items);
+typedef void(^SCDidFetchSectionItemsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
 /// A block called when fetch section items fails.
-typedef void(^SCFetchSectionItemsFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSError *error);
+/// The error can be nil when the data store provides no failure details.
+typedef void(^SCFetchSectionItemsFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSError * _Nullable error);
 /// A block invoked after a section creates an item.
 typedef void(^SCSectionItemDidCreateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block that approves an item before a section inserts it.
-typedef BOOL(^SCSectionItemWillInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, SCTableViewModel *itemModel);
+/// The item model is nil when the new-item detail screen is skipped.
+typedef BOOL(^SCSectionItemWillInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, SCTableViewModel * _Nullable itemModel);
 /// A block called when a section item insert cannot proceed without a connection.
 typedef BOOL(^SCSectionItemInsertNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item insert fails.
-typedef void(^SCSectionItemInsertFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *error);
+typedef void(^SCSectionItemInsertFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
 /// A block invoked after a section inserts an item.
 typedef void(^SCSectionItemDidInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
 /// A block that approves an item before a section updates it.
-typedef BOOL(^SCSectionItemWillUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath, SCTableViewModel *itemModel);
+typedef BOOL(^SCSectionItemWillUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath, SCTableViewModel * _Nullable itemModel);
 /// A block called when a section item update cannot proceed without a connection.
 typedef BOOL(^SCSectionItemUpdateNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item update fails.
-typedef void(^SCSectionItemUpdateFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *error);
+typedef void(^SCSectionItemUpdateFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
 /// A block invoked after a section updates an item.
 typedef void(^SCSectionItemDidUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
 /// A block that approves an item before a section deletes it.
@@ -53,21 +60,22 @@ typedef BOOL(^SCSectionItemWillDeleteAction_Block)(SCArrayOfItemsSection *itemsS
 /// A block called when a section item delete cannot proceed without a connection.
 typedef BOOL(^SCSectionItemDeleteNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item delete fails.
-typedef void(^SCSectionItemDeleteFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *error);
+typedef void(^SCSectionItemDeleteFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
 /// A block invoked after a section deletes an item.
 typedef void(^SCSectionItemDidDeleteAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block invoked after a section adds its special cells.
-typedef void(^SCDidAddSpecialCellsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray *items);
+/// The array contains fetched data objects as well as any special cells.
+typedef void(^SCDidAddSpecialCellsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
 
 /// A block that supplies the detail view controller for a row.
-typedef UIViewController*(^SCDetailViewControllerForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
+typedef UIViewController * _Nullable (^SCDetailViewControllerForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
 /// A block that supplies the detail table-view model for a row.
-typedef SCTableViewModel*(^SCDetailTableViewModelForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
+typedef SCTableViewModel * _Nullable (^SCDetailTableViewModelForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
 
 /// A block that supplies the custom cell for a row.
-typedef SCCustomCell*(^SCCellForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef SCCustomCell * _Nullable (^SCCellForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block that supplies the cell reuse identifier for a row.
-typedef NSString*(^SCReuseIdForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef NSString * _Nullable (^SCReuseIdForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block that supplies the custom height for a row.
 typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 
@@ -99,7 +107,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///     };
 /// };
 /// ```
-@property (nonatomic, copy) SCSectionAction_Block didAddToModel;
+@property (nonatomic, copy, nullable) SCSectionAction_Block didAddToModel;
 
 /// Action gets called when the section's header view is about to be displayed.
 ///
@@ -112,7 +120,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///     NSLog(@"Header view about to be displayed for section at index `%i`", sectionIndex);
 /// };
 /// ```
-@property (nonatomic, copy) SCSectionViewAction_Block willDisplayHeaderView;
+@property (nonatomic, copy, nullable) SCSectionViewAction_Block willDisplayHeaderView;
 
 /// Action gets called when the section's footer view is about to be displayed.
 ///
@@ -125,7 +133,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///     NSLog(@"Footer view about to be displayed for section at index `%i`", sectionIndex);
 /// };
 /// ```
-@property (nonatomic, copy) SCSectionViewAction_Block willDisplayFooterView;
+@property (nonatomic, copy, nullable) SCSectionViewAction_Block willDisplayFooterView;
 
 /// Action gets called when the value of a section with an inherent value (such as an SCSelectionSection) has changed.
 ///
@@ -138,7 +146,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///     NSLog(@"Value for section at index `%i` has changed to %@", sectionIndex, section.boundValue);
 /// };
 /// ```
-@property (nonatomic, copy) SCSectionAction_Block valueChanged;
+@property (nonatomic, copy, nullable) SCSectionAction_Block valueChanged;
 
 
 #pragma mark - Detail Model Actions
@@ -161,7 +169,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
 ///
 /// - SeeAlso: ``detailModelConfigured``
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelCreated;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelCreated;
 
 /// Action gets called after the section's detail model is fully configured, including the addition of all automatically generated sections.
 ///
@@ -185,7 +193,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelConfigured;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelConfigured;
 
 /// Implement action to provide your own custom presentation for the detail model instead of having the framework automatically present it.
 ///
@@ -202,7 +210,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block customPresentDetailModel;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block customPresentDetailModel;
 
 /// Action gets called when the section's detail model is about to be presented in its own view controller.
 ///
@@ -220,7 +228,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelWillPresent;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelWillPresent;
 
 /// Action gets called when the section's detail model has been presented in its own view controller.
 ///
@@ -236,7 +244,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelDidPresent;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelDidPresent;
 
 /// Action gets called to give you a chance to decide if the detail model should be dismissed. Return YES to allow the detail model to be dismissed, otherwise return NO.
 ///
@@ -252,7 +260,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCConditionalDetailModelSectionAction_Block detailModelShouldDismiss;
+@property (nonatomic, copy, nullable) SCConditionalDetailModelSectionAction_Block detailModelShouldDismiss;
 
 /// Action gets called when the section's detail model's view controller is about to be dismissed.
 ///
@@ -268,7 +276,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelWillDismiss;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelWillDismiss;
 
 /// Action gets called when the section's detail model's view controller has been dismissed.
 ///
@@ -284,7 +292,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - Warning: In the case where the detail model is not associated with an existing row (such as the case when `SCArrayOfObjectsSection` creates a new item), indexPath.row will be set to NSNotFound. This is a good way to test if the detail model was generated for a new item or an already existing one.
-@property (nonatomic, copy) SCDetailModelSectionAction_Block detailModelDidDismiss;
+@property (nonatomic, copy, nullable) SCDetailModelSectionAction_Block detailModelDidDismiss;
 
 /// Action gets called to give you the chance to return a custom detail view controller for the section.
 ///
@@ -304,7 +312,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCDetailViewControllerForRowAtIndexPathAction_Block detailViewControllerForRowAtIndexPath;
+@property (nonatomic, copy, nullable) SCDetailViewControllerForRowAtIndexPathAction_Block detailViewControllerForRowAtIndexPath;
 
 /// Action gets called to give you the chance to return a custom detail model for the section's detail view controller.
 ///
@@ -324,7 +332,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCDetailTableViewModelForRowAtIndexPathAction_Block detailTableViewModelForRowAtIndexPath;
+@property (nonatomic, copy, nullable) SCDetailTableViewModelForRowAtIndexPathAction_Block detailTableViewModelForRowAtIndexPath;
 
 
 #pragma mark - SCArrayOfItemsSection Actions
@@ -353,7 +361,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
 ///
 /// - SeeAlso: ``reuseIdentifierForRowAtIndexPath``
-@property (nonatomic, copy) SCCellForRowAtIndexPathAction_Block cellForRowAtIndexPath;
+@property (nonatomic, copy, nullable) SCCellForRowAtIndexPathAction_Block cellForRowAtIndexPath;
 
 /// In case more than one type of custom cell is returned in cellForRowAtIndexPath, this action gets called to give you the chance to return a custom cell reuse identifier for each different type.
 ///
@@ -387,7 +395,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to sections that generate detail views, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCReuseIdForRowAtIndexPathAction_Block reuseIdentifierForRowAtIndexPath;
+@property (nonatomic, copy, nullable) SCReuseIdForRowAtIndexPathAction_Block reuseIdentifierForRowAtIndexPath;
 
 /// Action gets called to give you the chance to return a custom cell height for each of the section's cells, instead of STV's automatically calculated cell height.
 ///
@@ -409,7 +417,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: Implement this action only if you would like to the cell height directly instead of having the framework automatically calculate it for you.
-@property (nonatomic, copy) SCCustomHeightForRowAtIndexPathAction_Block customHeightForRowAtIndexPath;
+@property (nonatomic, copy, nullable) SCCustomHeightForRowAtIndexPathAction_Block customHeightForRowAtIndexPath;
 
 /// Action gets called as soon as the section has retrieved its items from their data store.
 ///
@@ -432,7 +440,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCDidFetchSectionItemsAction_Block didFetchItemsFromStore;
+@property (nonatomic, copy, nullable) SCDidFetchSectionItemsAction_Block didFetchItemsFromStore;
 
 /// Action gets called if the section fails to retrieve its items from their data store.
 ///
@@ -448,7 +456,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///  };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCFetchSectionItemsFailedAction_Block fetchItemsFromStoreFailed;
+@property (nonatomic, copy, nullable) SCFetchSectionItemsFailedAction_Block fetchItemsFromStoreFailed;
 
 /// Action gets called as soon as the section has created a new item to be used in its add new item detail view (which usually apprears right after the user taps the section's Add button).
 ///
@@ -465,7 +473,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDidCreateAction_Block didCreateItem;
+@property (nonatomic, copy, nullable) SCSectionItemDidCreateAction_Block didCreateItem;
 
 /// Action gets called right before a newly created item is inserted into the section.
 ///
@@ -486,7 +494,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemWillInsertAction_Block willInsertItem;
+@property (nonatomic, copy, nullable) SCSectionItemWillInsertAction_Block willInsertItem;
 
 /// Action gets called when a newly created item is being inserted into the section, but no data store connection could be established.
 ///
@@ -504,7 +512,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemInsertNoConnectionAction_Block insertItemNoConnection;
+@property (nonatomic, copy, nullable) SCSectionItemInsertNoConnectionAction_Block insertItemNoConnection;
 
 /// Action gets called when a newly created item could not be inserted into the section.
 ///
@@ -520,7 +528,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemInsertFailedAction_Block insertItemFailed;
+@property (nonatomic, copy, nullable) SCSectionItemInsertFailedAction_Block insertItemFailed;
 
 /// Action gets called as soon as a new item has been added to the section.
 ///
@@ -536,7 +544,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDidInsertAction_Block didInsertItem;
+@property (nonatomic, copy, nullable) SCSectionItemDidInsertAction_Block didInsertItem;
 
 /// Action gets called right before an existing item is updated.
 ///
@@ -555,7 +563,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemWillUpdateAction_Block willUpdateItem;
+@property (nonatomic, copy, nullable) SCSectionItemWillUpdateAction_Block willUpdateItem;
 
 /// Action gets called when an existing item is being updated, but no data store connection could be established.
 ///
@@ -573,7 +581,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemUpdateNoConnectionAction_Block updateItemNoConnection;
+@property (nonatomic, copy, nullable) SCSectionItemUpdateNoConnectionAction_Block updateItemNoConnection;
 
 /// Action gets called when an existing item could not be updated.
 ///
@@ -589,7 +597,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemUpdateFailedAction_Block updateItemFailed;
+@property (nonatomic, copy, nullable) SCSectionItemUpdateFailedAction_Block updateItemFailed;
 
 /// Action gets called as soon as an existing item has been updated.
 ///
@@ -607,7 +615,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDidUpdateAction_Block didUpdateItem;
+@property (nonatomic, copy, nullable) SCSectionItemDidUpdateAction_Block didUpdateItem;
 
 /// Action gets called right before an existing item is deleted.
 ///
@@ -630,7 +638,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemWillDeleteAction_Block willDeleteItem;
+@property (nonatomic, copy, nullable) SCSectionItemWillDeleteAction_Block willDeleteItem;
 
 /// Action gets called when an existing item is being deleted, but no data store connection could be established.
 ///
@@ -648,7 +656,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDeleteNoConnectionAction_Block deleteItemNoConnection;
+@property (nonatomic, copy, nullable) SCSectionItemDeleteNoConnectionAction_Block deleteItemNoConnection;
 
 /// Action gets called when an existing item could not be deleted.
 ///
@@ -664,7 +672,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDeleteFailedAction_Block deleteItemFailed;
+@property (nonatomic, copy, nullable) SCSectionItemDeleteFailedAction_Block deleteItemFailed;
 
 /// Action gets called as soon as an existing item has been deleted.
 ///
@@ -680,7 +688,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCSectionItemDidDeleteAction_Block didDeleteItem;
+@property (nonatomic, copy, nullable) SCSectionItemDidDeleteAction_Block didDeleteItem;
 
 
 /// Action gets called after the section has retrieved its items from their data store, and the framework has automatically added any needed special cells (e.g.: placeholder cell, load more cell, etc.) to the items array.
@@ -704,15 +712,17 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsSection subclasses, such as SCArrayOfObjectsSection.
-@property (nonatomic, copy) SCDidAddSpecialCellsAction_Block didAddSpecialCells;
+@property (nonatomic, copy, nullable) SCDidAddSpecialCellsAction_Block didAddSpecialCells;
 
 
 #pragma mark - Miscellaneous
 
 /// Method assigns all the actions of another `SCSectionActions` class to the current one.
 ///
-/// - Parameter actions: The source `SCSectionActions` class.
+/// - Parameter actions: The source actions, or nil to leave existing hooks alone.
 /// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
-- (void)setActionsTo:(SCSectionActions *)actions overrideExisting:(BOOL)override;
+- (void)setActionsTo:(SCSectionActions * _Nullable)actions overrideExisting:(BOOL)override;
 
 @end
+
+NS_ASSUME_NONNULL_END

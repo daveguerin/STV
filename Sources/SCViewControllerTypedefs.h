@@ -9,6 +9,8 @@
 
 
 
+#import <Foundation/Foundation.h>
+
 /// The types of presentation modes used with SCViewController and SCTableViewController.
 typedef NS_ENUM(NSInteger, SCPresentationMode)
 {

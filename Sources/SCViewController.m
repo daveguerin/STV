@@ -13,7 +13,7 @@
 #import "SCGlobals.h"
 
 
-@interface SCViewController ()
+@interface SCViewController () <UIPopoverPresentationControllerDelegate>
 {
     __weak id _delegate;
     SCTableViewModel *_tableViewModel;
@@ -25,10 +25,9 @@
 	BOOL _cancelButtonTapped;
 	BOOL _doneButtonTapped;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    UIPopoverController *_popoverController;
-#pragma clang diagnostic pop
+    __weak UIPopoverPresentationController *_popoverController;
+    BOOL _popoverWillDismissNotified;
+    BOOL _popoverDidDismissNotified;
 
     SCViewControllerActions *_actions;
     SCViewControllerState _state;
@@ -43,9 +42,10 @@
 
 @implementation SCViewController
 
+// Custom accessors: retain the runtime V attribute for existing backing storage.
 @synthesize tableView = _tableView;
+// Custom accessors: retain the runtime V attribute for existing backing storage.
 @synthesize tableViewModel = _tableViewModel;
-
 
 - (instancetype)init
 {
@@ -153,16 +153,19 @@
 
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-- (void)setPopoverController:(UIPopoverController *)popover
+- (void)setPopoverController:(UIPopoverPresentationController *)popover
 {
+    if (_popoverController.delegate == self) {
+        _popoverController.delegate = nil;
+    }
     _popoverController = popover;
-    
+    if (popover) {
+        _popoverWillDismissNotified = NO;
+        _popoverDidDismissNotified = NO;
+    }
     _popoverController.delegate = self;
 }
-#pragma clang diagnostic pop
 
 
 - (void)loadView
@@ -193,6 +196,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+
+    if (_state == SCViewControllerStateNew || _state == SCViewControllerStateDismissed) {
+        _popoverWillDismissNotified = NO;
+        _popoverDidDismissNotified = NO;
+    }
 
     if (_state != SCViewControllerStateNew) {
         _state = SCViewControllerStateActive;
@@ -301,24 +309,7 @@
     }
 
     if (self.state == SCViewControllerStateDismissed) {
-        if ([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]]) {
-            [(SCTableViewController *)self.tableViewModel.detailViewController loseFocus];
-        }
-
-        else if ([self.tableViewModel.detailViewController isKindOfClass:[SCViewController class]]) {
-            [(SCViewController *)self.tableViewModel.detailViewController loseFocus];
-        }
-
-
-        if (self.actions.willDismiss) {
-            self.actions.willDismiss(self);
-        }
-
-        if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(viewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)]) {
-            [self.delegate viewControllerWillDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
-        }
-
+        [self notifyPopoverWillDismiss];
     }
 
 }
@@ -337,15 +328,7 @@
     }
 
     if (self.state == SCViewControllerStateDismissed) {
-        if (self.actions.didDismiss) {
-            self.actions.didDismiss(self);
-        }
-
-        if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(viewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)]) {
-            [self.delegate viewControllerDidDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
-        }
-
+        [self notifyPopoverDidDismiss];
     }
 
 }
@@ -662,7 +645,7 @@
     _doneButtonTapped = doneValue;
     
     BOOL shouldDismiss = TRUE;
-    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
 	   && [self.delegate respondsToSelector:
 		   @selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
         shouldDismiss = [self.delegate viewControllerShouldDismiss:self
@@ -691,8 +674,7 @@
     _state = SCViewControllerStateDismissed;
 
     if (self.popoverController) {
-        self.popoverController.delegate = nil;  // disable delegate methods
-        [self.popoverController dismissPopoverAnimated:YES];
+        [self.popoverController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
         self.popoverController = nil;
     }
 
@@ -788,31 +770,76 @@
 
 
 #pragma mark -
-#pragma mark UIPopoverControllerDelegate methods
+#pragma mark Popover presentation and adaptive dismissal
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
-- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+- (void)notifyPopoverWillDismiss
 {
-    BOOL shouldDismiss = TRUE;
-    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:
-		   @selector(tableViewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
-        shouldDismiss = [self.delegate viewControllerShouldDismiss:self
-                                                cancelButtonTapped:FALSE
-                                                  doneButtonTapped:TRUE];
+    if (_popoverWillDismissNotified) {
+        return;
+    }
+    _popoverWillDismissNotified = YES;
+
+    if ([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]]) {
+        [(SCTableViewController *)self.tableViewModel.detailViewController loseFocus];
     }
 
-    return shouldDismiss;
+    else if ([self.tableViewModel.detailViewController isKindOfClass:[SCViewController class]]) {
+        [(SCViewController *)self.tableViewModel.detailViewController loseFocus];
+    }
+
+
+    if (self.actions.willDismiss) {
+        self.actions.willDismiss(self);
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
+       && [self.delegate respondsToSelector:@selector(viewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        [self.delegate viewControllerWillDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
+    }
+
 }
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+- (void)notifyPopoverDidDismiss
 {
-    // handle dismissal
+    if (_popoverDidDismissNotified) {
+        return;
+    }
+    _popoverDidDismissNotified = YES;
+
+    if (self.actions.didDismiss) {
+        self.actions.didDismiss(self);
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
+       && [self.delegate respondsToSelector:@selector(viewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        [self.delegate viewControllerDidDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
+    }
+
 }
 
-#pragma clang diagnostic pop
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController
+{
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
+        && [self.delegate respondsToSelector:@selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        return [self.delegate viewControllerShouldDismiss:self cancelButtonTapped:NO doneButtonTapped:YES];
+    }
+    return YES;
+}
+
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
+{
+    if (!self.popoverController || presentationController.presentedViewController != self.popoverController.presentedViewController) {
+        return;
+    }
+    // Interactive transitions may be cancelled. Commit only after UIKit reports
+    // completion, never in presentationControllerWillDismiss: or willDisappear.
+    _cancelButtonTapped = NO;
+    _doneButtonTapped = YES;
+    _state = SCViewControllerStateDismissed;
+    [self notifyPopoverWillDismiss];
+    [self notifyPopoverDidDismiss];
+    self.popoverController = nil;
+}
 
 @end
 

@@ -15,26 +15,6 @@
 
 @implementation SCPropertyDefinition
 
-@synthesize ownerDataStuctureDefinition;
-@synthesize dataType;
-@synthesize dataReadOnly;
-@synthesize name;
-@synthesize title;
-@synthesize type;
-@synthesize attributes;
-@synthesize editingModeType;
-@synthesize editingModeAttributes;
-@synthesize required;
-@synthesize autoValidate;
-@synthesize existsInNormalMode;
-@synthesize existsInEditingMode;
-@synthesize existsInCreationMode;
-@synthesize existsInDetailMode;
-@synthesize uiElementClass;
-@synthesize uiElementNibName;
-@synthesize objectBindings;
-
-
 + (instancetype)definitionWithName:(NSString *)propertyName
 {
 	return [[[self class] alloc] initWithName:propertyName];
@@ -57,12 +37,12 @@
 			  type:(SCPropertyType)propertyType
 {
     if ( (self=[super init]) ) {
-        ownerDataStuctureDefinition = nil;
+        _ownerDataStuctureDefinition = nil;
 		
-        dataType = SCDataTypeUnknown;
-        dataReadOnly = FALSE;
+        _dataType = SCDataTypeUnknown;
+        _dataReadOnly = FALSE;
 		
-        name = [propertyName copy];
+        _name = [propertyName copy];
         self.title = propertyTitle;
         self.type = propertyType;
         self.attributes = nil;
@@ -75,9 +55,9 @@
         self.existsInCreationMode = TRUE;
         self.existsInDetailMode = TRUE;
         
-        uiElementClass = nil;
-        uiElementNibName = nil;
-        objectBindings = nil;
+        _uiElementClass = nil;
+        _uiElementNibName = nil;
+        _objectBindings = nil;
         
         _cellActions = [[SCCellActions alloc] init];
     }
@@ -135,7 +115,7 @@
 
     self.type = (SCPropertyType)[[ibDictionary valueForKey:@"type"] integerValue];
     
-    switch (type)
+    switch (_type)
     {
         case SCPropertyTypeAutoDetect:
             break;
@@ -297,8 +277,6 @@
 
 @implementation SCCustomPropertyDefinition
 
-
-
 + (instancetype)definitionWithName:(NSString *)propertyName 
           uiElementClass:(Class)elementClass
           objectBindings:(NSDictionary *)bindings
@@ -331,7 +309,7 @@
 - (instancetype)initWithName:(NSString *)propertyName
 {
     if ( (self = [super initWithName:propertyName]) ) {
-        type = SCPropertyTypeCustom;
+        _type = SCPropertyTypeCustom;
     }
 
     return self;
@@ -380,11 +358,13 @@
 
 
 
+@interface SCPropertyGroup ()
+{
+    NSMutableArray *propertyDefinitionNames;
+}
+@end
+
 @implementation SCPropertyGroup
-
-@synthesize headerTitle;
-@synthesize footerTitle;
-
 
 + (instancetype)groupWithHeaderTitle:(NSString *)groupHeaderTitle footerTitle:(NSString *)groupFooterTitle
          propertyNames:(NSArray *)propertyNames
@@ -395,8 +375,8 @@
 - (instancetype)init
 {
     if ( (self=[super init]) ) {
-        headerTitle = nil;
-        footerTitle = nil;
+        _headerTitle = nil;
+        _footerTitle = nil;
         propertyDefinitionNames = [[NSMutableArray alloc] init];
     }
 
@@ -455,6 +435,12 @@
 
 
 
+
+@interface SCPropertyGroupArray ()
+{
+    NSMutableArray *propertyGroups;
+}
+@end
 
 @implementation SCPropertyGroupArray
 

@@ -14,6 +14,8 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCClassDefinition
 /// This class functions as a means to further extend the definition of user-defined classes.
 /// Using class definitions, classes like SCObjectCell and SCObjectSection
@@ -35,7 +37,7 @@
 /// descPropertyDef.type = SCPropertyTypeTextView;
 /// SCPropertyDefinition *categoryPropertyDef = [taskDef propertyDefinitionWithName:@"category"];
 /// categoryPropertyDef.type = SCPropertyTypeSelection;
-/// NSArray *categoryItems = [NSArray arrayWithObjects:@"Home", @"Work", @"Other", nil];
+/// NSArray<NSString *> *categoryItems = [NSArray arrayWithObjects:@"Home", @"Work", @"Other", nil];
 /// categoryPropertyDef.attributes = [SCSelectionAttributes attributesWithItems:categoryItems
 ///     allowMultipleSelection:NO allowNoSelection:NO];
 /// ```
@@ -51,7 +53,7 @@
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter autoGenerate: If TRUE, SCClassDefinition will automatically generate all the property definitions for the given class.
-+ (instancetype)definitionWithClass:(Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
++ (instancetype)definitionWithClass:(nullable Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and a string containing the property names.
 ///
@@ -65,7 +67,7 @@
 /// Property names string syntax options:
 ///     @"property1;property2;property3;..."
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
-+ (instancetype)definitionWithClass:(Class)_cls propertyNamesString:(NSString *)propertyNamesString;
++ (instancetype)definitionWithClass:(nullable Class)_cls propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and an array of the property names to generate property definitions from.
 ///
@@ -75,7 +77,7 @@
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-+ (instancetype)definitionWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames;
++ (instancetype)definitionWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Allocates and returns an initialized SCClassDefinition given a class, an array of
 /// the property names to generate property definitions from, and array of titles
@@ -84,14 +86,14 @@
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
 /// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
-+ (instancetype)definitionWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames
-		propertyTitles:(NSArray *)propertyTitles;
++ (instancetype)definitionWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames
+		propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and an SCPropertyGroupArray.
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter groups: A collection of property groups.
-+ (instancetype)definitionWithClass:(Class)_cls propertyGroups:(SCPropertyGroupArray *)groups;
++ (instancetype)definitionWithClass:(nullable Class)_cls propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and the option to auto generate property definitions for the given class.
 ///
@@ -101,7 +103,7 @@
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter autoGenerate: If TRUE, `SCClassDefinition` will automatically generate all the property definitions for the given class.
-- (instancetype)initWithClass:(Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
+- (instancetype)initWithClass:(nullable Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Returns an initialized SCClassDefinition given a class and a string containing the property names.
 ///
@@ -115,7 +117,7 @@
 /// Property names string syntax options:
 ///     @"property1;property2;property3;..."
 ///     @"group1 header:(property1, property2,...):group1 footer;group2..."
-- (instancetype)initWithClass:(Class)_cls propertyNamesString:(NSString *)propertyNamesString;
+- (instancetype)initWithClass:(nullable Class)_cls propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and an array of the property names to generate property definitions from.
 ///
@@ -125,7 +127,7 @@
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-- (instancetype)initWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames;
+- (instancetype)initWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Allocates and returns an initialized SCClassDefinition given a class, an array of
 /// the property names to generate property definitions from, and array of titles
@@ -134,24 +136,21 @@
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
 /// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
-- (instancetype)initWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles;
+- (instancetype)initWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Returns an initialized SCClassDefinition given a class and an SCPropertyGroupArray.
 ///
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter groups: A collection of property groups.
-- (instancetype)initWithClass:(Class)_cls propertyGroups:(SCPropertyGroupArray *)groups;
+- (instancetype)initWithClass:(nullable Class)_cls propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 
 #pragma mark - Configuration
 
 /// The class associated with the definition.
-@property (nonatomic, strong) Class cls;
+@property (nonatomic, strong, nullable) Class cls;
 
 
 @end
 
-
-
-
-
+NS_ASSUME_NONNULL_END

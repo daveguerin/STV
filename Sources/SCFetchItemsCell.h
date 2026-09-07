@@ -9,6 +9,8 @@
 
 #import "SCTableViewCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /// SCFetchItemsCell is a special cell that is automatically displayed by an SCArrayOfItemsSection when more section items need to be fetched. This is typically the case when the section's dataFetchOptions property has specified a batchSize for the fetched items.
 ///
 /// Sample use:
@@ -21,11 +23,7 @@
 ///
 /// - Note: SCExpandCollapseCell is always displayed at the bottom of the section.
 @interface SCFetchItemsCell : SCCustomCell
-{
-    UIActivityIndicatorView *_activityIndicator;
-    BOOL _autoFetchItems;
-    BOOL _autoHide;
-}
+
 
 #pragma mark - Configuration
 
@@ -51,3 +49,5 @@
 - (void)stopActivityIndicator;
 
 @end
+
+NS_ASSUME_NONNULL_END

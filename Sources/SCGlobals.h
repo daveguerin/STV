@@ -53,6 +53,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 // -----------------------------------------------------------------------------
@@ -77,7 +79,6 @@
 /* SCDebugLog definition               */
 // -----------------------------------------------------------------------------
 
-//#define SCDebugLog(...) NSLog(@"**STV** %@", [NSString stringWithFormat:__VA_ARGS__]) // dgApps
 /// Logs a formatted STV debug message with source context.
 #define SCDebugLog( s, ... ) NSLog(@"**STV** %p (%@:%d) %s %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __FUNCTION__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 
@@ -147,12 +148,12 @@ typedef NS_ENUM(NSInteger, SCDataType)
 /// lastSaleAmount = [customer valueForSensibleKeyPath:@"salesData.invoices[n].amount"];
 /// saleBeforeLastAmount = [customer valueForSensibleKeyPath:@"salesData.invoices[n-1].amount"];
 /// ```
-- (instancetype)valueForSensibleKeyPath:(NSString *)keyPath;
+- (nullable instancetype)valueForSensibleKeyPath:(nullable NSString *)keyPath;
 
 /// Similar to valueForSensibleKeyPath, this method uses a Sensible keyPath to set a value.
 /// - Parameter value: The value to set.
 /// - Parameter keyPath: A key path that may contain array indexes in brackets.
-- (void)setValue:(id)value forSensibleKeyPath:(NSString *)keyPath;
+- (void)setValue:(nullable id)value forSensibleKeyPath:(nullable NSString *)keyPath;
 
 @end
 
@@ -161,9 +162,9 @@ typedef NS_ENUM(NSInteger, SCDataType)
 @interface UILabel (SensibleCocoa)
 
 /// Text prepended to the label's value.
-@property (nonatomic, copy) NSString *prefix;
+@property (nonatomic, copy, nullable) NSString *prefix;
 /// Text appended to the label's value.
-@property (nonatomic, copy) NSString *suffix;
+@property (nonatomic, copy, nullable) NSString *suffix;
 
 @end
 
@@ -196,7 +197,7 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 /// Method determines if the given view is inside a popover view
 /// - Parameter view: The view to inspect.
-+ (BOOL)isViewInsidePopover:(UIView *)view;
++ (BOOL)isViewInsidePopover:(nullable UIView *)view;
 
 /// Returns whether an Internet connection is currently available.
 + (BOOL)IsInternetConnectionAvailable;
@@ -207,44 +208,44 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 /// Loads and returns the first top-level object in the named nib.
 /// - Parameter nibName: The nib name to load.
-+ (NSObject *)getFirstNodeInNibWithName:(NSString *)nibName;
++ (nullable NSObject *)getFirstNodeInNibWithName:(nullable NSString *)nibName;
 
 /// Returns a user-facing title derived from a property name.
 /// - Parameter propertyName: The property name.
-+ (NSString *)getUserFriendlyTitleFromName:(NSString *)propertyName;
++ (NSString *)getUserFriendlyTitleFromName:(nullable NSString *)propertyName;
 
 /// Returns the class identified by a name using Swift-compatible lookup rules.
 /// - Parameter className: The class name to resolve.
-+ (Class)swiftCompatibleNSClassFromString:(NSString *)className;
++ (nullable Class)swiftCompatibleNSClassFromString:(NSString *)className;
 
 /// Returns whether a class represents a string type.
 /// - Parameter aClass: The class to inspect.
-+ (BOOL)isStringClass:(Class)aClass;
++ (BOOL)isStringClass:(nullable Class)aClass;
 
 /// Returns whether a class represents a number type.
 /// - Parameter aClass: The class to inspect.
-+ (BOOL)isNumberClass:(Class)aClass;
++ (BOOL)isNumberClass:(nullable Class)aClass;
 
 /// Returns whether a class represents a date type.
 /// - Parameter aClass: The class to inspect.
-+ (BOOL)isDateClass:(Class)aClass;
++ (BOOL)isDateClass:(nullable Class)aClass;
 
 /// Returns whether a class represents a dictionary type.
 /// - Parameter aClass: The class to inspect.
-+ (BOOL)isDictionaryClass:(Class)aClass;
++ (BOOL)isDictionaryClass:(nullable Class)aClass;
 
 /// Returns whether a class represents an STV basic data type.
 /// - Parameter aClass: The class to inspect.
-+ (BOOL)isBasicDataTypeClass:(Class)aClass;
++ (BOOL)isBasicDataTypeClass:(nullable Class)aClass;
 
 /// Returns the STV data-structure name associated with a class.
 /// - Parameter aClass: The class to inspect.
-+ (NSString *)dataStructureNameForClass:(Class)aClass;
++ (nullable NSString *)dataStructureNameForClass:(nullable Class)aClass;
 
 /// Returns whether an object exposes the specified property name.
 /// - Parameter propertyName: The property name.
 /// - Parameter object: The object involved in the operation.
-+ (BOOL)propertyName:(NSString *)propertyName existsInObject:(NSObject *)object;
++ (BOOL)propertyName:(nullable NSString *)propertyName existsInObject:(nullable NSObject *)object;
 
 ///  Returns the the value for the given property in the given object.
 /// - Parameter propertyName: The name of the property whose value is requested. propertyName can be
@@ -254,33 +255,33 @@ typedef NS_ENUM(NSInteger, SCDataType)
 /// - Returns: Returns the value of the given property. If more than one property name is given
 ///   (separated by `;`), the return value is an NSArray. Returns nil if property does not exist
 ///   in object (or NSNull if more than one property name is given).
-+ (NSObject *)valueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
++ (nullable NSObject *)valueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object;
 
 /// Returns a string representation of an object's property value.
 /// - Parameter propertyName: The property name.
 /// - Parameter object: The object involved in the operation.
 /// - Parameter delimiter: The delimiter used to separate multiple values.
-+ (NSString *)stringValueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
-			separateValuesUsingDelimiter:(NSString *)delimiter;
++ (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object
+            separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
 /// Sets an object's property to the supplied value.
 /// - Parameter value: The value to assign or convert.
 /// - Parameter propertyName: The property name.
 /// - Parameter object: The object involved in the operation.
-+ (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
++ (void)setValue:(nullable NSObject *)value forPropertyName:(NSString *)propertyName inObject:(nullable NSObject *)object;
 
 /// Returns a value converted for the requested STV data type.
 /// - Parameter dataType: The target STV data type.
 /// - Parameter value: The value to assign or convert.
-+ (NSObject *)getValueCompatibleWithDataType:(SCDataType)dataType fromValue:(NSObject *)value;
++ (nullable NSObject *)getValueCompatibleWithDataType:(SCDataType)dataType fromValue:(nullable NSObject *)value;
 
 /// Returns a bindings dictionary parsed from its string representation.
 /// - Parameter bindingsString: The bindings string to parse.
-+ (NSDictionary *)bindingsDictionaryForBindingsString:(NSString *)bindingsString;
++ (NSDictionary<NSString *, NSString *> *)bindingsDictionaryForBindingsString:(nullable NSString *)bindingsString;
 
 /// Returns the string representation of a bindings dictionary.
 /// - Parameter bindingsDictionary: The bindings dictionary to encode.
-+ (NSString *)bindingsStringForBindingsDictionary:(NSDictionary *)bindingsDictionary;
++ (nullable NSString *)bindingsStringForBindingsDictionary:(nullable NSDictionary<NSString *, NSString *> *)bindingsDictionary;
 
 
 /// Returns the Base64 representation of a string.
@@ -290,11 +291,11 @@ typedef NS_ENUM(NSInteger, SCDataType)
 /// We need our own instantiator for cases where we need to port Xcode 6 view controller id naming conventions to Xcode 7
 /// - Parameter identifier: The identifier.
 /// - Parameter storyboard: The storyboard.
-+ (UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier usingStoryboard:(UIStoryboard *)storyboard;
++ (nullable UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier usingStoryboard:(nullable UIStoryboard *)storyboard;
 
 /// Returns a date with its time components removed.
 /// - Parameter date: The source date.
-+ (NSDate *)stripTimeFromDate:(NSDate *)date;
++ (nullable NSDate *)stripTimeFromDate:(NSDate *)date;
 
 @end
 
@@ -306,13 +307,10 @@ typedef NS_ENUM(NSInteger, SCDataType)
 /// This class defines a tabel view model center.
 /// IMPORTANT: This class is usually only used internally by the framework.
 @interface SCModelCenter : NSObject
-{
-	/// The registered table-view models.
-	CFMutableSetRef modelsSet;
-}
+
 
 /// The view controller currently responsible for keyboard input.
-@property (nonatomic, weak) UIViewController *keyboardIssuer;
+@property (nonatomic, weak, nullable) UIViewController *keyboardIssuer;
 
 /// Returns the shared STV model center.
 + (SCModelCenter *)sharedModelCenter;
@@ -326,8 +324,10 @@ typedef NS_ENUM(NSInteger, SCDataType)
 
 /// Returns the table-view model associated with a view controller.
 /// - Parameter viewController: The view controller associated with the operation.
-- (SCTableViewModel *)modelForViewController:(UIViewController *)viewController;
+- (nullable SCTableViewModel *)modelForViewController:(nullable UIViewController *)viewController;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 

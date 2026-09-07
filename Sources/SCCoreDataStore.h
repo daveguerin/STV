@@ -12,6 +12,8 @@
 #import "SCDataStore.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCCoreDataStore
 /// SCCoreDataStore is an SCDataStore subclass that encapsulates Core Data persistent storage, providing means for the SC framework to communicate with this storage to fetch, add, update and remove data objects.
 ///
@@ -25,51 +27,55 @@
 /// Allocates and returns an initialized SCCoreDataStore given a managed object context and an entity definition.
 /// - Parameter context: The Core Data managed object context.
 /// - Parameter definition: The entity definition of the entity objects in the data store.
-+ (instancetype)storeWithManagedObjectContext:(NSManagedObjectContext *)context defaultEntityDefinition:(SCEntityDefinition *)definition;
++ (instancetype)storeWithManagedObjectContext:(nullable NSManagedObjectContext *)context defaultEntityDefinition:(nullable SCEntityDefinition *)definition;
 
 /// Allocates and returns an initialized SCCoreDataStore given a managed object context and an NSMutableSet to bind the data store to.
 /// - Parameter context: The Core Data managed object context.
 /// - Parameter set: An NSMutableSet that the data store will bind to and fetch all its objects from.
 /// - Parameter definition: The entity definition of the entity objects in the bound set.
 /// - Parameter ownsStoreObjects: When TRUE, objects removed from the bound set will also be removed from the data store.
-+ (instancetype)storeWithManagedObjectContext:(NSManagedObjectContext *)context boundSet:(NSMutableSet *)set boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsStoreObjects:(BOOL)ownsStoreObjects;
++ (instancetype)storeWithManagedObjectContext:(nullable NSManagedObjectContext *)context boundSet:(nullable NSMutableSet<NSManagedObject *> *)set boundSetEntityDefinition:(nullable SCEntityDefinition *)definition boundSetOwnsStoreObjects:(BOOL)ownsStoreObjects;
 
 /// Returns an initialized SCCoreDataStore given a managed object context and an entity definition.
 /// - Parameter context: The Core Data managed object context.
 /// - Parameter definition: The entity definition of the entity objects in the data store.
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context defaultEntityDefinition:(SCEntityDefinition *)definition;
+- (instancetype)initWithManagedObjectContext:(nullable NSManagedObjectContext *)context defaultEntityDefinition:(nullable SCEntityDefinition *)definition;
 
 /// Returns an initialized SCCoreDataStore given a managed object context and an NSMutableSet to bind the data store to.
 /// - Parameter context: The Core Data managed object context.
 /// - Parameter set: An NSMutableSet that the data store will bind to and fetch all its objects from.
 /// - Parameter definition: The entity definition of the entity objects in the bound set.
 /// - Parameter ownsStoreObjects: When TRUE, objects removed from the bound set will also be removed from the data store.
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context boundSet:(NSMutableSet *)set boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsStoreObjects:(BOOL)ownsStoreObjects;
+- (instancetype)initWithManagedObjectContext:(nullable NSManagedObjectContext *)context boundSet:(nullable NSMutableSet<NSManagedObject *> *)set boundSetEntityDefinition:(nullable SCEntityDefinition *)definition boundSetOwnsStoreObjects:(BOOL)ownsStoreObjects;
 
 
 #pragma mark - Configuration
 
 /// The managed object context associated with the store.
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+/// Nil until configured. A commit with no context succeeds without saving.
+@property (nonatomic, strong, nullable) NSManagedObjectContext *managedObjectContext;
 
 /// The NSMutableSet the store is bound to. This property is automatically set by bindStoreToPropertyName:forObject:withDefinition: method.
-@property (nonatomic, strong, readonly) NSMutableSet *boundSet;
+@property (nonatomic, strong, readonly, nullable) NSMutableSet<NSManagedObject *> *boundSet;
 
 /// The NSMutableOrderedSet the store is bound to. This property is automatically set by bindStoreToPropertyName:forObject:withDefinition: method.
-@property (nonatomic, strong, readonly) NSMutableOrderedSet *boundOrderedSet;
+@property (nonatomic, strong, readonly, nullable) NSMutableOrderedSet<NSManagedObject *> *boundOrderedSet;
 
 /// When TRUE, objects removed from boundSet will also be removed from the data store.
 @property (nonatomic, readonly) BOOL boundSetOwnsStoreObjects;
 
 /// The most recent Core Data commit error, or nil after a successful commit.
-@property (nonatomic, strong, readonly) NSError *lastCommitError;
+@property (nonatomic, strong, readonly, nullable) NSError *lastCommitError;
 
 /// Optional callback used by the compatibility commitData method when a save fails.
-@property (nonatomic, copy) SCDataStoreFailure_Block commitFailure;
+@property (nonatomic, copy, nullable) SCDataStoreFailure_Block commitFailure;
 
 /// Saves the managed object context and returns the failure instead of terminating the host application.
 /// - Parameter error: On return, an error describing a failure, or `nil` if the operation succeeds.
-- (BOOL)commitDataWithError:(NSError **)error;
+///   Pass NULL when the error is not needed.
+- (BOOL)commitDataWithError:(NSError * _Nullable * _Nullable)error;
 
 
 @end
+
+NS_ASSUME_NONNULL_END

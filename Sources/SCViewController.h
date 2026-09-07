@@ -11,6 +11,8 @@
 #import "SCViewControllerTypedefs.h"
 #import "SCViewControllerActions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCTableViewModel;
 @class SCTableViewController;
 
@@ -29,9 +31,10 @@
 /// Finally, SCViewController provides several useful actions (SCViewControllerActions) and delegate methods (SCViewControllerDelegate) that notify the delegate object of events like the view appearing or disappearing.
 ///
 /// - Note: You do NOT have to use `SCViewController` in order to be able to use SCTableViewModel, but it's highly recommended that you do so whenever you need a UIViewController.
-@interface SCViewController : UIViewController <UIPopoverControllerDelegate>
+@interface SCViewController : UIViewController
 {
-    @protected
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
     UITableView *_tableView;
 }
 
@@ -39,35 +42,38 @@
 
 /// Set this outlet to the table view that will be associated with tableViewModel. Once a valid table view is set, it will automatically be associated with tableViewModel.
 /// - Note: If the table view is added programmatically, then the user must also add it to the view controller's view.
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong, nullable) IBOutlet UITableView *tableView;
 
 /// Contains a valid SCTableViewModel that is associated with tableView and ready to use. If this model is replaced by a custom one, the class will automatically take care of associating it with tableView.
-@property (nonatomic, strong) SCTableViewModel *tableViewModel;
+@property (nonatomic, strong, nullable) SCTableViewModel *tableViewModel;
 
 /// The type of the navigation bar.
 @property (nonatomic, readwrite) SCNavigationBarType navigationBarType;
 
 /// The navigation bar's Add button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem *addButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *addButton;
 
 /// The editButtonItem of SCViewController's superclass.
-@property (nonatomic, readonly) UIBarButtonItem *editButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *editButton;
 
 /// The navigation bar's Cancel button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem *cancelButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *cancelButton;
 
 /// Set to TRUE to allow the cancel button to appear when entering editing mode. Default: TRUE.
 /// - Note: Only applicable if navigationBarType == SCNavigationBarTypeEditRight.
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
 /// The navigation bar's Done button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem	*doneButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem	*doneButton;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-/// The popover controller associated with the view controller. Set this property when presenting the view controller from a popover. The view controller takes over the popover controller's delegate while associated with it.
-@property (nonatomic, strong) UIPopoverController *popoverController;
-#pragma clang diagnostic pop
+/// The UIKit popover presentation associated with this controller, or nil.
+/// UIKit owns the presentation; this weak association avoids a retain cycle.
+/// Assign after setting the presented navigation controller's modal style to
+/// UIModalPresentationPopover. STV becomes its delegate until disassociated.
+/// Generated popovers require explicit Done/Cancel; compact widths adapt to a
+/// sheet. If interactive dismissal is enabled, its callbacks commit as Done
+/// only after UIKit confirms completion (not when a swipe is cancelled).
+@property (nonatomic, weak, nullable) UIPopoverPresentationController *popoverController;
 
 /// The set of view controller action blocks.
 @property (nonatomic, readonly) SCViewControllerActions *actions;
@@ -92,12 +98,12 @@
 ///  This property is automatically set to the contained child view controller, allowing the view controller to act as a proxy for this child. When acting as a proxy, both the view controller's tableView and tableViewModel will return the child's instead of its own.
 ///
 /// - Note: If your view controller has more than once contained view controller child, you may manually assign this property to the child of your choice.
-@property (nonatomic, weak) SCTableViewController *containedViewController;
+@property (nonatomic, weak, nullable) SCTableViewController *containedViewController;
 
 #pragma mark - Managing Delegate
 
 /// The object that acts as the delegate of `SCViewController`. The object must adopt the SCViewControllerDelegate protocol.
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak, nullable) id delegate;
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
@@ -235,3 +241,5 @@
                       cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 @end
+
+NS_ASSUME_NONNULL_END

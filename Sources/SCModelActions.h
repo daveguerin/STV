@@ -10,6 +10,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCTableViewCell;
 @class SCTableViewModel;
 @class SCArrayOfItemsModel;
@@ -24,18 +26,18 @@ typedef void(^SCDidAddSectionAction_Block)(SCTableViewModel *tableModel, SCTable
 /// A block invoked after a section is removed from a table-view model.
 typedef void(^SCDidRemoveSectionAction_Block)(SCTableViewModel *tableModel, NSUInteger sectionIndex);
 /// A block that sorts a table-view model's mutable section array.
-typedef void(^SCSortSectionsAction_Block)(SCTableViewModel *tableModel, NSMutableArray *sections);
+typedef void(^SCSortSectionsAction_Block)(SCTableViewModel *tableModel, NSMutableArray<SCTableViewSection *> *sections);
 /// A block that maps a section-index title to a section index.
 typedef NSInteger(^SCSectionForSectionIndexTitleAction_Block)(SCTableViewModel *tableModel, NSString *title, NSInteger index);
 
 /// A block invoked after a model fetches its items.
-typedef void(^SCDidFetchModelItemsAction_Block)(SCArrayOfItemsModel *itemsModel, NSMutableArray *items);
+typedef void(^SCDidFetchModelItemsAction_Block)(SCArrayOfItemsModel *itemsModel, NSMutableArray<id> *items);
 /// A block that supplies the section-header title for an item.
-typedef NSString*(^SCSectionHeaderTitleForItemAction_Block)(SCArrayOfItemsModel *itemsModel, NSObject *item, NSUInteger itemIndex);
+typedef NSString * _Nullable (^SCSectionHeaderTitleForItemAction_Block)(SCArrayOfItemsModel *itemsModel, NSObject *item, NSUInteger itemIndex);
 /// A block that supplies all section-header titles for an items model.
-typedef NSArray*(^SCSectionHeaderTitlesAction_Block)(SCArrayOfItemsModel *itemsModel);
+typedef NSArray<NSString *> * _Nullable (^SCSectionHeaderTitlesAction_Block)(SCArrayOfItemsModel *itemsModel);
 /// A block that post-processes search results computed by an items model.
-typedef NSArray*(^SCDidComputeSearchResultsAction_Block)(SCArrayOfItemsModel *itemsModel, NSString *searchText, NSArray *searchResults);
+typedef NSArray<id> * _Nullable (^SCDidComputeSearchResultsAction_Block)(SCArrayOfItemsModel *itemsModel, NSString *searchText, NSArray<id> * _Nullable searchResults);
 /// A block invoked after a table-view cell moves between index paths.
 typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableViewCell *cell, NSIndexPath *fromIndexPath, NSIndexPath *toIndexPath);
 
@@ -70,7 +72,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     }
 /// };
 /// ```
-@property (nonatomic, copy) SCDidAddSectionAction_Block didAddSection;
+@property (nonatomic, copy, nullable) SCDidAddSectionAction_Block didAddSection;
 
 /// Action gets called as soon as a section has been removed from the model.
 ///
@@ -83,7 +85,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"Section at index `%i` has been removed.", sectionIndex);
 /// };
 /// ```
-@property (nonatomic, copy) SCDidRemoveSectionAction_Block didRemoveSection;
+@property (nonatomic, copy, nullable) SCDidRemoveSectionAction_Block didRemoveSection;
 
 /// Action gets called to give you a chance to provide custom section sorting.
 ///
@@ -97,7 +99,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 /// };
 /// ```
 /// - Note: To have the model automatically sort its sections alphabetically, simply set its `autoSortSections` property to TRUE.
-@property (nonatomic, copy) SCSortSectionsAction_Block sortSections;
+@property (nonatomic, copy, nullable) SCSortSectionsAction_Block sortSections;
 
 /// Action gets called to give you a chance  to return the index of the section having the given title and section title index.
 ///
@@ -114,7 +116,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 /// };
 /// ```
 /// - Note: `index` is an index number identifying a section title in the SCTableViewModel's `sectionIndexTitles` array.
-@property (nonatomic, copy) SCSectionForSectionIndexTitleAction_Block sectionForSectionIndexTitle;
+@property (nonatomic, copy, nullable) SCSectionForSectionIndexTitleAction_Block sectionForSectionIndexTitle;
 
 /// Action gets called as soon as the model's table view has finished loading all its cells.
 ///
@@ -127,7 +129,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The table view has finished loading cells.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didFinishLoadingCells;
+@property (nonatomic, copy, nullable) SCModelAction_Block didFinishLoadingCells;
 
 /// Action gets called as soon as the model has refreshed its contents after returning from a pull-to-refresh operation.
 ///
@@ -140,7 +142,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model has been refreshed.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didRefresh;
+@property (nonatomic, copy, nullable) SCModelAction_Block didRefresh;
 
 
 /// Action gets called after the model's table view has started scrolling.
@@ -154,7 +156,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model's table view has started scrolling.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didScroll;
+@property (nonatomic, copy, nullable) SCModelAction_Block didScroll;
 
 /// Action gets called after the model's table view has ended dragging.
 ///
@@ -167,7 +169,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model's table view has ended dragging with decelerating=%i.", tableModel.tableView.decelerating);
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didEndDragging;
+@property (nonatomic, copy, nullable) SCModelAction_Block didEndDragging;
 
 /// Action gets called after the model's table view has ended decelerating.
 ///
@@ -180,7 +182,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model's table view has ended decelerating.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didEndDecelerating;
+@property (nonatomic, copy, nullable) SCModelAction_Block didEndDecelerating;
 
 
 /// Action gets called as the model's table view is about to enter editing mode. Return NO to prevent the table view from entering editing mode, otherwise return YES.
@@ -196,7 +198,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return YES;     // allow editing to begin
 /// };
 /// ```
-@property (nonatomic, copy) SCConditionalModelAction_Block shouldBeginEditing;
+@property (nonatomic, copy, nullable) SCConditionalModelAction_Block shouldBeginEditing;
 
 /// Action gets called after the model's table view has entered editing mode.
 ///
@@ -209,7 +211,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model has entered editing mode.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didBeginEditing;
+@property (nonatomic, copy, nullable) SCModelAction_Block didBeginEditing;
 
 /// Action gets called as the model's table view is about to exit editing mode. Return NO to prevent the table view from exiting editing mode, otherwise return YES.
 ///
@@ -224,7 +226,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return YES;     // allow editing to end
 /// };
 /// ```
-@property (nonatomic, copy) SCConditionalModelAction_Block shouldEndEditing;
+@property (nonatomic, copy, nullable) SCConditionalModelAction_Block shouldEndEditing;
 
 /// Action gets called after the model's table view has exited editing mode.
 ///
@@ -237,7 +239,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"The model has exited editing mode.");
 /// };
 /// ```
-@property (nonatomic, copy) SCModelAction_Block didEndEditing;
+@property (nonatomic, copy, nullable) SCModelAction_Block didEndEditing;
 
 
 /// Action gets called after any of the model's sections' cells has moved.
@@ -251,7 +253,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     NSLog(@"A cell has been moved from:%@ to:%@.", fromIndexPath, toIndexPath);
 /// };
 /// ```
-@property (nonatomic, copy) SCDidMoveCellAction_Block didMoveCell;
+@property (nonatomic, copy, nullable) SCDidMoveCellAction_Block didMoveCell;
 
 
 
@@ -280,7 +282,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 /// };
 /// ```
 /// - Note: This action is only applicable to SCArrayOfItemsModel subclasses, such as SCArrayOfObjectsModel.
-@property (nonatomic, copy) SCDidFetchModelItemsAction_Block didFetchItemsFromStore;
+@property (nonatomic, copy, nullable) SCDidFetchModelItemsAction_Block didFetchItemsFromStore;
 
 
 /// Action gets called when SCArrayOfItemsModel requests a section header title for each of its items.
@@ -299,7 +301,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return [[objectName substringToIndex:1] uppercaseString];
 /// };
 /// ```
- @property (nonatomic, copy) SCSectionHeaderTitleForItemAction_Block sectionHeaderTitleForItem;
+ @property (nonatomic, copy, nullable) SCSectionHeaderTitleForItemAction_Block sectionHeaderTitleForItem;
 
 /// Implement this action to provide custom sections for SCArrayOfItemsModel.
 ///
@@ -312,7 +314,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return @[@"Section A", @"Section B", @"Section C"];
 /// };
 /// ```
-@property (nonatomic, copy) SCSectionHeaderTitlesAction_Block sectionHeaderTitles;
+@property (nonatomic, copy, nullable) SCSectionHeaderTitlesAction_Block sectionHeaderTitles;
 
 
 /// Action gets called when SCArrayOfItemsModel has computed the search results for the given searchText.
@@ -328,7 +330,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return myCustomSearchResults;
 /// };
 /// ```
-@property (nonatomic, copy) SCDidComputeSearchResultsAction_Block didComputeSearchResults;
+@property (nonatomic, copy, nullable) SCDidComputeSearchResultsAction_Block didComputeSearchResults;
 
 
 
@@ -337,12 +339,14 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 /// The owner table view model of the actions object.
 ///
 /// - Warning: This property gets set automatically by the framework, you should never set this property manually
-@property (nonatomic, weak) SCTableViewModel *ownerTableViewModel;
+@property (nonatomic, weak, nullable) SCTableViewModel *ownerTableViewModel;
 
 /// Method assigns all the actions of another `SCModelActions` class to the current one.
 ///
-/// - Parameter actions: The source `SCModelActions` class.
+/// - Parameter actions: The source actions, or nil to leave existing hooks alone.
 /// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
-- (void)setActionsTo:(SCModelActions *)actions overrideExisting:(BOOL)override;
+- (void)setActionsTo:(SCModelActions * _Nullable)actions overrideExisting:(BOOL)override;
 
 @end
+
+NS_ASSUME_NONNULL_END

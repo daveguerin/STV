@@ -70,32 +70,19 @@
 
 #pragma mark - SCTableViewCell
 
+@interface SCTableViewCell ()
+{
+    __weak SCTableViewModel *activeDetailModel;
+    __weak id ownerViewControllerDelegate;
+    BOOL _isCustomBoundProperty;
+    SCDetailViewControllerOptions *_detailViewControllerOptions;
+}
+@end
+
 @implementation SCTableViewCell
 
-@synthesize ownerTableViewModel;
-@synthesize ownerSection;
-@synthesize boundPropertyDataType;
+// Custom accessors disable autosynthesis; create backing storage and its V attribute.
 @synthesize height = _height;
-@synthesize editable;
-@synthesize movable;
-@synthesize selectable;
-@synthesize enabled;
-@synthesize detailCellsImageViews;
-@synthesize badgeView;
-@synthesize leadingSwipePerformsFirstActionWithFullSwipe;
-@synthesize trailingSwipePerformsFirstActionWithFullSwipe;
-@synthesize autoDeselect;
-@synthesize autoResignFirstResponder;
-@synthesize cellEditingStyle;
-@synthesize valueRequired;
-@synthesize autoValidateValue;
-@synthesize commitChangesLive;
-@synthesize needsCommit;
-@synthesize beingReused;
-@synthesize customCell;
-@synthesize reuseId;
-@synthesize configured;
-@synthesize isSpecialCell;
 
 + (instancetype)cell
 {
@@ -175,7 +162,7 @@
 	self.shouldIndentWhileEditing = TRUE;
 	
 	_cellActions = [[SCCellActions alloc] init];
-	boundPropertyDataType = SCDataTypeUnknown;
+	_boundPropertyDataType = SCDataTypeUnknown;
     _isCustomBoundProperty = FALSE;
     if (!_height) {
         _height = UITableViewAutomaticDimension;
@@ -187,25 +174,25 @@
     */
     _sizingMode = SCTableViewCellSizingModeInherit;
     _estimatedHeight = 44.0;
-	selectable = TRUE;
-    enabled = TRUE;
-    _disabledTextColor = [UIColor labelColor]; // dgApps
-    autoResignFirstResponder = TRUE;
-	cellEditingStyle = UITableViewCellEditingStyleDelete;
-	autoValidateValue = TRUE;
-	commitChangesLive = TRUE;
-	needsCommit = FALSE;
-	beingReused = FALSE;
-	customCell = FALSE;
-    isSpecialCell = FALSE;
-    configured = FALSE;
+	_selectable = TRUE;
+    _enabled = TRUE;
+    _disabledTextColor = [UIColor labelColor];
+    _autoResignFirstResponder = TRUE;
+	_cellEditingStyle = UITableViewCellEditingStyleDelete;
+	_autoValidateValue = TRUE;
+	_commitChangesLive = TRUE;
+	_needsCommit = FALSE;
+	_beingReused = FALSE;
+	_customCell = FALSE;
+    _isSpecialCell = FALSE;
+    _configured = FALSE;
     
     // Setup the badgeView
-	badgeView = [[SCBadgeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-	[self.contentView addSubview:badgeView];
+	_badgeView = [[SCBadgeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+	[self.contentView addSubview:_badgeView];
 
-    leadingSwipePerformsFirstActionWithFullSwipe = YES;
-    trailingSwipePerformsFirstActionWithFullSwipe = YES;
+    _leadingSwipePerformsFirstActionWithFullSwipe = YES;
+    _trailingSwipePerformsFirstActionWithFullSwipe = YES;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -255,7 +242,7 @@
         self.detailTextLabel.adjustsFontForContentSizeCategory = YES;
 
         if (reuseIdentifier) {
-            reuseId = [reuseIdentifier copy];
+            _reuseId = [reuseIdentifier copy];
         }
 
     }
@@ -400,7 +387,7 @@
 
 - (void)setNeedsCommit:(BOOL)needs
 {
-    needsCommit = needs;
+    _needsCommit = needs;
 }
 
 - (void)setActiveDetailModel:(SCTableViewModel *)model
@@ -412,16 +399,16 @@
 - (SCDetailViewControllerOptions *)detailViewControllerOptions
 {
     // Conserve resources by lazy loading for only cells that need it
-    if (!detailViewControllerOptions) {
-        detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
+    if (!_detailViewControllerOptions) {
+        _detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
     }
 
-    return detailViewControllerOptions;
+    return _detailViewControllerOptions;
 }
 
 - (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
 {
-    detailViewControllerOptions = options;
+    _detailViewControllerOptions = options;
 }
 
 - (void)didLayoutSubviews
@@ -991,7 +978,7 @@
 
 - (void)cellValueChanged
 {
-	needsCommit = TRUE;
+	_needsCommit = TRUE;
 
     if (self.commitChangesLive) {
         [self commitChanges];
@@ -1042,12 +1029,12 @@
 
 - (void)markCellAsSpecial
 {
-    isSpecialCell = TRUE;
+    _isSpecialCell = TRUE;
 }
 
 - (void)commitChanges
 {
-	needsCommit = FALSE;
+	_needsCommit = FALSE;
 }
 
 - (void)reloadBoundValue
@@ -1403,9 +1390,8 @@
             case SCPresentationModePopover:
             {
                 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                UIPopoverController *popoverController  = [[UIPopoverController alloc] initWithContentViewController:self.ownerTableViewModel.viewController];
+                detailNavController.modalPresentationStyle = UIModalPresentationPopover;
+                UIPopoverPresentationController *popoverController = detailNavController.popoverPresentationController;
                 if ([detailViewController isKindOfClass:[SCTableViewController class]]) {
                     [(SCTableViewController *)detailViewController setPopoverController:popoverController];
                 }
@@ -1414,10 +1400,12 @@
                     [(SCViewController *)detailViewController setPopoverController:popoverController];
                 }
 
-                detailViewController.modalInPopover = YES;
+                detailNavController.modalInPresentation = YES;
                 
-                [popoverController presentPopoverFromRect:cell.bounds inView:cell permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-#pragma clang diagnostic pop
+                popoverController.sourceView = cell ?: self.ownerTableViewModel.tableView;
+                popoverController.sourceRect = popoverController.sourceView.bounds;
+                popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+                [self.ownerTableViewModel.viewController presentViewController:detailNavController animated:YES completion:nil];
             }
                 break;
                 
@@ -1692,8 +1680,6 @@
 
 
 @implementation SCCustomCell
-
-
 
 + (instancetype)cellWithText:(NSString *)cellText objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName
 {
@@ -2734,12 +2720,13 @@
 
 
 
+@interface SCControlCell ()
+{
+    BOOL showClearButtonInInputAccessoryView;
+}
+@end
+
 @implementation SCControlCell
-
-@synthesize maxTextLabelWidth;
-@synthesize controlIndentation;
-@synthesize controlMargin;
-
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -2786,9 +2773,9 @@
 {
 	[super performInitialization];
     
-    maxTextLabelWidth = SC_DefaultMaxTextLabelWidth;
-	controlIndentation = SC_DefaultControlIndentation;
-	controlMargin = kDefaultControlMargin;
+    _maxTextLabelWidth = SC_DefaultMaxTextLabelWidth;
+	_controlIndentation = SC_DefaultControlIndentation;
+	_controlMargin = kDefaultControlMargin;
 
     if (!self.controlCreatedInIB) {
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
@@ -3054,7 +3041,6 @@
 
 @implementation SCLabelCell
 
-
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName
 {
 	return [[[self class] alloc] initWithText:cellText boundObject:object labelTextPropertyName:propertyName];
@@ -3230,10 +3216,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCTextViewCell
 
-@synthesize minimumHeight;
-@synthesize maximumHeight;
-
-
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName
 {
 	return [[[self class] alloc] initWithText:cellText boundObject:object textViewTextPropertyName:propertyName];
@@ -3247,8 +3229,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 	
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    minimumHeight = kMinTextViewHeight;
-    maximumHeight = kMaxTextViewHeight;
+    _minimumHeight = kMinTextViewHeight;
+    _maximumHeight = kMaxTextViewHeight;
 	
     UITextView *textView = [[SCIntrinsicTextView alloc] init];
     textView.adjustsFontForContentSizeCategory = YES;
@@ -3307,14 +3289,14 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 - (void)setMinimumHeight:(CGFloat)value
 {
-    minimumHeight = MAX(0, value);
+    _minimumHeight = MAX(0, value);
     self.sc_layoutKey = nil;
     [self setNeedsUpdateConstraints];
 }
 
 - (void)setMaximumHeight:(CGFloat)value
 {
-    maximumHeight = value;
+    _maximumHeight = value;
     self.sc_layoutKey = nil;
     [self setNeedsUpdateConstraints];
 }
@@ -3542,7 +3524,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCTextFieldCell
 
-
 + (instancetype)cellWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName
 {
 	return [[[self class] alloc] initWithText:cellText placeholder:placeholder boundObject:object textFieldTextPropertyName:propertyName];
@@ -3734,14 +3715,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCNumericTextFieldCell
 
-@synthesize minimumValue;
-@synthesize maximumValue;
-@synthesize allowFloatValue;
-@synthesize displayZeroAsBlank;
-@synthesize numberFormatter;
-
-
-
 //overrides superclass
 - (void)performInitialization
 {
@@ -3749,13 +3722,13 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 	
 	self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 	
-	minimumValue = nil;
-	maximumValue = nil;
-	allowFloatValue = TRUE;
-	displayZeroAsBlank = FALSE;
+	_minimumValue = nil;
+	_maximumValue = nil;
+	_allowFloatValue = TRUE;
+	_displayZeroAsBlank = FALSE;
     
-    numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    _numberFormatter = [[NSNumberFormatter alloc] init];
+    [_numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
 }
 
 
@@ -3764,11 +3737,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 {
     NSObject *value = nil;
     if ([self.textField.text length]) {
-        [numberFormatter setMinimum:self.minimumValue];
-        [numberFormatter setMaximum:self.maximumValue];
-        [numberFormatter setAllowsFloats:self.allowFloatValue];
+        [_numberFormatter setMinimum:self.minimumValue];
+        [_numberFormatter setMaximum:self.maximumValue];
+        [_numberFormatter setAllowsFloats:self.allowFloatValue];
         
-        value = [numberFormatter numberFromString:self.textField.text];
+        value = [_numberFormatter numberFromString:self.textField.text];
     }
 
     return value;
@@ -3791,11 +3764,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             }
 
             else {
-                [numberFormatter setMinimum:self.minimumValue];
-                [numberFormatter setMaximum:self.maximumValue];
-                [numberFormatter setAllowsFloats:self.allowFloatValue];
+                [_numberFormatter setMinimum:self.minimumValue];
+                [_numberFormatter setMaximum:self.maximumValue];
+                [_numberFormatter setAllowsFloats:self.allowFloatValue];
                 
-                self.textField.text = [numberFormatter stringFromNumber:numericValue];
+                self.textField.text = [_numberFormatter stringFromNumber:numericValue];
             }
 
         }
@@ -3834,7 +3807,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     self.allowFloatValue = numericTextFieldAttributes.allowFloatValue;
     if (numericTextFieldAttributes.numberFormatter) {
-        numberFormatter = numericTextFieldAttributes.numberFormatter;
+        _numberFormatter = numericTextFieldAttributes.numberFormatter;
     }
 
 }
@@ -3851,11 +3824,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         return TRUE;
     }
 
-    [numberFormatter setMinimum:self.minimumValue];
-	[numberFormatter setMaximum:self.maximumValue];
-	[numberFormatter setAllowsFloats:self.allowFloatValue];
+    [_numberFormatter setMinimum:self.minimumValue];
+	[_numberFormatter setMaximum:self.maximumValue];
+	[_numberFormatter setAllowsFloats:self.allowFloatValue];
 	BOOL valid;
-    if ([numberFormatter numberFromString:self.textField.text]) {
+    if ([_numberFormatter numberFromString:self.textField.text]) {
         valid = TRUE;
     }
 
@@ -3877,7 +3850,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 @implementation SCSliderCell
-
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName
 {
@@ -4009,7 +3981,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 @implementation SCSegmentedCell
-
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray
 {
@@ -4192,7 +4163,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCSwitchCell
 
-
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName
 {
 	return [[[self class] alloc] initWithText:cellText boundObject:object switchOnPropertyName:propertyName];
@@ -4316,12 +4286,14 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 
+@interface SCDateCell ()
+{
+    UITextField *_pickerField;
+    UIViewController *_activePickerDetailViewController;
+}
+@end
+
 @implementation SCDateCell
-
-@synthesize datePicker;
-@synthesize dateFormatter;
-@synthesize displaySelectedDate;
-
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName
 {
@@ -4337,13 +4309,13 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     _dateCleared = FALSE;
     _activePickerDetailViewController = nil;
 	
-	datePicker = [[UIDatePicker alloc] init];
-	[datePicker addTarget:self action:@selector(pickerValueChanged) 
+	_datePicker = [[UIDatePicker alloc] init];
+	[_datePicker addTarget:self action:@selector(pickerValueChanged)
 		 forControlEvents:UIControlEventValueChanged];
 	
 	_pickerField = [[UITextField alloc] initWithFrame:CGRectZero];
 	_pickerField.delegate = self;
-	_pickerField.inputView = datePicker;
+	_pickerField.inputView = _datePicker;
     [self.contentView addSubview:_pickerField];
     _pickerField.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -4353,9 +4325,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         [_pickerField.heightAnchor constraintEqualToConstant:0]
     ]];
 	
-	dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:@"MMM d  hh:mm a"];
-	displaySelectedDate = TRUE;
+	_dateFormatter = [[NSDateFormatter alloc] init];
+	[_dateFormatter setDateFormat:@"MMM d  hh:mm a"];
+	_displaySelectedDate = TRUE;
 	_displayDatePickerAsInputAccessoryView = FALSE;
     self.showClearButtonInInputAccessoryView = TRUE;
     
@@ -4480,7 +4452,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     if (date) {
-        self.label.text = [dateFormatter stringFromDate:date];
+        self.label.text = [_dateFormatter stringFromDate:date];
     }
 
     else {
@@ -4553,7 +4525,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 - (void)cellValueChanged
 {
     if (!_dateCleared) {
-        self.label.text = [dateFormatter stringFromDate:self.datePicker.date];
+        self.label.text = [_dateFormatter stringFromDate:self.datePicker.date];
     }
 
     else {
@@ -4694,7 +4666,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @interface SCSelectionCell ()
 {
     @protected
-    NSArray *items;
+    NSArray *_items;
     BOOL itemsInSync;
     BOOL _loadingContents;
     UIActivityIndicatorView *_activityIndicator;
@@ -4710,24 +4682,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @end
 
 @implementation SCSelectionCell
-
-@synthesize selectionItemsStore;
-@synthesize selectionItemsFetchOptions;
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissDetailView;
-@synthesize hideDetailViewNavigationBar;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditDetailView;
-@synthesize displaySelection;
-@synthesize delimeter;
-@synthesize selectedItemsIndexes;
-@synthesize placeholderCell;
-@synthesize addNewItemCell;
-
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems
 {
@@ -4750,29 +4704,29 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 {
 	[super performInitialization];
 	
-	selectionItemsStore = nil;
-    selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
-    items = nil;
+	_selectionItemsStore = nil;
+    _selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
+    _items = nil;
     itemsInSync = FALSE;
     _loadingContents = FALSE;
     _activityIndicator = nil;
     _commitingDetailModel = FALSE;
     
-	allowMultipleSelection = FALSE;
-	allowNoSelection = FALSE;
-	maximumSelections = 0;
-	autoDismissDetailView = FALSE;
-	hideDetailViewNavigationBar = FALSE;
-    allowAddingItems = FALSE;
-	allowDeletingItems = FALSE;
-	allowMovingItems = FALSE;
-	allowEditDetailView = FALSE;
-	displaySelection = TRUE;
-	delimeter = @", ";
-	selectedItemsIndexes = [[NSMutableSet alloc] init];
-    placeholderCell = nil;
+	_allowMultipleSelection = FALSE;
+	_allowNoSelection = FALSE;
+	_maximumSelections = 0;
+	_autoDismissDetailView = FALSE;
+	_hideDetailViewNavigationBar = FALSE;
+    _allowAddingItems = FALSE;
+	_allowDeletingItems = FALSE;
+	_allowMovingItems = FALSE;
+	_allowEditDetailView = FALSE;
+	_displaySelection = TRUE;
+	_delimeter = @", ";
+	_selectedItemsIndexes = [[NSMutableSet alloc] init];
+    _placeholderCell = nil;
     
-    addNewItemCell = nil;
+    _addNewItemCell = nil;
     _addNewItemCellExistsInNormalMode = FALSE;
     _addNewItemCellExistsInEditingMode = TRUE;
 	
@@ -4836,14 +4790,14 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 - (NSArray *)items
 {
     if (!itemsInSync) {
-        if (!items) {
-            items = [NSArray array];
+        if (!_items) {
+            _items = [NSArray array];
         }
 
         switch (self.selectionItemsStore.storeMode)
         {
             case SCStoreModeSynchronous:
-                items = [self.selectionItemsStore fetchObjectsWithOptions:self.selectionItemsFetchOptions];
+                _items = [self.selectionItemsStore fetchObjectsWithOptions:self.selectionItemsFetchOptions];
                 itemsInSync = TRUE;
                 break;
                 
@@ -4866,7 +4820,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
                 [self.selectionItemsStore asynchronousFetchObjectsWithOptions:self.selectionItemsFetchOptions
                 success:^(NSArray *results)
                  {
-                    self->items = results;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_items = results;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
 
                     if (!skipBuildingFromBoundValue) {
                         [self buildSelectedItemsIndexesFromBoundValue];
@@ -4896,7 +4850,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         }
     }
 
-    return items;
+    return _items;
 }
 
 - (void)setItems:(NSArray *)customItems
@@ -4905,15 +4859,15 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         [(SCArrayStore *)self.selectionItemsStore setObjectsArray:[NSMutableArray arrayWithArray:customItems]];
     }
 
-    items = customItems;
+    _items = customItems;
     itemsInSync = TRUE;
 }
 
 - (void)setSelectionItemsStore:(SCDataStore *)store
 {
-    selectionItemsStore = store;
+    _selectionItemsStore = store;
     
-    selectionItemsFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
+    _selectionItemsFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
     
     
     itemsInSync = FALSE;
@@ -4926,7 +4880,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 - (void)setSelectionItemsFetchOptions:(SCDataFetchOptions *)fetchOptions
 {
-    selectionItemsFetchOptions = fetchOptions;
+    _selectionItemsFetchOptions = fetchOptions;
     
     itemsInSync = FALSE;
     
@@ -4959,7 +4913,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 	[self.selectedItemsIndexes removeAllObjects];
 
     if ([self.boundValue isKindOfClass:[NSNumber class]]) {
-        [self.selectedItemsIndexes addObject:self.boundValue];
+        [self.selectedItemsIndexes addObject:(NSNumber *)self.boundValue];
     }
 
     else if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
@@ -5374,9 +5328,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCObjectSelectionCell
 
-@synthesize intermediateEntityDefinition;
-
-
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store
 {
     return [[[self class] alloc] initWithText:cellText boundObject:object selectedObjectPropertyName:propertyName selectionItemsStore:store];
@@ -5392,7 +5343,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 {
 	[super performInitialization];
     
-    intermediateEntityDefinition = nil;
+    _intermediateEntityDefinition = nil;
 }
 
 - (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store
@@ -5796,9 +5747,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCObjectCell
 
-@synthesize boundObjectTitleText;
-
-
 + (instancetype)cellWithBoundObject:(NSObject *)object
 {
 	return [[[self class] alloc] initWithBoundObject:object];
@@ -5819,7 +5767,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 {
 	[super performInitialization];
 	
-	boundObjectTitleText = nil;
+	_boundObjectTitleText = nil;
 	self.detailViewControllerOptions.tableViewStyle = UITableViewStyleGrouped;
 	
 	self.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -5861,7 +5809,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 - (void)setBoundObjectTitleText: (NSString*)input 
 { 
-    boundObjectTitleText = [input copy];
+    _boundObjectTitleText = [input copy];
     
     [self setCellTextAndDetailText];
 }
@@ -6061,21 +6009,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCArrayOfObjectsCell
 
-@synthesize dataStore;
-@synthesize dataFetchOptions;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditDetailView;
-@synthesize allowRowSelection;
-@synthesize autoSelectNewItemCell;
-@synthesize displayItemsCountInBadgeView;
-@synthesize placeholderCell;
-@synthesize addNewItemCell;
-@synthesize addNewItemCellExistsInNormalMode;
-@synthesize addNewItemCellExistsInEditingMode;
-
-
 + (instancetype)cellWithDataStore:(SCDataStore *)store
 {
     return [[[self class] alloc] initWithDataStore:store];
@@ -6101,21 +6034,21 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 {
 	[super performInitialization];
 	
-    dataStore = nil;
-    dataFetchOptions = nil;  // will be re-initialized when dataStore is set
+    _dataStore = nil;
+    _dataFetchOptions = nil;  // will be re-initialized when dataStore is set
     
-	allowAddingItems = TRUE;
-	allowDeletingItems = TRUE;
-	allowMovingItems = TRUE;
-	allowEditDetailView = TRUE;
-	allowRowSelection = TRUE;
-	autoSelectNewItemCell = FALSE;
-	displayItemsCountInBadgeView = TRUE;
+	_allowAddingItems = TRUE;
+	_allowDeletingItems = TRUE;
+	_allowMovingItems = TRUE;
+	_allowEditDetailView = TRUE;
+	_allowRowSelection = TRUE;
+	_autoSelectNewItemCell = FALSE;
+	_displayItemsCountInBadgeView = TRUE;
     
-    placeholderCell = nil;
-    addNewItemCell = nil;
-    addNewItemCellExistsInNormalMode = TRUE;
-    addNewItemCellExistsInEditingMode = TRUE;
+    _placeholderCell = nil;
+    _addNewItemCell = nil;
+    _addNewItemCellExistsInNormalMode = TRUE;
+    _addNewItemCellExistsInEditingMode = TRUE;
     
     _detailSectionActions = [[SCSectionActions alloc] init];
 }
@@ -6184,10 +6117,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 - (void)setDataStore:(SCDataStore *)store
 {
-    dataStore = store;
+    _dataStore = store;
 
-    if (!dataFetchOptions) {
-        dataFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
+    if (!_dataFetchOptions) {
+        _dataFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
     }
 
     [self bindDataStoreToBoundObject];

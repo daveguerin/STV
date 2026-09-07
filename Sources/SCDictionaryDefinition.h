@@ -10,6 +10,8 @@
 #import "SCDataDefinition.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCDictionaryDefinition
 /// This class functions as a means to further extend the key definitions of an NSMutableDictionary.
 ///
@@ -49,14 +51,14 @@
 /// Key names string syntax options:
 ///     @"key1;key2;key3;..."
 ///     @"group1 header:(key1, key2,...):group1 footer;group2..."
-+ (instancetype)definitionWithDictionaryKeyNamesString:(NSString *)keyNamesString;
++ (instancetype)definitionWithDictionaryKeyNamesString:(nullable NSString *)keyNamesString;
 
 /// Allocates and returns an initialized `SCDictionaryDefinition` given the key names of the mutable dictionary to be defined.
 ///
 /// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
 ///
 /// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
-+ (instancetype)definitionWithDictionaryKeyNames:(NSArray *)keyNames;
++ (instancetype)definitionWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames;
 
 /// Allocates and returns an initialized `SCDictionaryDefinition` given the key names and titles of the mutable dictionary to be defined.
 ///
@@ -64,7 +66,7 @@
 ///
 /// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
 /// - Parameter keyTitles: An array of titles to the keys in keyNames. All array elements must be of type NSString.
-+ (instancetype)definitionWithDictionaryKeyNames:(NSArray *)keyNames keyTitles:(NSArray *)keyTitles;
++ (instancetype)definitionWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames keyTitles:(nullable NSArray<NSString *> *)keyTitles;
 
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names string of the mutable dictionary to be defined.
@@ -76,14 +78,14 @@
 /// Key names string syntax options:
 ///     @"key1;key2;key3;..."
 ///     @"group1 header:(key1, key2,...):group1 footer;group2..."
-- (instancetype)initWithDictionaryKeyNamesString:(NSString *)keyNamesString;
+- (instancetype)initWithDictionaryKeyNamesString:(nullable NSString *)keyNamesString;
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names of the mutable dictionary to be defined.
 ///
 /// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
 ///
 /// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
-- (instancetype)initWithDictionaryKeyNames:(NSArray *)keyNames;
+- (instancetype)initWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames;
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names and titles of the mutable dictionary to be defined.
 ///
@@ -91,6 +93,8 @@
 ///
 /// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
 /// - Parameter keyTitles: An array of titles to the keys in keyNames. All array elements must be of type NSString.
-- (instancetype)initWithDictionaryKeyNames:(NSArray *)keyNames keyTitles:(NSArray *)keyTitles;
+- (instancetype)initWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames keyTitles:(nullable NSArray<NSString *> *)keyTitles;
 
 @end
+
+NS_ASSUME_NONNULL_END

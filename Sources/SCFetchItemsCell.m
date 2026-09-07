@@ -13,6 +13,12 @@
 #import "SCTableViewModel.h"
 
 
+@interface SCFetchItemsCell ()
+{
+    UIActivityIndicatorView *_activityIndicator;
+}
+@end
+
 @implementation SCFetchItemsCell
 
 
@@ -21,7 +27,7 @@
 - (void)performInitialization
 {
     [super performInitialization];
-    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
+    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
 
     _activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_activityIndicator];

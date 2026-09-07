@@ -9,6 +9,8 @@
 
 #import "SCViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 #pragma mark - SCSearchViewController
@@ -22,15 +24,14 @@
 ///   Supplied controls keep their existing layout; missing controls are created
 ///   and constrained automatically.
 @interface SCSearchViewController : SCViewController
-{
-    @protected
-    UISearchBar *_searchBar;
-}
+
 
 #pragma mark - Configuration
 
 /// The search bar associated with the controller. Access creates a constrained
 /// UISearchBar when Interface Builder has not supplied one.
-@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong, null_resettable) IBOutlet UISearchBar *searchBar;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -19,6 +19,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 // Keys
 /// The legacy plug-in dictionary key for custom class name.
 #define kCustomClassName                @"_STV_CustomClassName"
@@ -129,7 +131,7 @@
 
 /// Creates the STV object represented by a plug-in dictionary.
 /// - Parameter pluginDictionary: The plugin dictionary.
-+ (id)objectForPluginDictionary:(NSDictionary *)pluginDictionary;
++ (nullable id)objectForPluginDictionary:(NSDictionary<NSString *, id> *)pluginDictionary;
 
 @end
 
@@ -139,6 +141,8 @@
 
 /// Initializes an object from an Interface Builder configuration dictionary.
 /// - Parameter ibDictionary: The Interface Builder configuration dictionary.
-- (instancetype)initWithibDictionary:(NSMutableDictionary *)ibDictionary;
+- (nullable instancetype)initWithibDictionary:(NSMutableDictionary<NSString *, id> *)ibDictionary;
 
 @end
+
+NS_ASSUME_NONNULL_END

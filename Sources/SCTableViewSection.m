@@ -27,23 +27,15 @@
 @end
 
 
-@implementation SCTableViewSection
+@interface SCTableViewSection ()
+{
+    BOOL commitChangesLive;
+    SCDetailViewControllerOptions *_detailViewControllerOptions;
+    SCDetailViewControllerOptions *_newItemDetailViewControllerOptions;
+}
+@end
 
-@synthesize cells;
-@synthesize boundObject;
-@synthesize boundObjectStore;
-@synthesize boundPropertyName;
-@synthesize commitCellChangesLive;
-@synthesize headerTitle;
-@synthesize headerHeight;
-@synthesize headerView;
-@synthesize footerTitle;
-@synthesize footerHeight;
-@synthesize footerView;
-@synthesize sectionActions;
-@synthesize cellActions;
-@synthesize cellsImageViews;
-@synthesize expandCollapseCell;
+@implementation SCTableViewSection
 
 + (instancetype)section {
     return [[[self class] alloc] init];
@@ -60,26 +52,26 @@
 - (instancetype)init {
     if ((self = [super init])) {
         _ownerTableViewModel = nil;
-        boundObject = nil;
-        boundObjectStore = nil;
-        boundPropertyName = nil;
-        commitCellChangesLive = TRUE;
-        headerTitle = nil;
-        headerHeight = UITableViewAutomaticDimension;
-        headerView = nil;
-        footerTitle = nil;
-        footerHeight = UITableViewAutomaticDimension;
-        footerView = nil;
+        _boundObject = nil;
+        _boundObjectStore = nil;
+        _boundPropertyName = nil;
+        _commitCellChangesLive = TRUE;
+        _headerTitle = nil;
+        _headerHeight = UITableViewAutomaticDimension;
+        _headerView = nil;
+        _footerTitle = nil;
+        _footerHeight = UITableViewAutomaticDimension;
+        _footerView = nil;
 
-        sectionActions = [[SCSectionActions alloc] init];
-        cellsImageViews = nil;
-        cellActions = [[SCCellActions alloc] init];
-        cells = [[NSMutableArray alloc] init];
+        _sectionActions = [[SCSectionActions alloc] init];
+        _cellsImageViews = nil;
+        _cellActions = [[SCCellActions alloc] init];
+        _cells = [[NSMutableArray alloc] init];
 
-        expandCollapseCell = nil;
+        _expandCollapseCell = nil;
 
-        detailViewControllerOptions = nil;
-        newItemDetailViewControllerOptions = nil;
+        _detailViewControllerOptions = nil;
+        _newItemDetailViewControllerOptions = nil;
     }
 
     return self;
@@ -109,7 +101,7 @@
      Access only materialized cells: an array section's cells getter may fetch
      data. New cells inherit current model policy when they are prepared.
      */
-    for (SCTableViewCell *cell in cells) {
+    for (SCTableViewCell *cell in _cells) {
         [cell setNeedsUpdateConstraints];
         [cell updateConstraintsIfNeeded];
     }
@@ -190,46 +182,46 @@
 }
 
 - (void)setExpandCollapseCell:(SCExpandCollapseCell *)cell {
-    if (expandCollapseCell) {
-        NSUInteger index = [self indexForCell:expandCollapseCell];
+    if (_expandCollapseCell) {
+        NSUInteger index = [self indexForCell:_expandCollapseCell];
         [self removeCellAtIndex:index];
     }
 
-    expandCollapseCell = cell;
+    _expandCollapseCell = cell;
     if (![self isKindOfClass:[SCArrayOfItemsSection class]]) { // SCArrayOfItemsSection automatically handles adding expandCollapseCell
-        [self insertCell:expandCollapseCell atIndex:0];
+        [self insertCell:_expandCollapseCell atIndex:0];
     }
 
-    expandCollapseCell.movable = FALSE;
-    expandCollapseCell.editable = TRUE;
-    expandCollapseCell.cellEditingStyle = UITableViewCellEditingStyleInsert;
-    [expandCollapseCell markCellAsSpecial];
+    _expandCollapseCell.movable = FALSE;
+    _expandCollapseCell.editable = TRUE;
+    _expandCollapseCell.cellEditingStyle = UITableViewCellEditingStyleInsert;
+    [_expandCollapseCell markCellAsSpecial];
 }
 
 - (SCDetailViewControllerOptions *)detailViewControllerOptions {
     // Conserve resources by lazy loading for only sections that need it
-    if (!detailViewControllerOptions) {
-        detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
+    if (!_detailViewControllerOptions) {
+        _detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
     }
 
-    return detailViewControllerOptions;
+    return _detailViewControllerOptions;
 }
 
 - (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options {
-    detailViewControllerOptions = options;
+    _detailViewControllerOptions = options;
 }
 
 - (SCDetailViewControllerOptions *)newItemDetailViewControllerOptions {
     // Conserve resources by lazy loading for only sections that need it
-    if (!newItemDetailViewControllerOptions) {
-        newItemDetailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
+    if (!_newItemDetailViewControllerOptions) {
+        _newItemDetailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
     }
 
-    return newItemDetailViewControllerOptions;
+    return _newItemDetailViewControllerOptions;
 }
 
 - (void)setNewItemDetailViewControllerOptions:(SCDetailViewControllerOptions *)options {
-    newItemDetailViewControllerOptions = options;
+    _newItemDetailViewControllerOptions = options;
 }
 
 - (NSComparisonResult)compare:(SCTableViewSection *)section {
@@ -276,7 +268,7 @@
 }
 
 - (void)setCommitCellChangesLive:(BOOL)commit {
-    commitCellChangesLive = commit;
+    _commitCellChangesLive = commit;
 
     for (SCTableViewCell *cell in self.cells) {
         if ([cell isKindOfClass:[SCTableViewCell class]]) {
@@ -286,11 +278,11 @@
 }
 
 - (NSString *)footerTitle {
-    return footerTitle;
+    return _footerTitle;
 }
 
 - (UIView *)footerView {
-    return footerView;
+    return _footerView;
 }
 
 - (NSUInteger)cellCount {
@@ -480,8 +472,6 @@
 
 @implementation SCObjectSection
 
-@synthesize propertyGroup;
-
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle boundObject:object];
 }
@@ -519,8 +509,8 @@
 
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store propertyGroup:(SCPropertyGroup *)group {
     if ((self = [self initWithHeaderTitle:sectionHeaderTitle])) {
-        boundObject = object;
-        boundObjectStore = store;
+        _boundObject = object;
+        _boundObjectStore = store;
 
         if (!group) {
             SCDataDefinition *objectDefinition = [self.boundObjectStore definitionForObject:self.boundObject];
@@ -531,10 +521,10 @@
         self.propertyGroup = group;
 
         if (!sectionHeaderTitle) {
-            self.headerTitle = propertyGroup.headerTitle;
+            self.headerTitle = _propertyGroup.headerTitle;
         }
 
-        self.footerTitle = propertyGroup.footerTitle;
+        self.footerTitle = _propertyGroup.footerTitle;
 
         [self generateCellsForEditingState:FALSE];
     }
@@ -543,31 +533,31 @@
 }
 
 - (void)setBoundObject:(NSObject *)boundObj {
-    boundObject = boundObj;
+    _boundObject = boundObj;
 
     // Regenerate the cells
     [self generateCellsForEditingState:FALSE];
 }
 
 - (void)setBoundObjectStore:(SCDataStore *)store {
-    boundObjectStore = store;
+    _boundObjectStore = store;
 
     // Regenerate the cells
     [self generateCellsForEditingState:FALSE];
 }
 
 - (void)setBoundObject:(NSObject *)boundObj withStore:(SCDataStore *)store autoGenerateCells:(BOOL)autoGenerateCells {
-    boundObject = boundObj;
-    boundObjectStore = store;
+    _boundObject = boundObj;
+    _boundObjectStore = store;
 
     if (autoGenerateCells) {
         [self generateCellsForEditingState:FALSE];
     }
 
     else {
-        for (SCTableViewCell *cell in cells) {
+        for (SCTableViewCell *cell in _cells) {
             if (!cell.boundObject) {
-                cell.boundObject = boundObject;
+                cell.boundObject = _boundObject;
                 cell.boundObjectStore = store;
             }
         }
@@ -592,7 +582,7 @@
     // Create a dictionary of old cell indexPaths (will need this as the section's structure changes)
     NSUInteger sectionIndex = [self.ownerTableViewModel indexForSection:self];
     NSMutableDictionary *oldCellsIndexPaths = [NSMutableDictionary dictionaryWithCapacity:self.cellCount];
-    for (SCTableViewCell *cell in cells) {
+    for (SCTableViewCell *cell in _cells) {
         NSUInteger index = [self indexForCell:cell];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:sectionIndex];
         NSString *cellKey = [NSString stringWithFormat:@"%p", cell]; // use cell address as key
@@ -1050,7 +1040,7 @@
         }
 
         if (!cell.boundObject) {
-            cell.boundObject = boundObject;
+            cell.boundObject = _boundObject;
         }
 
         [self configureCell:cell forPropertyDefinition:propertyDefinition inEditingMode:editing];
@@ -1101,7 +1091,7 @@
     NSIndexPath *_backedUpSelectedCellIndexPath;
 }
 
-@property (nonatomic, strong) NSMutableArray *mutableItems;
+@property (nonatomic, strong, nullable) NSMutableArray<id> *mutableItems;
 
 - (void)setActiveDetailModel:(SCTableViewModel *)model;
 
@@ -1143,27 +1133,15 @@
 @end
 
 
+@interface SCArrayOfItemsSection ()
+{
+    BOOL itemsInSync;
+    __weak SCTableViewModel *activeDetailModel;
+    NSMutableArray *cellReuseIdentifiers;
+}
+@end
+
 @implementation SCArrayOfItemsSection
-
-@synthesize dataStore;
-@synthesize dataFetchOptions;
-@synthesize autoFetchItems;
-@synthesize itemsAccessoryType;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditDetailView;
-@synthesize allowRowSelection;
-@synthesize skipNewItemDetailView;
-@synthesize autoSelectNewItemCell;
-@synthesize cellIdentifier;
-@synthesize addButtonItem;
-@synthesize fetchItemsCell;
-@synthesize placeholderCell;
-@synthesize addNewItemCell;
-@synthesize addNewItemCellExistsInNormalMode;
-@synthesize addNewItemCellExistsInEditingMode;
-
 
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle dataStore:(SCDataStore *)store {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle dataStore:store];
@@ -1172,40 +1150,40 @@
 
 - (instancetype)init {
     if ((self = [super init])) {
-        dataStore = nil;
-        dataFetchOptions = nil; // will be re-initialized when dataStore is set
+        _dataStore = nil;
+        _dataFetchOptions = nil; // will be re-initialized when dataStore is set
 
         _isFetchingItems = FALSE;
         itemsInSync = FALSE;
-        autoFetchItems = TRUE;
+        _autoFetchItems = TRUE;
 
         _autoCommitDetailModelChanges = YES;
 
         activeDetailModel = nil;
         cellReuseIdentifiers = [[NSMutableArray alloc] init];
-        itemsAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        allowAddingItems = TRUE;
-        allowDeletingItems = TRUE;
-        allowMovingItems = TRUE;
-        allowEditDetailView = TRUE;
-        allowRowSelection = TRUE;
-        skipNewItemDetailView = FALSE;
-        autoSelectNewItemCell = FALSE;
+        _itemsAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        _allowAddingItems = TRUE;
+        _allowDeletingItems = TRUE;
+        _allowMovingItems = TRUE;
+        _allowEditDetailView = TRUE;
+        _allowRowSelection = TRUE;
+        _skipNewItemDetailView = FALSE;
+        _autoSelectNewItemCell = FALSE;
 
         // set the cellIndentifier to a unique string
-        cellIdentifier = [[[NSUUID UUID] UUIDString] copy];
+        _cellIdentifier = [[[NSUUID UUID] UUIDString] copy];
 
         _selectedCellIndexPath = nil;
         _backedUpSelectedCellIndexPath = nil;
-        addButtonItem = nil;
+        _addButtonItem = nil;
         tempItem = nil;
 
-        fetchItemsCell = [[SCFetchItemsCell alloc] initWithText:@"Load more..."];
-        fetchItemsCell.textLabel.textAlignment = NSTextAlignmentCenter;
-        placeholderCell = nil;
-        addNewItemCell = nil;
-        addNewItemCellExistsInNormalMode = TRUE;
-        addNewItemCellExistsInEditingMode = TRUE;
+        _fetchItemsCell = [[SCFetchItemsCell alloc] initWithText:@"Load more..."];
+        _fetchItemsCell.textLabel.textAlignment = NSTextAlignmentCenter;
+        _placeholderCell = nil;
+        _addNewItemCell = nil;
+        _addNewItemCellExistsInNormalMode = TRUE;
+        _addNewItemCellExistsInEditingMode = TRUE;
     }
 
     return self;
@@ -1248,14 +1226,14 @@
 }
 
 - (void)setDataStore:(SCDataStore *)__dataStore {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCDataStoreWillDiscardAllUninsertedObjectsNotification object:dataStore];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SCDataStoreWillDiscardAllUninsertedObjectsNotification object:_dataStore];
 
-    dataStore = __dataStore;
+    _dataStore = __dataStore;
     // Register with store notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataStoreWillDiscardUninsertedObjects) name:SCDataStoreWillDiscardAllUninsertedObjectsNotification object:dataStore];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataStoreWillDiscardUninsertedObjects) name:SCDataStoreWillDiscardAllUninsertedObjectsNotification object:_dataStore];
 
-    if (!dataFetchOptions) {
-        dataFetchOptions = [__dataStore.defaultDataDefinition generateCompatibleDataFetchOptions];
+    if (!_dataFetchOptions) {
+        _dataFetchOptions = [__dataStore.defaultDataDefinition generateCompatibleDataFetchOptions];
     }
 
     itemsInSync = FALSE;
@@ -1293,7 +1271,7 @@
 }
 
 - (void)setDataFetchOptions:(SCDataFetchOptions *)options {
-    dataFetchOptions = options;
+    _dataFetchOptions = options;
 
     if (!options.sortKey && self.dataStore) {
         options.sortKey = self.dataStore.defaultDataDefinition.keyPropertyName;
@@ -1328,7 +1306,7 @@
     }
 
     itemsInSync = TRUE;
-    return cells;
+    return _cells;
 }
 
 - (void)callDidInsertItemActionWithItem:(NSObject *)item atIndexPath:(NSIndexPath *)indexPath {
@@ -1368,7 +1346,7 @@
 - (void)fetchItems:(id)sender {
     if (self.dataFetchOptions.batchSize) {
         if (self.dataFetchOptions.batchCurrentOffset == self.dataFetchOptions.batchStartingOffset) {
-            [cells removeAllObjects];
+            [_cells removeAllObjects];
         }
     }
 
@@ -1430,13 +1408,13 @@
     NSInteger insertionIndex = -1;
     if (self.dataFetchOptions.batchSize) {
         [self removeSpecialCellsFromItems];
-        insertionIndex = cells.count;
+        insertionIndex = _cells.count;
 
-        [cells addObjectsFromArray:mutableFetchedItems];
+        [_cells addObjectsFromArray:mutableFetchedItems];
     }
 
     else {
-        cells = [[NSMutableArray alloc] initWithArray:mutableFetchedItems];
+        _cells = [[NSMutableArray alloc] initWithArray:mutableFetchedItems];
     }
 
     BOOL fetchCellExists = [self fetchItemsCellExists];
@@ -1501,11 +1479,11 @@
     }
 
     if (self.sectionActions.didAddSpecialCells) {
-        self.sectionActions.didAddSpecialCells(self, cells);
+        self.sectionActions.didAddSpecialCells(self, _cells);
     }
 
     else if (self.ownerTableViewModel.sectionActions.didAddSpecialCells) {
-        self.ownerTableViewModel.sectionActions.didAddSpecialCells(self, cells);
+        self.ownerTableViewModel.sectionActions.didAddSpecialCells(self, _cells);
     }
 }
 
@@ -1528,11 +1506,11 @@
 }
 
 - (NSMutableArray *)mutableItems {
-    return cells;
+    return _cells;
 }
 
 - (void)setMutableItems:(NSMutableArray *)mutableItems {
-    cells = mutableItems;
+    _cells = mutableItems;
 }
 
 - (void)discardTempItem {
@@ -1561,32 +1539,32 @@
 }
 
 - (void)setPlaceholderCell:(SCTableViewCell *)_placeholderCell {
-    placeholderCell = _placeholderCell;
+    self->_placeholderCell = _placeholderCell;
 
-    placeholderCell.ownerTableViewModel = self.ownerTableViewModel;
-    placeholderCell.ownerSection = self;
-    placeholderCell.selectable = FALSE;
-    placeholderCell.movable = FALSE;
-    placeholderCell.editable = self.addNewItemCell != nil;
-    placeholderCell.cellEditingStyle = UITableViewCellEditingStyleNone;
-    placeholderCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [placeholderCell markCellAsSpecial];
+    self->_placeholderCell.ownerTableViewModel = self.ownerTableViewModel;
+    self->_placeholderCell.ownerSection = self;
+    self->_placeholderCell.selectable = FALSE;
+    self->_placeholderCell.movable = FALSE;
+    self->_placeholderCell.editable = self.addNewItemCell != nil;
+    self->_placeholderCell.cellEditingStyle = UITableViewCellEditingStyleNone;
+    self->_placeholderCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [self->_placeholderCell markCellAsSpecial];
 
     itemsInSync = FALSE;
 }
 
 - (void)setAddNewItemCell:(SCTableViewCell *)_addNewItemCell {
-    addNewItemCell = _addNewItemCell;
+    self->_addNewItemCell = _addNewItemCell;
 
-    addNewItemCell.ownerTableViewModel = self.ownerTableViewModel;
-    addNewItemCell.ownerSection = self;
-    addNewItemCell.movable = FALSE;
-    addNewItemCell.editable = TRUE;
-    addNewItemCell.cellEditingStyle = UITableViewCellEditingStyleInsert;
-    addNewItemCell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    [addNewItemCell markCellAsSpecial];
+    self->_addNewItemCell.ownerTableViewModel = self.ownerTableViewModel;
+    self->_addNewItemCell.ownerSection = self;
+    self->_addNewItemCell.movable = FALSE;
+    self->_addNewItemCell.editable = TRUE;
+    self->_addNewItemCell.cellEditingStyle = UITableViewCellEditingStyleInsert;
+    self->_addNewItemCell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    [self->_addNewItemCell markCellAsSpecial];
 
-    placeholderCell.editable = addNewItemCell != nil;
+    _placeholderCell.editable = self->_addNewItemCell != nil;
 
     itemsInSync = FALSE;
 }
@@ -1645,10 +1623,10 @@
 }
 
 - (void)setAddButtonItem:(UIBarButtonItem *)barButtonItem {
-    addButtonItem = barButtonItem;
+    _addButtonItem = barButtonItem;
 
-    addButtonItem.target = self;
-    addButtonItem.action = @selector(didTapAddButtonItem);
+    _addButtonItem.target = self;
+    _addButtonItem.action = @selector(didTapAddButtonItem);
 }
 
 // override superclass method
@@ -2228,48 +2206,27 @@
                 [self.ownerTableViewModel.viewController presentViewController:detailNavController animated:YES completion:nil];
             } break;
             case SCPresentationModePopover: {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-                UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:detailNavController];
+                detailNavController.modalPresentationStyle = UIModalPresentationPopover;
+                UIPopoverPresentationController *popoverController = detailNavController.popoverPresentationController;
                 if ([detailViewController isKindOfClass:[SCTableViewController class]]) {
                     [(SCTableViewController *)detailViewController setPopoverController:popoverController];
                 }
-
                 else if ([detailViewController isKindOfClass:[SCViewController class]]) {
                     [(SCViewController *)detailViewController setPopoverController:popoverController];
                 }
-
-                detailViewController.modalInPopover = YES;
-
-                if (cell) {
-                    [popoverController presentPopoverFromRect:cell.bounds inView:cell permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+                detailNavController.modalInPresentation = YES;
+                popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+                if (!cell && self.addButtonItem) {
+                    popoverController.sourceItem = self.addButtonItem;
                 }
-
                 else {
-                    if (self.addButtonItem) {
-                        [popoverController presentPopoverFromBarButtonItem:self.addButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-                    }
-
-                    else {
-                        UIView *popoverView;
-                        CGRect popoverRect;
-                        if (self.addNewItemCell) {
-                            popoverView = self.addNewItemCell;
-                            popoverRect = self.addNewItemCell.frame;
-                        }
-
-                        else {
-                            popoverView = self.ownerTableViewModel.tableView;
-                            popoverRect = self.ownerTableViewModel.tableView.frame;
-                        }
-
-                        [popoverController presentPopoverFromRect:popoverRect inView:popoverView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-                    }
+                    popoverController.sourceView = cell ?: self.addNewItemCell ?: self.ownerTableViewModel.tableView;
+                    popoverController.sourceRect = popoverController.sourceView.bounds;
                 }
+                [self.ownerTableViewModel.viewController presentViewController:detailNavController animated:YES completion:nil];
 
             } break;
-#pragma clang diagnostic pop
 
             default:
                 // Do nothing
@@ -3085,7 +3042,6 @@
 
 @implementation SCArrayOfObjectsSection
 
-
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle items:(NSMutableArray *)sectionItems itemsDefinition:(SCDataDefinition *)definition {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle items:sectionItems itemsDefinition:definition];
 }
@@ -3324,7 +3280,6 @@
 
 @implementation SCArrayOfStringsSection
 
-
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle items:(NSMutableArray *)sectionItems {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle items:sectionItems];
 }
@@ -3355,12 +3310,16 @@
 @end
 
 
-@implementation SCSelectionSection
+@interface SCSelectionSection ()
+{
+    BOOL boundToNSNumber;
+    BOOL boundToNSString;
+    NSIndexPath *lastSelectedRowIndexPath;
+    NSMutableSet *_selectedItemsIndexes;
+}
+@end
 
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissViewController;
+@implementation SCSelectionSection
 
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle boundObject:object selectedIndexPropertyName:propertyName items:sectionItems];
@@ -3379,16 +3338,16 @@
         boundToNSNumber = FALSE;
         boundToNSString = FALSE;
         lastSelectedRowIndexPath = nil;
-        itemsAccessoryType = UITableViewCellAccessoryCheckmark;
-        allowAddingItems = FALSE;
-        allowDeletingItems = FALSE;
-        allowMovingItems = FALSE;
-        allowEditDetailView = FALSE;
+        _itemsAccessoryType = UITableViewCellAccessoryCheckmark;
+        _allowAddingItems = FALSE;
+        _allowDeletingItems = FALSE;
+        _allowMovingItems = FALSE;
+        _allowEditDetailView = FALSE;
 
-        allowMultipleSelection = FALSE;
-        allowNoSelection = FALSE;
-        maximumSelections = 0;
-        autoDismissViewController = FALSE;
+        _allowMultipleSelection = FALSE;
+        _allowNoSelection = FALSE;
+        _maximumSelections = 0;
+        _autoDismissViewController = FALSE;
         _selectedItemsIndexes = [[NSMutableSet alloc] init];
         _selectedCellTextColor = [UIColor linkColor];    // dgApps
         _deselectedCellTextColor = [UIColor labelColor]; // dgApps
@@ -3399,15 +3358,15 @@
 
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems {
     if ((self = [self initWithHeaderTitle:sectionHeaderTitle items:[NSMutableArray arrayWithArray:sectionItems]])) {
-        boundObject = object;
+        _boundObject = object;
 
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         boundToNSNumber = TRUE;
-        allowMultipleSelection = FALSE;
+        _allowMultipleSelection = FALSE;
 
         [self reloadBoundValues];
     }
@@ -3417,14 +3376,14 @@
 
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems allowMultipleSelection:(BOOL)multipleSelection {
     if ((self = [self initWithHeaderTitle:sectionHeaderTitle items:[NSMutableArray arrayWithArray:sectionItems]])) {
-        boundObject = object;
+        _boundObject = object;
 
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
-        allowMultipleSelection = multipleSelection;
+        _allowMultipleSelection = multipleSelection;
 
         [self reloadBoundValues];
     }
@@ -3434,11 +3393,11 @@
 
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems {
     if ((self = [self initWithHeaderTitle:sectionHeaderTitle items:[NSMutableArray arrayWithArray:sectionItems]])) {
-        boundObject = object;
+        _boundObject = object;
 
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         boundToNSString = TRUE;
@@ -3477,7 +3436,7 @@
 
     if (boundToNSNumber) {
         if (self.boundValue) {
-            [self.selectedItemsIndexes addObject:self.boundValue];
+            [self.selectedItemsIndexes addObject:(NSNumber *)self.boundValue];
         }
 
         if (self.boundObject && !self.boundValue) {
@@ -3782,15 +3741,13 @@
 @end
 
 
+@interface SCObjectSelectionSection ()
+{
+    NSIndexPath *lastSelectedRowIndexPath;
+}
+@end
+
 @implementation SCObjectSelectionSection
-
-@synthesize selectedItemsIndexes;
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissViewController;
-@synthesize intermediateEntityDefinition;
-
 
 + (instancetype)sectionWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store {
     return [[[self class] alloc] initWithHeaderTitle:sectionHeaderTitle boundObject:object selectedObjectPropertyName:propertyName selectionItemsStore:store];
@@ -3803,21 +3760,21 @@
 - (instancetype)init {
     if ((self = [super init])) {
         lastSelectedRowIndexPath = nil;
-        itemsAccessoryType = UITableViewCellAccessoryCheckmark;
-        allowAddingItems = FALSE;
-        allowDeletingItems = FALSE;
-        allowMovingItems = FALSE;
-        allowEditDetailView = FALSE;
+        _itemsAccessoryType = UITableViewCellAccessoryCheckmark;
+        _allowAddingItems = FALSE;
+        _allowDeletingItems = FALSE;
+        _allowMovingItems = FALSE;
+        _allowEditDetailView = FALSE;
 
-        allowMultipleSelection = FALSE;
-        allowNoSelection = FALSE;
-        maximumSelections = 0;
-        autoDismissViewController = FALSE;
-        selectedItemsIndexes = [[NSMutableSet alloc] init];
+        _allowMultipleSelection = FALSE;
+        _allowNoSelection = FALSE;
+        _maximumSelections = 0;
+        _autoDismissViewController = FALSE;
+        _selectedItemsIndexes = [[NSMutableSet alloc] init];
         _selectedCellTextColor = [UIColor linkColor];    // dgApps
         _deselectedCellTextColor = [UIColor labelColor]; // dgApps
 
-        intermediateEntityDefinition = nil;
+        _intermediateEntityDefinition = nil;
     }
 
     return self;
@@ -3825,19 +3782,19 @@
 
 - (instancetype)initWithHeaderTitle:(NSString *)sectionHeaderTitle boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store {
     if ((self = [self initWithHeaderTitle:sectionHeaderTitle dataStore:store])) {
-        boundObject = object;
+        _boundObject = object;
 
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
-            allowMultipleSelection = TRUE;
+            _allowMultipleSelection = TRUE;
         }
 
         else {
-            allowMultipleSelection = FALSE;
+            _allowMultipleSelection = FALSE;
         }
 
         // Synchronize selectedItemsIndexes

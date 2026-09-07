@@ -15,6 +15,8 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCPropertyDefinition
 /// This class functions as a property definition for SCDataDefinition.
 ///
@@ -25,36 +27,9 @@
 /// - SeeAlso: ``SCPropertyType``, ``SCPropertyAttributes``, ``SCClassDefinition``, ``SCEntityDefinition``, ``SCDictionaryDefinition``.
 @interface SCPropertyDefinition : NSObject
 {
-	/// The owner data structure definition of the property definition.
-	__weak SCDataDefinition *ownerDataStuctureDefinition;
-	/// This property is automatically set by the framework and should never be assigned a value directly.
-	SCDataType dataType;
-	/// This property is automatically set by the framework and should never be assigned a value directly.
-	BOOL dataReadOnly;
-	/// The name of the property associated with the property definition.
-	NSString *name;
-	/// The title of the property. Property titles are used by user interface elements to generate labels associated with the generated controls.
-	NSString *title;
-	/// The type of the property. Property types determines which user interface element will be generated for the property.
-	SCPropertyType type;
-	/// The attibutes set associated with the type of the property. Property attributes gives the user the ability to further customize the user interface element that will be generated for the given property type.
-	SCPropertyAttributes *attributes;
-	/// The type of the property while in editing mode. Property types determines which user interface element will be generated for the property while in editing mode.
-	SCPropertyType editingModeType;
-	/// The attibutes set associated with the editingModetype of the property. Property attributes gives the user the ability to further customize the user interface element that will be generated for the given property editingModetype.
-	SCPropertyAttributes *editingModeAttributes;
-	/// Set to TRUE if property is a required property. Default: FALSE.
-	BOOL required;
-	/// Set to TRUE if the property value should be automatically validated by the user interface element before commiting it to the property. If the user chooses to provide custom validation using either the cell's actions, or the model's SCTableViewModelDelegate, they should set this property to FALSE. Default: TRUE.
-	BOOL autoValidate;
-    /// If set to TRUE, a user interface is generated for the property when the owning control is in Normal Mode, otherwise, no UI is generated in that mode. Default: TRUE.
-    BOOL existsInNormalMode;
-    /// If set to TRUE, a user interface is generated for the property when the owning control is in Editing Mode, otherwise, no UI is generated in that mode. Default: TRUE.
-    BOOL existsInEditingMode;
-    /// If set to TRUE, a user interface is generated for the property when the UI is generated for a newly created object, otherwise, no UI is generated. Default: TRUE.
-    BOOL existsInCreationMode;
-    /// If set to TRUE, a user interface is generated for the property when the UI is generated for an existing object, otherwise, no UI is generated. Default: TRUE.
-    BOOL existsInDetailMode;
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
+    SCPropertyType _type;
 }
 
 #pragma mark - Creation and Initialization
@@ -70,7 +45,7 @@
 /// - Parameter propertyTitle: The title of the property. Property titles are used by user interface elements to generate labels associated with the generated controls.
 /// - Parameter propertyType: The property type determines which user interface element will be generated for the property.
 + (instancetype)definitionWithName:(NSString *)propertyName 
-				   title:(NSString *)propertyTitle
+				   title:(nullable NSString *)propertyTitle
 					type:(SCPropertyType)propertyType;
 
 /// Returns an initialized `SCPropertyDefinition` given a property name.
@@ -84,7 +59,7 @@
 /// - Parameter propertyTitle: The title of the property. Property titles are used by user interface elements to generate labels associated with the generated controls.
 /// - Parameter propertyType: The property type determines which user interface element will be generated for the property.
 - (instancetype)initWithName:(NSString *)propertyName 
-			 title:(NSString *)propertyTitle
+			 title:(nullable NSString *)propertyTitle
 			  type:(SCPropertyType)propertyType;
 
 #pragma mark - Configuration
@@ -92,24 +67,26 @@
 /// The owner data structure definition of the property definition.
 ///
 /// - Warning: This property gets set automatically by the framework, you should never set this property manually.
-@property (nonatomic, weak) SCDataDefinition *ownerDataStuctureDefinition;
+@property (nonatomic, weak, nullable) SCDataDefinition *ownerDataStuctureDefinition;
 
 /// The name of the property associated with the property definition.
-@property (nonatomic, readonly) NSString *name;
+/// Nil when created with inherited `init` instead of `initWithName:`.
+@property (nonatomic, readonly, nullable) NSString *name;
 
 /// The title of the property. Property titles are used by user
 /// interface elements to generate labels associated with the generated controls.
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy, nullable) NSString *title;
 
 /// The type of the property. Property types determines which user interface element will be generated for the property.
 @property (nonatomic, readwrite) SCPropertyType type;
 
 /// The attibutes set associated with the type of the property. Property attributes gives the user the ability
 /// to further customize the user interface element that will be generated for the given property type.
-@property (nonatomic, strong) SCPropertyAttributes *attributes;
+@property (nonatomic, strong, nullable) SCPropertyAttributes *attributes;
 
 /// The set of cell action blocks.
-@property (nonatomic, readonly) SCCellActions *cellActions;
+/// Initialized by `initWithName:`; nil when using inherited `init` directly.
+@property (nonatomic, readonly, nullable) SCCellActions *cellActions;
 
 /// The type of the property while in editing mode. Property types determines which user interface element will
 /// be generated for the property while in editing mode.
@@ -117,7 +94,7 @@
 @property (nonatomic, readwrite) SCPropertyType editingModeType;
 
 /// The attibutes set associated with the editingModetype of the property. Property attributes gives the user the ability to further customize the user interface element that will be generated for the given property editingModetype.
-@property (nonatomic, strong) SCPropertyAttributes *editingModeAttributes;
+@property (nonatomic, strong, nullable) SCPropertyAttributes *editingModeAttributes;
 
 /// Set to TRUE if property is a required property. Default: FALSE.
 @property (nonatomic, readwrite) BOOL required;
@@ -145,18 +122,18 @@
 /// The class of the custom user interface element the property will generate. Set this property to override the standard user interface element generated by the property's `type`.
 ///
 /// - Note: No need to set if `uiElementNibName` contains a valid value.
-@property (nonatomic, strong) Class uiElementClass;
+@property (nonatomic, strong, nullable) Class uiElementClass;
 
 /// The Nib name of the custom user interface element the property will generate. Set this property to override the standard user interface element generated by the property's `type`.
 ///
 /// - Note: Do not include the `.xib` extension when providing the nib name.
 /// - Note: If the NIB is a SwiftPM resource then the name should use a PACKAGE_TARGET_Name format.
-@property (nonatomic, copy) NSString *uiElementNibName;
+@property (nonatomic, copy, nullable) NSString *uiElementNibName;
 
 /// This dictionary specifies how each of the uiElementClass or uiElementNibName custom controls binds itself to the definition's properties. Each dictionary key should be the tag string value of one of the uiElement's custom controls, and the value should be the name of the definition's property that is bound to that control.
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: This property can be used interchangibly with objectBindingsString
-@property (nonatomic, strong) NSDictionary *objectBindings;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, NSString *> *objectBindings;
 
 /// This string specifies how each of the uiElementClass or uiElementNibName custom controls binds itself to the definition's properties. The string should consist of a colon separated pair of control's tag and the property name, while each pair should be separated by a semi-colon.
 ///
@@ -164,7 +141,7 @@
 ///     NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: This property can be used interchangibly with objectBindings
-@property (nonatomic, copy) NSString *objectBindingsString;
+@property (nonatomic, copy, nullable) NSString *objectBindingsString;
 
 #pragma mark - Internal
 
@@ -179,7 +156,7 @@
 
 /// Applies Interface Builder configuration values from a dictionary.
 /// - Parameter ibDictionary: The Interface Builder configuration dictionary.
-- (void)setAllPropertiesFromibDictionary:(NSDictionary *)ibDictionary;
+- (void)setAllPropertiesFromibDictionary:(nullable NSDictionary<NSString *, id> *)ibDictionary;
 
 @end
 
@@ -204,7 +181,7 @@
 /// - Parameter elementClass: The class of the custom user interface element that will be generated.
 /// - Parameter bindings: This dictionary specifies how each of the uiElement's custom controls binds itself to the data definition's properties. Each dictionary key should be the tag string value of one of the uiElement's custom controls, and the value should be the name of the class definition's property that is bound to that control.
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
-+ (instancetype)definitionWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindings:(NSDictionary *)bindings;
++ (instancetype)definitionWithName:(NSString *)propertyName uiElementClass:(nullable Class)elementClass objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings;
 
 /// Allocates and returns an initialized `SCCustomPropertyDefinition` given a property name and a class of the  custom user interface element to generate.
 ///
@@ -215,7 +192,7 @@
 ///  Example bindings string:
 ///         NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
-+ (instancetype)definitionWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindingsString:(NSString *)bindingsString;
++ (instancetype)definitionWithName:(NSString *)propertyName uiElementClass:(nullable Class)elementClass objectBindingsString:(nullable NSString *)bindingsString;
 
 /// Allocates and returns an initialized `SCCustomPropertyDefinition` given a property name and the name of the nib file containing the custom user interface element to generate.
 ///
@@ -224,7 +201,7 @@
 /// - Parameter bindings: This dictionary specifies how each of the uiElement's custom controls binds itself to the data definition's properties. Each dictionary key should be the tag string value of one of the uiElement's custom controls, and the value should be the name of the class definition's property that is bound to that control.
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: If the NIB is a SwiftPM resource then the name should use a PACKAGE_TARGET_Name format.
-+ (instancetype)definitionWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindings:(NSDictionary *)bindings;
++ (instancetype)definitionWithName:(NSString *)propertyName uiElementNibName:(nullable NSString *)elementNibName objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings;
 
 /// Allocates and returns an initialized `SCCustomPropertyDefinition` given a property name and the name of the nib file containing the custom user interface element to generate.
 ///
@@ -236,7 +213,7 @@
 ///         NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: If the NIB is a SwiftPM resource then the name should use a PACKAGE_TARGET_Name format.
-+ (instancetype)definitionWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindingsString:(NSString *)bindingsString;
++ (instancetype)definitionWithName:(NSString *)propertyName uiElementNibName:(nullable NSString *)elementNibName objectBindingsString:(nullable NSString *)bindingsString;
 
 /// Returns an initialized `SCCustomPropertyDefinition` given a property name and a class of the  custom user interface element to generate.
 ///
@@ -244,7 +221,7 @@
 /// - Parameter elementClass: The class of the custom user interface element that will be generated.
 /// - Parameter bindings: This dictionary specifies how each of the uiElement's custom controls binds itself to the data definition's properties. Each dictionary key should be the tag string value of one of the uiElement's custom controls, and the value should be the name of the class definition's property that is bound to that control.
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
-- (instancetype)initWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindings:(NSDictionary *)bindings;
+- (instancetype)initWithName:(NSString *)propertyName uiElementClass:(nullable Class)elementClass objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings;
 
 /// Returns an initialized `SCCustomPropertyDefinition` given a property name and a class of the  custom user interface element to generate.
 ///
@@ -255,7 +232,7 @@
 ///  Example bindings string:
 ///         NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
-- (instancetype)initWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindingsString:(NSString *)bindingsString;
+- (instancetype)initWithName:(NSString *)propertyName uiElementClass:(nullable Class)elementClass objectBindingsString:(nullable NSString *)bindingsString;
 
 /// Returns an initialized `SCCustomPropertyDefinition` given a property name and the name of the nib file containing the custom user interface element to generate.
 ///
@@ -264,7 +241,7 @@
 /// - Parameter bindings: This dictionary specifies how each of the uiElement's custom controls binds itself to the class definition's properties. Each dictionary key should be the tag string value of one of the uiElement's custom controls, and the value should be the name of the class definition's property that is bound to that control.
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: If the NIB is a SwiftPM resource then the name should use a PACKAGE_TARGET_Name format.
-- (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindings:(NSDictionary *)bindings;
+- (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(nullable NSString *)elementNibName objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings;
 
 /// Allocates and returns an initialized `SCCustomPropertyDefinition` given a property name and a class of the  custom user interface element to generate.
 ///
@@ -276,7 +253,7 @@
 ///         NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: If the NIB is a SwiftPM resource then the name should use a PACKAGE_TARGET_Name format.
-- (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindingsString:(NSString *)bindingsString;
+- (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(nullable NSString *)elementNibName objectBindingsString:(nullable NSString *)bindingsString;
 
 
 @end
@@ -295,14 +272,7 @@
 ///
 /// - SeeAlso: ``SCPropertyDefinition``, ``SCClassDefinition``.
 @interface SCPropertyGroup : NSObject
-{
-    /// The group header title.
-    NSString *headerTitle;
-    /// The group footer title.
-    NSString *footerTitle;
-    /// The ordered property-definition names.
-    NSMutableArray *propertyDefinitionNames;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -313,7 +283,7 @@
 /// - Parameter groupHeaderTitle: A header title for the group.
 /// - Parameter groupFooterTitle: A footer title for the group.
 /// - Parameter propertyNames: The property names to include in the group.
-+ (instancetype)groupWithHeaderTitle:(NSString *)groupHeaderTitle footerTitle:(NSString *)groupFooterTitle propertyNames:(NSArray *)propertyNames;
++ (instancetype)groupWithHeaderTitle:(nullable NSString *)groupHeaderTitle footerTitle:(nullable NSString *)groupFooterTitle propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Returns an initialized `SCPropertyGroup` given a header title, a footer title
 ///  and an NSArray of property names to be included in the group.
@@ -321,17 +291,17 @@
 /// - Parameter groupHeaderTitle: A header title for the group.
 /// - Parameter groupFooterTitle: A footer title for the group.
 /// - Parameter propertyNames: The property names to include in the group.
-- (instancetype)initWithHeaderTitle:(NSString *)groupHeaderTitle footerTitle:(NSString *)groupFooterTitle
-        propertyNames:(NSArray *)propertyNames;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)groupHeaderTitle footerTitle:(nullable NSString *)groupFooterTitle
+        propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 
 #pragma mark - Configuration
 
 /// The group header title.
-@property (nonatomic, copy) NSString *headerTitle;
+@property (nonatomic, copy, nullable) NSString *headerTitle;
 
 /// The group footer title.
-@property (nonatomic, copy) NSString *footerTitle;
+@property (nonatomic, copy, nullable) NSString *footerTitle;
 
 
 #pragma mark - Managing Property Names
@@ -372,10 +342,7 @@
 ///
 /// - SeeAlso: ``SCPropertyGroup``.
 @interface SCPropertyGroupArray : NSObject
-{
-    /// The property groups.
-    NSMutableArray *propertyGroups;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -402,7 +369,8 @@
 
 /// 	Return group with the given header title.
 /// - Parameter headerTitle: The section header title.
-- (SCPropertyGroup *)groupByHeaderTitle:(NSString *)headerTitle;
+/// - Returns: The matching group, or nil if no header title matches.
+- (nullable SCPropertyGroup *)groupByHeaderTitle:(nullable NSString *)headerTitle;
 
 /// 	Remove group at the given index.
 /// - Parameter index: The index involved in the operation.
@@ -413,4 +381,4 @@
 
 @end
 
-
+NS_ASSUME_NONNULL_END

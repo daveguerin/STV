@@ -15,6 +15,8 @@
 #import "SCDetailViewControllerOptions.h"
 #import "SCBadgeView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCTableViewModel;
 @class SCTableViewSection;
 @class SCEntityDefinition;
@@ -43,69 +45,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// Please note that even though a cell value is not applicable to SCTableViewCell itself, SCTableViewCell still provides the bound object functionality as a framework to all its subclasses to use.
 @interface SCTableViewCell : UITableViewCell <SCViewControllerDelegate, SCTableViewControllerDelegate>
-{
-	/// Property used internally by framework to change reuseIdentifier after the cell has been created.
-	NSString *reuseId; //used internally
-    /// Property used internally.
-    BOOL configured; //used internally
-	/// The active detail model.
-	__weak SCTableViewModel *activeDetailModel;  // the current active detail model
-	
-	/// The owner table view model of the cell.
-	__weak SCTableViewModel *ownerTableViewModel;
-    /// The owner section of the cell.
-    __weak SCTableViewSection *ownerSection;
-	/// The view-controller delegate that owns this object.
-	__weak id ownerViewControllerDelegate; 
-	/// Property should only be used internally by framework.
-	SCDataType boundPropertyDataType;
-    BOOL _isCustomBoundProperty;
-	
-    CGFloat _height;
-	/// The editable state of the cell. Default: FALSE.
-	BOOL editable;
-	/// The movable state of the cell. Default: FALSE.
-	BOOL movable;
-	/// Determines if the cell can be selected. Default: TRUE.
-	BOOL selectable;
-    /// Set to FALSE to disable the cell's functionality. Usefull in situations where the cell should only be enabled in `Editing Mode` for example. Default: TRUE.
-    BOOL enabled;
-    /// If property is TRUE, the cell gets automatically deselected whenever the user selects it. Default: FALSE.
-    BOOL autoDeselect;
-	/// If property is TRUE, the cell automatically dismisses the keyboard (if applicable) when another cell is selected or when the value of another cell is changed. Default: TRUE.
-	BOOL autoResignFirstResponder;
-    /// The cell's editing style.
-    UITableViewCellEditingStyle cellEditingStyle;
-    /// The cell's badge view. When assigned a text value, the badgeView displays a badge similar to the badge displayed by the iPhone's mail application for its mail folders.
-    SCBadgeView *badgeView;
 
-    /// When this property is set to YES, a full leading swipe in the cell row performs the first UIContextualAction listed in the actions property. In a left-to-right language environment that is when the user swipes from left to right. The default value of this property is YES.
-    BOOL leadingSwipePerformsFirstActionWithFullSwipe;
-    /// When this property is set to YES, a full trailing swipe in the cell row performs the first UIContextualAction listed in the actions property.  In a left-to-right language environment that is when the user swipes from right to left.  The default value of this property is YES.
-    BOOL trailingSwipePerformsFirstActionWithFullSwipe;
-
-	/// Set this property to an array of UIImageView objects to be set to each of the cell's detail cells.
-	NSArray *detailCellsImageViews;
-		
-	/// Determines if the cell's value is required. If TRUE, valueIsValid will only return true if the cells value is not empty. Default: FALSE.
-	BOOL valueRequired;
-	/// Determines whether to automatically validate the cell's value. Where applicable, each subclass provides its own rules for validating the cell's value. If the user chooses to provide custom validation using either the cell's actions, or the model's SCTableViewModelDelegate, they should set this property to FALSE. Default: TRUE.
-	BOOL autoValidateValue;
-	
-	/// Set this property to TRUE for the cell to commit its value as soon as it is changed. If this value is FALSE, the user must explicitly call commitChanges for the cell to commit its value changes. Default: TRUE.
-	BOOL commitChangesLive;
-	/// This propery is TRUE if the cell value has changed and needs to be committed. If commitChangesLive is TRUE, this property always remains FALSE.
-	BOOL needsCommit;
-	/// Property used internally by framework to determine if cell is being dequed and reused.
-	BOOL beingReused;
-	/// Property used internally by framework to determine if cell is a custom cell.
-	BOOL customCell;
-    /// Is TRUE if the cell is a special cell. Special cells are cells like addNewItemCell or placeholderCell and typically exist within an SCArrayOfItemsSection.
-    BOOL isSpecialCell;
-    
-    /// Options for the generated detail view controller (only applicable to subclasses with a detail view controller).
-    SCDetailViewControllerOptions *detailViewControllerOptions;
-}
 
 #pragma mark - Creation and Initialization
 
@@ -118,34 +58,34 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /// Allocates and returns an initialized SCTableViewCell given cell text.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
-+ (instancetype)cellWithText:(NSString *)cellText;
++ (instancetype)cellWithText:(nullable NSString *)cellText;
 
 /// Allocates and returns an initialized SCTableViewCell given cell text and its alignment.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter textAlignment: The alignment setting for the cell's text.
-+ (instancetype)cellWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment;
++ (instancetype)cellWithText:(nullable NSString *)cellText textAlignment:(NSTextAlignment)textAlignment;
 
 /// Allocates and returns an initialized SCTableViewCell given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see class overview).
 /// - Parameter propertyName: The cell's bound property name (see class overview).
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object boundPropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized SCTableViewCell given cell text.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
-- (instancetype)initWithText:(NSString *)cellText;
+- (instancetype)initWithText:(nullable NSString *)cellText;
 
 /// Returns an initialized SCTableViewCell given cell text and its alignment.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter textAlignment: The alignment setting for the cell's text.
-- (instancetype)initWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment;
+- (instancetype)initWithText:(nullable NSString *)cellText textAlignment:(NSTextAlignment)textAlignment;
 
 /// Returns an initialized SCTableViewCell given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see class overview).
 /// - Parameter propertyName: The cell's bound property name (see class overview).
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object boundPropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
@@ -153,24 +93,24 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// The owner table view model of the cell.
 ///
 /// - Warning: This property gets set automatically by the framework, you should never set this property manually
-@property (nonatomic, weak) SCTableViewModel *ownerTableViewModel;
+@property (nonatomic, nullable, weak) SCTableViewModel *ownerTableViewModel;
 
 /// The owner section of the cell.
 ///
 /// - Warning: This property gets set automatically by the framework, you should never set this property manually
-@property (nonatomic, weak) SCTableViewSection *ownerSection;
+@property (nonatomic, nullable, weak) SCTableViewSection *ownerSection;
 
 /// The set of cell action blocks.
 @property (nonatomic, readonly) SCCellActions *cellActions;
 
 /// The cell's bound object (see class overview).
-@property (nonatomic, strong) NSObject *boundObject;
+@property (nonatomic, nullable, strong) NSObject *boundObject;
 
 /// The data store of the cell's bound object.
-@property (nonatomic, strong) SCDataStore *boundObjectStore;
+@property (nonatomic, nullable, strong) SCDataStore *boundObjectStore;
 
 /// The cell's bound property name (see class overview).
-@property (nonatomic, copy) IBInspectable NSString *boundPropertyName;
+@property (nonatomic, nullable, copy) IBInspectable NSString *boundPropertyName;
 
 /// Always returns UITableViewAutomaticDimension. Assign a positive value to
 /// constrain contentView's height, or automatic dimension to remove that limit.
@@ -198,7 +138,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readwrite) BOOL enabled;
 
 /// The color to be used for text elements when the cell's enabled property is set to FALSE. Default: black color.
-@property (nonatomic, strong) UIColor *disabledTextColor;
+@property (nonatomic, nullable, strong) UIColor *disabledTextColor;
 
 /// The cell style.
 @property (nonatomic, readonly) UITableViewCellStyle cellStyle;
@@ -215,7 +155,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /// Set this property to an array of UIImageView objects to be set to each of the cell's detail cells.
 /// - Note: Only applicable to cells with detail views.
-@property (nonatomic, strong) NSArray *detailCellsImageViews;
+@property (nonatomic, nullable, strong) NSArray<UIImageView *> *detailCellsImageViews;
 
 /// If property is TRUE, the cell gets automatically deselected whenever the user selects it. Default: FALSE.
 @property (nonatomic, readwrite) BOOL autoDeselect;
@@ -275,10 +215,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readwrite) SCDataType boundPropertyDataType;
 
 /// This property represents the bound value of the cell.
-@property (nonatomic, strong) NSObject *boundValue;
+@property (nonatomic, nullable, strong) NSObject *boundValue;
 
 /// Property used internally by framework to change reuseIdentifier after the cell has been created.
-@property (nonatomic, copy) NSString *reuseId;
+@property (nonatomic, nullable, copy) NSString *reuseId;
 
 /// Property used internally.
 @property (nonatomic, readwrite) BOOL configured;
@@ -293,14 +233,14 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic) BOOL cellCreatedInIB;
 
 /// For internal use only.
-@property (nonatomic, copy) NSString *ibDetailViewControllerIdentifier;
+@property (nonatomic, nullable, copy) NSString *ibDetailViewControllerIdentifier;
 
 /// For internal use only.
 @property (nonatomic, readonly) BOOL generatesDetailView;
 
 /// Create STV cells from regular UITableViewCells *
 /// - Parameter cell: The cell to configure.
-+ (instancetype)cellWithCell:(UITableViewCell *)cell;
++ (nullable instancetype)cellWithCell:(UITableViewCell *)cell;
 
 
 /// Method should be overridden by subclasses to perform any required initialization.
@@ -352,7 +292,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// The method should be able to set the subclass' specific attributes to its corresponding SCPropertyAttributes subclass.
 /// - Parameter attributes: The property attributes to apply.
-- (void) setAttributesTo:(SCPropertyAttributes *)attributes;
+- (void) setAttributesTo:(nullable SCPropertyAttributes *)attributes;
 
 /// Method should be overridden by subclasses to provide subclass specific validation of the cell's value.
 ///
@@ -368,11 +308,11 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /// Method called internally.
 /// - Parameter options: The detail-view-controller options.
-- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options;
+- (void)setDetailViewControllerOptions:(nullable SCDetailViewControllerOptions *)options;
 
 /// Method called internally.
 /// - Parameter viewController: The view controller associated with the operation.
-- (SCTableViewModel *)modelForViewController:(UIViewController *)viewController;
+- (nullable SCTableViewModel *)modelForViewController:(nullable UIViewController *)viewController;
 
 /// Subclasses should override this method to change the returned default detail view controller navigation bar type.
 - (SCNavigationBarType)defaultDetailViewControllerNavigationBarType;
@@ -381,14 +321,14 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cell: The cell to configure.
 /// - Parameter indexPath: The row index path.
 /// - Parameter allowUITableViewController: Whether a `UITableViewController` subclass is allowed.
-- (UIViewController *)getDetailViewControllerForCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath allowUITableViewControllerSubclass:(BOOL)allowUITableViewController;
+- (UIViewController *)getDetailViewControllerForCell:(SCTableViewCell *)cell forRowAtIndexPath:(nullable NSIndexPath *)indexPath allowUITableViewControllerSubclass:(BOOL)allowUITableViewController;
 
 /// Subclasses should call this method to present their detail view controller.
 /// - Parameter detailViewController: The detail view controller.
 /// - Parameter cell: The cell to configure.
 /// - Parameter indexPath: The row index path.
 /// - Parameter mode: The presentation mode.
-- (void)presentDetailViewController:(UIViewController *)detailViewController forCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath withPresentationMode:(SCPresentationMode)mode;
+- (void)presentDetailViewController:(UIViewController *)detailViewController forCell:(SCTableViewCell *)cell forRowAtIndexPath:(nullable NSIndexPath *)indexPath withPresentationMode:(SCPresentationMode)mode;
 
 /// Subclasses should override this method to configure the generated detail view controller.
 /// - Parameter detailViewController: The detail view controller.
@@ -396,15 +336,15 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /// Subclasses should override this method to build a detail model for the detail view controller.
 /// - Parameter detailModel: The detail table-view model.
-- (void)buildDetailModel:(SCTableViewModel *)detailModel;
+- (void)buildDetailModel:(nullable SCTableViewModel *)detailModel;
 
 /// Subclasses should override this method to configure the detail model for the detail view controller.
 /// - Parameter detailModel: The detail table-view model.
-- (void)configureDetailModel:(SCTableViewModel *)detailModel;
+- (void)configureDetailModel:(nullable SCTableViewModel *)detailModel;
 
 /// Subclasses should override this method to commit the detail model changes.
 /// - Parameter detailModel: The detail table-view model.
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel;
+- (void)commitDetailModelChanges:(nullable SCTableViewModel *)detailModel;
 
 /// Subclasses should override this method to handle their detail view controller willPresent. Superclass method must be called.
 /// - Parameter detailViewController: The detail view controller.
@@ -434,7 +374,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /// Method called internally *
 /// - Parameter indexPath: The row index path.
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath;
+- (nullable UIViewController *)generatedDetailViewController:(nullable NSIndexPath *)indexPath;
 
 @end
 
@@ -461,12 +401,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 @interface SCCustomCell : SCTableViewCell <UITextViewDelegate, UITextFieldDelegate>
 {
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
     BOOL _pauseControlEvents;
-    
-    NSMutableDictionary *_objectBindings;
-    
     BOOL _autoResize;
-    BOOL _showClearButtonInInputAccessoryView;
 }
 
 
@@ -483,7 +421,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter nibName: The name of the nib file to load the cell from. The nib file should only contain
 ///   one cell, and it should be a subclass of `SCControlCell`.
 /// - Note: it's ok for this parameter to be nil if the cell has no corresponding nib file.
-+ (instancetype)cellWithText:(NSString *)cellText objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName;
++ (nullable instancetype)cellWithText:(nullable NSString *)cellText objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings nibName:(nullable NSString *)nibName;
 
 /// Allocates and returns an initialized `SCCustomCell` given cell text, custom object bindings string, and a nib file name. Use this type of constructor in cases where the bound object is not yet known and will be provided later by the framework. A common case is when implementing the SCTableViewModelDataSource method called `tableViewModel:cellForRowAtIndexPath:`.
 /// - Note: This constructor is usually used to construct custom cells that are either created in Interface Builder, or created by subclassing `SCCustomCell`.
@@ -494,7 +432,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter nibName: The name of the nib file to load the cell from. The nib file should only contain
 ///   one cell, and it should be a subclass of `SCControlCell`.
 /// - Note: it's ok for this parameter to be nil if the cell has no corresponding nib file.
-+ (instancetype)cellWithText:(NSString *)cellText objectBindingsString:(NSString *)bindingsString nibName:(NSString *)nibName;
++ (nullable instancetype)cellWithText:(nullable NSString *)cellText objectBindingsString:(nullable NSString *)bindingsString nibName:(nullable NSString *)nibName;
 
 /// Allocates and returns an initialized `SCControlCell` given cell text, bound object, custom object bindings,
 /// and a nib file name.
@@ -509,7 +447,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter nibName: The name of the nib file to load the cell from. The nib file should only contain
 ///   one cell, and it should be a subclass of `SCControlCell`.
 /// - Note: It's ok for this parameter to be nil if the cell has no corresponding nib file.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName;
++ (nullable instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object objectBindings:(nullable NSDictionary<NSString *, NSString *> *)bindings nibName:(nullable NSString *)nibName;
 
 
 #pragma mark - Configuration
@@ -522,7 +460,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// - Warning: All control tags must be greater than zero.
 /// - Note: This property can be used interchangibly with objectBindingsString
-@property (nonatomic, readonly) NSMutableDictionary *objectBindings;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSString *> *objectBindings;
 
 /// This string specifies how each of the cell's custom controls binds itself to the boundObject's properties. The string should consist of a colon separated pair of control's tag and the property name, while each pair should be separated by a semi-colon.
 ///
@@ -530,7 +468,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///     NSString *bindingsString = @"1:firstName;2:lastName";
 /// - Warning: IMPORTANT: All control tags must be greater than zero.
 /// - Note: This property can be used interchangibly with objectBindings. Setting this property does not remove previous values from objectBindings.
-@property (nonatomic, copy) NSString *objectBindingsString;
+@property (nonatomic, nullable, copy) NSString *objectBindingsString;
 
 /// 	Determines if cell should automatically resize to fit its contents. Default: TRUE.
 @property (nonatomic, readwrite) BOOL autoResize;
@@ -544,26 +482,26 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// Adds the controlTag:propertyName key-value pair to the objectBindings dictionary.
 /// - Parameter propertyName: The property name.
 /// - Parameter controlTag: The tag identifying the custom control.
-- (void)setObjectBindingsPropertyName:(NSString *)propertyName forControlWithTag:(NSInteger)controlTag;
+- (void)setObjectBindingsPropertyName:(nullable NSString *)propertyName forControlWithTag:(NSInteger)controlTag;
 
 /// Returns the control with the given tag value. Returns nil if controlTag is less than 1.
 /// - Parameter controlTag: The tag identifying the custom control.
-- (UIView *)controlWithTag:(NSInteger)controlTag;
+- (nullable UIView *)controlWithTag:(NSInteger)controlTag;
 
 /// Returns the bound value for the control with the given tag value. Returns nil if controlTag is less than 1.
 /// - Parameter controlTag: The tag identifying the custom control.
-- (NSObject *)boundValueForControlWithTag:(NSInteger)controlTag;
+- (nullable NSObject *)boundValueForControlWithTag:(NSInteger)controlTag;
 
 /// Commits the bound value for the control with the given tag value.
 /// - Parameter controlTag: The tag identifying the custom control.
 /// - Parameter controlValue: The value to commit for the custom control.
-- (void)commitValueForControlWithTag:(NSInteger)controlTag value:(NSObject *)controlValue;
+- (void)commitValueForControlWithTag:(NSInteger)controlTag value:(nullable NSObject *)controlValue;
 
 
 #pragma mark - Internal Methods (should only be used by the framework or when subclassing)
 
 /// An array of all the cell's input controls sorted by their tag value. Property is used internally by the framework.
-@property (nonatomic, readonly) NSArray *inputControlsSortedByTag;
+@property (nonatomic, readonly) NSArray<UIView *> *inputControlsSortedByTag;
 
 /// 	Method must be called by subclasses to configure any added custom controls for automatic binding.
 - (void)configureCustomControls;
@@ -604,7 +542,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// Sets a control's initial value when one has not already been recorded.
 /// - Parameter value: The value to assign or convert.
 /// - Parameter propertyName: The property name.
-- (void)setInitialControlValueIfNeeded:(id)value propertyName:(NSString *)propertyName;
+- (void)setInitialControlValueIfNeeded:(nullable id)value propertyName:(NSString *)propertyName;
 
 @end
 
@@ -620,17 +558,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
  
 @interface SCControlCell : SCCustomCell  
 {
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
     BOOL _boundValueLoaded;
-	UIColor *_initialControlColor;
-	
-	/// The maximum width of the cell's textLabel. Default: 200.
-	CGFloat maxTextLabelWidth;
-	/// The indentation of the control from the cell's left border. Default: 120.
-	CGFloat controlIndentation;
-	/// The margin between the control and the cell's textLabel. Default: 10.
-	CGFloat controlMargin;
-    /// The show clear button in input accessory view.
-    BOOL showClearButtonInInputAccessoryView;
+    UIColor * _Nullable _initialControlColor;
 }
 
 
@@ -639,10 +570,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// The control associated with the cell. Assiging a control automatically configures it and adds it to the cell's contentView.
 ///
 /// - Note: The type of the control has been choosen to be of type UIView instead of UIControl because not all user controls decend from UIControl (e.g. UITextView).
-@property (nonatomic, strong) IBOutlet UIView *control;
+@property (nonatomic, nullable, strong) IBOutlet UIView *control;
 
 /// The value of contained in the cell's control.
-@property (nonatomic, readonly) NSObject *controlValue;
+@property (nonatomic, nullable, readonly) NSObject *controlValue;
 
 /// The maximum width of the cell's textLabel. Default: 200.
 @property (nonatomic, readwrite) CGFloat maxTextLabelWidth;
@@ -665,7 +596,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 /* Internal */
 /// The control label supplied by Interface Builder.
-@property (nonatomic, readonly) UILabel *ibControlLabel;
+@property (nonatomic, nullable, readonly) UILabel *ibControlLabel;
 
 /// 	Method should be overridden by subclasses to return the expected class of the cell's control. Defailt: returns [UIView class]
 - (Class)expectedControlClass;
@@ -698,20 +629,20 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UILabel's text. Property must be of type NSString and can be a readonly property.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object labelTextPropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized `SCLabelCell` given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UILabel's text. Property must be of type NSString and can be a readonly property.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object labelTextPropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
 
 /// The UILabel control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UILabel *label;
+@property (nonatomic, nullable, readonly) UILabel *label;
 
 #pragma mark - Internal Methods (should only be used by the framework or when subclassing)
 
@@ -726,12 +657,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// This class functions as a cell with a UITextView control. The bound property of this cell must be of type NSString.
 
 @interface SCTextViewCell : SCControlCell
-{
-	/// The minimum height for textView.
-	CGFloat minimumHeight;
-	/// Caps the editor using constraints; longer text remains editable by scrolling.
-	CGFloat maximumHeight;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -739,20 +665,20 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UITextView's text. Property must be a readwrite property of type NSString.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object textViewTextPropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized `SCTextViewCell` given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UITextView's text. Property must be a readwrite property of type NSString.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object textViewTextPropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
 
 /// The UITextView control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UITextView *textView;
+@property (nonatomic, nullable, readonly) UITextView *textView;
 
 /// The minimum height for textView.
 @property (nonatomic, readwrite) CGFloat minimumHeight;
@@ -780,7 +706,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter placeholder: The placeholder string for UITextField.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UITextField's text. Property must be a readwrite property of type NSString.
-+ (instancetype)cellWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText placeholder:(nullable NSString *)placeholder boundObject:(nullable NSObject *)object textFieldTextPropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized `SCTextFieldCell` given cell text, bound object, and a bound property name.
@@ -788,13 +714,13 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter placeholder: The placeholder string for UITextField.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UITextField's text. Property must be a readwrite property of type NSString.
-- (instancetype)initWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText placeholder:(nullable NSString *)placeholder boundObject:(nullable NSObject *)object textFieldTextPropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
 
 /// The UITextField control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UITextField *textField;
+@property (nonatomic, nullable, readonly) UITextField *textField;
 
 
 @end
@@ -810,26 +736,15 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - If allowFloatValue is FALSE, then value is only valid if it's an integer value.
 
 @interface SCNumericTextFieldCell : SCTextFieldCell
-{
-	/// The minimum valid cell value.
-	NSNumber *minimumValue;
-	/// The maximum valid cell value.
-	NSNumber *maximumValue;
-	/// If FALSE, only integer cell values are valid. Default: TRUE.
-	BOOL allowFloatValue;
-	/// If TRUE, an empty space is displayed if the bound value equals zero. Default: FALSE.
-	BOOL displayZeroAsBlank;
-    /// The number formatter responsible for converting the cell's numeric value to a string and vice versa.
-    NSNumberFormatter *numberFormatter;
-}
+
 
 #pragma mark - Configuration
 
 /// The minimum valid cell value.
-@property (nonatomic, copy) NSNumber *minimumValue;
+@property (nonatomic, nullable, copy) NSNumber *minimumValue;
 
 /// The maximum valid cell value.
-@property (nonatomic, copy) NSNumber *maximumValue;
+@property (nonatomic, nullable, copy) NSNumber *maximumValue;
 
 /// If FALSE, only integer cell values are valid. Default: TRUE.
 @property (nonatomic, readwrite) BOOL allowFloatValue;
@@ -860,20 +775,20 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISlider's value. Property must be a readwrite property of type NSNumber.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object sliderValuePropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized SCSliderCell given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISlider's value. Property must be a readwrite property of type NSNumber.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object sliderValuePropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
 
 /// The UISlider control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UISlider *slider;
+@property (nonatomic, nullable, readonly) UISlider *slider;
 
 
 @end
@@ -894,7 +809,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISegmentedControl's selectedSegmentIndex value. Property must be a readwrite property of type NSNumber.
 /// - Parameter cellSegmentTitlesArray: An array containing title strings for UISegmentedControl's segments.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedSegmentIndexPropertyName:(nullable NSString *)propertyName segmentTitlesArray:(nullable NSArray<NSString *> *)cellSegmentTitlesArray;
 
 
 /// Returns an initialized SCSegmentedCell given cell text, bound object, and a bound property name.
@@ -902,17 +817,17 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISegmentedControl's selectedSegmentIndex value. Property must be a readwrite property of type NSNumber.
 /// - Parameter cellSegmentTitlesArray: An array containing title strings for UISegmentedControl's segments.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedSegmentIndexPropertyName:(nullable NSString *)propertyName segmentTitlesArray:(nullable NSArray<NSString *> *)cellSegmentTitlesArray;
 
 
 #pragma mark - Configuration
 
 /// The UISegmentedControl associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UISegmentedControl *segmentedControl;
+@property (nonatomic, nullable, readonly) UISegmentedControl *segmentedControl;
 
 /// 	Method creates segmented control segments based on the content of the segmentTitlesArray.
 /// - Parameter segmentTitlesArray: Must be an array of NSString objects.
-- (void)createSegmentsUsingArray:(NSArray *)segmentTitlesArray;
+- (void)createSegmentsUsingArray:(nullable NSArray<NSString *> *)segmentTitlesArray;
 
 
 @end
@@ -931,20 +846,20 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISwitch's on value. Property must be a readwrite property of type NSNumber.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object switchOnPropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized SCSwitchCell given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the UISwitch's on value. Property must be a readwrite property of type NSNumber.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object switchOnPropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
 
 /// The UISwitch control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-@property (nonatomic, readonly) UISwitch *switchControl;
+@property (nonatomic, nullable, readonly) UISwitch *switchControl;
 
 
 @end
@@ -956,18 +871,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 #pragma mark - SCDateCell
 /// This class functions as a cell that provides the end-user with a UIDatePicker to choose a date with. The bound property of this cell must be of type NSDate.
 @interface SCDateCell : SCLabelCell <SCViewControllerDelegate>
-{
-	//internal
-	UITextField *_pickerField;
-    UIViewController *_activePickerDetailViewController;
-	
-	/// The UIDatePicker control associated with the cell. Even though this property is readonly, feel free to customize any of the control's properties.
-	UIDatePicker *datePicker;
-	/// Set to customize how the cell display's the selected date.
-	NSDateFormatter *dateFormatter;
-	/// If TRUE, the cell displays the selected date in a left aligned label. Default: TRUE.
-	BOOL displaySelectedDate;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -975,14 +879,14 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the cell's date selection. Property must be a readwrite property of type NSDate.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object datePropertyName:(nullable NSString *)propertyName;
 
 
 /// Returns an initialized SCDateCell given cell text, bound object, and a bound property name.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the cell's date selection. Property must be a readwrite property of type NSDate.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object datePropertyName:(nullable NSString *)propertyName;
 
 
 #pragma mark - Configuration
@@ -991,13 +895,13 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readonly) UIDatePicker *datePicker;
 
 /// Set to customize how the cell display's the selected date.
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, nullable, strong) NSDateFormatter *dateFormatter;
 
 /// If TRUE, the cell displays the selected date in a left aligned label. Default: TRUE.
 @property (nonatomic, readwrite) BOOL displaySelectedDate;
 
 /// A placeholder string that appears when no date is selected. Default: nil.
-@property (nonatomic, copy) NSString *placeholder;
+@property (nonatomic, nullable, copy) NSString *placeholder;
 
 /// Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell. Default: FALSE.
 @property (nonatomic, readwrite) BOOL displayDatePickerAsInputAccessoryView;
@@ -1013,45 +917,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// - SeeAlso: ``SCSelectionSection``.
 @interface SCSelectionCell : SCLabelCell
-{
-	/// The data store for the selection items.
-	SCDataStore *selectionItemsStore;
-    /// The fetch options for the selection items.
-    SCDataFetchOptions *selectionItemsFetchOptions;
-    
-	/// If TRUE, the cell allows multiple selection. Default: FALSE.
-	BOOL allowMultipleSelection;
-	/// If TRUE, the cell allows no selection at all. Default: FALSE.
-	BOOL allowNoSelection;
-	/// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
-	NSUInteger maximumSelections;
-	/// If TRUE, the detail view is automatically dismissed when an item is selected. Default: FALSE.
-	BOOL autoDismissDetailView;
-	/// If TRUE, the detail view's navigation bar is hidder. Default: FALSE.
-	BOOL hideDetailViewNavigationBar;
-    
-    /// Allows/disables adding new objects to the items array. Default: FALSE.
-    BOOL allowAddingItems;
-	/// Allows/disables deleting new objects from the items array. Default: FALSE.
-	BOOL allowDeletingItems;
-	/// Allows/disables moving an item from one row to another. Default: FALSE.
-	BOOL allowMovingItems;
-	/// Allows/disables editing detail views for items. Default: FALSE.
-	BOOL allowEditDetailView;
-	
-	/// If TRUE, the cell displays the selected items' titles inside the cell in a left aligned label. Default: TRUE.
-	BOOL displaySelection;
-	/// The delimeter that separates the titles of the selected items. Default: @" ,".
-	NSString *delimeter;
-	
-	/// This property reflects the current cell's selection(s). You can add index(es) to the set to define the cell's selection.
-	NSMutableSet *selectedItemsIndexes;
-    
-    /// When set to a valid cell object, `placeholderCell` will be displayed when no items exist in the generated section. As soon as any items are added, this cell automatically disappears. Default: nil.
-    SCTableViewCell *placeholderCell;
-    /// When set to a valid cell object, `addNewItemCell` will be displayed as the last cell of the generated section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to addButtonItem. Default: nil.
-    SCTableViewCell *addNewItemCell;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -1060,7 +926,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected item index. Property must be of an NSNumber type and cannot be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems;
 
 /// Allocates and returns an initialized SCSelectionCell given cell text, bound object, a bound property name, an array of selection items, and whether to allow multiple selection.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
@@ -1068,14 +934,14 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected items indexes set. Property must be of an NSMutableSet type and can be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)cellItems allowMultipleSelection:(BOOL)multipleSelection;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Allocates and returns an initialized SCSelectionCell given cell text, bound object, an NSString bound property name, and an array of selection items.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected item string. Property must be of an NSString type and cannot be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems;
 
 
 /// Returns an initialized SCSelectionCell given cell text, bound object, an NSNumber bound property name, and an array of selection items.
@@ -1083,7 +949,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected item index. Property must be of an NSNumber type and cannot be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems;
 
 /// Returns an initialized SCSelectionCell given cell text, bound object, a bound property name, an array of selection items, and whether to allow multiple selection.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
@@ -1091,26 +957,26 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected items indexes set. Property must be of an NSMutableSet type and can be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)cellItems allowMultipleSelection:(BOOL)multipleSelection;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Returns an initialized SCSelectionCell given cell text, bound object, an NSString bound property name, and an array of selection items.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the selected item string. Property must be of an NSString type and cannot be a readonly property.
 /// - Parameter cellItems: An array of the items that the user will choose from. All items must be of an NSString type.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)cellItems;
 
 
 #pragma mark - Configuration
 
 /// The data store for the selection items.
-@property (nonatomic, strong) SCDataStore *selectionItemsStore;
+@property (nonatomic, nullable, strong) SCDataStore *selectionItemsStore;
 
 /// The fetch options for the selection items.
-@property (nonatomic, strong) SCDataFetchOptions *selectionItemsFetchOptions;
+@property (nonatomic, nullable, strong) SCDataFetchOptions *selectionItemsFetchOptions;
 
 /// The items stored in selectionItemsStore.
-@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, nullable, strong) NSArray<id> *items;
 
 /// This property reflects the current cell's selection. You can set this property to define the cell's selection.
 ///
@@ -1120,7 +986,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// This property reflects the current cell's selection(s). You can add index(es) to the set to define the cell's selection.
 ///
 /// - Note: If you have bound this cell to an object or a key, you can define the cell's selection using either the bound property value or the key value, respectively.
-@property (nonatomic, readonly) NSMutableSet *selectedItemsIndexes;
+@property (nonatomic, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
 /// If TRUE, the cell allows multiple selection. Default: FALSE.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
@@ -1163,10 +1029,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 #pragma mark - Configuring Special Cells
 
 /// When set to a valid cell object, `placeholderCell` will be displayed when no items exist in the generated section. As soon as any items are added, this cell automatically disappears. Default: nil.
-@property (nonatomic, strong) SCTableViewCell *placeholderCell;
+@property (nonatomic, nullable, strong) SCTableViewCell *placeholderCell;
 
 /// When set to a valid cell object, `addNewItemCell` will be displayed as the last cell of the generated section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to addButtonItem. Default: nil.
-@property (nonatomic, strong) SCTableViewCell *addNewItemCell;
+@property (nonatomic, nullable, strong) SCTableViewCell *addNewItemCell;
 
 /// When TRUE, addNewItemCell will be displayed in Normal Mode. Default: FALSE.
 @property (nonatomic, readwrite) BOOL addNewItemCellExistsInNormalMode;
@@ -1194,10 +1060,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// - SeeAlso: ``SCObjectSelectionSection``.
 @interface SCObjectSelectionCell : SCSelectionCell
-{
-	/// Set this to the definition of the intermediate entity between the bound object's definition and the objectsDefinition. This is useful in complex many-to-many relationships where you have created an intermediate entity between you main two entities. Default: nil.
-	SCDataDefinition *intermediateEntityDefinition;
-}
+
 
 #pragma mark - Creation and Initialization
 
@@ -1206,7 +1069,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Allocates and returns an initialized SCObjectSelectionCell given cell text, bound object, a bound property name, and an array of selection objects.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
@@ -1214,7 +1077,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter propertyName: The cell's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter items: An array of the objects that the user will choose from. All objects must be of an NSObject type and must be instances of the same class.
 /// - Parameter definition: The definition of the selection objects.
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)items itemsDefintion:(SCDataDefinition *)definition;
++ (instancetype)cellWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItems:(nullable NSArray<id> *)items itemsDefintion:(SCDataDefinition *)definition;
 
 
 /// Returns an initialized SCObjectSelectionCell given cell text, bound object, a bound property name, and a selection items store.
@@ -1222,7 +1085,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter object: The cell's bound object (see SCTableViewCell class overview).
 /// - Parameter propertyName: The cell's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized SCObjectSelectionCell given cell text, bound object, a bound property name, and an array of selection objects.
 /// - Parameter cellText: The text that will appear in the cell's textLabel.
@@ -1230,12 +1093,12 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter propertyName: The cell's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter items: An array of the objects that the user will choose from. All objects must be of an NSObject type and must be instances of the same class.
 /// - Parameter definition: The definition of the selection objects.
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)items itemsDefintion:(SCDataDefinition *)definition;;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItems:(nullable NSArray<id> *)items itemsDefintion:(SCDataDefinition *)definition;;
 
 #pragma mark - Configuration
 
 /// Set this to the definition of the intermediate entity between the bound object's definition and the objectsDefinition. This is useful in complex many-to-many relationships where you have created an intermediate entity between you main two entities. Default: nil.
-@property (nonatomic, strong) SCDataDefinition *intermediateEntityDefinition;
+@property (nonatomic, nullable, strong) SCDataDefinition *intermediateEntityDefinition;
 
 
 @end
@@ -1259,59 +1122,56 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// - SeeAlso: ``SCObjectSection``, ``SCArrayOfObjectsSection``.
 @interface SCObjectCell : SCCustomCell
-{
-	/// The bound object title that will appear in the cell's textLabel.
-	NSString *boundObjectTitleText;
-}
+
 
 #pragma mark - Creation and Initialization
 
 /// Allocates and returns an initialized SCObjectCell given a bound object.
 ///
 /// - Parameter object: The object that SCObjectCell will use to generate its detail view cells.
-+ (instancetype)cellWithBoundObject:(NSObject *)object;
++ (instancetype)cellWithBoundObject:(nullable NSObject *)object;
 
 /// Allocates and returns an initialized SCObjectCell given a bound object and a class definition.
 ///
 /// - Parameter object: The object that SCObjectCell will use to generate its detail view cells.
 /// - Parameter definition: The class definition for the object.
-+ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition;
++ (instancetype)cellWithBoundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
 /// Allocates and returns an initialized SCObjectCell given a bound object and a data store.
 ///
 /// - Parameter object: The object that SCObjectCell will use to generate its detail view cells.
 /// - Parameter store: The data store containing the object.
-+ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store;
++ (instancetype)cellWithBoundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized `SCObjectCell` given a bound object.
 ///
 /// - Parameter object: The object that `SCObjectCell` will use to generate its detail view cells.
-- (instancetype)initWithBoundObject:(NSObject *)object;
+- (instancetype)initWithBoundObject:(nullable NSObject *)object;
 
 /// Returns an initialized `SCObjectCell` given a bound object and a class definition.
 ///
 /// - Parameter object: The object that `SCObjectCell` will use to generate its detail view cells.
 /// - Parameter definition: The class definition for the object.
-- (instancetype)initWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition;
+- (instancetype)initWithBoundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized SCObjectCell given a bound object and a data store.
 ///
 /// - Parameter object: The object that SCObjectCell will use to generate its detail view cells.
 /// - Parameter store: The data store containing the object.
-- (instancetype)initWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store;
+- (instancetype)initWithBoundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store;
 
 
 #pragma mark - Configuration
 
 /// The class definition of the bound object.
-@property (nonatomic, strong) SCDataDefinition *objectDefinition;
+@property (nonatomic, nullable, strong) SCDataDefinition *objectDefinition;
 
 /// The bound object title that will appear in the cell's textLabel.
 ///
 /// If this value is nil, `SCObjectCell` uses the value of the title property found
 /// in objectDefinition. Set this value to override the default behaviour and
 /// provide your own title text for the object.
-@property (nonatomic, copy) NSString *boundObjectTitleText; 
+@property (nonatomic, nullable, copy) NSString *boundObjectTitleText;
 
 
 @end
@@ -1327,63 +1187,32 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// - SeeAlso: ``SCObjectCell``, ``SCObjectSection``, ``SCArrayOfObjectsSection``.
 @interface SCArrayOfObjectsCell : SCCustomCell
-{
-	/// The data store that's used to store and fetch the cell's objects.
-	SCDataStore *dataStore;
-    /// The options used to fetch the cell's items from dataStore.
-    SCDataFetchOptions *dataFetchOptions;
-    
-	/// Allows/disables adding new objects to the items array. Default: TRUE.
-	BOOL allowAddingItems;
-	/// Allows/disables deleting new objects from the items array. Default: TRUE.
-	BOOL allowDeletingItems;
-	/// Allows/disables moving objects from one row to another. Default: TRUE.
-	BOOL allowMovingItems;
-	/// Allows/disables editing detail views for objects. Default: TRUE.
-	BOOL allowEditDetailView;
-	/// Allows/disables row selection. Default: TRUE.
-	BOOL allowRowSelection;
-	/// Allows/disables automatic cell selection of newly created items. Default: FALSE.
-	BOOL autoSelectNewItemCell;
-	/// Allows/disables displaying the number of objects in the cell's badgeView. Default: TRUE.
-	BOOL displayItemsCountInBadgeView;
-    
-    /// When set to a valid cell object, `placeholderCell` will be displayed when no items exist in the generated section. As soon as any items are added, this cell automatically disappears. Default: nil.
-    SCTableViewCell *placeholderCell;
-    /// When set to a valid cell object, `addNewItemCell` will be displayed as the last cell of the generated section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to the section's addButtonItem. Default: nil.
-    SCTableViewCell *addNewItemCell;
-    /// When TRUE, addNewItemCell will be displayed in Normal Mode. Default: TRUE.
-    BOOL addNewItemCellExistsInNormalMode;
-    /// When TRUE, addNewItemCell will be displayed in Editing Mode. Default: TRUE.
-    BOOL addNewItemCellExistsInEditingMode;
-    
-    SCSectionActions *_detailSectionActions;
-}
+
 
 #pragma mark - Creation and Initialization
 
 /// Allocates and returns an initialized SCArrayOfObjectsCell given a data store.
 ///
 /// - Parameter store: The data store containing the cell's objects.
-+ (instancetype)cellWithDataStore:(SCDataStore *)store;
++ (instancetype)cellWithDataStore:(nullable SCDataStore *)store;
 
 /// Allocates and returns an initialized SCArrayOfObjectsCell given an array of objects and their class definition.
 ///
 /// - Parameter cellItems: An array of objects that the cell will use to generate its detail cells.
 /// - Parameter definition: The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsClassDefinitions dictionary after initialization.
-+ (instancetype)cellWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition;
++ (instancetype)cellWithItems:(nullable NSMutableArray<id> *)cellItems itemsDefinition:(SCDataDefinition *)definition;
 
 
 /// Returns an initialized SCArrayOfObjectsCell given a data store.
 ///
 /// - Parameter store: The data store containing the cell's objects.
-- (instancetype)initWithDataStore:(SCDataStore *)store;
+- (instancetype)initWithDataStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized SCArrayOfObjectsCell given an array of objects and their class definition.
 ///
 /// - Parameter cellItems: An array of objects that the cell will use to generate its detail cells.
 /// - Parameter definition: The class definition of the class or entity of the objects in the objects array. If the array contains more than one type of object, then their respective class definitions must be added to the itemsClassDefinitions dictionary after initialization.
-- (instancetype)initWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition;
+- (instancetype)initWithItems:(nullable NSMutableArray<id> *)cellItems itemsDefinition:(SCDataDefinition *)definition;
 
 /// Allocates and returns an initialized SCArrayOfObjectsCell given a header title and an entity definition.
 ///
@@ -1399,7 +1228,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellItemsSet: A mutable set of objects that the cell will use to generate its cells.
 /// - Parameter definition: The class definition of the entity of the objects in the objects set.
 /// - Parameter ownsObjects: Whether the relationship owns the objects in the set.
-+ (instancetype)cellWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
++ (instancetype)cellWithBoundItemsSet:(NSMutableSet<id> *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
 
 /// Returns an initialized SCArrayOfObjectsCell given a header title and an entity definition.
 ///
@@ -1415,19 +1244,19 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter cellItemsSet: A mutable set of objects that the cell will use to generate its cells.
 /// - Parameter definition: The class definition of the entity of the objects in the objects set.
 /// - Parameter ownsObjects: Whether the relationship owns the objects in the set.
-- (instancetype)initWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
+- (instancetype)initWithBoundItemsSet:(NSMutableSet<id> *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects;
 
 
 #pragma mark - Configuration
 
 /// The data store that's used to store and fetch the cell's objects.
-@property (nonatomic, strong) SCDataStore *dataStore;
+@property (nonatomic, nullable, strong) SCDataStore *dataStore;
 
 /// The options used to fetch the cell's items from dataStore.
-@property (nonatomic, strong) SCDataFetchOptions *dataFetchOptions;
+@property (nonatomic, nullable, strong) SCDataFetchOptions *dataFetchOptions;
 
 /// The items fetched from the dataStore.
-@property (nonatomic, readonly) NSArray *items;
+@property (nonatomic, nullable, readonly) NSArray<id> *items;
 
 /// 	Allows/disables adding new objects to the items array. Default: TRUE.
 @property (nonatomic, readwrite) BOOL allowAddingItems;
@@ -1457,10 +1286,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 #pragma mark - Configuring Special Cells
 
 /// When set to a valid cell object, `placeholderCell` will be displayed when no items exist in the generated section. As soon as any items are added, this cell automatically disappears. Default: nil.
-@property (nonatomic, strong) SCTableViewCell *placeholderCell;
+@property (nonatomic, nullable, strong) SCTableViewCell *placeholderCell;
 
 /// When set to a valid cell object, `addNewItemCell` will be displayed as the last cell of the generated section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to the section's addButtonItem. Default: nil.
-@property (nonatomic, strong) SCTableViewCell *addNewItemCell;
+@property (nonatomic, nullable, strong) SCTableViewCell *addNewItemCell;
 
 /// When TRUE, addNewItemCell will be displayed in Normal Mode. Default: TRUE.
 @property (nonatomic, readwrite) BOOL addNewItemCellExistsInNormalMode;
@@ -1471,13 +1300,4 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 @end
 
-
-
-
-
-
-
-
-
-
-
+NS_ASSUME_NONNULL_END

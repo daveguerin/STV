@@ -9,6 +9,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 @protocol SCInputAccessoryViewDelegate;
@@ -52,7 +54,7 @@
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
 /// Used internally to set a delegate for the accessory view.
-@property (nonatomic, weak) id<SCInputAccessoryViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<SCInputAccessoryViewDelegate> delegate;
 
 /// Method called internally when the `Previous` button is tapped.
 - (void)previousTapped;
@@ -89,3 +91,5 @@
 - (void)inputAccessoryViewDoneTapped:(SCInputAccessoryView *)inputAccessoryView;
 
 @end
+
+NS_ASSUME_NONNULL_END

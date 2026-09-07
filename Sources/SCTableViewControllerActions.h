@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCTableViewController;
 
 /// A block invoked with an STV table-view controller.
@@ -28,31 +30,31 @@ typedef BOOL(^SCTableViewControllerButtonTappedAction_Block)(SCTableViewControll
 @interface SCTableViewControllerActions : NSObject
 
 /// Action gets called when the view controller's view has been loaded.
-@property (nonatomic, copy) SCTableViewControllerAction_Block viewDidLoad;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block viewDidLoad;
 
 /// Action gets called when the view controller is about to appear.
-@property (nonatomic, copy) SCTableViewControllerAction_Block willAppear;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block willAppear;
 
 /// Action gets called when the view controller has appeared.
-@property (nonatomic, copy) SCTableViewControllerAction_Block didAppear;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block didAppear;
 
 /// Action gets called when the view controller is about to disappear.
-@property (nonatomic, copy) SCTableViewControllerAction_Block willDisappear;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block willDisappear;
 
 /// Action gets called when the view controller has disappeared.
-@property (nonatomic, copy) SCTableViewControllerAction_Block didDisappear;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block didDisappear;
 
 /// Action gets called when the view controller is about to appear for the first time.
-@property (nonatomic, copy) SCTableViewControllerAction_Block willPresent;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block willPresent;
 
 /// Action gets called when the view controller has appeared for the first time.
-@property (nonatomic, copy) SCTableViewControllerAction_Block didPresent;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block didPresent;
 
 /// Action gets called when the view controller is about to be dismissed.
-@property (nonatomic, copy) SCTableViewControllerAction_Block willDismiss;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block willDismiss;
 
 /// Action gets called when the view controller has been dismissed.
-@property (nonatomic, copy) SCTableViewControllerAction_Block didDismiss;
+@property (nonatomic, copy, nullable) SCTableViewControllerAction_Block didDismiss;
 
 /// Action gets called when the view controller's Cancel button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -65,7 +67,7 @@ typedef BOOL(^SCTableViewControllerButtonTappedAction_Block)(SCTableViewControll
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCTableViewControllerButtonTappedAction_Block cancelButtonTapped;
+@property (nonatomic, copy, nullable) SCTableViewControllerButtonTappedAction_Block cancelButtonTapped;
 
 /// Action gets called when the view controller's Done button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -78,7 +80,7 @@ typedef BOOL(^SCTableViewControllerButtonTappedAction_Block)(SCTableViewControll
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCTableViewControllerButtonTappedAction_Block doneButtonTapped;
+@property (nonatomic, copy, nullable) SCTableViewControllerButtonTappedAction_Block doneButtonTapped;
 
 /// Action gets called when the view controller's Edit button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -91,6 +93,8 @@ typedef BOOL(^SCTableViewControllerButtonTappedAction_Block)(SCTableViewControll
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCTableViewControllerButtonTappedAction_Block editButtonTapped;
+@property (nonatomic, copy, nullable) SCTableViewControllerButtonTappedAction_Block editButtonTapped;
 
 @end
+
+NS_ASSUME_NONNULL_END

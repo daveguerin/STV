@@ -11,6 +11,8 @@
 #import "SCDataStore.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCUserDefaultsStore
 /// SCUserDefaultsStore is an SCDataStore subclass that encapsulates the NSUserDefaults storage, providing means for the SC framework to communicate with this storage to fetch, add, update and remove user defaults.
 ///
@@ -23,3 +25,5 @@
 @property (nonatomic, readonly) NSUserDefaults *standardUserDefaultsObject;
 
 @end
+
+NS_ASSUME_NONNULL_END

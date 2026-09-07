@@ -12,6 +12,12 @@
 NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification = @"SCDataStoreWillDiscardAllUninsertedObjectsNotification";
 
 
+@interface SCDataStore ()
+{
+    SCDataDefinition *_boundObjectDefinition;
+}
+@end
+
 @implementation SCDataStore
 
 

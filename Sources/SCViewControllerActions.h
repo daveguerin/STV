@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @class SCViewController;
 
@@ -29,31 +31,31 @@ typedef BOOL(^SCViewControllerButtonTappedAction_Block)(SCViewController *viewCo
 
 
 /// Action gets called when the view controller's view has been loaded.
-@property (nonatomic, copy) SCViewControllerAction_Block viewDidLoad;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block viewDidLoad;
 
 /// Action gets called when the view controller is about to appear.
-@property (nonatomic, copy) SCViewControllerAction_Block willAppear;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block willAppear;
 
 /// Action gets called when the view controller has appeared.
-@property (nonatomic, copy) SCViewControllerAction_Block didAppear;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block didAppear;
 
 /// Action gets called when the view controller is about to disappear.
-@property (nonatomic, copy) SCViewControllerAction_Block willDisappear;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block willDisappear;
 
 /// Action gets called when the view controller has disappeared.
-@property (nonatomic, copy) SCViewControllerAction_Block didDisappear;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block didDisappear;
 
 /// Action gets called when the view controller is about to appear for the first time.
-@property (nonatomic, copy) SCViewControllerAction_Block willPresent;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block willPresent;
 
 /// Action gets called when the view controller has appeared for the first time.
-@property (nonatomic, copy) SCViewControllerAction_Block didPresent;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block didPresent;
 
 /// Action gets called when the view controller is about to be dismissed.
-@property (nonatomic, copy) SCViewControllerAction_Block willDismiss;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block willDismiss;
 
 /// Action gets called when the view controller has been dismissed.
-@property (nonatomic, copy) SCViewControllerAction_Block didDismiss;
+@property (nonatomic, copy, nullable) SCViewControllerAction_Block didDismiss;
 
 /// Action gets called when the view controller's Cancel button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -66,7 +68,7 @@ typedef BOOL(^SCViewControllerButtonTappedAction_Block)(SCViewController *viewCo
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCViewControllerButtonTappedAction_Block cancelButtonTapped;
+@property (nonatomic, copy, nullable) SCViewControllerButtonTappedAction_Block cancelButtonTapped;
 
 /// Action gets called when the view controller's Done button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -79,7 +81,7 @@ typedef BOOL(^SCViewControllerButtonTappedAction_Block)(SCViewController *viewCo
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCViewControllerButtonTappedAction_Block doneButtonTapped;
+@property (nonatomic, copy, nullable) SCViewControllerButtonTappedAction_Block doneButtonTapped;
 
 /// Action gets called when the view controller's Edit button has been tapped. Return FALSE to ignore the tap, otherwise return TRUE.
 ///
@@ -92,6 +94,8 @@ typedef BOOL(^SCViewControllerButtonTappedAction_Block)(SCViewController *viewCo
 ///     return TRUE;    // accept the tap
 /// }
 /// ```
-@property (nonatomic, copy) SCViewControllerButtonTappedAction_Block editButtonTapped;
+@property (nonatomic, copy, nullable) SCViewControllerButtonTappedAction_Block editButtonTapped;
 
 @end
+
+NS_ASSUME_NONNULL_END

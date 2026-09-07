@@ -25,6 +25,7 @@
 #import "SCDateDefinition.h"
 #import "SCDictionaryDefinition.h"
 #import "SCEntityDefinition.h"
+#import "SCImageView.h"
 #import "SCNumberDefinition.h"
 #import "SCSearchViewController.h"
 #import "SCStringDefinition.h"

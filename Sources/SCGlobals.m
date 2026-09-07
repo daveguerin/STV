@@ -275,19 +275,20 @@
 
 + (BOOL)isViewInsidePopover:(UIView *)view
 {
-	BOOL inPopover = FALSE;
-	while (view.superview)
-	{
-		NSString *sviewClassName = NSStringFromClass([view.superview class]);
-        if ([sviewClassName rangeOfString:@"UIPopoverView"].location != NSNotFound) {
-            inPopover = TRUE;
-            break;
+    for (UIResponder *responder = view; responder; responder = responder.nextResponder) {
+        if (![responder isKindOfClass:[UIViewController class]]) {
+            continue;
         }
-
-        view = view.superview;
-	}
-	
-	return inPopover;
+        for (UIViewController *controller = (UIViewController *)responder;
+             controller; controller = controller.parentViewController) {
+            UIPopoverPresentationController *popover = controller.popoverPresentationController;
+            if (controller.presentingViewController && popover.containerView.window
+                && [popover adaptivePresentationStyleForTraitCollection:popover.containerView.traitCollection] == UIModalPresentationNone) {
+                return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 + (BOOL)IsInternetConnectionAvailable
@@ -836,10 +837,13 @@
 
 @end
 
+@interface SCModelCenter ()
+{
+    CFMutableSetRef modelsSet;
+}
+@end
+
 @implementation SCModelCenter
-
-@synthesize keyboardIssuer;
-
 
 + (SCModelCenter *)sharedModelCenter
 {
@@ -859,7 +863,7 @@
 - (instancetype) init
 {
     if ( (self = [super init]) ) {
-        keyboardIssuer = nil;
+        _keyboardIssuer = nil;
         [self registerForKeyboardNotifications];
 		
         modelsSet = CFSetCreateMutable(kCFAllocatorDefault, 0, NULL);

@@ -12,6 +12,8 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 #pragma mark - SCDataFetchOptions
 /// This class is used to control how data is fetched from SCDataStore. SCDataFetchOptions can be configured to have the data sorted, filtered, and/or returned in batches.
 ///
@@ -25,16 +27,7 @@
 
 
 @interface SCDataFetchOptions : NSObject
-{
-    BOOL _sort;
-    NSString *_sortKey;
-    BOOL _sortAscending;
-    BOOL _filter;
-    NSPredicate *_filterPredicate;
-    NSUInteger _batchSize;
-    NSUInteger _batchStartingOffset;
-    NSUInteger _batchCurrentOffset;
-}
+
 
 
 #pragma mark - Creation and Initialization
@@ -47,14 +40,14 @@
 /// - Parameter key: The key that the data will be sorted against. Passing a non nil value for `key` also sets the sort property to TRUE.
 /// - Parameter ascending: Whether the results should be sorted in ascending order.
 /// - Parameter predicate: The NSPredicate that the data will be filtered against. Passing a non nil value for `predicate` also sets the filter property to TRUE.
-+ (instancetype)optionsWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate;
++ (instancetype)optionsWithSortKey:(nullable NSString *)key sortAscending:(BOOL)ascending filterPredicate:(nullable NSPredicate *)predicate;
 
 /// Returns an initialized SCDataFetchOptions object given the sorting and filtering configuration.
 ///
 /// - Parameter key: The key that the data will be sorted against. Passing a non nil value for `key` also sets the sort property to TRUE.
 /// - Parameter ascending: Whether the results should be sorted in ascending order.
 /// - Parameter predicate: The NSPredicate that the data will be filtered against. Passing a non nil value for `predicate` also sets the filter property to TRUE.
-- (instancetype)initWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate;
+- (instancetype)initWithSortKey:(nullable NSString *)key sortAscending:(BOOL)ascending filterPredicate:(nullable NSPredicate *)predicate;
 
 
 #pragma mark - Configuration
@@ -64,7 +57,7 @@
 @property (nonatomic, readwrite) BOOL sort;
 
 /// The key that the data will be sorted against. Default: nil.
-@property (nonatomic, copy) NSString *sortKey;
+@property (nonatomic, copy, nullable) NSString *sortKey;
 
 /// Set to TRUE to have the sorting done in ascending order, otherwise set to FALSE. Default: TRUE.
 /// - Note: Only applicable when sortKey is set to a valid key.
@@ -75,7 +68,7 @@
 @property (nonatomic, readwrite) BOOL filter;
 
 /// The NSPredicate that the data will be filtered against. Default: nil.
-@property (nonatomic, strong) NSPredicate *filterPredicate;
+@property (nonatomic, strong, nullable) NSPredicate *filterPredicate;
 
 /// Set to the data batch size that should be retrieved. Setting this property to zero retrieves all avialable data. Default: 0.
 @property (nonatomic, readwrite) NSUInteger batchSize;
@@ -107,22 +100,18 @@
 - (void)resetBatchOffset;
 
 /// Returns an array of sort-descriptors based on the current sorting configuration.
-- (NSArray *)sortDescriptors;
+- (NSArray<NSSortDescriptor *> *)sortDescriptors;
 
 /// Sorts the given array based on the current sorting configuration.
 /// - Parameter array: The mutable array to process.
-- (void)sortMutableArray:(NSMutableArray *)array;
+- (void)sortMutableArray:(NSMutableArray<id> *)array;
 
 /// Filters the given array based on the current filtering configuration.
 /// - Parameter array: The mutable array to process.
-- (void)filterMutableArray:(NSMutableArray *)array;
+- (void)filterMutableArray:(NSMutableArray<id> *)array;
 
 
 
 @end
 
-
-
-
-
-
+NS_ASSUME_NONNULL_END

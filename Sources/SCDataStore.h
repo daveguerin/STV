@@ -14,6 +14,8 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 /* Data store notifications (used internally) */
 /// Posted before a data store discards all uninserted objects.
 extern NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification;
@@ -27,7 +29,8 @@ typedef NS_ENUM(NSInteger, SCStoreMode) {
     SCStoreModeAsynchronous
 };
 /// A block invoked after a data-store fetch succeeds.
-typedef void(^SCDataStoreFetchSuccess_Block)(NSArray *results);
+/// Results may be nil when forwarded from a post-fetch completion handler.
+typedef void(^SCDataStoreFetchSuccess_Block)(NSArray<id> * _Nullable results);
 /// A block invoked after a data-store insert succeeds.
 typedef void(^SCDataStoreInsertSuccess_Block)(void);
 /// A block invoked after a data-store update succeeds.
@@ -35,13 +38,15 @@ typedef void(^SCDataStoreUpdateSuccess_Block)(void);
 /// A block invoked after a data-store delete succeeds.
 typedef void(^SCDataStoreDeleteSuccess_Block)(void);
 /// A block invoked when a data-store operation fails.
-typedef void(^SCDataStoreFailure_Block)(NSError *error);
+/// The abstract asynchronous methods supply nil when no error is available.
+typedef void(^SCDataStoreFailure_Block)(NSError * _Nullable error);
 /// A block that determines how to handle an unavailable network connection.
 typedef BOOL(^SCNoConnection_Block)(void);
 /// A completion block for asynchronous post-fetch processing.
-typedef void(^SCPostFetchAsyncronousCompletionHandler_Block)(NSArray *results, NSError *error);
+/// Supply nil for error on success; results may be nil on failure.
+typedef void(^SCPostFetchAsyncronousCompletionHandler_Block)(NSArray<id> * _Nullable results, NSError * _Nullable error);
 /// A block that performs asynchronous post-fetch processing.
-typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler);
+typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler);
 
 
 #pragma mark - SCDataStore
@@ -59,35 +64,29 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///
 /// - SeeAlso: ``SCArrayStore``, ``SCCoreDataStore``, ``SCUserDefaultsStore``
 ///
-/// - Note: At initialization time, SCDataStore must be assigned at least one default SCDataDefinition that fully defines its stored data objects.
+/// - Note: Configure an appropriate data definition before creating objects.
+///   A newly initialized store may have no default data definition.
 ///
 /// - Warning: SCDataStore is an abstract base class and should not be directly instantiated.
 @interface SCDataStore : NSObject
 {
-    SCStoreMode _storeMode;
-    
-    NSObject *_storedData;
-    SCDataDefinition *_defaultDataDefinition;
-    NSMutableDictionary *_dataDefinitions;
-    
-    // Internal (must be managed by subclasses)
-    NSMutableArray *_uninsertedObjects;
-    NSObject *_boundObject;
-    NSString *_boundPropertyName;
-    SCDataDefinition *_boundObjectDefinition;
-    
-    NSDictionary *_defaultsDictionary;
+@protected
+    // Backing storage used by subclasses; use properties for ordinary access.
+    NSMutableDictionary<NSString *, SCDataDefinition *> *_dataDefinitions;
+    NSMutableArray<id> *_uninsertedObjects;
+    NSObject * _Nullable _boundObject;
+    NSString * _Nullable _boundPropertyName;
 }
 
 #pragma mark - Creation and Initialization
 
 /// Allocated and returns an initialized SCDataStore given a default SCDataDefinition of the data stored.
 /// - Parameter definition: The data definition involved in the operation.
-+ (instancetype)storeWithDefaultDataDefinition:(SCDataDefinition *)definition;
++ (instancetype)storeWithDefaultDataDefinition:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized SCDataStore given a default SCDataDefinition of the data stored.
 /// - Parameter definition: The data definition involved in the operation.
-- (instancetype)initWithDefaultDataDefinition:(SCDataDefinition *)definition;
+- (instancetype)initWithDefaultDataDefinition:(nullable SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration
@@ -96,32 +95,33 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 @property (nonatomic, readwrite) SCStoreMode storeMode;
 
 /// The data store's default data definition. To add more data definitions (other than the default one), use addDataDefinition:.
-@property (nonatomic, strong) SCDataDefinition *defaultDataDefinition;
+@property (nonatomic, strong, nullable) SCDataDefinition *defaultDataDefinition;
 
 /// Whether the data store supports nil values. Default: YES.
 @property (nonatomic, readwrite) BOOL supportsNilValues;
 
 /// Adds a definition to dataDefinitions.
 /// - Parameter definition: The data definition involved in the operation.
-- (void)addDataDefinition:(SCDataDefinition *)definition;
+- (void)addDataDefinition:(nullable SCDataDefinition *)definition;
 
 /// Returns the data definition for the given object.
 /// - Parameter object: The object involved in the operation.
-- (SCDataDefinition *)definitionForObject:(NSObject *)object;
+/// - Returns: The applicable definition, or nil if none is configured or found.
+- (nullable SCDataDefinition *)definitionForObject:(NSObject *)object;
 
  
 #pragma mark - Synchronous Data Access
 
 /// Returns a newly allocated and initialized object based on the store's default data definition.
-/// - Returns: The newly created object.
+/// - Returns: The new object, or nil when creation is unsupported or unavailable.
 /// - Warning: Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
-- (NSObject *)createNewObject;
+- (nullable NSObject *)createNewObject;
 
 /// Returns a newly allocated and initialized object based on the given data definition.
 /// - Parameter definition: The data definition that describes the object to be created.
-/// - Returns: The newly created object.
+/// - Returns: The new object, or nil when creation is unsupported or unavailable.
 /// - Warning: Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
-- (NSObject *)createNewObjectWithDefinition:(SCDataDefinition *)definition;
+- (nullable NSObject *)createNewObjectWithDefinition:(nullable SCDataDefinition *)definition;
 
 /// Discards the given uninserted object.
 ///
@@ -149,7 +149,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 /// - Parameter subsetArray: The ordered subset containing the object.
 /// - Returns: Returns TRUE if successful.
 /// - Note: Only applicable for data stores that maintain ordered object storage.
-- (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray *)subsetArray;
+- (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray<id> *)subsetArray;
 
 /// Updates the given object in the data store.
 /// - Parameter object: The object to be updated.
@@ -162,30 +162,30 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 - (BOOL)deleteObject:(NSObject *)object;
 
 /// Fetches objects from the data store that satisfy the given fetch options.
-/// - Parameter fetchOptions: The fetch options that the data store must satisfy when returning the objects.
-/// - Returns: An array of the fetched objects.
+/// - Parameter fetchOptions: Fetch settings, or nil to use the store's defaults.
+/// - Returns: The fetched objects, or nil when fetching is unsupported or fails.
 /// - SeeAlso: ``SCDataFetchOptions``
-- (NSArray *)fetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions;
+- (nullable NSArray<id> *)fetchObjectsWithOptions:(nullable SCDataFetchOptions *)fetchOptions;
 
 /// Returns the value for the given property name in the given object.
 /// - Parameter propertyName: The name of the property.
 /// - Parameter object: The object containing propertyName.
 /// - Returns: The value for the given propertyName.
-- (NSObject *)valueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
+- (nullable NSObject *)valueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object;
 
 /// Returns the string value for the given property name in the given object.
 /// - Parameter propertyName: The name of the property.
 /// - Parameter object: The object containing propertyName.
 /// - Parameter delimiter: If the property returns more than one value, this delimiter is used to separate the values in the returned string.
 /// - Returns: The value for the given propertyName.
-- (NSString *)stringValueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
-			separateValuesUsingDelimiter:(NSString *)delimiter;
+- (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object
+			separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
 /// Sets the value for the given property name in the given object.
 /// - Parameter value: The value of the property.
 /// - Parameter propertyName: The name of the property.
 /// - Parameter object: The object containing propertyName.
-- (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
+- (void)setValue:(nullable NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
 
 
 #pragma mark - Asynchronous Data Access
@@ -215,7 +215,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///     {
 ///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
 ///     }
-- (void)asynchronousInsertObject:(NSObject *)object success:(SCDataStoreInsertSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block;
+- (void)asynchronousInsertObject:(NSObject *)object success:(nullable SCDataStoreInsertSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
 /// Asynchronously updates the given object into the data store.
 /// - Parameter object: The object to be updated.
@@ -242,7 +242,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///     {
 ///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
 ///     }
-- (void)asynchronousUpdateObject:(NSObject *)object success:(SCDataStoreUpdateSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block;
+- (void)asynchronousUpdateObject:(NSObject *)object success:(nullable SCDataStoreUpdateSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
 /// Asynchronously deletes the given object from the data store.
 /// - Parameter object: The object to be deleted.
@@ -269,14 +269,14 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///     {
 ///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
 ///     }
-- (void)asynchronousDeleteObject:(NSObject *)object success:(SCDataStoreDeleteSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block;
+- (void)asynchronousDeleteObject:(NSObject *)object success:(nullable SCDataStoreDeleteSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
 /// Asynchronously fetches objects from the data store that satisfy the given fetch options.
 /// - Parameter fetchOptions: The fetch options that the data store must satisfy when returning the objects.
 /// - Parameter success_block: The code block called after the data has been successfully fetched.
 ///
 /// SCDataStoreFetchSuccess_Block syntax:
-///     ^(NSArray *results)
+///     ^(NSArray<id> * _Nullable results)
 ///     {
 ///         // Your code here
 ///     }
@@ -298,7 +298,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///     }
 ///
 /// - SeeAlso: ``SCDataFetchOptions``
-- (void)asynchronousFetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions success:(SCDataStoreFetchSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block;
+- (void)asynchronousFetchObjectsWithOptions:(nullable SCDataFetchOptions *)fetchOptions success:(nullable SCDataStoreFetchSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
 /// Action gets called right after asynchronousFetchObjectsWithOptions has successfully finished.
 ///
@@ -310,7 +310,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///
 /// ```objective-c
 /// // Objective-C
-/// myDataStore.postAsynchronousFetchObjectsAction = ^(NSArray *results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler)
+/// myDataStore.postAsynchronousFetchObjectsAction = ^(NSArray<id> * _Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler)
 /// {
 ///     // ... load your data here asynchronously ...
 ///
@@ -318,7 +318,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 ///     completionHandler(myUpdatedResultsArray, error);
 /// };
 /// ```
-@property (nonatomic, copy) SCPostFetchAsyncronousAction_Block postAsynchronousFetchObjectsAction;
+@property (nonatomic, copy, nullable) SCPostFetchAsyncronousAction_Block postAsynchronousFetchObjectsAction;
 
 
 #pragma mark - Data Validation
@@ -349,10 +349,10 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
 /// Should be used by subclasses to store their data when heap memory storage is needed.
-@property (nonatomic, strong) NSObject *storedData;
+@property (nonatomic, strong, nullable) NSObject *storedData;
 
 /// Should be used by subclasses to store any default values needed.
-@property (nonatomic, strong) NSDictionary *defaultsDictionary;
+@property (nonatomic, strong, nullable) NSDictionary<NSString *, id> *defaultsDictionary;
 
 /// Binds the store to a property name that will be used to fetch all the store's data.
 ///
@@ -360,7 +360,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 /// - Parameter propertyName: The property name.
 /// - Parameter object: The object involved in the operation.
 /// - Parameter definition: The data definition involved in the operation.
-- (void)bindStoreToPropertyName:(NSString *)propertyName forObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition;
+- (void)bindStoreToPropertyName:(nullable NSString *)propertyName forObject:(nullable NSObject *)object withDefinition:(nullable SCDataDefinition *)definition;
 
 /// This method is typically called internally by the framework when all unadded objects must be discarded. The method will issue the `SCDataStoreWillDiscardAllUnaddedObjectsNotification` notification to inform all classes using the store that this will happen.
 - (void)forceDiscardAllUnaddedObjects;
@@ -373,7 +373,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 /// - Parameter objects: The fetched objects.
 /// - Parameter success_block: The success_block.
 /// - Parameter failure_block: The failure_block.
-- (void)fetchObjectsSuccessful:(NSArray *)objects successBlock:(SCDataStoreFetchSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block;
+- (void)fetchObjectsSuccessful:(nullable NSArray<id> *)objects successBlock:(nullable SCDataStoreFetchSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block;
 
 @end
 
@@ -395,7 +395,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 @interface SCMissingFrameworkDataDefinition : SCDataDefinition
 
 /// The message explaining which required framework is unavailable.
-@property (nonatomic, copy) NSString *missingFrameworkMessage;
+@property (nonatomic, copy, nullable) NSString *missingFrameworkMessage;
 
 @end
 
@@ -404,9 +404,8 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray *results, SCPostFetchA
 @interface SCMissingFrameworkDataStore : SCDataStore
 
 /// The placeholder definition for an unavailable framework.
-@property (nonatomic, readonly) SCMissingFrameworkDataDefinition *missingFrameworkDataDefinition;
+@property (nonatomic, readonly, nullable) SCMissingFrameworkDataDefinition *missingFrameworkDataDefinition;
 
 @end
 
-
-
+NS_ASSUME_NONNULL_END

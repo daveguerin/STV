@@ -76,26 +76,22 @@
 
 
 
+@interface SCTableViewModel ()
+{
+    NSIndexPath *lastReturnedCellIndexPath;
+    SCTableViewCell *lastReturnedCell;
+    NSIndexPath *lastVisibleCellIndexPath;
+    __weak id target;
+    SEL action;
+    BOOL keyboardShown;
+    CGFloat keyboardOverlap;
+}
+@end
+
 @implementation SCTableViewModel
 
-@synthesize masterModel;
-@synthesize activeDetailModel;
-@synthesize viewController;
-@synthesize editButtonItem;
-@synthesize autoResizeForKeyboard;
-@synthesize sectionIndexTitles;
-@synthesize autoGenerateSectionIndexTitles;
-@synthesize autoSortSections;
-@synthesize hideSectionHeaderTitles;
-@synthesize lockCellSelection;
-@synthesize tag;
-@synthesize activeCell;
-@synthesize activeCellIndexPath;
-@synthesize activeCellControl;
-@synthesize commitButton;
-@synthesize swipeToDeleteActive;
-@synthesize enablePullToRefresh;
-
+// Fully custom accessors use no storage; retain the runtime V attribute for compatibility.
+@synthesize viewController = _viewController;
 
 + (instancetype)modelWithTableView:(UITableView *)tableView
 {
@@ -115,26 +111,26 @@
         lastVisibleCellIndexPath = nil;
         target = nil;
         action = nil;
-        masterModel = nil;
-        activeDetailModel = nil;
+        _masterModel = nil;
+        _activeDetailModel = nil;
 		
-        editButtonItem = nil;
-        sectionIndexTitles = nil;
-        autoGenerateSectionIndexTitles = FALSE;
-        autoSortSections = FALSE;
-        hideSectionHeaderTitles = FALSE;
-        lockCellSelection = FALSE;
-        tag = 0;
+        _editButtonItem = nil;
+        _sectionIndexTitles = nil;
+        _autoGenerateSectionIndexTitles = FALSE;
+        _autoSortSections = FALSE;
+        _hideSectionHeaderTitles = FALSE;
+        _lockCellSelection = FALSE;
+        _tag = 0;
         
-        enablePullToRefresh = FALSE;
+        _enablePullToRefresh = FALSE;
         [self setRefreshControl:[[UIRefreshControl alloc] init]]; // call setter
         
         sections = [[NSMutableArray alloc] init];
-        activeCell = nil;
-        activeCellIndexPath = nil;
-        activeCellControl = nil;
+        _activeCell = nil;
+        _activeCellIndexPath = nil;
+        _activeCellControl = nil;
 		
-        commitButton = nil;
+        _commitButton = nil;
 		
         keyboardShown = FALSE;
         keyboardOverlap = 0;
@@ -145,7 +141,7 @@
         */
         _defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
         _defaultCellHeight = 44.0;
-        swipeToDeleteActive = FALSE;
+        _swipeToDeleteActive = FALSE;
         
         _detailViewController = nil;
         
@@ -299,7 +295,7 @@
 
 - (void)setEnablePullToRefresh:(BOOL)enable
 {
-    enablePullToRefresh = enable;
+    _enablePullToRefresh = enable;
     self.tableView.refreshControl = enable ? self.refreshControl : nil;
 }
 
@@ -394,7 +390,7 @@
 - (NSArray *)sectionIndexTitles
 {
     if (!self.autoGenerateSectionIndexTitles) {
-        return sectionIndexTitles;
+        return _sectionIndexTitles;
     }
 
     // Generate sectionIndexTitles
@@ -413,7 +409,7 @@
 
 - (void)setAutoSortSections:(BOOL)autoSort
 {
-	autoSortSections = autoSort;
+	_autoSortSections = autoSort;
     if (autoSort) {
         [sections sortUsingSelector:@selector(compare:)];
     }
@@ -444,26 +440,26 @@
 
 - (void)setActiveCell:(SCTableViewCell *)cell
 {
-    if (activeCell == cell) {
+    if (_activeCell == cell) {
         return;
     }
 
-    if (activeCell) {
-        if (activeCell.cellActions.willDeselect) {
+    if (_activeCell) {
+        if (_activeCell.cellActions.willDeselect) {
             /*
             Invoke the exact block that was checked, using the cell being
             deselected; STV 6 dereferenced the incoming cell's possibly nil
             block.
             */
-            activeCell.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
+            _activeCell.cellActions.willDeselect(_activeCell, self.activeCellIndexPath);
         }
 
-        else if (activeCell.ownerSection.cellActions.willDeselect) {
+        else if (_activeCell.ownerSection.cellActions.willDeselect) {
             /*
                 Section-level deselection callbacks describe the previous active
                 cell, so pass that cell rather than its replacement.
                 */
-            activeCell.ownerSection.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
+            _activeCell.ownerSection.cellActions.willDeselect(_activeCell, self.activeCellIndexPath);
         }
 
         else if (self.cellActions.willDeselect) {
@@ -471,27 +467,27 @@
                     Model-level deselection callbacks receive the cell actually
                     being deselected.
                     */
-            self.cellActions.willDeselect(activeCell, self.activeCellIndexPath);
+            self.cellActions.willDeselect(_activeCell, self.activeCellIndexPath);
         }
 
-        [activeCell willDeselectCell];
+        [_activeCell willDeselectCell];
         
         [self.tableView deselectRowAtIndexPath:self.activeCellIndexPath animated:NO];
 
-        if (activeCell.cellActions.didDeselect) {
+        if (_activeCell.cellActions.didDeselect) {
             /*
             Deselect callbacks belong to the previous active cell, not the
             replacement cell.
             */
-            activeCell.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
+            _activeCell.cellActions.didDeselect(_activeCell, self.activeCellIndexPath);
         }
 
-        else if (activeCell.ownerSection.cellActions.didDeselect) {
+        else if (_activeCell.ownerSection.cellActions.didDeselect) {
             /*
                 Keep section callback ownership and callback arguments aligned
                 during active-cell replacement.
                 */
-            activeCell.ownerSection.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
+            _activeCell.ownerSection.cellActions.didDeselect(_activeCell, self.activeCellIndexPath);
         }
 
         else if (self.cellActions.didDeselect) {
@@ -499,83 +495,83 @@
                     Keep model callback ownership and callback arguments aligned
                     during active-cell replacement.
                     */
-            self.cellActions.didDeselect(activeCell, self.activeCellIndexPath);
+            self.cellActions.didDeselect(_activeCell, self.activeCellIndexPath);
         }
 
-        [activeCell didDeselectCell];
+        [_activeCell didDeselectCell];
     }
 
-    activeCell = cell;
-    activeCellIndexPath = [self indexPathForCell:activeCell];
+    _activeCell = cell;
+    _activeCellIndexPath = [self indexPathForCell:_activeCell];
 
-    if (![activeCell isKindOfClass:[SCCustomCell class]]) {
+    if (![_activeCell isKindOfClass:[SCCustomCell class]]) {
         self.activeCellControl = nil;
     }
 
-    if (activeCell) {
-        if (!activeCell.selected) {
-            if (activeCell.cellActions.willSelect) {
+    if (_activeCell) {
+        if (!_activeCell.selected) {
+            if (_activeCell.cellActions.willSelect) {
                 /*
                 Call the checked active-cell block directly so the callback
                 cannot become a null block-function invocation.
                 */
-                activeCell.cellActions.willSelect(activeCell, self.activeCellIndexPath);
+                _activeCell.cellActions.willSelect(_activeCell, self.activeCellIndexPath);
             }
 
-            else if (activeCell.ownerSection.cellActions.willSelect) {
-                activeCell.ownerSection.cellActions.willSelect(cell, self.activeCellIndexPath);
+            else if (_activeCell.ownerSection.cellActions.willSelect) {
+                _activeCell.ownerSection.cellActions.willSelect(cell, self.activeCellIndexPath);
             }
 
-            else if (activeCell.ownerTableViewModel.cellActions.willSelect) {
+            else if (_activeCell.ownerTableViewModel.cellActions.willSelect) {
                 self.cellActions.willSelect(cell, self.activeCellIndexPath);
             }
 
-            activeCell.selected = YES;
+            _activeCell.selected = YES;
 
-            if (activeCell.cellActions.didSelect) {
+            if (_activeCell.cellActions.didSelect) {
                 /*
                 Keep callback ownership and callback arguments aligned for
                 analyzer safety and predictable selection behavior.
                 */
-                activeCell.cellActions.didSelect(activeCell, self.activeCellIndexPath);
+                _activeCell.cellActions.didSelect(_activeCell, self.activeCellIndexPath);
             }
 
-            else if (activeCell.ownerSection.cellActions.didSelect) {
-                activeCell.ownerSection.cellActions.didSelect(cell, self.activeCellIndexPath);
+            else if (_activeCell.ownerSection.cellActions.didSelect) {
+                _activeCell.ownerSection.cellActions.didSelect(cell, self.activeCellIndexPath);
             }
 
-            else if (activeCell.ownerTableViewModel.cellActions.didSelect) {
+            else if (_activeCell.ownerTableViewModel.cellActions.didSelect) {
                 self.cellActions.didSelect(cell, self.activeCellIndexPath);
             }
 
         }
 
-        [self.tableView scrollToRowAtIndexPath:activeCellIndexPath
+        [self.tableView scrollToRowAtIndexPath:_activeCellIndexPath
                                      atScrollPosition:UITableViewScrollPositionNone
                                              animated:YES];
-        [self.tableView selectRowAtIndexPath:activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self.tableView selectRowAtIndexPath:_activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
 
 }
 
 - (void)setActiveCellControl:(UIResponder *)control
 {
-    activeCellControl = control;
+    _activeCellControl = control;
 }
 
 - (void)setCommitButton:(UIBarButtonItem *)button
 {
-	commitButton = button;
+	_commitButton = button;
 	
-	commitButton.enabled = self.valuesAreValid;
+	_commitButton.enabled = self.valuesAreValid;
 }
 
 - (void)setEditButtonItem:(UIBarButtonItem *)barButtonItem
 {
-	editButtonItem = barButtonItem;
+	_editButtonItem = barButtonItem;
 	
-	editButtonItem.target = self;
-	editButtonItem.action = @selector(didTapEditButtonItem);
+	_editButtonItem.target = self;
+	_editButtonItem.action = @selector(didTapEditButtonItem);
 }
 
 - (void)valueChangedForSectionAtIndex:(NSUInteger)index
@@ -798,8 +794,8 @@
 
 - (void)removeAllSections
 {
-    activeCell = nil;
-    activeCellControl = nil;
+    _activeCell = nil;
+    _activeCellControl = nil;
     
 	[sections removeAllObjects];
 }
@@ -995,8 +991,8 @@
 - (void)clear
 {
 	[self removeAllSections];
-	activeCell = nil;
-    activeCellIndexPath = nil;
+	_activeCell = nil;
+    _activeCellIndexPath = nil;
 }
 
 - (void)setTableViewEditing:(BOOL)editing animated:(BOOL)animate
@@ -1007,7 +1003,7 @@
 
     if (self.swipeToDeleteActive) {
         [self.tableView setEditing:NO animated:animate];
-        swipeToDeleteActive = FALSE;
+        _swipeToDeleteActive = FALSE;
         return;
     }
 
@@ -2286,12 +2282,12 @@
 
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    swipeToDeleteActive = TRUE;
+    _swipeToDeleteActive = TRUE;
 }
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    swipeToDeleteActive = FALSE;
+    _swipeToDeleteActive = FALSE;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
@@ -2605,6 +2601,7 @@
     NSArray<NSLayoutConstraint *> *_searchAttachmentConstraints;
     BOOL _searchHostDefinedPresentationContext;
     BOOL _searchAttachedToNavigationItem;
+    UINavigationItemSearchBarPlacement _searchHostPreferredSearchBarPlacement;
 }
 
 - (void)detachSearchController;
@@ -2622,50 +2619,47 @@
 
 
 
+@interface SCArrayOfItemsModel ()
+{
+    SCArrayOfItemsSection *tempSection;
+    BOOL _loadingContents;
+    NSMutableArray *_items;
+    BOOL itemsInSync;
+    SCDetailViewControllerOptions *_detailViewControllerOptions;
+    SCDetailViewControllerOptions *_newItemDetailViewControllerOptions;
+}
+@end
+
 @implementation SCArrayOfItemsModel
-
-@synthesize dataStore;
-@synthesize dataFetchOptions;
-@synthesize autoFetchItems;
-@synthesize itemsAccessoryType;
-@synthesize allowAddingItems;
-@synthesize allowDeletingItems;
-@synthesize allowMovingItems;
-@synthesize allowEditDetailView;
-@synthesize allowRowSelection;
-@synthesize autoSelectNewItemCell;
-@synthesize addButtonItem;
-@synthesize searchBar;
-
 
 - (instancetype)init
 {
     if ( (self=[super init]) ) {
         tempSection = nil;
         
-        dataStore = nil;
-        dataFetchOptions = nil;  // will be re-initialized when dataStore is set
+        _dataStore = nil;
+        _dataFetchOptions = nil;  // will be re-initialized when dataStore is set
         
         _loadingContents = FALSE;
         sectionsInSync = FALSE;
-        items = nil;
-        autoFetchItems = TRUE;
+        _items = nil;
+        _autoFetchItems = TRUE;
         itemsInSync = FALSE;
-        itemsAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        allowAddingItems = TRUE;
-        allowDeletingItems = TRUE;
-        allowMovingItems = FALSE;
-        allowEditDetailView = TRUE;
-        allowRowSelection = TRUE;
-        autoSelectNewItemCell = FALSE;
-        addButtonItem = nil;
+        _itemsAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        _allowAddingItems = TRUE;
+        _allowDeletingItems = TRUE;
+        _allowMovingItems = FALSE;
+        _allowEditDetailView = TRUE;
+        _allowRowSelection = TRUE;
+        _autoSelectNewItemCell = FALSE;
+        _addButtonItem = nil;
 		
         filteredArray = nil;
-        searchBar = nil;
+        _searchBar = nil;
         _enableSearchController = FALSE;
         
-        detailViewControllerOptions = nil;
-        newItemDetailViewControllerOptions = nil;
+        _detailViewControllerOptions = nil;
+        _newItemDetailViewControllerOptions = nil;
         
         _sectionsCellIdentifiers = [NSMutableDictionary dictionary];
     }
@@ -2697,10 +2691,10 @@
 
 - (void)setDataStore:(SCDataStore *)__dataStore
 {
-    dataStore =  __dataStore;
+    _dataStore =  __dataStore;
 
-    if (!dataFetchOptions) {
-        dataFetchOptions = [__dataStore.defaultDataDefinition generateCompatibleDataFetchOptions];
+    if (!_dataFetchOptions) {
+        _dataFetchOptions = [__dataStore.defaultDataDefinition generateCompatibleDataFetchOptions];
     }
 
     itemsInSync = FALSE;
@@ -2709,7 +2703,7 @@
 
 - (void)setDataFetchOptions:(SCDataFetchOptions *)options
 {
-    dataFetchOptions = options;
+    _dataFetchOptions = options;
 
     if (!options.sortKey && self.dataStore) {
         options.sortKey = self.dataStore.defaultDataDefinition.keyPropertyName;
@@ -2722,31 +2716,31 @@
 - (SCDetailViewControllerOptions *)detailViewControllerOptions
 {
     // Conserve resources by lazy loading for only models that need it
-    if (!detailViewControllerOptions) {
-        detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
+    if (!_detailViewControllerOptions) {
+        _detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
     }
 
-    return detailViewControllerOptions;
+    return _detailViewControllerOptions;
 }
 
 - (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
 {
-    detailViewControllerOptions = options;
+    _detailViewControllerOptions = options;
 }
 
 - (SCDetailViewControllerOptions *)newItemDetailViewControllerOptions
 {
     // Conserve resources by lazy loading for only models that need it
-    if (!newItemDetailViewControllerOptions) {
-        newItemDetailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
+    if (!_newItemDetailViewControllerOptions) {
+        _newItemDetailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
     }
 
-    return newItemDetailViewControllerOptions;
+    return _newItemDetailViewControllerOptions;
 }
 
 - (void)setNewItemDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
 {
-    newItemDetailViewControllerOptions = options;
+    _newItemDetailViewControllerOptions = options;
 }
 
 
@@ -2756,12 +2750,12 @@
         switch (self.dataStore.storeMode)
         {
             case SCStoreModeSynchronous:
-                items = [[NSMutableArray alloc] initWithArray:[self.dataStore fetchObjectsWithOptions:self.dataFetchOptions]];
+                _items = [[NSMutableArray alloc] initWithArray:[self.dataStore fetchObjectsWithOptions:self.dataFetchOptions]];
                 itemsInSync = TRUE;
                 sectionsInSync = FALSE;
 
                 if (self.modelActions.didFetchItemsFromStore) {
-                    self.modelActions.didFetchItemsFromStore(self, items);
+                    self.modelActions.didFetchItemsFromStore(self, _items);
                 }
 
                 break;
@@ -2770,7 +2764,7 @@
                 itemsInSync = TRUE;
                 SCFetchItemsCell *fetchItemsCell = [SCFetchItemsCell cell];
                 [fetchItemsCell startActivityIndicator];
-                items = [NSMutableArray arrayWithObject:fetchItemsCell];
+                _items = [NSMutableArray arrayWithObject:fetchItemsCell];
                 
                 _loadingContents = TRUE;
 
@@ -2779,7 +2773,7 @@
                      {
                     self->_loadingContents = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
 
-                    self->items = [NSMutableArray arrayWithArray:results];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_items = [NSMutableArray arrayWithArray:results];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     self->sectionsInSync = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     [self.tableView reloadData];
                 }
@@ -2796,17 +2790,17 @@
         }
     }
 
-    return items;
+    return _items;
 }
 
 - (NSMutableArray *)mutableItems
 {
-    return items;
+    return _items;
 }
 
 - (void)setMutableItems:(NSMutableArray *)mutableItems
 {
-    items = mutableItems;
+    _items = mutableItems;
 }
 
 //override superclass
@@ -2970,9 +2964,9 @@
 
 - (void)setSearchBar:(UISearchBar *)sbar
 {
-	searchBar = sbar;
+	_searchBar = sbar;
     if (sbar != self.searchController.searchBar) {
-        searchBar.delegate = self;
+        _searchBar.delegate = self;
     }
 
 }
@@ -3010,7 +3004,6 @@
 - (void)initDisplayController
 {
     SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.trueTableView.style];
-    resultsViewController.edgesForExtendedLayout = UIRectEdgeNone;
     resultsViewController.tableView.dataSource = self;
     resultsViewController.tableView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:resultsViewController];
@@ -3028,6 +3021,8 @@
     _searchAttachmentConstraints = nil;
     if (_searchAttachedController.navigationItem.searchController == _searchController) {
         _searchAttachedController.navigationItem.searchController = nil;
+        _searchAttachedController.navigationItem.preferredSearchBarPlacement =
+            _searchHostPreferredSearchBarPlacement;
     }
 
     if (_searchAttachedTable.tableHeaderView == _searchController.searchBar) {
@@ -3069,7 +3064,9 @@
     BOOL useNavigationItem = !navigation.navigationBarHidden
         && [navigation.viewControllers containsObject:controller];
     if (_searchAttachedTable == table && _searchAttachedController == controller
-       && _searchAttachedToNavigationItem == useNavigationItem) {
+       && _searchAttachedToNavigationItem == useNavigationItem
+       && (useNavigationItem || _searchController.active
+           || (table.tableHeaderView == _searchController.searchBar && _searchAttachmentConstraints.count))) {
         return;
     }
 
@@ -3082,6 +3079,16 @@
     UISearchBar *bar = _searchController.searchBar;
     if (useNavigationItem) {
         bar.translatesAutoresizingMaskIntoConstraints = YES;
+        /*
+         hermes:
+         Integrated navigation search may move the text field out of its bar.
+         Stacked placement keeps the complete bar available for table-header
+         reattachment. Restore the host's preference when releasing the item.
+         */
+        _searchHostPreferredSearchBarPlacement =
+            _searchAttachedController.navigationItem.preferredSearchBarPlacement;
+        _searchAttachedController.navigationItem.preferredSearchBarPlacement =
+            UINavigationItemSearchBarPlacementStacked;
         _searchAttachedController.navigationItem.searchController = _searchController;
     }
 
@@ -3142,7 +3149,7 @@
 // override superclass
 - (void)setItemsAccessoryType:(UITableViewCellAccessoryType)type
 {
-	itemsAccessoryType = type;
+	_itemsAccessoryType = type;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).itemsAccessoryType = type;
 	}
@@ -3152,7 +3159,7 @@
 // override superclass
 - (void)setAllowAddingItems:(BOOL)allow
 {
-	allowAddingItems = allow;
+	_allowAddingItems = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowAddingItems = allow;
 	}
@@ -3162,7 +3169,7 @@
 // override superclass
 - (void)setAllowDeletingItems:(BOOL)allow
 {
-	allowDeletingItems = allow;
+	_allowDeletingItems = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowDeletingItems = allow;
 	}
@@ -3172,7 +3179,7 @@
 // override superclass
 - (void)setAllowMovingItems:(BOOL)allow
 {
-	allowMovingItems = allow;
+	_allowMovingItems = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowMovingItems = allow;
 	}
@@ -3182,7 +3189,7 @@
 // override superclass
 - (void)setAllowEditDetailView:(BOOL)allow
 {
-	allowEditDetailView = allow;
+	_allowEditDetailView = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowEditDetailView = allow;
 	}
@@ -3192,7 +3199,7 @@
 // override superclass
 - (void)setAllowRowSelection:(BOOL)allow
 {
-	allowRowSelection = allow;
+	_allowRowSelection = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowRowSelection = allow;
 	}
@@ -3202,7 +3209,7 @@
 // override superclass
 - (void)setAutoSelectNewItemCell:(BOOL)allow
 {
-	autoSelectNewItemCell = allow;
+	_autoSelectNewItemCell = allow;
 	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).autoSelectNewItemCell = allow;
 	}
@@ -3211,10 +3218,10 @@
 
 - (void)setAddButtonItem:(UIBarButtonItem *)barButtonItem
 {
-	addButtonItem = barButtonItem;
+	_addButtonItem = barButtonItem;
 	
-	addButtonItem.target = self;
-	addButtonItem.action = @selector(didTapAddButtonItem);
+	_addButtonItem.target = self;
+	_addButtonItem.action = @selector(didTapAddButtonItem);
 }
 
 - (void)didTapAddButtonItem
@@ -3273,7 +3280,7 @@
         case SCStoreModeSynchronous:
             [self.dataStore insertObject:newItem];
             
-            [items addObject:newItem];
+            [_items addObject:newItem];
             [self addNewItemToRespectiveSection:newItem];
             break;
             
@@ -3281,7 +3288,7 @@
             [self.dataStore asynchronousInsertObject:newItem
                     success:^()
                     {
-                        [self->items addObject:newItem];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                        [self->_items addObject:newItem];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                         [self addNewItemToRespectiveSection:newItem];
                     }
                     failure:^(NSError *error)
@@ -3506,6 +3513,20 @@
 - (void)willPresentSearchController:(UISearchController *)searchController
 {
     [self removeKeyboardInset];
+    if (searchController == _searchController && !_searchAttachedToNavigationItem) {
+        /*
+         hermes:
+         UIKit reparents the active search bar into its presentation container.
+         Release header constraints and return root layout ownership to UIKit;
+         otherwise the editing field can be constrained outside the window.
+         */
+        [NSLayoutConstraint deactivateConstraints:_searchAttachmentConstraints];
+        _searchAttachmentConstraints = nil;
+        if (_searchAttachedTable.tableHeaderView == searchController.searchBar) {
+            _searchAttachedTable.tableHeaderView = nil;
+        }
+        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = YES;
+    }
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController
@@ -3515,6 +3536,9 @@
 
 - (void)didDismissSearchController:(UISearchController *)searchController
 {
+    if (searchController == _searchController && _enableSearchController) {
+        [self attachSearchController];
+    }
     [self reconcileKeyboardInset];
 }
 
@@ -3530,9 +3554,6 @@
 
 
 @implementation SCArrayOfObjectsModel
-
-@synthesize searchPropertyName;
-
 
 + (instancetype)modelWithTableView:(UITableView *)tableView
                             items:(NSMutableArray *)items
@@ -3555,7 +3576,7 @@
 - (instancetype)init
 {
     if ( (self=[super init]) ) {
-        searchPropertyName = nil;
+        _searchPropertyName = nil;
     }
 
     return self;
@@ -3759,36 +3780,36 @@
 
 
 
+@interface SCSelectionModel ()
+{
+    BOOL boundToNSNumber;
+    BOOL boundToNSString;
+    NSIndexPath *lastSelectedRowIndexPath;
+    NSMutableSet *_selectedItemsIndexes;
+}
+@end
+
 @implementation SCSelectionModel
-
-@synthesize boundObject;
-@synthesize boundObjectStore;
-@synthesize boundPropertyName;
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissViewController;
-
 
 - (instancetype)init
 {
     if ( (self=[super init]) ) {
-        boundObject = nil;
-        boundObjectStore = nil;
-        boundPropertyName = nil;
+        _boundObject = nil;
+        _boundObjectStore = nil;
+        _boundPropertyName = nil;
         
         boundToNSNumber = FALSE;
         boundToNSString = FALSE;
         lastSelectedRowIndexPath = nil;
-        allowAddingItems = FALSE;
-        allowDeletingItems = FALSE;
-        allowMovingItems = FALSE;
-        allowEditDetailView = FALSE;
+        _allowAddingItems = FALSE;
+        _allowDeletingItems = FALSE;
+        _allowMovingItems = FALSE;
+        _allowEditDetailView = FALSE;
 		
-        allowMultipleSelection = FALSE;
-        allowNoSelection = FALSE;
-        maximumSelections = 0;
-        autoDismissViewController = FALSE;
+        _allowMultipleSelection = FALSE;
+        _allowNoSelection = FALSE;
+        _maximumSelections = 0;
+        _autoDismissViewController = FALSE;
         _selectedItemsIndexes = [[NSMutableSet alloc] init];
     }
 
@@ -3801,15 +3822,15 @@
                   items:(NSArray *)sectionItems
 {
     if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
-        boundObject = object;
+        _boundObject = object;
 		
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         boundToNSNumber = TRUE;
-        allowMultipleSelection = FALSE;
+        _allowMultipleSelection = FALSE;
 		
         [self reloadBoundValues];
     }
@@ -3824,14 +3845,14 @@
  allowMultipleSelection:(BOOL)multipleSelection
 {
     if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
-        boundObject = object;
+        _boundObject = object;
 		
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
-        allowMultipleSelection = multipleSelection;
+        _allowMultipleSelection = multipleSelection;
 		
         [self reloadBoundValues];
     }
@@ -3845,11 +3866,11 @@
                   items:(NSArray *)sectionItems
 {
     if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
-        boundObject = object;
+        _boundObject = object;
 		
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         boundToNSString = TRUE;
@@ -3954,7 +3975,7 @@
 
     if (boundToNSNumber) {
         if (self.boundValue) {
-            [self.selectedItemsIndexes addObject:self.boundValue];
+            [self.selectedItemsIndexes addObject:(NSNumber *)self.boundValue];
         }
 
         if (self.boundObject && !self.boundValue) {
@@ -4173,37 +4194,33 @@
 
 
 
+@interface SCObjectSelectionModel ()
+{
+    NSIndexPath *lastSelectedRowIndexPath;
+}
+@end
+
 @implementation SCObjectSelectionModel
-
-@synthesize boundObject;
-@synthesize boundObjectStore;
-@synthesize boundPropertyName;
-@synthesize selectedItemsIndexes;
-@synthesize allowMultipleSelection;
-@synthesize allowNoSelection;
-@synthesize maximumSelections;
-@synthesize autoDismissViewController;
-
 
 - (instancetype)init
 {
     if ( (self=[super init]) ) {
-        boundObject = nil;
-        boundObjectStore = nil;
-        boundPropertyName = nil;
+        _boundObject = nil;
+        _boundObjectStore = nil;
+        _boundPropertyName = nil;
         
         lastSelectedRowIndexPath = nil;
-        itemsAccessoryType = UITableViewCellAccessoryCheckmark;
-        allowAddingItems = FALSE;
-        allowDeletingItems = FALSE;
-        allowMovingItems = FALSE;
-        allowEditDetailView = FALSE;
+        _itemsAccessoryType = UITableViewCellAccessoryCheckmark;
+        _allowAddingItems = FALSE;
+        _allowDeletingItems = FALSE;
+        _allowMovingItems = FALSE;
+        _allowEditDetailView = FALSE;
 		
-        allowMultipleSelection = FALSE;
-        allowNoSelection = FALSE;
-        maximumSelections = 0;
-        autoDismissViewController = FALSE;
-        selectedItemsIndexes = [[NSMutableSet alloc] init];
+        _allowMultipleSelection = FALSE;
+        _allowNoSelection = FALSE;
+        _maximumSelections = 0;
+        _autoDismissViewController = FALSE;
+        _selectedItemsIndexes = [[NSMutableSet alloc] init];
     }
 
     return self;
@@ -4214,20 +4231,20 @@
       selectionItemsStore:(SCDataStore *)store
 {
     if ( (self = [self initWithTableView:tableView]) ) {
-        boundObject = object;
-        dataStore = store;
+        _boundObject = object;
+        _dataStore = store;
         
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
-            boundPropertyName = [propertyName copy];
+            _boundPropertyName = [propertyName copy];
         }
 
         if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
-            allowMultipleSelection = TRUE;
+            _allowMultipleSelection = TRUE;
         }
 
         else {
-            allowMultipleSelection = FALSE;
+            _allowMultipleSelection = FALSE;
         }
 
         // Synchronize selectedItemsIndexes

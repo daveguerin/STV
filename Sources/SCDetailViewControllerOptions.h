@@ -12,6 +12,8 @@
 
 #import "SCViewControllerTypedefs.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 #pragma mark - SCDetailViewControllerOptions
@@ -42,7 +44,7 @@
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
 /// The title of the detail view controller. Set to nil to have the presenting control set a title automatically. Default: nil.
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy, nullable) NSString *title;
 
 /// The style of the detail view controller's table view. Default: Depends on the control presenting the view controller.
 @property (nonatomic, readwrite) UITableViewStyle tableViewStyle;
@@ -51,5 +53,7 @@
 @property (nonatomic, readwrite) BOOL hidesBottomBarWhenPushed;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 

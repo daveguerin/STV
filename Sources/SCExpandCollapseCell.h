@@ -9,6 +9,8 @@
 
 #import "SCTableViewCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 
 
@@ -32,24 +34,26 @@
 /// - Parameter expandText: The text that will be displayed in the cell when the section is collapsed.
 /// - Parameter collapseText: The text that will be displayed in the cell when the section is expanded.
 /// - Parameter expanded: The initial expanded state of the cell's owner section.
-+ (instancetype)cellWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
++ (instancetype)cellWithExpandText:(nullable NSString *)expandText collapseText:(nullable NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
 
 /// Returns an initialized SCExpandCollapseCell given its expandText, collapseText, an initial owner section expand state.
 /// - Parameter expandText: The text that will be displayed in the cell when the section is collapsed.
 /// - Parameter collapseText: The text that will be displayed in the cell when the section is expanded.
 /// - Parameter expanded: The initial expanded state of the cell's owner section.
-- (instancetype)initWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
+- (instancetype)initWithExpandText:(nullable NSString *)expandText collapseText:(nullable NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
 
 
 #pragma mark - Configuration
 
 /// The text that will be displayed in the cell when the section is collapsed.
-@property (nonatomic, copy) NSString *expandText;
+@property (nonatomic, nullable, copy) NSString *expandText;
 
 /// The text that will be displayed in the cell when the section is expanded.
-@property (nonatomic, copy) NSString *collapseText;
+@property (nonatomic, nullable, copy) NSString *collapseText;
 
 /// The expanded state of the ownerSection. Set to TRUE to expand the ownerSection's content. Default:FALSE.
 @property (nonatomic, readwrite) BOOL ownerSectionExpanded;
 
 @end
+
+NS_ASSUME_NONNULL_END

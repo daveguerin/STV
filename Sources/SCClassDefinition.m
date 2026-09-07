@@ -16,8 +16,6 @@
 
 @implementation SCClassDefinition
 
-@synthesize cls;
-
 + (instancetype)definitionWithClass:(Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate
 {
 	return [[[self class] alloc] initWithClass:_cls autoGeneratePropertyDefinitions:autoGenerate];
@@ -103,7 +101,7 @@
 - (instancetype) init
 {
     if ( (self = [super init]) ) {
-        cls = nil;
+        _cls = nil;
     }
 
     return self;
@@ -112,7 +110,7 @@
 - (instancetype)initWithClass:(Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate
 {
     if ( (self=[self init]) ) {
-        cls = _cls;
+        self->_cls = _cls;
 
         if (autoGenerate) {
             unsigned int count = 0;

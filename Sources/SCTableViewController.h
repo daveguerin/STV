@@ -11,6 +11,8 @@
 #import "SCViewControllerTypedefs.h"
 #import "SCTableViewControllerActions.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SCTableViewModel;
 @class SCDataDefinition;
 @class SCObjectSection;
@@ -31,42 +33,45 @@
 /// Finally, SCTableViewController provides several useful actions (SCTableViewControllerActions) that notify the delegate object of events like the view appearing or disappearing.
 
 
-@interface SCTableViewController : UITableViewController <UIPopoverControllerDelegate>
+@interface SCTableViewController : UITableViewController
 {
 }
 
 #pragma mark - Configuration
 
 /// Contains a valid SCTableViewModel that is associated with tableView and ready to use. If this model is replaced by a custom one, the class will automatically take care of associating it with tableView.
-@property (nonatomic, strong) SCTableViewModel *tableViewModel;
+@property (nonatomic, strong, nullable) SCTableViewModel *tableViewModel;
 
 /// The type of the navigation bar.
 @property (nonatomic, readwrite) SCNavigationBarType navigationBarType;
 
 /// The navigation bar's Add button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem *addButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *addButton;
 
 /// The editButtonItem of `SCTableViewController`'s superclass.
-@property (nonatomic, readonly) UIBarButtonItem *editButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *editButton;
 
 /// The navigation bar's Cancel button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem *cancelButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *cancelButton;
 
 /// Set to TRUE to allow the cancel button to appear when entering editing mode. Default: TRUE.
 /// - Note: Only applicable if navigationBarType == SCNavigationBarTypeEditRight.
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
 /// The navigation bar's Done button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly) UIBarButtonItem	*doneButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem	*doneButton;
 
 /// When set to YES, the view controller will automatically disable all navigation bar buttons until its view fully appears. This setting is inhereted by all automatically generated detail view controllers. Default: NO.
 @property (nonatomic, readwrite) BOOL autoDisableNavigationButtonsUntilViewAppears;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-/// The popover controller associated with the view controller. Set this property when presenting the view controller from a popover. The view controller takes over the popover controller's delegate while associated with it.
-@property (nonatomic, strong) UIPopoverController *popoverController;
-#pragma clang diagnostic pop
+/// The UIKit popover presentation associated with this controller, or nil.
+/// UIKit owns the presentation; this weak association avoids a retain cycle.
+/// Assign after setting the presented navigation controller's modal style to
+/// UIModalPresentationPopover. STV becomes its delegate until disassociated.
+/// Generated popovers require explicit Done/Cancel; compact widths adapt to a
+/// sheet. If interactive dismissal is enabled, its callbacks commit as Done
+/// only after UIKit confirms completion (not when a swipe is cancelled).
+@property (nonatomic, weak, nullable) UIPopoverPresentationController *popoverController;
 
 /// The set of view controller action blocks.
 @property (nonatomic, readonly) SCTableViewControllerActions *actions;
@@ -93,7 +98,7 @@
 /// - Parameter ibName: The name of the data definition. This name is typically found in IB's document outline pane.
 ///
 /// - Returns: The data definition.
-- (SCDataDefinition *)dataDefinitionWithIBName:(NSString *)ibName;
+- (nullable SCDataDefinition *)dataDefinitionWithIBName:(NSString *)ibName;
 
 ///  This method should be implemented by SCTableViewController subclasses that wish to provide data source object to an SCObjectSection that has been created in Interface Builder.
 ///
@@ -103,7 +108,7 @@
 /// - Parameter index: The object section index.
 ///
 /// - Returns: An object compatible with objectSection's data definition.
-- (NSObject *)objectForSection:(SCObjectSection *)objectSection atIndex:(NSUInteger)index;
+- (nullable NSObject *)objectForSection:(SCObjectSection *)objectSection atIndex:(NSUInteger)index;
 
 ///  This method should be implemented by SCTableViewController subclasses that wish to provide data source objects to an SCArrayOfObjectsSection that has been created in Interface Builder. The method is typically called by the STV framework for sections with data definitions of type SCClassDefinition or SCDictionaryDefinition.
 ///
@@ -113,18 +118,18 @@
 /// - Parameter index: The objects section index.
 ///
 /// - Returns: A mutable array of objects compatible with objectsSection's data definition.
-- (NSMutableArray *)objectsForSection:(SCArrayOfObjectsSection *)objectsSection atIndex:(NSUInteger)index;
+- (nullable NSMutableArray *)objectsForSection:(SCArrayOfObjectsSection *)objectsSection atIndex:(NSUInteger)index;
 
 
 #pragma mark - Managing Delegate
 
 /// The object that acts as the delegate of `SCTableViewController`. The object must adopt the SCTableViewControllerDelegate protocol.
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak, nullable) id delegate;
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
 /// The data definitions connected to the controller through Interface Builder.
-@property (nonatomic, retain, readonly) IBOutletCollection(SCDataDefinition) NSArray *_STV_ibDataDefinitions;
+@property (nonatomic, retain, readonly, nullable) IBOutletCollection(SCDataDefinition) NSArray<SCDataDefinition *> *_STV_ibDataDefinitions;
 
 // For internal use only
 /// Whether the controller was embedded by Interface Builder.
@@ -275,3 +280,5 @@
                            cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 @end
+
+NS_ASSUME_NONNULL_END
