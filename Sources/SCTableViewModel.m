@@ -236,8 +236,10 @@
 - (void)setDefaultCellSizingMode:(SCTableViewCellSizingMode)mode
 {
     _defaultCellSizingMode = mode;
-    for(SCTableViewSection *section in sections)
+    for(SCTableViewSection *section in sections) {
         [section invalidateCellSizingPolicy];
+    }
+
     for(SCTableViewCell *cell in self.tableView.visibleCells)
     {
         [cell setNeedsUpdateConstraints];
@@ -403,11 +405,14 @@
 
     // Generate sectionIndexTitles
 	NSMutableArray *titles = [NSMutableArray arrayWithCapacity:self.sectionCount];
-	for(SCTableViewSection *section in sections)
+	for(SCTableViewSection *section in sections) {
         if ([section.headerTitle length]) {
             // Add first letter of the header title to section titles
             [titles addObject:[section.headerTitle substringToIndex:1]];
         }
+
+	}
+
 
     return titles;
 }
@@ -760,7 +765,7 @@
 
 - (SCTableViewSection *)sectionWithHeaderTitle:(NSString *)title
 {
-	for(SCTableViewSection *section in sections)
+	for(SCTableViewSection *section in sections) {
         if (title) {
             if ([section.headerTitle isEqualToString:title]) {
                 return section;
@@ -774,6 +779,9 @@
             }
 
         }
+
+	}
+
 
 
     return nil;
@@ -1034,8 +1042,10 @@
     [self.tableView beginUpdates];
     
     // Update sections to reflect new state
-    for(SCTableViewSection *section in sections)
+    for(SCTableViewSection *section in sections) {
         [section editingModeWillChange];
+    }
+
     
     // Set editing mode
     [self.viewController setEditing:editing animated:animate];
@@ -1044,8 +1054,10 @@
     [self.tableView endUpdates];
     
     // Notify section that editing mode has changed
-    for(SCTableViewSection *section in sections)
+    for(SCTableViewSection *section in sections) {
         [section editingModeDidChange];
+    }
+
 
 
     if (editing) {
@@ -1425,20 +1437,26 @@
 
 - (BOOL)valuesAreValid
 {
-	for(SCTableViewSection *section in sections)
+	for(SCTableViewSection *section in sections) {
         if (!section.valuesAreValid) {
             return FALSE;
         }
+
+	}
+
 
     return TRUE;
 }
 
 - (BOOL)needsCommit
 {
-	for(SCTableViewSection *section in sections)
+	for(SCTableViewSection *section in sections) {
         if (section.needsCommit) {
             return TRUE;
         }
+
+	}
+
 
     return FALSE;
 }
@@ -1467,8 +1485,10 @@
 
     }
 
-    for(SCTableViewSection *section in sections)
+    for(SCTableViewSection *section in sections) {
 		[section reloadBoundValues];
+    }
+
 }
 
 - (BOOL)sc_viewContainsActiveInput:(UIView *)view
@@ -1478,10 +1498,13 @@
         return YES;
     }
 
-    for(UIView *subview in view.subviews)
+    for(UIView *subview in view.subviews) {
         if ([self sc_viewContainsActiveInput:subview]) {
             return YES;
         }
+
+    }
+
 
     return NO;
 }
@@ -2462,8 +2485,10 @@
     }
 
     UIResponder *owner = table.nextResponder;
-    while(owner && ![owner isKindOfClass:[UIViewController class]])
+    while(owner && ![owner isKindOfClass:[UIViewController class]]) {
         owner = owner.nextResponder;
+    }
+
     BOOL nativeAvoidance = [owner isKindOfClass:[UITableViewController class]] &&
         [(UITableViewController *)owner tableView] == table;
     if (!keyboardShown || !self.autoResizeForKeyboard || !table || nativeAvoidance) {
@@ -2928,11 +2953,14 @@
     }
 
     NSUInteger sectionIndex = NSNotFound;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
         if ([[self sectionAtIndex:i].headerTitle isEqualToString:sectionHeader]) {
             sectionIndex = i;
             break;
         }
+
+	}
+
 
     return sectionIndex;
 }
@@ -3121,56 +3149,70 @@
 - (void)setItemsAccessoryType:(UITableViewCellAccessoryType)type
 {
 	itemsAccessoryType = type;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).itemsAccessoryType = type;
+	}
+
 }
 
 // override superclass
 - (void)setAllowAddingItems:(BOOL)allow
 {
 	allowAddingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowAddingItems = allow;
+	}
+
 }
 
 // override superclass
 - (void)setAllowDeletingItems:(BOOL)allow
 {
 	allowDeletingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowDeletingItems = allow;
+	}
+
 }
 
 // override superclass
 - (void)setAllowMovingItems:(BOOL)allow
 {
 	allowMovingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowMovingItems = allow;
+	}
+
 }
 
 // override superclass
 - (void)setAllowEditDetailView:(BOOL)allow
 {
 	allowEditDetailView = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowEditDetailView = allow;
+	}
+
 }
 
 // override superclass
 - (void)setAllowRowSelection:(BOOL)allow
 {
 	allowRowSelection = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowRowSelection = allow;
+	}
+
 }
 
 // override superclass
 - (void)setAutoSelectNewItemCell:(BOOL)allow
 {
 	autoSelectNewItemCell = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++)
+	for(NSUInteger i=0; i<self.sectionCount; i++) {
 		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).autoSelectNewItemCell = allow;
+	}
+
 }
 
 - (void)setAddButtonItem:(UIBarButtonItem *)barButtonItem
@@ -3578,8 +3620,10 @@
         NSArray *searchProperties;
         if ([self.searchPropertyName isEqualToString:@"*"]) {
             searchProperties = [NSMutableArray arrayWithCapacity:objDef.propertyDefinitionCount];
-            for(NSUInteger i=0; i<objDef.propertyDefinitionCount; i++)
+            for(NSUInteger i=0; i<objDef.propertyDefinitionCount; i++) {
                 [(NSMutableArray *)searchProperties addObject:[objDef propertyDefinitionAtIndex:i].name];
+            }
+
         }
 
         else {

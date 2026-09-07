@@ -267,11 +267,14 @@
 - (void)setupDefaultConfiguration
 {
     // Setup keyPropertyName
-    for(SCPropertyDefinition *propertyDef in propertyDefinitions)
+    for(SCPropertyDefinition *propertyDef in propertyDefinitions) {
         if ([self isValidPropertyName:propertyDef.name]) {
             self.keyPropertyName = propertyDef.name;
             break;
         }
+
+    }
+
 
     // Setup titlePropertyName
     self.titlePropertyName = self.keyPropertyName;

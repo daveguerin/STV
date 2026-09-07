@@ -1932,10 +1932,13 @@
         return nil;
     }
 
-    for(UIView *customControl in self.contentView.subviews)
+    for(UIView *customControl in self.contentView.subviews) {
         if (customControl.tag == controlTag) {
             return customControl;
         }
+
+    }
+
 
     return nil;
 }
@@ -2211,8 +2214,10 @@
 {
     // Parse controls for bindings with curly braces and auto generate bindings
     NSInteger maxTag = 0;
-    for(UIView *customControl in self.contentView.subviews)
+    for(UIView *customControl in self.contentView.subviews) {
         maxTag = MAX(customControl.tag, maxTag);
+    }
+
     if (maxTag < kSTVTagStartRange) {
         maxTag = kSTVTagStartRange;
     }
@@ -2319,10 +2324,13 @@
                 if (zeroMarkRange.location==0) // has to be the very first character in suffix
                 {
                     numberOfDecimalPlaces = 0;
-                    for(NSInteger i=1; i<[suffixString length]; i++)
+                    for(NSInteger i=1; i<[suffixString length]; i++) {
                         if ([suffixString characterAtIndex:i] == '0') {
                             numberOfDecimalPlaces++;
                         }
+
+                    }
+
 
                     // Create formatString
                     NSString *floatSpecifier = [NSString stringWithFormat:@"%@%luf", @"%.", (unsigned long)numberOfDecimalPlaces];
@@ -4087,8 +4095,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
         else if ([self.boundValue isKindOfClass:[NSString class]]) {
             NSMutableArray *segmentTitles = [NSMutableArray array];
-            for(NSInteger i=0; i<self.segmentedControl.numberOfSegments; i++)
+            for(NSInteger i=0; i<self.segmentedControl.numberOfSegments; i++) {
                 [segmentTitles addObject:[self.segmentedControl titleForSegmentAtIndex:i]];
+            }
+
             NSInteger selectedIndex = [segmentTitles indexOfObject:self.boundValue];
             if (selectedIndex != NSNotFound) {
                 self.segmentedControl.selectedSegmentIndex = selectedIndex;
@@ -4504,10 +4514,13 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         return;
     }
 
-    for(NSLayoutConstraint *constraint in self.sc_labelConstraints)
+    for(NSLayoutConstraint *constraint in self.sc_labelConstraints) {
         if (constraint.firstItem == self.control && constraint.firstAttribute == NSLayoutAttributeCenterY) {
             constraint.active = NO;
         }
+
+    }
+
 
     UIDatePicker *picker = self.datePicker;
     picker.translatesAutoresizingMaskIntoConstraints = NO;
@@ -4947,8 +4960,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     else if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
         NSMutableSet *boundSet = (NSMutableSet *)self.boundValue;
-        for(NSNumber *index in boundSet)
+        for(NSNumber *index in boundSet) {
             [self.selectedItemsIndexes addObject:index];
+        }
+
     }
 
     else if ([SCUtilities isStringClass:[self.boundValue class]] && self.items) {
@@ -5078,8 +5093,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         }
 
         else {
-            for(NSNumber *index in self.selectedItemsIndexes)
+            for(NSNumber *index in self.selectedItemsIndexes) {
                 [selectionSection.selectedItemsIndexes addObject:index];
+            }
+
         }
 
         selectionSection.boundObjectStore = self.boundObjectStore;
@@ -5132,8 +5149,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     if (selectedIndexes) {
         [self.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in selectedIndexes)
+        for(NSNumber *index in selectedIndexes) {
             [self.selectedItemsIndexes addObject:index];
+        }
+
         
         [self cellValueChanged];
     }
@@ -5236,8 +5255,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
             NSMutableSet *boundValueSet = (NSMutableSet *)self.boundValue;
             [boundValueSet removeAllObjects];
-            for(NSNumber *index in self.selectedItemsIndexes)
+            for(NSNumber *index in self.selectedItemsIndexes) {
                 [boundValueSet addObject:index];
+            }
+
         }
 
     }
@@ -5550,8 +5571,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         
         // Override object's bound value since it might not yet be committed
         [selectionModel.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in self.selectedItemsIndexes)
+        for(NSNumber *index in self.selectedItemsIndexes) {
             [selectionModel.selectedItemsIndexes addObject:index];
+        }
+
         
         selectionModel.boundObject = self.boundObject;
         selectionModel.boundObjectStore = self.boundObjectStore;
@@ -5582,8 +5605,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         
         // Override object's bound value since it might not yet be committed
         [selectionSection.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in self.selectedItemsIndexes)
+        for(NSNumber *index in self.selectedItemsIndexes) {
             [selectionSection.selectedItemsIndexes addObject:index];
+        }
+
         
         selectionSection.boundObjectStore = self.boundObjectStore;
         selectionSection.commitCellChangesLive = FALSE;
@@ -5629,8 +5654,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     [self.selectedItemsIndexes removeAllObjects];
-	for(NSNumber *index in detailIndexes)
+	for(NSNumber *index in detailIndexes) {
 		[self.selectedItemsIndexes addObject:index];
+	}
+
     
     [self cellValueChanged];
     

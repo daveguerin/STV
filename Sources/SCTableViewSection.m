@@ -142,8 +142,10 @@
         }
 
         UIView *contentView = container.contentView;
-        for(UIView *subview in contentView.subviews.copy)
+        for(UIView *subview in contentView.subviews.copy) {
             [subview removeFromSuperview];
+        }
+
         UIView *content = customView;
         if (!content && title.length) {
             UILabel *label = [[UILabel alloc] init];
@@ -170,10 +172,13 @@
 
     }
 
-    for(NSLayoutConstraint *constraint in container.contentView.constraints.copy)
+    for(NSLayoutConstraint *constraint in container.contentView.constraints.copy) {
         if ([constraint.identifier isEqualToString:@"STV.supplementaryHeight"]) {
             constraint.active = NO;
         }
+
+    }
+
 
     if (fixedHeight >= 0) {
         NSLayoutConstraint *height = [container.contentView.heightAnchor constraintEqualToConstant:fixedHeight];
@@ -200,8 +205,10 @@
 {
     _ownerTableViewModel = ownerTableViewModel;
     
-    for(SCTableViewCell *cell in self.cells)
+    for(SCTableViewCell *cell in self.cells) {
         cell.ownerTableViewModel = _ownerTableViewModel;
+    }
+
 }
 
 - (void)setExpandCollapseCell:(SCExpandCollapseCell *)cell
@@ -1685,8 +1692,10 @@
             [self.ownerTableViewModel.tableView beginUpdates];
             
             NSMutableArray *indexPaths = [NSMutableArray array];
-            for(NSInteger i=insertionIndex; i<insertionIndex+mutableFetchedItems.count; i++)
+            for(NSInteger i=insertionIndex; i<insertionIndex+mutableFetchedItems.count; i++) {
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:sectionIndex]];
+            }
+
             if (indexPaths.count) {
                 [self.ownerTableViewModel.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
             }
@@ -4099,8 +4108,10 @@
 				toIndexPath:(NSIndexPath *)toIndexPath
 {
     NSMutableArray *selectedObjects = [NSMutableArray array];
-    for(NSNumber *objectIndex in self.selectedItemsIndexes)
+    for(NSNumber *objectIndex in self.selectedItemsIndexes) {
         [selectedObjects addObject:[self.items objectAtIndex:[objectIndex intValue]]];
+    }
+
     
     [super moveCellAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
     
@@ -4581,8 +4592,10 @@
 				toIndexPath:(NSIndexPath *)toIndexPath
 {
     NSMutableArray *selectedObjects = [NSMutableArray array];
-    for(NSNumber *objectIndex in self.selectedItemsIndexes)
+    for(NSNumber *objectIndex in self.selectedItemsIndexes) {
         [selectedObjects addObject:[self.items objectAtIndex:[objectIndex intValue]]];
+    }
+
     
     [super moveCellAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
     

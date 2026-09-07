@@ -895,10 +895,13 @@
         return;
     }
 
-    for(SCTableViewModel *model in (__bridge id)modelsSet)
+    for(SCTableViewModel *model in (__bridge id)modelsSet) {
         if (model.viewController == self.keyboardIssuer) {
             [model keyboardWillShow:aNotification];
         }
+
+    }
+
 
 }
 
@@ -908,10 +911,13 @@
         return;
     }
 
-    for(SCTableViewModel *model in (__bridge id)modelsSet)
+    for(SCTableViewModel *model in (__bridge id)modelsSet) {
         if (model.viewController == self.keyboardIssuer) {
             [model keyboardWillChangeFrame:aNotification];
         }
+
+    }
+
 
 }
 
@@ -921,10 +927,13 @@
         return;
     }
 
-    for(SCTableViewModel *model in (__bridge id)modelsSet)
+    for(SCTableViewModel *model in (__bridge id)modelsSet) {
         if (model.viewController == self.keyboardIssuer) {
             [model keyboardWillHide:aNotification];
         }
+
+    }
+
 
 }
 
@@ -942,10 +951,13 @@
 
 - (SCTableViewModel *)modelForViewController:(UIViewController *)viewController
 {
-    for(SCTableViewModel *model in (__bridge id)modelsSet)
+    for(SCTableViewModel *model in (__bridge id)modelsSet) {
         if (model.viewController == viewController) {
             return model;
         }
+
+    }
+
 
     return nil;
 }

@@ -170,8 +170,10 @@
     for(NSInteger i=0; i<groups.groupCount; i++)
     {
         SCPropertyGroup *propertyGroup = [groups groupAtIndex:i];
-        for(NSInteger j=0; j<propertyGroup.propertyNameCount; j++)
+        for(NSInteger j=0; j<propertyGroup.propertyNameCount; j++) {
             [propertyNames addObject:[propertyGroup propertyNameAtIndex:j]];
+        }
+
     }
 
     if ( (self=[self initWithClass:_cls propertyNames:propertyNames]) ) {
