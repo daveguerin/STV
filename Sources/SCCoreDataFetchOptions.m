@@ -16,11 +16,11 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _orderAttributeName = nil;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 
@@ -28,16 +28,15 @@
 - (NSArray *)sortDescriptors
 {
     NSArray *descriptors = nil;
-    if(self.orderAttributeName)
-    {
+    if (self.orderAttributeName) {
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:self.orderAttributeName ascending:self.sortAscending];
         descriptors = [NSArray arrayWithObject:descriptor];
     }
-    else 
-    {
+
+    else {
         descriptors = [super sortDescriptors];
     }
-    
+
     return descriptors;
 }
 

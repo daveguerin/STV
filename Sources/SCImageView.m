@@ -19,12 +19,11 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
-    
-    if(self)
-    {
+
+    if (self) {
         self.boundPropertyName = [aDecoder decodeObjectForKey:kBoundPropertyNameKey];
     }
-    
+
     return self;
 }
 

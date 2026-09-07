@@ -26,16 +26,15 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _datePropertyDefinition = [[SCPropertyDefinition alloc] initWithName:@"date"];
         _datePropertyDefinition.dataType = SCDataTypeNSDate;
         _datePropertyDefinition.type = SCPropertyTypeDate;
         
         [propertyDefinitions addObject:_datePropertyDefinition];
-	}
-    
-	return self;
+    }
+
+    return self;
 }
 
 
@@ -51,20 +50,18 @@
 {
     NSString *dateString;
     NSDateFormatter *dateFormatter = nil;
-    if([self.datePropertyDefinition.attributes isKindOfClass:[SCDateAttributes class]])
-    {
+    if ([self.datePropertyDefinition.attributes isKindOfClass:[SCDateAttributes class]]) {
         dateFormatter = [(SCDateAttributes *)self.datePropertyDefinition.attributes dateFormatter];
     }
-    
-    if(dateFormatter)
-    {
+
+    if (dateFormatter) {
         dateString = [dateFormatter stringFromDate:(NSDate *)object];
     }
-    else
-    {
+
+    else {
         dateString = [NSString stringWithFormat:@"%@", object];
     }
-       
+
     return dateString; 
 }
 

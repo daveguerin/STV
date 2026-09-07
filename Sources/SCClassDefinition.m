@@ -50,92 +50,100 @@
 	SCDataType dataType = SCDataTypeUnknown;
 	
     objc_property_t property = class_getProperty(self.cls, [propertyName UTF8String]);
-    if(!property)
+    if (!property) {
         return SCDataTypeUnknown;
+    }
+
     NSArray *attributesArray = [[NSString stringWithUTF8String: property_getAttributes(property)] 
                                 componentsSeparatedByString:@","];
     NSSet *attributesSet = [NSSet setWithArray:attributesArray];
-    
-    if([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSString class])]] ||
-       [attributesSet containsObject:@"T@"])  // @"T@" is for Swift 'String' strings
+
+    if ([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSString class])]] ||
+       [attributesSet containsObject:@"T@"]) { // @"T@" is for Swift 'String' strings
         dataType = SCDataTypeNSString;
-    else
-        if([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"", NSStringFromClass([NSNumber class])]])
-            dataType = SCDataTypeNSNumber;
-        else
-            if([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSDate class])]])
-                dataType = SCDataTypeNSDate;
-            else
-                if([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSMutableSet class])]])
-                    dataType = SCDataTypeNSMutableSet;
-                else
-                    if([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSMutableArray class])]])
-                        dataType = SCDataTypeNSMutableArray;
-                    else
-                        if([attributesSet containsObject:@"Tc"] || [attributesSet containsObject:@"TB"])
-                            dataType = SCDataTypeBOOL;
-                        else
-                            if([attributesSet containsObject:@"Ti"] || [attributesSet containsObject:@"Tq"])
-                                dataType = SCDataTypeInt;
-                            else
-                                if([attributesSet containsObject:@"Tf"])
-                                    dataType = SCDataTypeFloat;
-                                else
-                                    if([attributesSet containsObject:@"Td"])
-                                        dataType = SCDataTypeDouble;
-    
-    
-	return dataType;
+    }
+
+    else if ([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"", NSStringFromClass([NSNumber class])]]) {
+        dataType = SCDataTypeNSNumber;
+    }
+
+    else if ([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSDate class])]]) {
+        dataType = SCDataTypeNSDate;
+    }
+
+    else if ([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSMutableSet class])]]) {
+        dataType = SCDataTypeNSMutableSet;
+    }
+
+    else if ([attributesSet containsObject:[NSString stringWithFormat:@"T@\"%@\"",  NSStringFromClass([NSMutableArray class])]]) {
+        dataType = SCDataTypeNSMutableArray;
+    }
+
+    else if ([attributesSet containsObject:@"Tc"] || [attributesSet containsObject:@"TB"]) {
+        dataType = SCDataTypeBOOL;
+    }
+
+    else if ([attributesSet containsObject:@"Ti"] || [attributesSet containsObject:@"Tq"]) {
+        dataType = SCDataTypeInt;
+    }
+
+    else if ([attributesSet containsObject:@"Tf"]) {
+        dataType = SCDataTypeFloat;
+    }
+
+    else if ([attributesSet containsObject:@"Td"]) {
+        dataType = SCDataTypeDouble;
+    }
+
+
+    return dataType;
 }
 
 
 - (instancetype) init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         cls = nil;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithClass:(Class)_cls autoGeneratePropertyDefinitions:(BOOL)autoGenerate
 {
-	if( (self=[self init]) )
-	{
-		cls = _cls;
-		
-		if(autoGenerate)
-		{
-			unsigned int count = 0; 
-			objc_property_t *properties = class_copyPropertyList(self.cls, &count);
-			for (unsigned int i = 0; i < count; i++ )
+    if ( (self=[self init]) ) {
+        cls = _cls;
+
+        if (autoGenerate) {
+            unsigned int count = 0;
+            objc_property_t *properties = class_copyPropertyList(self.cls, &count);
+            for (unsigned int i = 0; i < count; i++ )
 			{	
-				NSString *propertyName = [NSString stringWithUTF8String: property_getName(properties[i])];
-				[self addPropertyDefinitionWithName:propertyName 
+                NSString *propertyName = [NSString stringWithUTF8String: property_getName(properties[i])];
+                [self addPropertyDefinitionWithName:propertyName
 											  title:[SCUtilities getUserFriendlyTitleFromName:propertyName] 
 											   type:SCPropertyTypeAutoDetect];
-			}
-			free(properties);
-		}
-		
-		[self setupDefaultConfiguration];
-	}
-	
-	return self;
+            }
+            free(properties);
+        }
+
+        [self setupDefaultConfiguration];
+    }
+
+    return self;
 }
 
 - (instancetype)initWithClass:(Class)_cls propertyNamesString:(NSString *)propertyNamesString
 {
-    if( (self=[self initWithClass:_cls autoGeneratePropertyDefinitions:NO]) )
-	{
-		[self generatePropertiesFromPropertyNamesString:propertyNamesString];
+    if ( (self=[self initWithClass:_cls autoGeneratePropertyDefinitions:NO]) ) {
+        [self generatePropertiesFromPropertyNamesString:propertyNamesString];
 		
-		[self setupDefaultConfiguration];
+        [self setupDefaultConfiguration];
 		
-		self.descriptionPropertyName = nil;
-	}
-	
-	return self;
+        self.descriptionPropertyName = nil;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames
@@ -145,16 +153,15 @@
 
 - (instancetype)initWithClass:(Class)_cls propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles
 {
-	if( (self=[self initWithClass:_cls autoGeneratePropertyDefinitions:NO]) )
-	{
-		[self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:propertyTitles];
+    if ( (self=[self initWithClass:_cls autoGeneratePropertyDefinitions:NO]) ) {
+        [self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:propertyTitles];
 		
-		[self setupDefaultConfiguration];
+        [self setupDefaultConfiguration];
 		
-		self.descriptionPropertyName = nil;
-	}
-	
-	return self;
+        self.descriptionPropertyName = nil;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithClass:(Class)_cls propertyGroups:(SCPropertyGroupArray *)groups
@@ -166,15 +173,14 @@
         for(NSInteger j=0; j<propertyGroup.propertyNameCount; j++)
             [propertyNames addObject:[propertyGroup propertyNameAtIndex:j]];
     }
-    
-    if( (self=[self initWithClass:_cls propertyNames:propertyNames]) )
-    {
+
+    if ( (self=[self initWithClass:_cls propertyNames:propertyNames]) ) {
         for(NSInteger i=0; i<groups.groupCount; i++)
         {
             [self.propertyGroups addGroup:[groups groupAtIndex:i]];
         }
     }
-    
+
     return self;
 }
 
@@ -186,12 +192,11 @@
     Class _class = [SCUtilities swiftCompatibleNSClassFromString:className];
     
     self = [self initWithClass:_class autoGeneratePropertyDefinitions:NO];
-    
-    if(self)
-    {
+
+    if (self) {
         [self setAllPropertiesFromibDictionary:ibDictionary];
     }
-    
+
     return self;
 }
 
@@ -203,10 +208,14 @@
     {
         NSString *propertyName = [propertyNamesArray objectAtIndex:i];
         NSString *propertyTitle;
-        if(i < propertyTitlesArray.count)
+        if (i < propertyTitlesArray.count) {
             propertyTitle = [propertyTitlesArray objectAtIndex:i];
-        else
+        }
+
+        else {
             propertyTitle = [SCUtilities getUserFriendlyTitleFromName:propertyName];
+        }
+
         [self addPropertyDefinitionWithName:propertyName
                                       title:propertyTitle
                                        type:SCPropertyTypeAutoDetect];
@@ -223,9 +232,8 @@
 - (BOOL)insertPropertyDefinition:(SCPropertyDefinition *)propertyDefinition
 						 atIndex:(NSInteger)index
 {
-	if(![propertyDefinition isKindOfClass:[SCCustomPropertyDefinition class]])
-	{
-		// determine property's data type
+    if (![propertyDefinition isKindOfClass:[SCCustomPropertyDefinition class]]) {
+        // determine property's data type
         // Get class and propertyName
         Class _class = self.cls;
         NSString *propertyName = nil;
@@ -234,12 +242,12 @@
         {
             propertyName = [keyPathArray objectAtIndex:i];
             objc_property_t property = class_getProperty(_class, [propertyName UTF8String]);
-            if(!property)
-            {
+            if (!property) {
                 SCDebugLog(@"Warning: Property '%@' does not exist in class '%@'.", propertyName, NSStringFromClass(_class));
                 return FALSE;
             }
-            if(i<keyPathArray.count-1)  // if not last property in keyPath
+
+            if (i<keyPathArray.count-1)  // if not last property in keyPath
             {
                 NSArray *attributesArray = [[NSString stringWithUTF8String:property_getAttributes(property)] 
                                             componentsSeparatedByString:@","];
@@ -247,23 +255,24 @@
                 NSString *className = [typeDescription substringWithRange:NSMakeRange(3, typeDescription.length-4)];
                 _class = NSClassFromString(className);
             }
+
         }
         
         // Set property's dataType & dataReadOnly properties
         objc_property_t property = class_getProperty(_class, [propertyName UTF8String]);
-        if(!property)
-        {
+        if (!property) {
             SCDebugLog(@"Warning: Property '%@' does not exist in class '%@'.", propertyName, NSStringFromClass(_class));
             return FALSE;
         }
+
         NSArray *attributesArray = [[NSString stringWithUTF8String: property_getAttributes(property)] 
                                     componentsSeparatedByString:@","];
         NSSet *attributesSet = [NSSet setWithArray:attributesArray];
         
         propertyDefinition.dataReadOnly = [attributesSet containsObject:@"R"];
         propertyDefinition.dataType = [self propertyDataTypeForPropertyWithName:propertyDefinition.name];
-	}
-    
+    }
+
     return [super insertPropertyDefinition:propertyDefinition atIndex:index];
 }
 
@@ -280,12 +289,12 @@
     {
         pname = [keyPathArray objectAtIndex:i];
         objc_property_t property = class_getProperty(_class, [pname UTF8String]);
-        if(!property)
-        {
+        if (!property) {
             valid = FALSE;
             break;
         }
-        if(i<keyPathArray.count-1)  // if not last property in keyPath
+
+        if (i<keyPathArray.count-1)  // if not last property in keyPath
         {
             NSArray *attributesArray = [[NSString stringWithUTF8String:property_getAttributes(property)] 
                                         componentsSeparatedByString:@","];
@@ -293,6 +302,7 @@
             NSString *className = [typeDescription substringWithRange:NSMakeRange(3, typeDescription.length-4)];
             _class = NSClassFromString(className);
         }
+
     }
     
     return valid;

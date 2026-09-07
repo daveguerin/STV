@@ -45,11 +45,11 @@
 - (void)willDisplay
 {
     [super willDisplay];
-    
-    if(self.autoFetchItems)
-    {
+
+    if (self.autoFetchItems) {
         [self performSelector:@selector(fetchItems) withObject:nil afterDelay:0.1f];
     }
+
 }
 
 // overrides superclass
@@ -64,13 +64,13 @@
 
 - (void)fetchItems
 {
-    if([self.ownerSection isKindOfClass:[SCArrayOfItemsSection class]])
-    {
+    if ([self.ownerSection isKindOfClass:[SCArrayOfItemsSection class]]) {
         SCArrayOfItemsSection *itemsSection = (SCArrayOfItemsSection *)self.ownerSection;
         
         [self startActivityIndicator];
         [itemsSection fetchItems:self];
     }
+
 }
 
 - (void)didFetchItems

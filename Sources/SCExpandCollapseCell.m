@@ -28,8 +28,7 @@
         configurationWithPointSize:12 weight:UIImageSymbolWeightBold];
     self = [super initWithImage:[UIImage systemImageNamed:@"chevron.down"
                                       withConfiguration:configuration]];
-    if(self)
-    {
+    if (self) {
         self.tintColor = UIColor.secondaryLabelColor;
         self.contentMode = UIViewContentModeCenter;
         /*
@@ -39,6 +38,7 @@
         detach it from UITableView's accessory layout.
         */
     }
+
     return self;
 }
 
@@ -84,12 +84,12 @@
 
 - (instancetype)initWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded
 {
-    if( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) )
-    {
+    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
         self.expandText = expandText;
         self.collapseText = collapseText;
         self.ownerSectionExpanded = expanded;
     }
+
     return self;
 }
 
@@ -97,16 +97,23 @@
 - (void)setOwnerSectionExpanded:(BOOL)expanded
 {
     _ownerSectionExpanded = expanded;
-    
-    if(expanded)
+
+    if (expanded) {
         self.textLabel.text = self.collapseText;
-    else 
+    }
+
+    else {
         self.textLabel.text = self.expandText;
-    if([self.accessoryView isKindOfClass:[SCExpandCollapseAccessoryView class]])
+    }
+
+    if ([self.accessoryView isKindOfClass:[SCExpandCollapseAccessoryView class]]) {
         [(SCExpandCollapseAccessoryView *)self.accessoryView updateDirection];
-    else
+    }
+
+    else {
         [self.accessoryView setNeedsDisplay];
-    
+    }
+
     [self.ownerSection setExpanded:expanded];
 }
 

@@ -29,46 +29,44 @@
 - (void)setTableViewModel:(SCTableViewModel *)model
 {
     [super setTableViewModel:model];
-    
-    if([model isKindOfClass:[SCArrayOfItemsModel class]])
-    {
+
+    if ([model isKindOfClass:[SCArrayOfItemsModel class]]) {
         SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)model;
         itemsModel.searchBar = self.searchBar;
         itemsModel.enableSearchController = TRUE;
     }
+
 }
 
 - (void)setSearchBar:(UISearchBar *)searchBar
 {
     _searchBar = searchBar;
-    
-    if([self.tableViewModel isKindOfClass:[SCArrayOfItemsModel class]])
-    {
+
+    if ([self.tableViewModel isKindOfClass:[SCArrayOfItemsModel class]]) {
         SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)self.tableViewModel;
         itemsModel.searchBar = self.searchBar;
     }
+
 }
 
 - (UISearchBar *)searchBar
 {
-    if(!_searchBar)
-    {
+    if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] init];
         _searchBarNeedsLayout = YES;
         [self.view addSubview:_searchBar];
     }
-    
+
     return _searchBar;
 }
 
 - (UITableView *)tableView
 {
-    if(!_tableView)
-    {
+    if (!_tableView) {
         _tableViewNeedsLayout = YES;
         [super setTableView:[[UITableView alloc] init]];
     }
-    
+
     return _tableView;
 }
 
@@ -98,10 +96,11 @@
     bar supplies its intrinsic height; no frame seed or appearance-time size
     correction is needed. Interface Builder retains supplied-view layout.
     */
-    if(_searchBarNeedsLayout)
-    {
-        if(!searchBar.superview)
+    if (_searchBarNeedsLayout) {
+        if (!searchBar.superview) {
             [self.view addSubview:searchBar];
+        }
+
         searchBar.translatesAutoresizingMaskIntoConstraints = NO;
         [NSLayoutConstraint activateConstraints:@[
             [searchBar.leadingAnchor
@@ -113,10 +112,11 @@
         _searchBarNeedsLayout = NO;
     }
 
-    if(_tableViewNeedsLayout)
-    {
-        if(!tableView.superview)
+    if (_tableViewNeedsLayout) {
+        if (!tableView.superview) {
             [self.view addSubview:tableView];
+        }
+
         tableView.translatesAutoresizingMaskIntoConstraints = NO;
         [NSLayoutConstraint activateConstraints:@[
             [tableView.leadingAnchor
@@ -130,6 +130,7 @@
         ]];
         _tableViewNeedsLayout = NO;
     }
+
 }
 
 @end

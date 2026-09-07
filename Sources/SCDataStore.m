@@ -27,8 +27,7 @@ NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification = @"SCDa
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _storeMode = SCStoreModeSynchronous;
         
         _supportsNilValues = YES;
@@ -48,16 +47,17 @@ NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification = @"SCDa
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commitData) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commitData) name:UIApplicationWillTerminateNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithDefaultDataDefinition:(SCDataDefinition *)definition
 {
-    if( (self = [self init]) )
-    {
+    if ( (self = [self init]) ) {
         self.defaultDataDefinition = definition;
     }
+
     return self;
 }
 
@@ -128,119 +128,133 @@ NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification = @"SCDa
 
 - (NSObject *)valueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 {
-    if([SCUtilities isBasicDataTypeClass:[object class]])
+    if ([SCUtilities isBasicDataTypeClass:[object class]]) {
         return object;
-    
-    if(!propertyName)
-		return nil;
-	
-	NSArray *propertyNames = [propertyName componentsSeparatedByString:@";"];
+    }
+
+    if (!propertyName) {
+        return nil;
+    }
+
+    NSArray *propertyNames = [propertyName componentsSeparatedByString:@";"];
 	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:propertyNames.count];
 	for(NSString *pName in propertyNames)
 	{
 		NSObject *value = nil;
 		@try 
 		{
-            if([object isKindOfClass:[NSUbiquitousKeyValueStore class]])
-            {
+            if ([object isKindOfClass:[NSUbiquitousKeyValueStore class]]) {
                 value = [(NSUbiquitousKeyValueStore *)object objectForKey:pName];
             }
-            else
-            {
+
+            else {
                 value = [object valueForSensibleKeyPath:pName];
             }
-		}
+
+        }
 		@catch (NSException * e) 
 		{
 			SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, NSStringFromClass([object class]));
 		}
-		if(!value)
-			value = [NSNull null];
-		[valuesArray addObject:value];
+        if (!value) {
+            value = [NSNull null];
+        }
+
+        [valuesArray addObject:value];
 	}
 	
     NSObject *value = nil;
-	if(propertyNames.count > 1)
-    {
+    if (propertyNames.count > 1) {
         value = valuesArray;
     }
-    else 
-    {
+
+    else {
         value = [valuesArray objectAtIndex:0];
-        if([value isKindOfClass:[NSNull class]])
+        if ([value isKindOfClass:[NSNull class]]) {
             value = nil;
+        }
+
     }
-    
-    if(!value && self.defaultsDictionary)
+
+    if (!value && self.defaultsDictionary) {
         value = [self.defaultsDictionary valueForKey:propertyName];
-    
-	return value;
+    }
+
+    return value;
 }
 
 - (NSString *)stringValueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 separateValuesUsingDelimiter:(NSString *)delimiter
 {
-    if([SCUtilities isBasicDataTypeClass:[object class]])
+    if ([SCUtilities isBasicDataTypeClass:[object class]]) {
         return [NSString stringWithFormat:@"%@", object];
-    
+    }
+
     NSObject *value = [self valueForPropertyName:propertyName inObject:object];
-	
-	if(!value)
-		return nil;
-	
-	NSMutableString *stringValue = [NSMutableString string];
-	if([value isKindOfClass:[NSArray class]])
-	{
-		NSArray *stringsArray = (NSArray *)value;
-		for(NSUInteger i=0; i<stringsArray.count; i++)
+
+    if (!value) {
+        return nil;
+    }
+
+    NSMutableString *stringValue = [NSMutableString string];
+    if ([value isKindOfClass:[NSArray class]]) {
+        NSArray *stringsArray = (NSArray *)value;
+        for(NSUInteger i=0; i<stringsArray.count; i++)
 		{
-			NSObject *str = [stringsArray objectAtIndex:i];
-			if(![str isKindOfClass:[NSNull class]])
-			{
-				if(i!=0 && delimiter)
-					[stringValue appendString:delimiter];
-				[stringValue appendString:[NSString stringWithFormat:@"%@", str]];
-			}
-		}
-	}
-	else
-	{
-		if(value)
-			[stringValue appendFormat:@"%@", value];
-	}
-	
-	return stringValue;
+            NSObject *str = [stringsArray objectAtIndex:i];
+            if (![str isKindOfClass:[NSNull class]]) {
+                if (i!=0 && delimiter) {
+                    [stringValue appendString:delimiter];
+                }
+
+                [stringValue appendString:[NSString stringWithFormat:@"%@", str]];
+            }
+
+        }
+    }
+
+    else {
+        if (value) {
+            [stringValue appendFormat:@"%@", value];
+        }
+
+    }
+
+    return stringValue;
 }
 
 - (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 {
-    if([SCUtilities isBasicDataTypeClass:[object class]])
+    if ([SCUtilities isBasicDataTypeClass:[object class]]) {
         return;
-    
-    if(![SCUtilities propertyName:propertyName existsInObject:object])
+    }
+
+    if (![SCUtilities propertyName:propertyName existsInObject:object]) {
         return;
-    
-    if([object isKindOfClass:[NSUbiquitousKeyValueStore class]])
-    {
+    }
+
+    if ([object isKindOfClass:[NSUbiquitousKeyValueStore class]]) {
         [(NSUbiquitousKeyValueStore *)object setObject:value forKey:propertyName];
     }
-    else
-    {
-        if(value == nil)
-        {
-            if(!self.supportsNilValues)
+
+    else {
+        if (value == nil) {
+            if (!self.supportsNilValues) {
                 value = [NSNull null];
-            
+            }
+
             // check if the property's data type is scalar since scalars don't support nil
             SCDataDefinition *dataDef = [self definitionForObject:object];
             SCPropertyDefinition *propertyDef = [dataDef propertyDefinitionWithName:propertyName];
-            if(propertyDef.dataTypeScalar)
-            {
+            if (propertyDef.dataTypeScalar) {
                 value = [NSNumber numberWithUnsignedShort:0];
             }
+
         }
+
         [object setValue:value forKeyPath:propertyName];
     }
+
 }
 
 - (BOOL)validateInsertForObject:(NSObject *)object
@@ -269,8 +283,10 @@ separateValuesUsingDelimiter:(NSString *)delimiter
 
 - (void)addDataDefinition:(SCDataDefinition *)definition
 {
-    if(definition && definition.dataStructureName && ![_dataDefinitions valueForKey:definition.dataStructureName])
+    if (definition && definition.dataStructureName && ![_dataDefinitions valueForKey:definition.dataStructureName]) {
         [_dataDefinitions setValue:definition forKey:definition.dataStructureName];
+    }
+
 }
 
 - (SCDataDefinition *)definitionForObject:(NSObject *)object
@@ -288,9 +304,10 @@ separateValuesUsingDelimiter:(NSString *)delimiter
 
 - (void)forceDiscardAllUnaddedObjects
 {
-    if(!_uninsertedObjects.count)
+    if (!_uninsertedObjects.count) {
         return;
-    
+    }
+
     [[NSNotificationCenter defaultCenter] postNotificationName:SCDataStoreWillDiscardAllUninsertedObjectsNotification object:self];
     
     for(NSInteger i=_uninsertedObjects.count-1; i>=0; i--)
@@ -307,55 +324,69 @@ separateValuesUsingDelimiter:(NSString *)delimiter
 - (void)asynchronousInsertObject:(NSObject *)object success:(SCDataStoreInsertSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block
 {
     // Must be implemented by subclasses that support SCDataStoreModeAsynchronous
-    if(failure_block)
+    if (failure_block) {
         failure_block(nil);
+    }
+
 }
 
 - (void)asynchronousUpdateObject:(NSObject *)object success:(SCDataStoreUpdateSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block
 {
     // Must be implemented by subclasses that support SCDataStoreModeAsynchronous
-    if(failure_block)
+    if (failure_block) {
         failure_block(nil);
+    }
+
 }
 
 - (void)asynchronousDeleteObject:(NSObject *)object success:(SCDataStoreDeleteSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block
 {
     // Must be implemented by subclasses that support SCDataStoreModeAsynchronous
-    if(failure_block)
+    if (failure_block) {
         failure_block(nil);
+    }
+
 }
 
 - (void)asynchronousFetchObjectsWithOptions:(SCDataFetchOptions *)options success:(SCDataStoreFetchSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block noConnection:(SCNoConnection_Block)noConnection_block
 {
     // Must be implemented by subclasses that support SCDataStoreModeAsynchronous
-    if(failure_block)
+    if (failure_block) {
         failure_block(nil);
+    }
+
 }
 
 - (void)fetchObjectsSuccessful:(NSArray *)objects successBlock:(SCDataStoreFetchSuccess_Block)success_block failure:(SCDataStoreFailure_Block)failure_block
 {
-    if(self.postAsynchronousFetchObjectsAction)
-    {
+    if (self.postAsynchronousFetchObjectsAction) {
         self.postAsynchronousFetchObjectsAction(objects, ^(NSArray *updatedObjects, NSError *error)
                                           {
-                                              if(!error)
-                                              {
-                                                  if(success_block)
-                                                      success_block(updatedObjects);
-                                              }
-                                              else
-                                              {
-                                                  if(failure_block)
-                                                      failure_block(error);
-                                              }
-                                          }
+            if (!error) {
+                if (success_block) {
+                    success_block(updatedObjects);
+                }
+
+            }
+
+            else {
+                if (failure_block) {
+                    failure_block(error);
+                }
+
+            }
+
+        }
                                           );
     }
-    else
-    {
-        if(success_block)
+
+    else {
+        if (success_block) {
             success_block(objects);
+        }
+
     }
+
 }
 
 - (void)commitData

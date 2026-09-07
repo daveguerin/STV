@@ -75,47 +75,49 @@
 
 - (instancetype)init
 {
-    if( (self = [super init]) ) 
-	{
-		[self performInitialization];
+    if ( (self = [super init]) ) {
+        [self performInitialization];
     }
+
     return self;
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
-    if( (self = [super initWithStyle:style]) )
-    {
+    if ( (self = [super initWithStyle:style]) ) {
         [self performInitialization];
     }
+
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if( (self = [super initWithCoder:aDecoder]) ) 
-	{
-		[self performInitialization];
+    if ( (self = [super initWithCoder:aDecoder]) ) {
+        [self performInitialization];
     }
+
     return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-	if( (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) )
-	{
-		[self performInitialization];
-	}
-	return self;
+    if ( (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) ) {
+        [self performInitialization];
+    }
+
+    return self;
 }
 
 - (void)dealloc
 {
     // Unregister from dynamic type font changes
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIContentSizeCategoryDidChangeNotification object:nil];
-    
-    if([SCModelCenter sharedModelCenter].keyboardIssuer == self)
+
+    if ([SCModelCenter sharedModelCenter].keyboardIssuer == self) {
         [SCModelCenter sharedModelCenter].keyboardIssuer = nil;
+    }
+
 }
 
 - (void)performInitialization
@@ -151,8 +153,10 @@
     for(NSDictionary *defDictionary in definitions)
     {
         SCDataDefinition *convertedDefinition = [SCPluginUtilities objectForPluginDictionary:defDictionary];
-        if(convertedDefinition)
+        if (convertedDefinition) {
             [convertedDefinitions setValue:convertedDefinition forKey:convertedDefinition.ibUniqueID];
+        }
+
     }
     
     for(NSString *key in convertedDefinitions)
@@ -169,14 +173,13 @@
     // return both local and any remote data definitions
     
     NSMutableDictionary *dataDefinitions = [NSMutableDictionary dictionaryWithDictionary:_ibDataDefinitions];
-    
-    if(self.tableViewModel.masterModel && [self.tableViewModel.masterModel.viewController isKindOfClass:[SCTableViewController class]])
-    {
+
+    if (self.tableViewModel.masterModel && [self.tableViewModel.masterModel.viewController isKindOfClass:[SCTableViewController class]]) {
         SCTableViewController *masterViewController = (SCTableViewController *)self.tableViewModel.masterModel.viewController;
         
         [dataDefinitions addEntriesFromDictionary:masterViewController.ibDataDefinitions];
     }
-    
+
     return dataDefinitions;
 }
 
@@ -190,41 +193,40 @@
 - (void)setTableViewModel:(SCTableViewModel *)model
 {
     // Preserve the detailViewController when applicable
-    if(_tableViewModel.detailViewController && !model.detailViewController)
+    if (_tableViewModel.detailViewController && !model.detailViewController) {
         model.detailViewController = _tableViewModel.detailViewController;
-    
+    }
+
     // Disconnect old model from table view
     _tableViewModel.tableView = nil;
     self.tableView.dataSource = nil;
     self.tableView.delegate = nil;
-    
-    if(model && [self isViewLoaded])
-    {
+
+    if (model && [self isViewLoaded]) {
         model.tableView = self.tableView;
         model.editButtonItem = self.editButton;
     }
-    
+
     // Check if new model is an SCArrayOfItemsModel and configure it from any existing SCArrayOfItemsSection
-    if([model isKindOfClass:[SCArrayOfItemsModel class]] && _tableViewModel.sectionCount)
-    {
+    if ([model isKindOfClass:[SCArrayOfItemsModel class]] && _tableViewModel.sectionCount) {
         SCArrayOfItemsSection *itemsSection = nil;
         for(NSUInteger i=0; i<_tableViewModel.sectionCount; i++)
         {
             SCTableViewSection *section = [_tableViewModel sectionAtIndex:i];
-            if([section isKindOfClass:[SCArrayOfItemsSection class]])
-            {
+            if ([section isKindOfClass:[SCArrayOfItemsSection class]]) {
                 itemsSection = (SCArrayOfItemsSection *)section;
                 break;
             }
+
         }
-        
-        if(itemsSection)
-        {
+
+        if (itemsSection) {
             SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)model;
             [itemsModel configureUsingSection:itemsSection];
         }
+
     }
-    
+
     _tableViewModel = model;
 }
 
@@ -242,58 +244,58 @@
 - (void)setAutoDisableNavigationButtonsUntilViewAppears:(BOOL)autoDisableNavigationButtonsUntilViewAppears
 {
     _autoDisableNavigationButtonsUntilViewAppears = autoDisableNavigationButtonsUntilViewAppears;
-    
-    
-    if([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]])
-    {
+
+
+    if ([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]]) {
         [(SCTableViewController *)self.tableViewModel.detailViewController setAutoDisableNavigationButtonsUntilViewAppears:autoDisableNavigationButtonsUntilViewAppears];
     }
+
 }
 
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
     [super didMoveToParentViewController:parent];
-    
-    if([parent isKindOfClass:[SCViewController class]])
-    {
+
+    if ([parent isKindOfClass:[SCViewController class]]) {
         SCViewController *parentViewController = (SCViewController *)parent;
-        if(!parentViewController.containedViewController)
-        {
+        if (!parentViewController.containedViewController) {
             // inherit master model configuration
-            if(parentViewController.tableViewModel.masterModel)
-            {
+            if (parentViewController.tableViewModel.masterModel) {
                 self.tableViewModel.masterModel = parentViewController.tableViewModel.masterModel;
                 self.tableViewModel.masterBoundObject = parentViewController.tableViewModel.masterBoundObject;
                 self.tableViewModel.masterBoundObjectStore = parentViewController.tableViewModel.masterBoundObjectStore;
             }
-            
+
             [self addStaticContentToModel];
 
-            if(!self.tableViewModel.sectionCount)
+            if (!self.tableViewModel.sectionCount) {
                 for(NSInteger i=0;
                     i<parentViewController.tableViewModel.sectionCount; i++)
                 {
                     [self.tableViewModel addSection:
                         [parentViewController.tableViewModel sectionAtIndex:i]];
                 }
-            
-            
+            }
+
+
             parentViewController.containedViewController = self;
         }
+
     }
-    
+
 }
 
 - (void)removeFromParentViewController
 {
-    if([self.parentViewController isKindOfClass:[SCViewController class]])
-    {
+    if ([self.parentViewController isKindOfClass:[SCViewController class]]) {
         SCViewController *parentViewController = (SCViewController *)self.parentViewController;
-        if(parentViewController.containedViewController == self)
+        if (parentViewController.containedViewController == self) {
             parentViewController.containedViewController = nil;
+        }
+
     }
-    
+
     [super removeFromParentViewController];
 }
 
@@ -314,25 +316,28 @@
     Embedded tables wait for explicit parent model configuration. Standalone
     tables load their own content without inferring a container's columns.
     */
-    if(!self.ibEmbedded)
+    if (!self.ibEmbedded) {
         [self addStaticContentToModel];
-    
-    
-    
+    }
+
+
+
     // Call viewDidLoad delegate method
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(tableViewControllerViewDidLoad:)])
-    {
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+       && [self.delegate respondsToSelector:@selector(tableViewControllerViewDidLoad:)]) {
         [self.delegate tableViewControllerViewDidLoad:self];
     }
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    if(self.actions.viewDidLoad)
+
+    if (self.actions.viewDidLoad) {
         self.actions.viewDidLoad(self);
+    }
+
 }
 
 - (void)invalidateStaticContent
@@ -342,15 +347,15 @@
 
 - (void)addStaticContentToModel
 {
-    if(self.staticContentAddedToModel)
+    if (self.staticContentAddedToModel) {
         return;
-    
+    }
+
     // Check if there is any static table view content and add it to the model
     NSUInteger sectionNumber = [self numberOfSectionsInTableView:self.tableView];
     
     NSMutableDictionary *STVSections = nil;
-    if(sectionNumber && [self.ibSTVSectionsString length])
-    {
+    if (sectionNumber && [self.ibSTVSectionsString length]) {
         // prepare the STVSections dictionary
         STVSections = [NSMutableDictionary dictionary];
         
@@ -363,17 +368,21 @@
             for(NSString *pairString in valuePairs)
             {
                 NSArray *pair = [pairString componentsSeparatedByString:@"➡︎"];
-                if(pair.count!=2)
+                if (pair.count!=2) {
                     continue;
+                }
+
                 [sectionDictionary setValue:[pair objectAtIndex:1] forKey:[pair objectAtIndex:0]];
             }
             
             NSString *index = [sectionDictionary valueForKey:kSectionIndexKey];
-            if(index)
+            if (index) {
                 [STVSections setValue:sectionDictionary forKey:index];
+            }
+
         }
     }
-    
+
     BOOL addButtonConnected = FALSE;
     
     for(NSUInteger sectionIndex=0; sectionIndex<sectionNumber; sectionIndex++)
@@ -382,59 +391,60 @@
         NSDictionary *sectionDictionary = [STVSections valueForKey:stringIndex];
         
         SCTableViewSection *section = nil;
-        
-        if(sectionDictionary)  // current section is an STV section
+
+        if (sectionDictionary)  // current section is an STV section
         {
             NSString *sectionType = [sectionDictionary valueForKey:kSectionTypeKey];
             
             NSString *dataDefinitionID = [sectionDictionary valueForKey:kSectionDataDefIdKey];
             
             SCDataDefinition *dataDefinition = [self.ibDataDefinitions valueForKey:dataDefinitionID];
-            
-            if(!dataDefinition && [sectionType isEqualToString:@"SCArrayOfStringsSection"])
+
+            if (!dataDefinition && [sectionType isEqualToString:@"SCArrayOfStringsSection"]) {
                 dataDefinition = [SCStringDefinition definition];
-            
-            if(!dataDefinition)
+            }
+
+            if (!dataDefinition) {
                 SCDebugLog(@"Warning: %@ - No valid data definition selected for %@ at index %lu", [self class], sectionType, (unsigned long)sectionIndex);
-            
+            }
+
             SCDataStore *dataStore = [dataDefinition generateCompatibleDataStore];
-            
-            if([sectionType isEqualToString:@"SCObjectSection"])
-            {
+
+            if ([sectionType isEqualToString:@"SCObjectSection"]) {
                 NSString *groupIndexString = [sectionDictionary valueForKey:kSectionDataDefGroupIndexKey];
                 NSInteger groupIndex = [groupIndexString integerValue];
-                if(groupIndex < 0)
+                if (groupIndex < 0) {
                     groupIndex = 0;
-                
+                }
+
                 SCPropertyGroup *propertyGroup = nil;
-                if(groupIndex < dataDefinition.propertyGroups.groupCount)
+                if (groupIndex < dataDefinition.propertyGroups.groupCount) {
                     propertyGroup = [dataDefinition.propertyGroups groupAtIndex:groupIndex];
+                }
+
                 SCObjectSection *objectSection = [SCObjectSection sectionWithHeaderTitle:nil boundObject:nil boundObjectStore:nil propertyGroup:propertyGroup];
                 
                 NSObject *object = nil;
                 SEL defaultiCloudKeyValueObjectSelector = NSSelectorFromString(@"defaultiCloudKeyValueObject");
-                if(self.tableViewModel.masterBoundObject)
-                {
+                if (self.tableViewModel.masterBoundObject) {
                     object = self.tableViewModel.masterBoundObject;
                 }
-                else
-                    if([dataStore isKindOfClass:[SCUserDefaultsStore class]])
-                    {
-                        object = [(SCUserDefaultsStore *)dataStore standardUserDefaultsObject];
-                    }
-                    else
-                        if([dataStore respondsToSelector:defaultiCloudKeyValueObjectSelector])
-                        {
+
+                else if ([dataStore isKindOfClass:[SCUserDefaultsStore class]]) {
+                    object = [(SCUserDefaultsStore *)dataStore standardUserDefaultsObject];
+                }
+
+                else if ([dataStore respondsToSelector:defaultiCloudKeyValueObjectSelector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                            object = [dataStore performSelector:defaultiCloudKeyValueObjectSelector];
+                    object = [dataStore performSelector:defaultiCloudKeyValueObjectSelector];
 #pragma clang diagnostic pop
-                        }
-                        else
-                        {
-                            object = [self objectForSection:objectSection atIndex:sectionIndex];
-                        }
-                
+                }
+
+                else {
+                    object = [self objectForSection:objectSection atIndex:sectionIndex];
+                }
+
                 NSInteger numberOfRows = [self tableView:self.tableView numberOfRowsInSection:sectionIndex];
                 BOOL autoGenerateCells = (numberOfRows == 0);
                 [objectSection setBoundObject:object withStore:dataStore autoGenerateCells:autoGenerateCells];
@@ -447,14 +457,14 @@
                     CGFloat cellHeight = [self tableView:self.tableView heightForRowAtIndexPath:indexPath];
                     
                     SCCustomCell *customCell;
-                    if([ibCell isKindOfClass:[SCCustomCell class]])
-                    {
+                    if ([ibCell isKindOfClass:[SCCustomCell class]]) {
                         customCell = (SCCustomCell *)ibCell;
                     }
-                    else
-                    {
+
+                    else {
                         customCell = [SCCustomCell cellWithCell:ibCell];
                     }
+
                     customCell.cellCreatedInIB = YES;
                     /*
                     Static Interface Builder heights are estimates in STV 7; an
@@ -466,11 +476,14 @@
                     customCell.boundObjectStore = objectSection.boundObjectStore;
                     customCell.boundObject = objectSection.boundObject;
                     SCPropertyDefinition *propertyDefinition = nil;
-                    if(customCell.boundPropertyName)
+                    if (customCell.boundPropertyName) {
                         propertyDefinition = [objectSection.boundObjectStore.defaultDataDefinition propertyDefinitionWithName:customCell.boundPropertyName];
-                    if(propertyDefinition && !propertyDefinition.existsInNormalMode)
+                    }
+
+                    if (propertyDefinition && !propertyDefinition.existsInNormalMode) {
                         continue;  // don't add cell
-                    
+                    }
+
                     // We'll configure the cell in viewWillAppear instead to include any custom user added actions in viewDidLoad
                     //if(propertyDefinition)
                     //    [objectSection configureCell:customCell forPropertyDefinition:propertyDefinition inEditingMode:NO];
@@ -480,146 +493,160 @@
                 
                 section = objectSection;
             }
-            else
-                if([sectionType isEqualToString:@"SCArrayOfObjectsSection"] || [sectionType isEqualToString:@"SCArrayOfStringsSection"])
-                {
-                    NSString *predicateString = [sectionDictionary valueForKey:kSectionPredicateStringKey];
-                    NSString *placeholderText = [sectionDictionary valueForKey:kSectionPlaceholderTextKey];
-                    NSString *placeholderTextAlignmentString = [sectionDictionary valueForKey:kSectionPlaceholderTextAlignmentKey];
-                    NSString *addNewItemText = [sectionDictionary valueForKey:kSectionAddNewItemTextKey];
-                    NSString *masterBoundPropertyName = [sectionDictionary valueForKey:kSectionMasterBoundPropertyName];
+
+            else if ([sectionType isEqualToString:@"SCArrayOfObjectsSection"] || [sectionType isEqualToString:@"SCArrayOfStringsSection"]) {
+                NSString *predicateString = [sectionDictionary valueForKey:kSectionPredicateStringKey];
+                NSString *placeholderText = [sectionDictionary valueForKey:kSectionPlaceholderTextKey];
+                NSString *placeholderTextAlignmentString = [sectionDictionary valueForKey:kSectionPlaceholderTextAlignmentKey];
+                NSString *addNewItemText = [sectionDictionary valueForKey:kSectionAddNewItemTextKey];
+                NSString *masterBoundPropertyName = [sectionDictionary valueForKey:kSectionMasterBoundPropertyName];
                     
-                    NSString *hideWhenEmptyString = [sectionDictionary valueForKey:kSectionHideWhenEmptyKey];
-                    BOOL hideWhenEmpty = ([hideWhenEmptyString isEqualToString:kYesString]) ? YES : NO;
-                    NSString *allowAddingString = [sectionDictionary valueForKey:kSectionAllowAddingKey];
-                    BOOL allowAdding = ([allowAddingString isEqualToString:kYesString]) ? YES : NO;
-                    NSString *allowDeletingString = [sectionDictionary valueForKey:kSectionAllowDeletingKey];
-                    BOOL allowDeleting = ([allowDeletingString isEqualToString:kYesString]) ? YES : NO;
-                    NSString *allowMovingString = [sectionDictionary valueForKey:kSectionAllowMovingKey];
-                    BOOL allowMoving = ([allowMovingString isEqualToString:kYesString]) ? YES : NO;
-                    NSString *allowEditingString = [sectionDictionary valueForKey:kSectionAllowEditingKey];
-                    BOOL allowEditing = ([allowEditingString isEqualToString:kYesString]) ? YES : NO;
+                NSString *hideWhenEmptyString = [sectionDictionary valueForKey:kSectionHideWhenEmptyKey];
+                BOOL hideWhenEmpty = ([hideWhenEmptyString isEqualToString:kYesString]) ? YES : NO;
+                NSString *allowAddingString = [sectionDictionary valueForKey:kSectionAllowAddingKey];
+                BOOL allowAdding = ([allowAddingString isEqualToString:kYesString]) ? YES : NO;
+                NSString *allowDeletingString = [sectionDictionary valueForKey:kSectionAllowDeletingKey];
+                BOOL allowDeleting = ([allowDeletingString isEqualToString:kYesString]) ? YES : NO;
+                NSString *allowMovingString = [sectionDictionary valueForKey:kSectionAllowMovingKey];
+                BOOL allowMoving = ([allowMovingString isEqualToString:kYesString]) ? YES : NO;
+                NSString *allowEditingString = [sectionDictionary valueForKey:kSectionAllowEditingKey];
+                BOOL allowEditing = ([allowEditingString isEqualToString:kYesString]) ? YES : NO;
                     
-                    NSString *batchSizeString = [sectionDictionary valueForKey:kSectionBatchSizeKey];
-                    NSInteger batchSize = 0;
-                    if(batchSizeString)
-                        batchSize = [batchSizeString integerValue];
-                    
-                    NSString *stringsArrayString = [sectionDictionary valueForKey:kSectionStringsArrayKey];
-                    NSMutableArray *stringsArray = nil;
-                    if([stringsArrayString length])
-                    {
-                        stringsArray = [NSMutableArray arrayWithArray:[stringsArrayString componentsSeparatedByString:@"⦿"]];
+                NSString *batchSizeString = [sectionDictionary valueForKey:kSectionBatchSizeKey];
+                NSInteger batchSize = 0;
+                if (batchSizeString) {
+                    batchSize = [batchSizeString integerValue];
+                }
+
+                NSString *stringsArrayString = [sectionDictionary valueForKey:kSectionStringsArrayKey];
+                NSMutableArray *stringsArray = nil;
+                if ([stringsArrayString length]) {
+                    stringsArray = [NSMutableArray arrayWithArray:[stringsArrayString componentsSeparatedByString:@"⦿"]];
+                }
+
+
+                SCArrayOfObjectsSection *objectsSection = nil;
+
+                if ([sectionType isEqualToString:@"SCArrayOfObjectsSection"]) {
+                    objectsSection = [SCArrayOfObjectsSection sectionWithHeaderTitle:nil dataStore:dataStore];
+                }
+
+                else if ([sectionType isEqualToString:@"SCArrayOfStringsSection"]) {
+                    objectsSection = [SCArrayOfStringsSection sectionWithHeaderTitle:nil dataStore:dataStore];
+                }
+
+                if (self.tableViewModel.masterBoundObject && [masterBoundPropertyName length]) {
+                    [dataStore bindStoreToPropertyName:masterBoundPropertyName forObject:self.tableViewModel.masterBoundObject withDefinition:[self.tableViewModel.masterBoundObjectStore definitionForObject:self.tableViewModel.masterBoundObject]];
+                }
+
+                else if ([dataStore isKindOfClass:[SCArrayStore class]]) {
+                    SCArrayStore *arrayStore = (SCArrayStore *)dataStore;
+
+                    if ([stringsArray count] && [objectsSection isKindOfClass:[SCArrayOfStringsSection class]]) {
+                        arrayStore.objectsArray = stringsArray;
                     }
-                    
-                    
-                    SCArrayOfObjectsSection *objectsSection = nil;
-                    
-                    if([sectionType isEqualToString:@"SCArrayOfObjectsSection"])
-                        objectsSection = [SCArrayOfObjectsSection sectionWithHeaderTitle:nil dataStore:dataStore];
-                    else if([sectionType isEqualToString:@"SCArrayOfStringsSection"])
-                        objectsSection = [SCArrayOfStringsSection sectionWithHeaderTitle:nil dataStore:dataStore];
-                    
-                    if(self.tableViewModel.masterBoundObject && [masterBoundPropertyName length])
-                    {
-                        [dataStore bindStoreToPropertyName:masterBoundPropertyName forObject:self.tableViewModel.masterBoundObject withDefinition:[self.tableViewModel.masterBoundObjectStore definitionForObject:self.tableViewModel.masterBoundObject]];
+
+                    NSMutableArray *objectsArray = [self objectsForSection:objectsSection atIndex:sectionIndex];
+                    if ([objectsArray count]) {
+                        arrayStore.objectsArray = objectsArray;
                     }
-                    else
-                        if([dataStore isKindOfClass:[SCArrayStore class]])
+
+                }
+
+                if ([predicateString length]) {
+                    objectsSection.dataFetchOptions.filterPredicate = [NSPredicate predicateWithFormat:predicateString];
+                }
+
+                if (batchSize) {
+                    objectsSection.dataFetchOptions.batchSize = batchSize;
+                }
+
+                if ([placeholderText length]) {
+                    NSTextAlignment placeholderTextAlignment = (NSTextAlignment)[placeholderTextAlignmentString integerValue];
+                    objectsSection.placeholderCell = [SCTableViewCell cellWithText:placeholderText textAlignment:placeholderTextAlignment];
+                }
+
+                if ([addNewItemText length]) {
+                    objectsSection.addNewItemCell = [SCTableViewCell cellWithText:addNewItemText textAlignment:NSTextAlignmentCenter];
+                }
+
+                objectsSection.hideWhenEmpty = hideWhenEmpty;
+                objectsSection.allowAddingItems = allowAdding;
+                objectsSection.allowDeletingItems = allowDeleting;
+                objectsSection.allowMovingItems = allowMoving;
+                objectsSection.allowEditDetailView = allowEditing;
+                    
+                // Further dictionary assignments
+                objectsSection.ibNewItemViewControllerIdentifier = [sectionDictionary valueForKey:kSectionibNewItemViewControllerIdentifier];
+                    
+                    
+                // Use first IB provided cell (if exists) as a custom cell
+                if ([self tableView:self.tableView numberOfRowsInSection:sectionIndex]) {
+                    NSIndexPath *firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:sectionIndex];
+                    CGFloat cellHeight = [self tableView:self.tableView heightForRowAtIndexPath:firstCellIndexPath];
+                    UITableViewCell *ibCell = [self tableView:self.tableView cellForRowAtIndexPath:firstCellIndexPath];
+                        
+                    // Set objectsSection's itemsAccessoryType to ibCell's
+                    if (ibCell.accessoryType != UITableViewCellAccessoryNone) {
+                        objectsSection.itemsAccessoryType = ibCell.accessoryType;
+                    }
+
+                    // Configure ibCell for dynamic type (needed due to an IB bug, we believe)
+                    UIFont *textLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                    if ([ibCell.textLabel.font.fontName isEqualToString:textLabelFont.fontName] && ibCell.textLabel.font.pointSize==16) {
+                        ibCell.textLabel.font = textLabelFont;
+                    }
+
+                    UIFont *detailTextLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+                    if ([ibCell.detailTextLabel.font.fontName isEqualToString:detailTextLabelFont.fontName] && ibCell.detailTextLabel.font.pointSize==11) {
+                        ibCell.detailTextLabel.font = detailTextLabelFont;
+                    }
+
+                    objectsSection.sectionActions.cellForRowAtIndexPath = ^SCCustomCell*(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath)
                         {
-                            SCArrayStore *arrayStore = (SCArrayStore *)dataStore;
-                            
-                            if([stringsArray count] && [objectsSection isKindOfClass:[SCArrayOfStringsSection class]])
-                                arrayStore.objectsArray = stringsArray;
-                            
-                            NSMutableArray *objectsArray = [self objectsForSection:objectsSection atIndex:sectionIndex];
-                            if([objectsArray count])
-                                arrayStore.objectsArray = objectsArray;
+                        SCCustomCell *customCell;
+                        if ([ibCell isKindOfClass:[SCCustomCell class]]) {
+                            customCell = [[ibCell class] cellWithCell:ibCell];
                         }
-                    
-                    if([predicateString length])
-                        objectsSection.dataFetchOptions.filterPredicate = [NSPredicate predicateWithFormat:predicateString];
-                    if(batchSize)
-                        objectsSection.dataFetchOptions.batchSize = batchSize;
-                    if([placeholderText length])
-                    {
-                        NSTextAlignment placeholderTextAlignment = (NSTextAlignment)[placeholderTextAlignmentString integerValue];
-                        objectsSection.placeholderCell = [SCTableViewCell cellWithText:placeholderText textAlignment:placeholderTextAlignment];
-                    }
-                    if([addNewItemText length])
-                        objectsSection.addNewItemCell = [SCTableViewCell cellWithText:addNewItemText textAlignment:NSTextAlignmentCenter];
-                    objectsSection.hideWhenEmpty = hideWhenEmpty;
-                    objectsSection.allowAddingItems = allowAdding;
-                    objectsSection.allowDeletingItems = allowDeleting;
-                    objectsSection.allowMovingItems = allowMoving;
-                    objectsSection.allowEditDetailView = allowEditing;
-                    
-                    // Further dictionary assignments
-                    objectsSection.ibNewItemViewControllerIdentifier = [sectionDictionary valueForKey:kSectionibNewItemViewControllerIdentifier];
-                    
-                    
-                    // Use first IB provided cell (if exists) as a custom cell
-                    if([self tableView:self.tableView numberOfRowsInSection:sectionIndex])
-                    {
-                        NSIndexPath *firstCellIndexPath = [NSIndexPath indexPathForRow:0 inSection:sectionIndex];
-                        CGFloat cellHeight = [self tableView:self.tableView heightForRowAtIndexPath:firstCellIndexPath];
-                        UITableViewCell *ibCell = [self tableView:self.tableView cellForRowAtIndexPath:firstCellIndexPath];
-                        
-                        // Set objectsSection's itemsAccessoryType to ibCell's
-                        if(ibCell.accessoryType != UITableViewCellAccessoryNone)
-                            objectsSection.itemsAccessoryType = ibCell.accessoryType;
-                        
-                        // Configure ibCell for dynamic type (needed due to an IB bug, we believe)
-                        UIFont *textLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                        if([ibCell.textLabel.font.fontName isEqualToString:textLabelFont.fontName] && ibCell.textLabel.font.pointSize==16)
-                            ibCell.textLabel.font = textLabelFont;
-                        UIFont *detailTextLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-                        if([ibCell.detailTextLabel.font.fontName isEqualToString:detailTextLabelFont.fontName] && ibCell.detailTextLabel.font.pointSize==11)
-                            ibCell.detailTextLabel.font = detailTextLabelFont;
-                        
-                        objectsSection.sectionActions.cellForRowAtIndexPath = ^SCCustomCell*(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath)
-                        {
-                            SCCustomCell *customCell;
-                            if([ibCell isKindOfClass:[SCCustomCell class]])
-                            {
-                                customCell = [[ibCell class] cellWithCell:ibCell];
-                            }
-                            else
-                            {
-                                customCell = [SCCustomCell cellWithCell:ibCell];
-                            }
-                            customCell.cellCreatedInIB = YES;
-                            /*
+
+                        else {
+                            customCell = [SCCustomCell cellWithCell:ibCell];
+                        }
+
+                        customCell.cellCreatedInIB = YES;
+                        /*
                             Repeated storyboard prototypes self-size from
                             constraints instead of freezing the prototype's
                             design height.
                             */
-                            customCell.estimatedHeight = cellHeight;
-                            customCell.sizingMode = SCTableViewCellSizingModeAutomatic;
+                        customCell.estimatedHeight = cellHeight;
+                        customCell.sizingMode = SCTableViewCellSizingModeAutomatic;
                             
-                            return customCell;
-                        };
-                    }
-                    
-                    // create and connect add button if does not exist
-                    if(!addButtonConnected && !self.tableViewModel.masterModel && self.navigationBarType==SCNavigationBarTypeAuto)  // initial state
-                    {
-                        if(objectsSection.allowAddingItems)
-                        {
-                            self.navigationBarType = SCNavigationBarTypeAddRightEditLeft;
-                            objectsSection.addButtonItem = self.addButton;
-                            
-                            addButtonConnected = YES;
-                        }
-                        else
-                        {
-                            self.navigationBarType = SCNavigationBarTypeEditRight;
-                        }
-                    }
-                    
-                    section = objectsSection;
+                        return customCell;
+                    };
                 }
+
+                // create and connect add button if does not exist
+                if (!addButtonConnected && !self.tableViewModel.masterModel && self.navigationBarType==SCNavigationBarTypeAuto)  // initial state
+                {
+                    if (objectsSection.allowAddingItems) {
+                        self.navigationBarType = SCNavigationBarTypeAddRightEditLeft;
+                        objectsSection.addButtonItem = self.addButton;
+                            
+                        addButtonConnected = YES;
+                    }
+
+                    else {
+                        self.navigationBarType = SCNavigationBarTypeEditRight;
+                    }
+
+                }
+
+                section = objectsSection;
+            }
+
         }
+
         else  // current section is a standard iOS section
         {
             section = [SCTableViewSection section];
@@ -630,10 +657,14 @@
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cellIndex inSection:sectionIndex];
                 UITableViewCell *ibCell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
                 SCTableViewCell *STVCell;
-                if([ibCell isKindOfClass:[SCTableViewCell class]])
+                if ([ibCell isKindOfClass:[SCTableViewCell class]]) {
                     STVCell = (SCTableViewCell *)ibCell;
-                else
+                }
+
+                else {
                     STVCell = [SCCustomCell cellWithCell:ibCell];
+                }
+
                 STVCell.cellCreatedInIB = YES;
                 /*
                 Keep the storyboard row height as an estimate and let UIKit fit
@@ -644,15 +675,17 @@
                 [section addCell:STVCell];
             }
         }
-        
+
         section.headerTitle = [self tableView:self.tableView titleForHeaderInSection:sectionIndex];
         section.footerTitle = [self tableView:self.tableView titleForFooterInSection:sectionIndex];
         section.headerView = [self tableView:self.tableView viewForHeaderInSection:sectionIndex];
         section.footerView = [self tableView:self.tableView viewForFooterInSection:sectionIndex];
         
         // The "if" check is important since UITableViewController auto provides a single empty section when not using a Storyboard.
-        if([section isKindOfClass:[SCArrayOfItemsSection class]] || section.cellCount || section.headerTitle || section.footerTitle || section.headerView || section.footerView)
+        if ([section isKindOfClass:[SCArrayOfItemsSection class]] || section.cellCount || section.headerTitle || section.footerTitle || section.headerView || section.footerView) {
             [self.tableViewModel addSection:section];
+        }
+
     }
     
     _staticContentAddedToModel = YES;
@@ -663,8 +696,10 @@
     for(NSString *key in self.ibDataDefinitions)
     {
         SCDataDefinition *dataDefinition = [self.ibDataDefinitions valueForKey:key];
-        if([dataDefinition.ibName isEqualToString:ibName])
+        if ([dataDefinition.ibName isEqualToString:ibName]) {
             return dataDefinition;
+        }
+
     }
     
     return nil;
@@ -682,40 +717,48 @@
 
 - (void)connectAddButtonToModelObjectsIfNeeded
 {
-    if(!self.addButton)
+    if (!self.addButton) {
         return;
-    
-    
-    if([self.tableViewModel isKindOfClass:[SCArrayOfItemsModel class]])
-    {
-        SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)self.tableViewModel;
-        if(!itemsModel.addButtonItem)
-            itemsModel.addButtonItem = self.addButton;
     }
-    else
-    {
+
+
+    if ([self.tableViewModel isKindOfClass:[SCArrayOfItemsModel class]]) {
+        SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)self.tableViewModel;
+        if (!itemsModel.addButtonItem) {
+            itemsModel.addButtonItem = self.addButton;
+        }
+
+    }
+
+    else {
         BOOL addButtonConnected = NO;
         
         SCArrayOfItemsSection *candidateSection = nil;
         for(NSInteger i=0; i<self.tableViewModel.sectionCount; i++)
         {
             SCTableViewSection *section = [self.tableViewModel sectionAtIndex:i];
-            if(![section isKindOfClass:[SCArrayOfItemsSection class]])
+            if (![section isKindOfClass:[SCArrayOfItemsSection class]]) {
                 continue;
-            
+            }
+
             SCArrayOfItemsSection *itemsSection = (SCArrayOfItemsSection *)section;
-            if(itemsSection.addButtonItem == self.addButton)
-            {
+            if (itemsSection.addButtonItem == self.addButton) {
                 addButtonConnected = YES;
                 break;
             }
-            if(!candidateSection && itemsSection.addButtonItem==nil && itemsSection.addNewItemCell==nil)
+
+            if (!candidateSection && itemsSection.addButtonItem==nil && itemsSection.addNewItemCell==nil) {
                 candidateSection = itemsSection;
+            }
+
         }
-        
-        if(!addButtonConnected)
+
+        if (!addButtonConnected) {
             candidateSection.addButtonItem = self.addButton;
+        }
+
     }
+
 }
 
 - (void)configureAllObjectSections
@@ -723,19 +766,24 @@
     for(NSInteger sectionIndex=0; sectionIndex<self.tableViewModel.sectionCount; sectionIndex++)
     {
         SCTableViewSection *section = [self.tableViewModel sectionAtIndex:sectionIndex];
-        if(![section isKindOfClass:[SCObjectSection class]])
+        if (![section isKindOfClass:[SCObjectSection class]]) {
             continue;
-        
+        }
+
         SCObjectSection *objectSection = (SCObjectSection *)section;
         for(NSInteger cellIndex=0; cellIndex<objectSection.cellCount; cellIndex++)
         {
             SCTableViewCell *cell = [objectSection cellAtIndex:cellIndex];
             
             SCPropertyDefinition *propertyDefinition = nil;
-            if(cell.boundPropertyName)
+            if (cell.boundPropertyName) {
                 propertyDefinition = [objectSection.boundObjectStore.defaultDataDefinition propertyDefinitionWithName:cell.boundPropertyName];
-            if(propertyDefinition)
+            }
+
+            if (propertyDefinition) {
                 [objectSection configureCell:cell forPropertyDefinition:propertyDefinition inEditingMode:NO];
+            }
+
         }
     }
 }
@@ -743,64 +791,64 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-    
-    if(_state != SCViewControllerStateNew)
-		_state = SCViewControllerStateActive;
-	
-    if(_state == SCViewControllerStateNew)
-    {
+
+    if (_state != SCViewControllerStateNew) {
+        _state = SCViewControllerStateActive;
+    }
+
+    if (_state == SCViewControllerStateNew) {
         // Configure object sections here so that all custom user cellActions added in viewDidLoad are synched
         [self configureAllObjectSections];
-        
-        if(self.tableViewModel.masterModel)
-        {
+
+        if (self.tableViewModel.masterModel) {
             // Inherit owner's background
-            if(self.tableView.style!=UITableViewStylePlain && self.tableViewModel.masterModel.tableView.style!=UITableViewStylePlain)
-            {
+            if (self.tableView.style!=UITableViewStylePlain && self.tableViewModel.masterModel.tableView.style!=UITableViewStylePlain) {
                 self.tableView.backgroundColor = self.tableViewModel.masterModel.tableView.backgroundColor;
             }
+
         }
-        
+
         [self connectAddButtonToModelObjectsIfNeeded];
     }
-    
-	_cancelButtonTapped = FALSE;
+
+    _cancelButtonTapped = FALSE;
 	_doneButtonTapped = FALSE;
     
     
     [self smoothlyDeselectRowsInTableView:self.tableView];
-    
-	
-    if(self.actions.willAppear)
+
+
+    if (self.actions.willAppear) {
         self.actions.willAppear(self);
-    
-	if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(tableViewControllerWillAppear:)])
-	{
-		[self.delegate tableViewControllerWillAppear:self];
-	}
-    
-    if(self.state == SCViewControllerStateNew)
-    {
-        if(self.actions.willPresent)
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+	   && [self.delegate respondsToSelector:@selector(tableViewControllerWillAppear:)]) {
+        [self.delegate tableViewControllerWillAppear:self];
+    }
+
+    if (self.state == SCViewControllerStateNew) {
+        if (self.actions.willPresent) {
             self.actions.willPresent(self);
-        
-        if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(tableViewControllerWillPresent:)])
-        {
+        }
+
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+           && [self.delegate respondsToSelector:@selector(tableViewControllerWillPresent:)]) {
             [self.delegate tableViewControllerWillPresent:self];
         }
+
     }
-    
-    if(self.autoDisableNavigationButtonsUntilViewAppears)
+
+    if (self.autoDisableNavigationButtonsUntilViewAppears) {
         [self disableNavigationBarButtons];  // temporarily disable navigation bar buttons until the view controller animations are finished
+    }
+
 }
 
 - (void)smoothlyDeselectRowsInTableView:(UITableView *)tableView
 {
     NSArray<NSIndexPath *> *selectedIndexPaths = [tableView indexPathsForSelectedRows];
-    if (self.transitionCoordinator)
-    {
+    if (self.transitionCoordinator) {
         [self.transitionCoordinator animateAlongsideTransitionInView:self.parentViewController.view animation:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context)
         {
             for (NSIndexPath *indexPath in selectedIndexPaths)
@@ -810,56 +858,59 @@
             
         } completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context)
         {
-            if (context.isCancelled)
-            {
+            if (context.isCancelled) {
                 for (NSIndexPath *indexPath in selectedIndexPaths)
                 {
                     [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
                 }
             }
+
         }];
     }
-    else
-    {
+
+    else {
         for (NSIndexPath *indexPath in selectedIndexPaths)
         {
             [tableView deselectRowAtIndexPath:indexPath animated:NO];
         }
     }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-    
-	
-    if(self.tableViewModel && self.doneButton)
+
+
+    if (self.tableViewModel && self.doneButton) {
         self.tableViewModel.commitButton = self.doneButton;
-	
-    if(self.autoDisableNavigationButtonsUntilViewAppears)
+    }
+
+    if (self.autoDisableNavigationButtonsUntilViewAppears) {
         [self enableNavigationBarButtons];
-    
-    if(self.actions.didAppear)
+    }
+
+    if (self.actions.didAppear) {
         self.actions.didAppear(self);
-    
-	if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(tableViewControllerDidAppear:)])
-	{
-		[self.delegate tableViewControllerDidAppear:self];
-	}
-    
-    if(self.state == SCViewControllerStateNew)
-    {
-        if(self.actions.didPresent)
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+	   && [self.delegate respondsToSelector:@selector(tableViewControllerDidAppear:)]) {
+        [self.delegate tableViewControllerDidAppear:self];
+    }
+
+    if (self.state == SCViewControllerStateNew) {
+        if (self.actions.didPresent) {
             self.actions.didPresent(self);
-        
-        if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(tableViewControllerDidPresent:)])
-        {
+        }
+
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+           && [self.delegate respondsToSelector:@selector(tableViewControllerDidPresent:)]) {
             [self.delegate tableViewControllerDidPresent:self];
         }
+
     }
-    
+
     _state = SCViewControllerStateActive;
 }
 
@@ -871,107 +922,106 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	
-    if(_state != SCViewControllerStateDismissed)  // could be set by the controller's buttons
+
+    if (_state != SCViewControllerStateDismissed)  // could be set by the controller's buttons
     {
-        if(self.navigationController)
-        {
-            if([self.parentViewController isKindOfClass:[UINavigationController class]] && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound)
-            {
+        if (self.navigationController) {
+            if ([self.parentViewController isKindOfClass:[UINavigationController class]] && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
                 // self has been popped from the navigation controller
                 _state = SCViewControllerStateDismissed;
             }
-            else 
-            {
+
+            else {
                 _state = SCViewControllerStateInactive;
             }
+
         }
-        else
-        {
+
+        else {
             _state = SCViewControllerStateInactive;
         }
+
     }
-    
-    if(self.actions.willDisappear)
+
+    if (self.actions.willDisappear) {
         self.actions.willDisappear(self);
-    
-	if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(tableViewControllerWillDisappear:)])
-	{
-		[self.delegate tableViewControllerWillDisappear:self];
-	}
-    
-    if(self.state == SCViewControllerStateDismissed)
-    {
-        if([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]])
-        {
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+	   && [self.delegate respondsToSelector:@selector(tableViewControllerWillDisappear:)]) {
+        [self.delegate tableViewControllerWillDisappear:self];
+    }
+
+    if (self.state == SCViewControllerStateDismissed) {
+        if ([self.tableViewModel.detailViewController isKindOfClass:[SCTableViewController class]]) {
             [(SCTableViewController *)self.tableViewModel.detailViewController loseFocus];
         }
-        else
-            if([self.tableViewModel.detailViewController isKindOfClass:[SCViewController class]])
-            {
-                [(SCViewController *)self.tableViewModel.detailViewController loseFocus];
-            }
-        
-        
-        if(self.actions.willDismiss)
+
+        else if ([self.tableViewModel.detailViewController isKindOfClass:[SCViewController class]]) {
+            [(SCViewController *)self.tableViewModel.detailViewController loseFocus];
+        }
+
+
+        if (self.actions.willDismiss) {
             self.actions.willDismiss(self);
-        
-        if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(tableViewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)])
-        {
+        }
+
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+           && [self.delegate respondsToSelector:@selector(tableViewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)]) {
             [self.delegate tableViewControllerWillDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
         }
+
     }
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    	
-    if(self.actions.didDisappear)
+
+
+    if (self.actions.didDisappear) {
         self.actions.didDisappear(self);
-    
-	if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(tableViewControllerDidDisappear:)])
-	{
-		[self.delegate tableViewControllerDidDisappear:self];
-	}
-    
-    if(self.state == SCViewControllerStateDismissed)
-    {
-        if(self.actions.didDismiss)
+    }
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+	   && [self.delegate respondsToSelector:@selector(tableViewControllerDidDisappear:)]) {
+        [self.delegate tableViewControllerDidDisappear:self];
+    }
+
+    if (self.state == SCViewControllerStateDismissed) {
+        if (self.actions.didDismiss) {
             self.actions.didDismiss(self);
-        
-        if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(tableViewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)])
-        {
+        }
+
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+           && [self.delegate respondsToSelector:@selector(tableViewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)]) {
             [self.delegate tableViewControllerDidDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
         }
+
     }
+
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     UIInterfaceOrientationMask interfaceOrientations;
-    
-    if(self.tableViewModel.masterModel)
-    {
+
+    if (self.tableViewModel.masterModel) {
         interfaceOrientations = [self.tableViewModel.masterModel.viewController supportedInterfaceOrientations];
     }
-    else
-    {
-        if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        {
+
+    else {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             interfaceOrientations = UIInterfaceOrientationMaskPortrait;
         }
-        else
-        {
+
+        else {
             interfaceOrientations = [super supportedInterfaceOrientations];
         }
+
     }
-    
+
     return interfaceOrientations;
 }
 
@@ -984,151 +1034,189 @@
     UINavigationItem *navItem = self.navigationItem;
     
 	// Reset buttons
-    if( (navItem.leftBarButtonItem==self.addButton || navItem.leftBarButtonItem==self.editButton || navItem.leftBarButtonItem==self.doneButton || navItem.leftBarButtonItem==self.cancelButton) && !navItem.backBarButtonItem)
+    if ( (navItem.leftBarButtonItem==self.addButton || navItem.leftBarButtonItem==self.editButton || navItem.leftBarButtonItem==self.doneButton || navItem.leftBarButtonItem==self.cancelButton) && !navItem.backBarButtonItem) {
         navItem.leftBarButtonItem = nil;
-    if(navItem.rightBarButtonItem==self.addButton || navItem.rightBarButtonItem==self.editButton || navItem.rightBarButtonItem==self.doneButton || navItem.rightBarButtonItem==self.cancelButton)
+    }
+
+    if (navItem.rightBarButtonItem==self.addButton || navItem.rightBarButtonItem==self.editButton || navItem.rightBarButtonItem==self.doneButton || navItem.rightBarButtonItem==self.cancelButton) {
         navItem.rightBarButtonItem = nil;
-	_addButton = nil;
+    }
+
+    _addButton = nil;
 	_cancelButton = nil;
 	_doneButton = nil;
     
     // Setup self.editButton
     self.editButton.target = self;
     self.editButton.action = @selector(editButtonAction);
-	
-	if(navItem && _navigationBarType!=SCNavigationBarTypeNone)
-	{
-		UIBarButtonItem *tempAddButton = [[UIBarButtonItem alloc] 
+
+    if (navItem && _navigationBarType!=SCNavigationBarTypeNone) {
+        UIBarButtonItem *tempAddButton = [[UIBarButtonItem alloc]
 										  initWithBarButtonSystemItem:UIBarButtonSystemItemAdd 
 										  target:nil 
 										  action:nil];
-		UIBarButtonItem *tempCancelButton = [[UIBarButtonItem alloc] 
+        UIBarButtonItem *tempCancelButton = [[UIBarButtonItem alloc]
 											 initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
 											 target:self 
 											 action:@selector(cancelButtonAction)];
-		UIBarButtonItem *tempDoneButton = [[UIBarButtonItem alloc] 
+        UIBarButtonItem *tempDoneButton = [[UIBarButtonItem alloc]
 										   initWithBarButtonSystemItem:UIBarButtonSystemItemDone 
 										   target:self 
 										   action:@selector(doneButtonAction)];
 		
-		switch (_navigationBarType)
+        switch (_navigationBarType)
 		{
-			case SCNavigationBarTypeAddLeft:
-                if(!navItem.leftBarButtonItem)
+            case SCNavigationBarTypeAddLeft:
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempAddButton;
-				_addButton = tempAddButton;
-				break;
-			case SCNavigationBarTypeAddRight:
-                if(!navItem.rightBarButtonItem)
+                }
+
+                _addButton = tempAddButton;
+                break;
+            case SCNavigationBarTypeAddRight:
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = tempAddButton;
-				_addButton = tempAddButton;
-				break;
-			case SCNavigationBarTypeEditLeft:
-                if(!navItem.leftBarButtonItem)
+                }
+
+                _addButton = tempAddButton;
+                break;
+            case SCNavigationBarTypeEditLeft:
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = self.editButton;
-				break;
-			case SCNavigationBarTypeEditRight:
-                if(!navItem.rightBarButtonItem)
+                }
+
+                break;
+            case SCNavigationBarTypeEditRight:
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = self.editButton;
+                }
+
                 _cancelButton = tempCancelButton;
                 _cancelButton.action = @selector(editingModeCancelButtonAction);
-				break;
-			case SCNavigationBarTypeAddRightEditLeft:
-                if(!navItem.rightBarButtonItem)
+                break;
+            case SCNavigationBarTypeAddRightEditLeft:
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = tempAddButton;
-				_addButton = tempAddButton;
-                if(!navItem.leftBarButtonItem)
+                }
+
+                _addButton = tempAddButton;
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = self.editButton;
-				break;
-			case SCNavigationBarTypeAddLeftEditRight:
-                if(!navItem.leftBarButtonItem)
+                }
+
+                break;
+            case SCNavigationBarTypeAddLeftEditRight:
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempAddButton;
-				_addButton = tempAddButton;
-                if(!navItem.rightBarButtonItem)
+                }
+
+                _addButton = tempAddButton;
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = self.editButton;
-				break;
-			case SCNavigationBarTypeDoneLeft:
-                if(!navItem.leftBarButtonItem)
+                }
+
+                break;
+            case SCNavigationBarTypeDoneLeft:
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempDoneButton;
-				_doneButton = tempDoneButton;
-				break;
-			case SCNavigationBarTypeDoneRight:
-                if(!navItem.rightBarButtonItem)
+                }
+
+                _doneButton = tempDoneButton;
+                break;
+            case SCNavigationBarTypeDoneRight:
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = tempDoneButton;
-				_doneButton = tempDoneButton;
+                }
+
+                _doneButton = tempDoneButton;
                 break;
             case SCNavigationBarTypeCancelLeft:
-                if(!navItem.leftBarButtonItem)
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempCancelButton;
+                }
+
                 _cancelButton = tempCancelButton;
                 break;
-			case SCNavigationBarTypeDoneLeftCancelRight:
-                if(!navItem.leftBarButtonItem)
+            case SCNavigationBarTypeDoneLeftCancelRight:
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempDoneButton;
-				_doneButton = tempDoneButton;
-                if(!navItem.rightBarButtonItem)
+                }
+
+                _doneButton = tempDoneButton;
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = tempCancelButton;
-				_cancelButton = tempCancelButton;
-				break;
-			case SCNavigationBarTypeDoneRightCancelLeft:
-                if(!navItem.rightBarButtonItem)
+                }
+
+                _cancelButton = tempCancelButton;
+                break;
+            case SCNavigationBarTypeDoneRightCancelLeft:
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItem = tempDoneButton;
-				_doneButton = tempDoneButton;
-                if(!navItem.leftBarButtonItem)
+                }
+
+                _doneButton = tempDoneButton;
+                if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempCancelButton;
-				_cancelButton = tempCancelButton;
-				break;
-			case SCNavigationBarTypeAddEditRight:
+                }
+
+                _cancelButton = tempCancelButton;
+                break;
+            case SCNavigationBarTypeAddEditRight:
 			{
-				_addButton = tempAddButton;
-				_addButton.style = UIBarButtonItemStylePlain;
+                _addButton = tempAddButton;
+                _addButton.style = UIBarButtonItemStylePlain;
 				
-				// create an array of the buttons
+                // create an array of the buttons
                 NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
                 [buttons addObject:self.editButton];
                 [buttons addObject:_addButton];
-                
-                if(!navItem.rightBarButtonItem)
+
+                if (!navItem.rightBarButtonItem) {
                     navItem.rightBarButtonItems = buttons;
-			}
+                }
+
+            }
 				break;
                 
-			default:
-				break;
-		}
-	}
+            default:
+                break;
+        }
+    }
+
 }
 
 - (void)disableNavigationBarButtons
 {
-    if(!self.navigationItem)
+    if (!self.navigationItem) {
         return;
-    
-    if(self.navigationItem.leftBarButtonItem)
-    {
+    }
+
+    if (self.navigationItem.leftBarButtonItem) {
         _leftBarButtonItemInitialEnabledState = self.navigationItem.leftBarButtonItem.enabled;
         self.navigationItem.leftBarButtonItem.enabled = NO;
     }
-    if(self.navigationItem.rightBarButtonItem)
-    {
+
+    if (self.navigationItem.rightBarButtonItem) {
         _rightBarButtonItemInitialEnabledState = self.navigationItem.rightBarButtonItem.enabled;
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
+
 }
 
 - (void)enableNavigationBarButtons
 {
-    if(!self.navigationItem)
+    if (!self.navigationItem) {
         return;
-    
-    if(self.navigationItem.leftBarButtonItem)
-    {
+    }
+
+    if (self.navigationItem.leftBarButtonItem) {
         self.navigationItem.leftBarButtonItem.enabled = _leftBarButtonItemInitialEnabledState;
     }
-    if(self.navigationItem.rightBarButtonItem)
-    {
+
+    if (self.navigationItem.rightBarButtonItem) {
         self.navigationItem.rightBarButtonItem.enabled = _rightBarButtonItemInitialEnabledState;
     }
+
 }
 
 - (UIBarButtonItem *)editButton
@@ -1139,111 +1227,119 @@
 - (void)cancelButtonAction
 {
     BOOL acceptTap = TRUE;
-    if(self.actions.cancelButtonTapped)
-    {
+    if (self.actions.cancelButtonTapped) {
         acceptTap = self.actions.cancelButtonTapped(self);
     }
-    if(!acceptTap)
+
+    if (!acceptTap) {
         return;
-    
-	[self dismissWithCancelValue:TRUE doneValue:FALSE];
+    }
+
+    [self dismissWithCancelValue:TRUE doneValue:FALSE];
 }
 
 - (void)doneButtonAction
 {
     BOOL acceptTap = TRUE;
-    if(self.actions.doneButtonTapped)
-    {
+    if (self.actions.doneButtonTapped) {
         acceptTap = self.actions.doneButtonTapped(self);
     }
-    if(!acceptTap)
+
+    if (!acceptTap) {
         return;
-    
-	[self dismissWithCancelValue:FALSE doneValue:TRUE];
+    }
+
+    [self dismissWithCancelValue:FALSE doneValue:TRUE];
 }
 
 - (void)editButtonAction
 {
-    if(self.tableViewModel.swipeToDeleteActive)
-    {
+    if (self.tableViewModel.swipeToDeleteActive) {
         [self.tableViewModel setTableViewEditing:NO animated:TRUE];
         return;
     }
-    
+
     BOOL editing = !self.tableView.editing;
     BOOL acceptTap = TRUE;
-    if(editing)
-    {
-        if(self.actions.editButtonTapped)
-        {
+    if (editing) {
+        if (self.actions.editButtonTapped) {
             acceptTap = self.actions.editButtonTapped(self);
         }
+
     }
-    else
-    {
-        if(self.actions.doneButtonTapped)
-        {
+
+    else {
+        if (self.actions.doneButtonTapped) {
             acceptTap = self.actions.doneButtonTapped(self);
         }
+
     }
-    if(!acceptTap)
+
+    if (!acceptTap) {
         return;
-    
-    if(self.navigationBarType == SCNavigationBarTypeEditRight)
-    {
-        if(editing)
-        {
+    }
+
+    if (self.navigationBarType == SCNavigationBarTypeEditRight) {
+        if (editing) {
             _nonEditModeLeftBarButtonItem = self.navigationItem.leftBarButtonItem;
             [self.navigationItem setHidesBackButton:TRUE animated:FALSE];
             
             SCTableViewSection *section = nil;
-            if(self.tableViewModel.sectionCount)
+            if (self.tableViewModel.sectionCount) {
                 section = [self.tableViewModel sectionAtIndex:0];
-            if(self.allowEditingModeCancelButton && ![section isKindOfClass:[SCArrayOfItemsSection class]])
+            }
+
+            if (self.allowEditingModeCancelButton && ![section isKindOfClass:[SCArrayOfItemsSection class]]) {
                 self.navigationItem.leftBarButtonItem = self.cancelButton;
-            
+            }
+
             self.tableViewModel.commitButton = self.editButton;
-            
-            if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-               && [self.delegate respondsToSelector:@selector(tableViewControllerDidEnterEditingMode:)])
-            {
+
+            if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+               && [self.delegate respondsToSelector:@selector(tableViewControllerDidEnterEditingMode:)]) {
                 [self.delegate tableViewControllerDidEnterEditingMode:self];
             }
+
         }
-        else
-        {
+
+        else {
             self.tableViewModel.commitButton = nil;
             self.editButton.enabled = TRUE;  // in case user taps 'Cancel' while button disabled
             
             self.navigationItem.leftBarButtonItem = _nonEditModeLeftBarButtonItem;
             BOOL selfIsRootVC = NO;
-            if([self.navigationController.viewControllers objectAtIndex:0]==self)
+            if ([self.navigationController.viewControllers objectAtIndex:0]==self) {
                 selfIsRootVC = YES;
-            if(!_nonEditModeLeftBarButtonItem && !selfIsRootVC)
+            }
+
+            if (!_nonEditModeLeftBarButtonItem && !selfIsRootVC) {
                 [self.navigationItem setHidesBackButton:FALSE animated:FALSE];
-            
-            if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-               && [self.delegate respondsToSelector:@selector(tableViewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)])
-            {
+            }
+
+            if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+               && [self.delegate respondsToSelector:@selector(tableViewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
                 [self.delegate tableViewControllerDidExitEditingMode:self cancelButtonTapped:NO doneButtonTapped:YES];
             }
+
         }
+
     }
-    
+
     [self.tableViewModel setTableViewEditing:editing animated:TRUE];
 }
 
 - (void)editingModeCancelButtonAction
 {
     BOOL acceptTap = TRUE;
-    if(self.actions.cancelButtonTapped)
-    {
+    if (self.actions.cancelButtonTapped) {
         acceptTap = self.actions.cancelButtonTapped(self);
     }
-    if(!acceptTap)
+
+    if (!acceptTap) {
         return;
-    
-	self.navigationItem.leftBarButtonItem = _nonEditModeLeftBarButtonItem;
+    }
+
+    self.navigationItem.leftBarButtonItem = _nonEditModeLeftBarButtonItem;
     [self.navigationItem setHidesBackButton:FALSE animated:FALSE];
     
     for(NSInteger i=0; i<self.tableViewModel.sectionCount; i++)
@@ -1252,12 +1348,12 @@
         [section reloadBoundValues];
     }
     [self.tableViewModel setTableViewEditing:FALSE animated:TRUE];
-    
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(tableViewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)])
-    {
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+       && [self.delegate respondsToSelector:@selector(tableViewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate tableViewControllerDidExitEditingMode:self cancelButtonTapped:YES doneButtonTapped:NO];
     }
+
 }
 
 - (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue
@@ -1266,24 +1362,22 @@
     _doneButtonTapped = doneValue;
     
     BOOL shouldDismiss = TRUE;
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
 	   && [self.delegate respondsToSelector:
-		   @selector(tableViewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)])
-	{
-		shouldDismiss = [self.delegate tableViewControllerShouldDismiss:self
+		   @selector(tableViewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        shouldDismiss = [self.delegate tableViewControllerShouldDismiss:self
 									 cancelButtonTapped:cancelValue
 									   doneButtonTapped:doneValue];
-	}
-    if(!shouldDismiss)
-    {
+    }
+
+    if (!shouldDismiss) {
         _cancelButtonTapped = NO;
         _doneButtonTapped = NO;
         
         return;
     }
-    
-    if(_hasFocus)
-    {
+
+    if (_hasFocus) {
         /*
         hermes:
         Explicitly configured detail models end their editing focus without
@@ -1292,39 +1386,41 @@
         [self loseFocus];
         return;
     }
-    
+
     _state = SCViewControllerStateDismissed;
-	
-    if(self.popoverController)
-    {
+
+    if (self.popoverController) {
         self.popoverController.delegate = nil;  // disable delegate methods
         [self.popoverController dismissPopoverAnimated:YES];
         self.popoverController = nil;
     }
-    else 
-        if(self.navigationController)
-        {
-            // check if self is the root controller on the navigation stack
-            if([self.navigationController.viewControllers objectAtIndex:0] == self)
-            {
-                [self dismissViewControllerAnimated:YES completion:nil];
-            }
-            else
-                [self.navigationController popViewControllerAnimated:YES];
-        }
-        else
+
+    else if (self.navigationController) {
+        // check if self is the root controller on the navigation stack
+        if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
             [self dismissViewControllerAnimated:YES completion:nil];
+        }
+
+        else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+
+    }
+
+    else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+
 }
 
 - (void)gainFocus
 {
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
        && [self.delegate respondsToSelector:
-           @selector(tableViewControllerWillGainFocus:)])
-    {
+           @selector(tableViewControllerWillGainFocus:)]) {
         [self.delegate tableViewControllerWillGainFocus:self];
     }
-    
+
     _hasFocus = TRUE;
     
     // Connect self.tableViewModel and refresh table view
@@ -1332,41 +1428,41 @@
     self.tableView.delegate = self.tableViewModel;
     [self.tableViewModel reloadBoundValues];
     [self.tableViewModel.tableView reloadData];
-    
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
        && [self.delegate respondsToSelector:
-           @selector(tableViewControllerDidGainFocus:)])
-    {
+           @selector(tableViewControllerDidGainFocus:)]) {
         [self.delegate tableViewControllerDidGainFocus:self];
     }
+
 }
 
 - (void)loseFocus
 {
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
        && [self.delegate respondsToSelector:
-           @selector(tableViewControllerWillLoseFocus:cancelButtonTapped:doneButtonTapped:)])
-    {
+           @selector(tableViewControllerWillLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate tableViewControllerWillLoseFocus:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
-    
+
     _hasFocus = FALSE;
-    if(self.navigationBarType != SCNavigationBarTypeNone)
+    if (self.navigationBarType != SCNavigationBarTypeNone) {
         self.navigationBarType = SCNavigationBarTypeAuto;
+    }
+
     self.title = nil;
     
     // Connect _noFocusModel and refresh table view
     self.tableView.dataSource = _noFocusModel;
     self.tableView.delegate = _noFocusModel;
     [self.tableView reloadData];
-    
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
        && [self.delegate respondsToSelector:
-           @selector(tableViewControllerDidLoseFocus:cancelButtonTapped:doneButtonTapped:)])
-    {
+           @selector(tableViewControllerDidLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate tableViewControllerDidLoseFocus:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
-    
+
     self.delegate = nil;
 }
 
@@ -1383,9 +1479,10 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    if([sender isKindOfClass:[SCCustomCell class]])
+    if ([sender isKindOfClass:[SCCustomCell class]]) {
         return NO;  // framework will handle these
-    
+    }
+
     return YES;
 }
 
@@ -1399,14 +1496,14 @@
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
     BOOL shouldDismiss = TRUE;
-    if([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
+    if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
 	   && [self.delegate respondsToSelector:
-		   @selector(tableViewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)])
-	{
-		shouldDismiss = [self.delegate tableViewControllerShouldDismiss:self
+		   @selector(tableViewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        shouldDismiss = [self.delegate tableViewControllerShouldDismiss:self
                                                      cancelButtonTapped:FALSE
                                                        doneButtonTapped:TRUE];
-	}
+    }
+
     return shouldDismiss;
 }
 

@@ -57,21 +57,20 @@
 			 title:(NSString *)propertyTitle
 			  type:(SCPropertyType)propertyType
 {
-	if( (self=[super init]) )
-	{
-		ownerDataStuctureDefinition = nil;
+    if ( (self=[super init]) ) {
+        ownerDataStuctureDefinition = nil;
 		
-		dataType = SCDataTypeUnknown;
-		dataReadOnly = FALSE;
+        dataType = SCDataTypeUnknown;
+        dataReadOnly = FALSE;
 		
-		name = [propertyName copy];
-		self.title = propertyTitle;
-		self.type = propertyType;
-		self.attributes = nil;
-		self.editingModeType = SCPropertyTypeUndefined;
-		self.editingModeAttributes = nil;
-		self.required = FALSE;
-		self.autoValidate = TRUE;
+        name = [propertyName copy];
+        self.title = propertyTitle;
+        self.type = propertyType;
+        self.attributes = nil;
+        self.editingModeType = SCPropertyTypeUndefined;
+        self.editingModeAttributes = nil;
+        self.required = FALSE;
+        self.autoValidate = TRUE;
         self.existsInNormalMode = TRUE;
         self.existsInEditingMode = TRUE;
         self.existsInCreationMode = TRUE;
@@ -82,44 +81,59 @@
         objectBindings = nil;
         
         _cellActions = [[SCCellActions alloc] init];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (void)setAllPropertiesFromibDictionary:(NSDictionary *)ibDictionary
 {
-    if(!ibDictionary)
+    if (!ibDictionary) {
         return;
-    
+    }
+
     NSString *pTitle = [ibDictionary valueForKey:@"title"];
-    if([pTitle length])
+    if ([pTitle length]) {
         self.title = pTitle;
-    else
+    }
+
+    else {
         self.title = nil;
-    
+    }
+
     self.required = [(NSNumber *)[ibDictionary valueForKey:@"required"] boolValue];
     
     NSNumber *normalMode = [ibDictionary valueForKey:@"existsInNormalMode"];
-    if(normalMode)
+    if (normalMode) {
         self.existsInNormalMode = [normalMode boolValue];
+    }
+
     NSNumber *editingMode = [ibDictionary valueForKey:@"existsInEditingMode"];
-    if(editingMode)
+    if (editingMode) {
         self.existsInEditingMode = [editingMode boolValue];
+    }
+
     NSNumber *creationMode = [ibDictionary valueForKey:@"existsInCreationMode"];
-    if(creationMode)
+    if (creationMode) {
         self.existsInCreationMode = [creationMode boolValue];
+    }
+
     NSNumber *detailMode = [ibDictionary valueForKey:@"existsInDetailMode"];
-    if(detailMode)
+    if (detailMode) {
         self.existsInDetailMode = [detailMode boolValue];
-    
+    }
+
     NSString *elementClassName = [ibDictionary valueForKey:@"uiElementClassName"];
-    if([elementClassName length])
+    if ([elementClassName length]) {
         self.uiElementClass = [SCUtilities swiftCompatibleNSClassFromString:elementClassName];
+    }
+
     NSString *elementNibName = [ibDictionary valueForKey:@"uiElementNibName"];
-    if([elementNibName length])
+    if ([elementNibName length]) {
         self.uiElementNibName = elementNibName;
-    
-    
+    }
+
+
     self.type = (SCPropertyType)[[ibDictionary valueForKey:@"type"] integerValue];
     
     switch (type)
@@ -137,11 +151,15 @@
         case SCPropertyTypeNumericTextField:
         {
             NSNumber *minValue = nil;
-            if([[ibDictionary valueForKey:@"useGenericFloat1"] boolValue])
+            if ([[ibDictionary valueForKey:@"useGenericFloat1"] boolValue]) {
                 minValue = [ibDictionary valueForKey:@"genericFloat1"];
+            }
+
             NSNumber *maxValue = nil;
-            if([[ibDictionary valueForKey:@"useGenericFloat2"] boolValue])
+            if ([[ibDictionary valueForKey:@"useGenericFloat2"] boolValue]) {
                 maxValue = [ibDictionary valueForKey:@"genericFloat2"];
+            }
+
             self.attributes = [SCNumericTextFieldAttributes attributesWithMinimumValue:minValue maximumValue:maxValue allowFloatValue:[[ibDictionary valueForKey:@"genericBool2"] boolValue] placeholder:[ibDictionary valueForKey:@"genericString1"]];
         }
             break;
@@ -157,11 +175,11 @@
         {
             NSDateFormatter *dateFormatter = nil;
             NSString *dateFormat = [ibDictionary valueForKey:@"genericString1"];
-            if([dateFormat length])
-            {
+            if ([dateFormat length]) {
                 dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:dateFormat];
             }
+
             self.attributes = [SCDateAttributes attributesWithDateFormatter:dateFormatter datePickerMode:[[ibDictionary valueForKey:@"genericInt1"] integerValue] displayDatePickerAsInputAccessoryView:NO];
         }
             break;
@@ -218,27 +236,27 @@
             NSString *itemsUIElementClassName = [ibDictionary valueForKey:@"genericString5"];
             NSString *itemsUIElementNibName = [ibDictionary valueForKey:@"genericString6"];
             NSObject *itemsUIElement = nil;
-            if([itemsUIElementNibName length])
-            {
+            if ([itemsUIElementNibName length]) {
                 itemsUIElement = [SCUtilities getFirstNodeInNibWithName:itemsUIElementNibName];
             }
-            else if([itemsUIElementClassName length])
-            {
+
+            else if ([itemsUIElementClassName length]) {
                 Class itemsUIElementClass = NSClassFromString(itemsUIElementClassName);
                 itemsUIElement = [[itemsUIElementClass alloc] init];
             }
-            if(itemsUIElement && [itemsUIElement isKindOfClass:[UITableViewCell class]])
-            {
+
+            if (itemsUIElement && [itemsUIElement isKindOfClass:[UITableViewCell class]]) {
                 attribs.sectionActions.cellForRowAtIndexPath = ^SCCustomCell*(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath)
                 {
-                    if([itemsUIElement isKindOfClass:[SCCustomCell class]])
+                    if ([itemsUIElement isKindOfClass:[SCCustomCell class]]) {
                         return (SCCustomCell *)itemsUIElement;
-                    
+                    }
+
                     SCCustomCell *customCell = [SCCustomCell cellWithCell:(UITableViewCell *)itemsUIElement];
                     return customCell;
                 };
             }
-            
+
             self.attributes = attribs;
         }
             break;
@@ -263,8 +281,10 @@
 
 - (BOOL)dataTypeScalar
 {
-    if(self.dataType==SCDataTypeBOOL || self.dataType==SCDataTypeDouble || self.dataType==SCDataTypeFloat || self.dataType==SCDataTypeInt)
+    if (self.dataType==SCDataTypeBOOL || self.dataType==SCDataTypeDouble || self.dataType==SCDataTypeFloat || self.dataType==SCDataTypeInt) {
         return TRUE;
+    }
+
     //else
     return FALSE;
 }
@@ -311,24 +331,22 @@
 //overrides superclass
 - (instancetype)initWithName:(NSString *)propertyName
 {
-    if( (self = [super initWithName:propertyName]) )
-    {
+    if ( (self = [super initWithName:propertyName]) ) {
         type = SCPropertyTypeCustom;
     }
-    
+
     return self;
 }
 
 - (instancetype)initWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindings:(NSDictionary *)bindings
 {
-	if( (self = [self initWithName:propertyName]) )
-	{
-		self.uiElementClass = elementClass;
-		self.objectBindings = bindings;
+    if ( (self = [self initWithName:propertyName]) ) {
+        self.uiElementClass = elementClass;
+        self.objectBindings = bindings;
         self.dataType = SCDataTypeNSString;
-	}
-	
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithName:(NSString *)propertyName uiElementClass:(Class)elementClass objectBindingsString:(NSString *)bindingsString
@@ -340,13 +358,12 @@
 
 - (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindings:(NSDictionary *)bindings
 {
-	if( (self = [self initWithName:propertyName]) )
-	{
-		self.uiElementNibName = elementNibName;
-		self.objectBindings = bindings;
-	}
-	
-	return self;
+    if ( (self = [self initWithName:propertyName]) ) {
+        self.uiElementNibName = elementNibName;
+        self.objectBindings = bindings;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithName:(NSString *)propertyName uiElementNibName:(NSString *)elementNibName objectBindingsString:(NSString *)bindingsString
@@ -378,25 +395,25 @@
 
 - (instancetype)init
 {
-	if( (self=[super init]) )
-	{
-		headerTitle = nil;
+    if ( (self=[super init]) ) {
+        headerTitle = nil;
         footerTitle = nil;
         propertyDefinitionNames = [[NSMutableArray alloc] init];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithHeaderTitle:(NSString *)groupHeaderTitle footerTitle:(NSString *)groupFooterTitle
         propertyNames:(NSArray *)propertyNames
 {
-    if( (self=[self init]) )
-	{
-		self.headerTitle = groupHeaderTitle;
+    if ( (self=[self init]) ) {
+        self.headerTitle = groupHeaderTitle;
         self.footerTitle = groupFooterTitle;
         [propertyDefinitionNames addObjectsFromArray:propertyNames];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (NSInteger)propertyNameCount
@@ -449,11 +466,11 @@
 
 - (instancetype)init
 {
-	if( (self=[super init]) )
-	{
-		propertyGroups = [[NSMutableArray alloc] init];
-	}
-	return self;
+    if ( (self=[super init]) ) {
+        propertyGroups = [[NSMutableArray alloc] init];
+    }
+
+    return self;
 }
 
 - (NSInteger)groupCount
@@ -480,8 +497,10 @@
 {
     for(SCPropertyGroup *group in propertyGroups)
     {
-        if([group.headerTitle isEqualToString:headerTitle])
+        if ([group.headerTitle isEqualToString:headerTitle]) {
             return group;
+        }
+
     }
     return nil;
 }

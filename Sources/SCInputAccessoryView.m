@@ -55,10 +55,10 @@
 - (instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle
 {
     self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
-    if(self) 
-    {
+    if (self) {
         [self performInitialization];
     }
+
     return self;
 }
 
@@ -118,44 +118,50 @@
 
 - (void)setShowPrevNextButtons:(BOOL)show
 {
-    if(_showPrevNextButtons == show)
+    if (_showPrevNextButtons == show) {
         return;
-    
+    }
+
     _showPrevNextButtons = show;
     
     NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self.toolbar.items];
-    if(_showPrevNextButtons)
-    {
+    if (_showPrevNextButtons) {
         [toolbarItems insertObject:self.previousNextSegmentedControl atIndex:0];
     }
-    else
-    {
+
+    else {
         [toolbarItems removeObjectAtIndex:0];
     }
+
     self.toolbar.items = toolbarItems;
 }
 
 - (void)setShowClearButton:(BOOL)show
 {
-    if(_showClearButton == show)
+    if (_showClearButton == show) {
         return;
-    
+    }
+
     _showClearButton = show;
     
     NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self.toolbar.items];
     NSUInteger clearIndex;
-    if(self.showPrevNextButtons)
+    if (self.showPrevNextButtons) {
         clearIndex = 1;
-    else
+    }
+
+    else {
         clearIndex = 0;
-    if(_showClearButton)
-    {
+    }
+
+    if (_showClearButton) {
         [toolbarItems insertObject:self.clearButton atIndex:clearIndex];
     }
-    else 
-    {
+
+    else {
         [toolbarItems removeObjectAtIndex:clearIndex];
     }
+
     self.toolbar.items = toolbarItems;
 }
 
@@ -177,26 +183,34 @@
 
 - (void)previousTapped
 {
-    if([self.delegate respondsToSelector:@selector(inputAccessoryViewPreviousTapped:)])
+    if ([self.delegate respondsToSelector:@selector(inputAccessoryViewPreviousTapped:)]) {
         [self.delegate inputAccessoryViewPreviousTapped:self];
+    }
+
 }
 
 - (void)nextTapped
 {
-    if([self.delegate respondsToSelector:@selector(inputAccessoryViewNextTapped:)])
+    if ([self.delegate respondsToSelector:@selector(inputAccessoryViewNextTapped:)]) {
         [self.delegate inputAccessoryViewNextTapped:self];
+    }
+
 }
 
 - (void)clearTapped
 {
-    if([self.delegate respondsToSelector:@selector(inputAccessoryViewClearTapped:)])
+    if ([self.delegate respondsToSelector:@selector(inputAccessoryViewClearTapped:)]) {
         [self.delegate inputAccessoryViewClearTapped:self];
+    }
+
 }
 
 - (void)doneTapped
 {
-    if([self.delegate respondsToSelector:@selector(inputAccessoryViewDoneTapped:)])
+    if ([self.delegate respondsToSelector:@selector(inputAccessoryViewDoneTapped:)]) {
         [self.delegate inputAccessoryViewDoneTapped:self];
+    }
+
 }
 
 @end

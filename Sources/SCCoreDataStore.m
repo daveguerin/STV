@@ -40,8 +40,7 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _managedObjectContext = nil;
         _boundSet = nil;
         _boundOrderedSet = nil;
@@ -49,27 +48,28 @@
         
         // Register with managed object notifications
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willSaveContext) name:NSManagedObjectContextWillSaveNotification object:nil];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context defaultEntityDefinition:(SCEntityDefinition *)definition
 {
-    if( (self=[self initWithDefaultDataDefinition:definition]) )
-    {
+    if ( (self=[self initWithDefaultDataDefinition:definition]) ) {
         self.managedObjectContext = context;
     }
+
     return self;
 }
 
 - (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context boundSet:(NSMutableSet *)set boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsStoreObjects:(BOOL)ownsStoreObjects
 {
-    if( (self=[self initWithDefaultDataDefinition:definition]) )
-    {
+    if ( (self=[self initWithDefaultDataDefinition:definition]) ) {
         self.managedObjectContext = context;
         self.boundSet = set;
         self.boundSetOwnsStoreObjects = ownsStoreObjects;
     }
+
     return self;
 }
 
@@ -89,40 +89,45 @@
 - (NSObject *)createNewObjectWithDefinition:(SCDataDefinition *)definition
 {
     NSObject *object = nil;
-    
-    if([definition isKindOfClass:[SCEntityDefinition class]])
-    {
+
+    if ([definition isKindOfClass:[SCEntityDefinition class]]) {
         SCEntityDefinition *entityDefinition = (SCEntityDefinition *)definition;
         
         // get the new object's order
         NSInteger order = NSNotFound;
-        if(entityDefinition.orderAttributeName && [entityDefinition isValidPropertyName:entityDefinition.orderAttributeName])
-        {
+        if (entityDefinition.orderAttributeName && [entityDefinition isValidPropertyName:entityDefinition.orderAttributeName]) {
             NSArray *objectsArray = [self fetchObjectsWithOptions:[self.defaultDataDefinition generateCompatibleDataFetchOptions]];
-            
-            if(objectsArray.count == 0) 
-            {
+
+            if (objectsArray.count == 0) {
                 order = 0;
             }
-            else
-            {
+
+            else {
                 NSObject *lastObject = [objectsArray objectAtIndex:objectsArray.count-1];
                 order = [(NSNumber *)[lastObject valueForKey:entityDefinition.orderAttributeName] intValue] + 1;
             }
+
         }
-        
+
         object = [NSEntityDescription insertNewObjectForEntityForName:entityDefinition.entity.name inManagedObjectContext:self.managedObjectContext];
-        if(self.boundSet)
+        if (self.boundSet) {
             [self.boundSet addObject:object];
-        else if(self.boundOrderedSet)
+        }
+
+        else if (self.boundOrderedSet) {
             [self.boundOrderedSet addObject:object];
-        if(order != NSNotFound)
+        }
+
+        if (order != NSNotFound) {
             [object setValue:[NSNumber numberWithInteger:order] forKey:entityDefinition.orderAttributeName];
+        }
+
     }
-    
+
     [self addDataDefinition:definition];
-    if(object)
+    if (object) {
         [_uninsertedObjects addObject:object];
+    }
 
     return object;
 }
@@ -131,8 +136,10 @@
 - (BOOL)discardUninsertedObject:(NSObject *)object
 {
     // Remove the new object from context
-    if(object)
+    if (object) {
         return [self deleteObject:object];
+    }
+
     //else
     return TRUE;
 }
@@ -143,8 +150,10 @@
     // restore all objects that have been deleted during UIApplicationDidEnterBackgroundNotification
     for(NSManagedObject *object in _uninsertedObjects)
     {
-        if(!object.managedObjectContext)
+        if (!object.managedObjectContext) {
             [self.managedObjectContext insertObject:object];
+        }
+
     }
 }
 
@@ -152,18 +161,22 @@
 - (BOOL)insertObject:(NSObject *)object
 {
     SCDataDefinition *definition = [self definitionForObject:object];
-    if(![definition isKindOfClass:[SCEntityDefinition class]])
+    if (![definition isKindOfClass:[SCEntityDefinition class]]) {
         return FALSE;
-    
-    if([_uninsertedObjects indexOfObjectIdenticalTo:object] != NSNotFound)
-    {
-        [self.managedObjectContext insertObject:(NSManagedObject *)object];
-        if(self.boundSet)
-            [self.boundSet addObject:object];
-        else if(self.boundOrderedSet)
-            [self.boundOrderedSet addObject:object];
     }
-    
+
+    if ([_uninsertedObjects indexOfObjectIdenticalTo:object] != NSNotFound) {
+        [self.managedObjectContext insertObject:(NSManagedObject *)object];
+        if (self.boundSet) {
+            [self.boundSet addObject:object];
+        }
+
+        else if (self.boundOrderedSet) {
+            [self.boundOrderedSet addObject:object];
+        }
+
+    }
+
     [_uninsertedObjects removeObjectIdenticalTo:object];
     
     return TRUE;
@@ -171,32 +184,35 @@
 
 - (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray *)subsetArray
 {
-    if(self.boundOrderedSet)
-    {
+    if (self.boundOrderedSet) {
         NSInteger objectIndex = [self.boundOrderedSet indexOfObject:object];
-        if(objectIndex == NSNotFound)
+        if (objectIndex == NSNotFound) {
             return FALSE;
-        
+        }
+
         NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:objectIndex];
         [self.boundOrderedSet moveObjectsAtIndexes:indexes toIndex:toOrder];
         
         return TRUE;
     }
-    
-    
+
+
     SCDataDefinition *definition = [self definitionForObject:object];
     SCEntityDefinition *entityDefinition = nil;
-    if([definition isKindOfClass:[SCEntityDefinition class]])
+    if ([definition isKindOfClass:[SCEntityDefinition class]]) {
         entityDefinition = (SCEntityDefinition *)definition;
-    
-    if(!entityDefinition || !entityDefinition.orderAttributeName)
+    }
+
+    if (!entityDefinition || !entityDefinition.orderAttributeName) {
         return FALSE;
-    
-    
+    }
+
+
     NSObject *toObject = [subsetArray objectAtIndex:toOrder];
-    if(toObject == object)
+    if (toObject == object) {
         return TRUE;  // no need to change order
-    
+    }
+
     NSInteger fromObjectOrderAttributeValue = [[object valueForKey:entityDefinition.orderAttributeName] integerValue];
     NSInteger toObjectOrderAttributeValue = [[toObject valueForKey:entityDefinition.orderAttributeName] integerValue];
     
@@ -205,32 +221,32 @@
     NSInteger absoluteFromOrder = [objectsArray indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
                                    {
                                        BOOL found = ([[obj valueForKey:entityDefinition.orderAttributeName] integerValue] == fromObjectOrderAttributeValue);
-                                       if(found)
-                                           *stop = YES;
-                                       
-                                       return found;
+        if (found) {
+            *stop = YES;
+        }
+
+        return found;
                                    }];
-    if(absoluteFromOrder == NSNotFound)
-    {
+    if (absoluteFromOrder == NSNotFound) {
         SCDebugLog(@"Unexpected object not found while reordering for: %@", object);
         return FALSE;
     }
-    
+
     // Determine absoluteToOrder
     NSInteger absoluteToOrder = [objectsArray indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
                                  {
                                      BOOL found = ([[obj valueForKey:entityDefinition.orderAttributeName] integerValue] == toObjectOrderAttributeValue);
-                                     if(found)
-                                         *stop = YES;
-                                     
-                                     return found;
+        if (found) {
+            *stop = YES;
+        }
+
+        return found;
                                  }];
-    if(absoluteToOrder == NSNotFound)
-    {
+    if (absoluteToOrder == NSNotFound) {
         SCDebugLog(@"Unexpected object not found while reordering for: %@", toObject);
         return FALSE;
     }
-    
+
     // Modify the object's order attribute to toObjectOrderAttributeValue
     [object setValue:[NSNumber numberWithInteger:toObjectOrderAttributeValue] forKey:entityDefinition.orderAttributeName];
     
@@ -245,9 +261,10 @@
     {
         NSObject *obj = [objectsArray objectAtIndex:i];
         NSInteger objAttributeValue = [[obj valueForKey:entityDefinition.orderAttributeName] integerValue];
-        if(objAttributeValue < currentOrderValue)
+        if (objAttributeValue < currentOrderValue) {
             break;
-        
+        }
+
         currentOrderValue--;
         [obj setValue:[NSNumber numberWithInteger:currentOrderValue] forKey:entityDefinition.orderAttributeName];
     }
@@ -256,9 +273,10 @@
     {
         NSObject *obj = [objectsArray objectAtIndex:i];
         NSInteger objAttributeValue = [[obj valueForKey:entityDefinition.orderAttributeName] integerValue];
-        if(objAttributeValue > currentOrderValue)
+        if (objAttributeValue > currentOrderValue) {
             break;
-        
+        }
+
         currentOrderValue++;
         [obj setValue:[NSNumber numberWithInteger:currentOrderValue] forKey:entityDefinition.orderAttributeName];
     }
@@ -269,20 +287,18 @@
 // overrides superclass
 - (BOOL)deleteObject:(NSObject *)object
 {
-    if(self.boundSet)
-    {
+    if (self.boundSet) {
         [self.boundSet removeObject:object];
     }
-    else if(self.boundOrderedSet)
-    {
+
+    else if (self.boundOrderedSet) {
         [self.boundOrderedSet removeObject:object];
     }
-    
-    if( (!self.boundSet && !self.boundOrderedSet) || _boundSetOwnsStoreObjects)
-    {
+
+    if ( (!self.boundSet && !self.boundOrderedSet) || _boundSetOwnsStoreObjects) {
         [self.managedObjectContext deleteObject:(NSManagedObject *)object];
     }
-    
+
     return TRUE;
 }
 
@@ -292,37 +308,44 @@
     SCCoreDataFetchOptions *defaultFetchOptions = (SCCoreDataFetchOptions *)[self.defaultDataDefinition generateCompatibleDataFetchOptions];
     
     SCCoreDataFetchOptions *coreDataFetchOptions;
-    if([fetchOptions isKindOfClass:[SCCoreDataFetchOptions class]])
-    {
+    if ([fetchOptions isKindOfClass:[SCCoreDataFetchOptions class]]) {
         coreDataFetchOptions = (SCCoreDataFetchOptions *)fetchOptions;
-        
-        if(coreDataFetchOptions.sort && !coreDataFetchOptions.sortKey)
+
+        if (coreDataFetchOptions.sort && !coreDataFetchOptions.sortKey) {
             coreDataFetchOptions.sortKey = defaultFetchOptions.sortKey;
+        }
+
     }
-    else
-    {
+
+    else {
         coreDataFetchOptions = defaultFetchOptions;
-        if(fetchOptions.filterPredicate)
+        if (fetchOptions.filterPredicate) {
             coreDataFetchOptions.filterPredicate = fetchOptions.filterPredicate;
+        }
+
     }
-    
+
     NSPredicate *filterPredicate = nil;
-    if(coreDataFetchOptions.filter)
+    if (coreDataFetchOptions.filter) {
         filterPredicate = coreDataFetchOptions.filterPredicate;
-    
+    }
+
     NSArray *sortDescriptors = nil;
-    if(!self.boundOrderedSet)
+    if (!self.boundOrderedSet) {
         sortDescriptors = [coreDataFetchOptions sortDescriptors];
-    
+    }
+
     NSMutableArray *array = [NSMutableArray array];
-    if(self.boundSet || self.boundOrderedSet)
-    {
-        if(self.boundSet)
+    if (self.boundSet || self.boundOrderedSet) {
+        if (self.boundSet) {
             [array addObjectsFromArray:[self.boundSet allObjects]];
-        else
+        }
+
+        else {
             [array addObjectsFromArray:[self.boundOrderedSet array]];
-        if(filterPredicate)
-        {
+        }
+
+        if (filterPredicate) {
             @try 
             {
                 [array filterUsingPredicate:filterPredicate];
@@ -332,8 +355,8 @@
                 SCDebugLog(@"Warning: Invalid filter predicate: %@.", filterPredicate);
             }
         }
-        if(sortDescriptors)
-        {
+
+        if (sortDescriptors) {
             @try 
             {
                 [array sortUsingDescriptors:sortDescriptors];
@@ -343,35 +366,42 @@
                 SCDebugLog(@"Warning: Invalid sort key: %@ or orderAttribute:%@.", coreDataFetchOptions.sortKey, coreDataFetchOptions.orderAttributeName);
             }
         }
+
     }
-    else 
-    {
+
+    else {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        if(fetchOptions.batchSize)
-        {
+        if (fetchOptions.batchSize) {
             [fetchRequest setFetchLimit:coreDataFetchOptions.batchSize];
             [fetchRequest setFetchOffset:coreDataFetchOptions.batchCurrentOffset*coreDataFetchOptions.batchSize];
         }
-        if(sortDescriptors)
+
+        if (sortDescriptors) {
             [fetchRequest setSortDescriptors: sortDescriptors];
-        if(filterPredicate)
+        }
+
+        if (filterPredicate) {
             [fetchRequest setPredicate:filterPredicate];
-		
+        }
+
         // fetch all entities in dataDefinitions
         NSArray *allEntities = [_dataDefinitions allValues];
         for(SCEntityDefinition *entityDefinition in allEntities)
         {
-            if(![entityDefinition isKindOfClass:[SCEntityDefinition class]])
+            if (![entityDefinition isKindOfClass:[SCEntityDefinition class]]) {
                 continue;
-            
+            }
+
             [fetchRequest setEntity:entityDefinition.entity];
             [array addObjectsFromArray:[entityDefinition.managedObjectContext executeFetchRequest:fetchRequest error:NULL]];
         }
-		
-		if(coreDataFetchOptions.batchSize)
+
+        if (coreDataFetchOptions.batchSize) {
             [coreDataFetchOptions incrementBatchOffset];
+        }
+
     }
-    
+
     return array;
 }
 
@@ -398,42 +428,46 @@
 // overrides superclass
 - (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 {
-    if(![SCUtilities propertyName:propertyName existsInObject:object])
+    if (![SCUtilities propertyName:propertyName existsInObject:object]) {
         return;
-    
+    }
+
     NSArray *keyPathArray = [propertyName componentsSeparatedByString:@"."];
-    if(keyPathArray.count == 1)
-    {
+    if (keyPathArray.count == 1) {
         [object setValue:value forKey:propertyName];
     }
-    else
-    {
-        if([object isKindOfClass:[NSManagedObject class]])
-        {
+
+    else {
+        if ([object isKindOfClass:[NSManagedObject class]]) {
             // Make sure all entity objects on the path exist, otherwise create them
             NSManagedObject *mObject = (NSManagedObject *)object;
             for(int i=0; i<keyPathArray.count-1; i++)
             {
                 NSString *key = [keyPathArray objectAtIndex:i];
                 NSManagedObject *subObject = [mObject valueForKey:key];
-                if(!subObject)
-                {
+                if (!subObject) {
                     NSRelationshipDescription *subObjectRel = [[mObject.entity relationshipsByName] valueForKey:key];
-					if(subObjectRel)
-					{
-						subObject = [NSEntityDescription insertNewObjectForEntityForName:[[subObjectRel destinationEntity] name] inManagedObjectContext:mObject.managedObjectContext];
-						[mObject setValue:subObject forKey:key];
-					}
+                    if (subObjectRel) {
+                        subObject = [NSEntityDescription insertNewObjectForEntityForName:[[subObjectRel destinationEntity] name] inManagedObjectContext:mObject.managedObjectContext];
+                        [mObject setValue:subObject forKey:key];
+                    }
+
                 }
-                
-                if(subObject)
+
+                if (subObject) {
                     mObject = subObject;
-                else
+                }
+
+                else {
                     break;
+                }
+
             }
         }
+
         [object setValue:value forKeyPath:propertyName];
     }
+
 }
 
 // overrides superclass
@@ -457,29 +491,32 @@
 // overrides superclass
 - (BOOL)validateOrderChangeForObject:(NSObject *)object
 {
-    if(self.boundOrderedSet)
+    if (self.boundOrderedSet) {
         return TRUE;
-    
-    
+    }
+
+
     BOOL orderCanChange = FALSE;
     
     SCDataDefinition *definition = [self definitionForObject:object];
-    if([definition isKindOfClass:[SCEntityDefinition class]])
-    {
+    if ([definition isKindOfClass:[SCEntityDefinition class]]) {
         SCEntityDefinition *entityDefinition = (SCEntityDefinition *)definition;
-        if(entityDefinition.orderAttributeName)
+        if (entityDefinition.orderAttributeName) {
             orderCanChange = TRUE;
+        }
+
     }
-    
+
     return orderCanChange;
 }
 
 // overrides superclass
 - (SCDataDefinition *)definitionForObject:(NSObject *)object
 {
-    if(![object isKindOfClass:[NSManagedObject class]])
+    if (![object isKindOfClass:[NSManagedObject class]]) {
         return nil;
-    
+    }
+
     NSString *dataStructureName = [(NSManagedObject *)object entity].name;
     
     return [_dataDefinitions valueForKey:dataStructureName];
@@ -502,10 +539,14 @@
                 self.boundSet = [(NSManagedObject *)_boundObject mutableSetValueForKeyPath:_boundPropertyName];
                 
                 // determine if boundSet owns the store's objects
-                if([propertyDefiniton.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]])
+                if ([propertyDefiniton.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]]) {
                     self.boundSetOwnsStoreObjects = TRUE;
-                else
+                }
+
+                else {
                     self.boundSetOwnsStoreObjects = FALSE;
+                }
+
             }
             @catch (NSException *exception)
             {
@@ -523,10 +564,14 @@
                 self.boundOrderedSet = [(NSManagedObject *)_boundObject mutableOrderedSetValueForKey:_boundPropertyName];
                 
                 // determine if boundSet owns the store's objects
-                if([propertyDefiniton.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]])
+                if ([propertyDefiniton.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]]) {
                     self.boundSetOwnsStoreObjects = TRUE;
-                else
+                }
+
+                else {
                     self.boundSetOwnsStoreObjects = FALSE;
+                }
+
             }
             @catch (NSException *exception)
             {
@@ -549,22 +594,25 @@
 - (void)commitData
 {
     NSError *error = nil;
-    if(![self commitDataWithError:&error])
-    {
+    if (![self commitDataWithError:&error]) {
         SCDebugLog(@"Error committing the Core Data store: %@, %@", error, error.userInfo);
-        if(self.commitFailure)
+        if (self.commitFailure) {
             self.commitFailure(error);
+        }
+
     }
+
 }
 
 - (BOOL)commitDataWithError:(NSError **)error
 {
     NSManagedObjectContext *context = self.managedObjectContext;
-    if(!context)
-    {
+    if (!context) {
         _lastCommitError = nil;
-        if(error)
+        if (error) {
             *error = nil;
+        }
+
         return YES;
     }
 
@@ -575,13 +623,17 @@
     directly on whichever queue called commitData.
     */
     [context performBlockAndWait:^{
-        if(context.hasChanges)
+        if (context.hasChanges) {
             success = [context save:&saveError];
+        }
+
     }];
 
     _lastCommitError = saveError;
-    if(error)
+    if (error) {
         *error = saveError;
+    }
+
     return success;
 }
 

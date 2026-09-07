@@ -30,50 +30,49 @@
 
 - (instancetype)valueForSensibleKeyPath:(NSString *)keyPath
 {
-    if(!keyPath)
+    if (!keyPath) {
         return nil;
-    
+    }
+
     NSRange bRange = [keyPath rangeOfString:@"["];
     
     // Return valueForKeyPath if string has no index brackets
-    if(bRange.location == NSNotFound)
+    if (bRange.location == NSNotFound) {
         return [self valueForKeyPath:keyPath];
-    
+    }
+
     id currentObject = self;
     
     NSArray *keys = [keyPath componentsSeparatedByString:@"."];
     for(NSString *key in keys)
     {
         NSRange lbRange = [key rangeOfString:@"["];
-        if(lbRange.location == NSNotFound)
-        {
+        if (lbRange.location == NSNotFound) {
             currentObject = [currentObject valueForKey:key];
         }
-        else
-        {
+
+        else {
             NSRange rbRange = [key rangeOfString:@"]"];
-            if(rbRange.location==NSNotFound || rbRange.location<lbRange.location)
-            {
+            if (rbRange.location==NSNotFound || rbRange.location<lbRange.location) {
                 SCDebugLog(@"Error: Invalid syntax in key:'%@'", key);
                 return nil;
             }
-            
+
             NSRange arrayKeyRange;
             arrayKeyRange.location = 0;
             arrayKeyRange.length = lbRange.location;
             NSString *arrayKey = [key substringWithRange:arrayKeyRange];
             NSArray *array = [currentObject valueForKey:arrayKey];
-            if(![array respondsToSelector:@selector(objectAtIndex:)])
-            {
+            if (![array respondsToSelector:@selector(objectAtIndex:)]) {
                 SCDebugLog(@"Error: Accessing a non-array object in key:'%@'", key);
                 return nil;
             }
-            if(!array.count)
-            {
+
+            if (!array.count) {
                 SCDebugLog(@"Error: Accessing an empty array in key:'%@'", key);
                 return nil;
             }
-            
+
             NSRange bracketRange;
             bracketRange.location = lbRange.location+1;
             bracketRange.length = rbRange.location - lbRange.location - 1;
@@ -84,35 +83,34 @@
             
             // check if the bracket string has the 'n' variable
             NSRange nRange = [bracketString rangeOfString:@"n"];
-            if(nRange.location == NSNotFound)
-            {
+            if (nRange.location == NSNotFound) {
                 bracketValue = [bracketString integerValue];
             }
-            else
-            {
+
+            else {
                 // determine if there is a number subtracted from n
                 NSUInteger nSubtract = 0;
                 NSRange minusRange = [bracketString rangeOfString:@"-"];
-                if(minusRange.location!=NSNotFound && minusRange.location>nRange.location)
-                {
+                if (minusRange.location!=NSNotFound && minusRange.location>nRange.location) {
                     NSString *nSubtractString = [bracketString substringFromIndex:minusRange.location+1];
                     nSubtract = [nSubtractString integerValue];
                 }
-                
+
                 bracketValue = array.count-1 - nSubtract;
             }
-            
-            if(bracketValue<0 || bracketValue>=array.count)
-            {
+
+            if (bracketValue<0 || bracketValue>=array.count) {
                 SCDebugLog(@"Error: Index out of bounds for array in key:'%@'", key);
                 return nil;
             }
-            
+
             currentObject = [array objectAtIndex:bracketValue];
         }
-        
-        if(!currentObject)
+
+        if (!currentObject) {
             break;
+        }
+
     }
     
     return currentObject;
@@ -120,18 +118,18 @@
 
 - (void)setValue:(id)value forSensibleKeyPath:(NSString *)keyPath
 {
-    if(!keyPath)
+    if (!keyPath) {
         return;
-    
+    }
+
     NSRange bRange = [keyPath rangeOfString:@"["];
     
     // Return valueForKeyPath if string has no index brackets
-    if(bRange.location == NSNotFound)
-    {
+    if (bRange.location == NSNotFound) {
         [self setValue:value forKeyPath:keyPath];
         return;
     }
-    
+
     id currentObject = self;
     
     NSArray *keys = [keyPath componentsSeparatedByString:@"."];
@@ -140,35 +138,32 @@
         NSString *key = [keys objectAtIndex:i];
         
         NSRange lbRange = [key rangeOfString:@"["];
-        if(lbRange.location == NSNotFound)
-        {
+        if (lbRange.location == NSNotFound) {
             currentObject = [currentObject valueForKey:key];
         }
-        else
-        {
+
+        else {
             NSRange rbRange = [key rangeOfString:@"]"];
-            if(rbRange.location==NSNotFound || rbRange.location<lbRange.location)
-            {
+            if (rbRange.location==NSNotFound || rbRange.location<lbRange.location) {
                 SCDebugLog(@"Error: Invalid syntax in key:'%@'", key);
                 return;
             }
-            
+
             NSRange arrayKeyRange;
             arrayKeyRange.location = 0;
             arrayKeyRange.length = lbRange.location;
             NSString *arrayKey = [key substringWithRange:arrayKeyRange];
             NSArray *array = [currentObject valueForKey:arrayKey];
-            if(![array respondsToSelector:@selector(objectAtIndex:)])
-            {
+            if (![array respondsToSelector:@selector(objectAtIndex:)]) {
                 SCDebugLog(@"Error: Accessing a non-array object in key:'%@'", key);
                 return;
             }
-            if(!array.count)
-            {
+
+            if (!array.count) {
                 SCDebugLog(@"Error: Accessing an empty array in key:'%@'", key);
                 return;
             }
-            
+
             NSRange bracketRange;
             bracketRange.location = lbRange.location+1;
             bracketRange.length = rbRange.location - lbRange.location - 1;
@@ -179,35 +174,34 @@
             
             // check if the bracket string has the 'n' variable
             NSRange nRange = [bracketString rangeOfString:@"n"];
-            if(nRange.location == NSNotFound)
-            {
+            if (nRange.location == NSNotFound) {
                 bracketValue = [bracketString integerValue];
             }
-            else
-            {
+
+            else {
                 // determine if there is a number subtracted from n
                 NSUInteger nSubtract = 0;
                 NSRange minusRange = [bracketString rangeOfString:@"-"];
-                if(minusRange.location!=NSNotFound && minusRange.location>nRange.location)
-                {
+                if (minusRange.location!=NSNotFound && minusRange.location>nRange.location) {
                     NSString *nSubtractString = [bracketString substringFromIndex:minusRange.location+1];
                     nSubtract = [nSubtractString integerValue];
                 }
-                
+
                 bracketValue = array.count-1 - nSubtract;
             }
-            
-            if(bracketValue<0 || bracketValue>=array.count)
-            {
+
+            if (bracketValue<0 || bracketValue>=array.count) {
                 SCDebugLog(@"Error: Index out of bounds for array in key:'%@'", key);
                 return;
             }
-            
+
             currentObject = [array objectAtIndex:bracketValue];
         }
-        
-        if(!currentObject)
+
+        if (!currentObject) {
             break;
+        }
+
     }
     
     NSString *lastKey = [keys lastObject];
@@ -228,9 +222,10 @@
 - (NSString *)prefix
 {
     NSString *prefix = objc_getAssociatedObject(self, @selector(prefix));
-    if(!prefix)
+    if (!prefix) {
         prefix = @"";
-    
+    }
+
     return prefix;
 }
 
@@ -242,9 +237,10 @@
 - (NSString *)suffix
 {
     NSString *suffix = objc_getAssociatedObject(self, @selector(suffix));
-    if(!suffix)
+    if (!suffix) {
         suffix = @"";
-    
+    }
+
     return suffix;
 }
 
@@ -283,12 +279,12 @@
 	while (view.superview)
 	{
 		NSString *sviewClassName = NSStringFromClass([view.superview class]);
-        if([sviewClassName rangeOfString:@"UIPopoverView"].location != NSNotFound)
-		{
-			inPopover = TRUE;
-			break;
-		}
-		view = view.superview;
+        if ([sviewClassName rangeOfString:@"UIPopoverView"].location != NSNotFound) {
+            inPopover = TRUE;
+            break;
+        }
+
+        view = view.superview;
 	}
 	
 	return inPopover;
@@ -300,8 +296,10 @@
     struct hostent *hostinfo;
     hostname = "google.com";
     hostinfo = gethostbyname (hostname);
-    if (hostinfo == NULL)
+    if (hostinfo == NULL) {
         return NO;
+    }
+
     //else
     return YES;
 }
@@ -311,9 +309,10 @@
     BOOL valid = FALSE;
     
     NSURL *url = [NSURL URLWithString:urlString];
-    if (url && url.scheme && url.host)
+    if (url && url.scheme && url.host) {
         valid = TRUE;
-    
+    }
+
     return valid;
 }
 
@@ -331,10 +330,13 @@
         if ([topLevelNodes count]) {
             return [topLevelNodes objectAtIndex:0];
         }
+
         else {
             return nil;
         }
+
     }
+
     else if ([nibNameComponents count] == 3) {
         // dgApps
         // It's a SwiftPM PackageName_TargetName_NIBName
@@ -372,37 +374,46 @@
                 if ([topLevelNodes count]) {
                     return [topLevelNodes objectAtIndex:0];
                 }
+
                 else {
                     return nil;
                 }
+
             }
+
         }
     }
 
-	return nil;
+    return nil;
 }
 
 + (NSString *)getUserFriendlyTitleFromName:(NSString *)propertyName
 {
 	NSMutableString *UFName = [[NSMutableString alloc] init];
-	
-	if(![propertyName length])
-		return UFName;
-	
-	// Capitalize & append the 1st character
-    if([propertyName characterAtIndex:0] != '~')
+
+    if (![propertyName length]) {
+        return UFName;
+    }
+
+    // Capitalize & append the 1st character
+    if ([propertyName characterAtIndex:0] != '~') {
         [UFName appendString:[[propertyName substringToIndex:1] uppercaseString]];
-	
-	// Leave a space for every capital letter
+    }
+
+    // Leave a space for every capital letter
 	NSCharacterSet *uppercaseSet = [NSCharacterSet uppercaseLetterCharacterSet];
 	for(NSUInteger i=1; i<[propertyName length]; i++)
 	{
 		unichar chr = [propertyName characterAtIndex:i];
-		if([uppercaseSet characterIsMember:chr])
-			[UFName appendString:[NSString stringWithFormat:@" %c", chr]];
-		else
-			[UFName appendString:[NSString stringWithFormat:@"%c", chr]];
-	}
+        if ([uppercaseSet characterIsMember:chr]) {
+            [UFName appendString:[NSString stringWithFormat:@" %c", chr]];
+        }
+
+        else {
+            [UFName appendString:[NSString stringWithFormat:@"%c", chr]];
+        }
+
+    }
 	
 	return UFName;
 }
@@ -410,9 +421,10 @@
 + (Class)swiftCompatibleNSClassFromString:(NSString *)className
 {
     Class _class = NSClassFromString(className);
-    if(_class)
+    if (_class) {
         return _class;
-    
+    }
+
     NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
     NSString *classStringName = [NSString stringWithFormat:@"_TtC%lu%@%lu%@", (unsigned long)appName.length, appName, (unsigned long)className.length, className];
     return NSClassFromString(classStringName);
@@ -440,51 +452,60 @@
 
 + (BOOL)isBasicDataTypeClass:(Class)aClass
 {
-    if(
+    if (
        [self isStringClass:aClass]  ||
        [self isNumberClass:aClass]  ||
-       [self isDateClass:aClass])
-    {
+       [self isDateClass:aClass]) {
         return TRUE;
     }
+
     //else
     return FALSE;
 }
 
 + (NSString *)dataStructureNameForClass:(Class)aClass
 {
-    if([self isStringClass:aClass])
+    if ([self isStringClass:aClass]) {
         return @"NSString";
+    }
+
     //else
-    if([self isNumberClass:aClass])
+    if ([self isNumberClass:aClass]) {
         return @"NSNumber";
+    }
+
     //else
-    if([self isDateClass:aClass])
+    if ([self isDateClass:aClass]) {
         return @"NSDate";
+    }
+
     //else
-    if([self isDictionaryClass:aClass])
+    if ([self isDictionaryClass:aClass]) {
         return @"NSDictionary";
+    }
+
     //else
     return NSStringFromClass(aClass);
 }
 
 + (BOOL)propertyName:(NSString *)propertyName existsInObject:(NSObject *)object
 {
-    if([self isBasicDataTypeClass:[object class]] || [self isDictionaryClass:[object class]])
+    if ([self isBasicDataTypeClass:[object class]] || [self isDictionaryClass:[object class]]) {
         return TRUE;
-    
+    }
+
     BOOL propertyExists;
     
 	@try 
-    { 
-        if([object isKindOfClass:[NSUbiquitousKeyValueStore class]])
-        {
+    {
+        if ([object isKindOfClass:[NSUbiquitousKeyValueStore class]]) {
             [(NSUbiquitousKeyValueStore *)object objectForKey:propertyName];
         }
-        else
-        {
+
+        else {
             [object valueForSensibleKeyPath:propertyName];
         }
+
         propertyExists = TRUE; 
     }
 	@catch (NSException *exception) 
@@ -496,36 +517,40 @@
                 // It's not a ~custom propertyName dgapps
                 SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, object);
             }
+
         }
-     }
+
+    }
     
     return propertyExists;
 }
 
 + (NSObject *)valueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 {
-    if([self isBasicDataTypeClass:[object class]])
+    if ([self isBasicDataTypeClass:[object class]]) {
         return object;
-    
-	if(!propertyName)
-		return nil;
-	
-	NSArray *propertyNames = [propertyName componentsSeparatedByString:@";"];
+    }
+
+    if (!propertyName) {
+        return nil;
+    }
+
+    NSArray *propertyNames = [propertyName componentsSeparatedByString:@";"];
 	NSMutableArray *valuesArray = [NSMutableArray arrayWithCapacity:propertyNames.count];
 	for(NSString *pName in propertyNames)
 	{
 		NSObject *value = nil;
 		@try 
 		{
-			if([object isKindOfClass:[NSUbiquitousKeyValueStore class]])
-            {
+            if ([object isKindOfClass:[NSUbiquitousKeyValueStore class]]) {
                 value = [(NSUbiquitousKeyValueStore *)object objectForKey:pName];
             }
-            else
-            {
+
+            else {
                 value = [object valueForSensibleKeyPath:pName];
             }
-		}
+
+        }
 		@catch (NSException * e) 
 		{
             if (propertyName.length > 0) {
@@ -534,135 +559,151 @@
                     // It's not a ~custom propertyName dgapps
                     SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, NSStringFromClass([object class]));
                 }
+
             }
-		}
-		if(!value)
-			value = [NSNull null];
-		[valuesArray addObject:value];
+
+        }
+        if (!value) {
+            value = [NSNull null];
+        }
+
+        [valuesArray addObject:value];
 	}
-	
-	if(propertyNames.count > 1)
-		return valuesArray;
-	//else
+
+    if (propertyNames.count > 1) {
+        return valuesArray;
+    }
+
+    //else
 	NSObject *value = [valuesArray objectAtIndex:0];
-	if([value isKindOfClass:[NSNull class]])
-		return nil;
-	return value;
+    if ([value isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+
+    return value;
 }
 
 + (NSString *)stringValueForPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 			separateValuesUsingDelimiter:(NSString *)delimiter
 {
-	if([self isBasicDataTypeClass:[object class]])
+    if ([self isBasicDataTypeClass:[object class]]) {
         return [NSString stringWithFormat:@"%@", object];
-    
+    }
+
     NSObject *value = [SCUtilities valueForPropertyName:propertyName inObject:object];
-	
-	if(!value)
-		return nil;
-	
-	NSMutableString *stringValue = [NSMutableString string];
-	if([value isKindOfClass:[NSArray class]])
-	{
-		NSArray *stringsArray = (NSArray *)value;
-		for(NSUInteger i=0; i<stringsArray.count; i++)
+
+    if (!value) {
+        return nil;
+    }
+
+    NSMutableString *stringValue = [NSMutableString string];
+    if ([value isKindOfClass:[NSArray class]]) {
+        NSArray *stringsArray = (NSArray *)value;
+        for(NSUInteger i=0; i<stringsArray.count; i++)
 		{
-			NSObject *str = [stringsArray objectAtIndex:i];
-			if(![str isKindOfClass:[NSNull class]])
-			{
-				if(i!=0 && delimiter)
-					[stringValue appendString:delimiter];
-				[stringValue appendString:[NSString stringWithFormat:@"%@", str]];
-			}
-		}
-	}
-	else
-	{
-		if(value)
-			[stringValue appendFormat:@"%@", value];
-	}
-	
-	return stringValue;
+            NSObject *str = [stringsArray objectAtIndex:i];
+            if (![str isKindOfClass:[NSNull class]]) {
+                if (i!=0 && delimiter) {
+                    [stringValue appendString:delimiter];
+                }
+
+                [stringValue appendString:[NSString stringWithFormat:@"%@", str]];
+            }
+
+        }
+    }
+
+    else {
+        if (value) {
+            [stringValue appendFormat:@"%@", value];
+        }
+
+    }
+
+    return stringValue;
 }
 
 + (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object
 {
-    if([self isBasicDataTypeClass:[object class]])
+    if ([self isBasicDataTypeClass:[object class]]) {
         return;
-    
-    if(![SCUtilities propertyName:propertyName existsInObject:object])
+    }
+
+    if (![SCUtilities propertyName:propertyName existsInObject:object]) {
         return;
-    
-    if([object isKindOfClass:[NSUbiquitousKeyValueStore class]])
-    {
+    }
+
+    if ([object isKindOfClass:[NSUbiquitousKeyValueStore class]]) {
         [(NSUbiquitousKeyValueStore *)object setObject:value forKey:propertyName];
     }
-    else
-    {
-        if(value == nil)
-        {
+
+    else {
+        if (value == nil) {
             // check if the property's data type is scalar since scalars don't support nil
             objc_property_t property = class_getProperty([object class], [propertyName UTF8String]);
-            if(property)
-            {
+            if (property) {
                 NSArray *attributesArray = [[NSString stringWithUTF8String: property_getAttributes(property)] 
                                             componentsSeparatedByString:@","];
                 NSSet *attributesSet = [NSSet setWithArray:attributesArray];
-                if([attributesSet containsObject:@"Tc"] || [attributesSet containsObject:@"Ti"] || [attributesSet containsObject:@"Tf"] || [attributesSet containsObject:@"Td"])
-                {
+                if ([attributesSet containsObject:@"Tc"] || [attributesSet containsObject:@"Ti"] || [attributesSet containsObject:@"Tf"] || [attributesSet containsObject:@"Td"]) {
                     value = [NSNumber numberWithUnsignedShort:0];
                 }
+
             }
+
         }
+
         [object setValue:value forKeyPath:propertyName];
     }
+
 }
 
 + (NSObject *)getValueCompatibleWithDataType:(SCDataType)dataType fromValue:(NSObject *)value
 {
-    if(!value)
+    if (!value) {
         return nil;
-    
+    }
+
     NSObject *convertedValue = value;
     
     switch (dataType)
     {
         case SCDataTypeNSString:
-            if(![SCUtilities isStringClass:[value class]])
-            {
+            if (![SCUtilities isStringClass:[value class]]) {
                 convertedValue = [NSString stringWithFormat:@"%@", value];
             }
+
             break;
             
         case SCDataTypeNSNumber:
-            if(![value isKindOfClass:[NSNumber class]])
-            {
-                if([SCUtilities isStringClass:[value class]])
-                {
+            if (![value isKindOfClass:[NSNumber class]]) {
+                if ([SCUtilities isStringClass:[value class]]) {
                     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
                     convertedValue = [numberFormatter numberFromString:(NSString *)value];
                 }
-                else 
-                {
+
+                else {
                     convertedValue = nil;
                 }
+
             }
+
             break;
             
         case SCDataTypeNSDate:
-            if(![value isKindOfClass:[NSDate class]])
-            {
-                if([SCUtilities isStringClass:[value class]])
-                {
+            if (![value isKindOfClass:[NSDate class]]) {
+                if ([SCUtilities isStringClass:[value class]]) {
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     convertedValue = [dateFormatter dateFromString:(NSString *)value];
                 }
-                else 
-                {
+
+                else {
                     convertedValue = nil;
                 }
+
             }
+
             break;
             
         default:;   // nothing to do for other types
@@ -674,42 +715,43 @@
 + (NSDictionary *)bindingsDictionaryForBindingsString:(NSString *)bindingsString
 {
     NSMutableDictionary *bindings = [NSMutableDictionary dictionary];
-    
-    if([bindingsString length])
-    {
+
+    if ([bindingsString length]) {
         NSCharacterSet *trimSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         
         NSArray *bindingsComponents = [bindingsString componentsSeparatedByString:@";"];
         for(NSString *pairString in bindingsComponents)
         {
             NSArray *pairComponents = [pairString componentsSeparatedByString:@":"];
-            if(pairComponents.count != 2)
-            {
+            if (pairComponents.count != 2) {
                 SCDebugLog(@"Warning: Invalid bindings string: %@", pairString);
                 continue;
             }
-            
+
             NSString *key = [(NSString *)[pairComponents objectAtIndex:0] stringByTrimmingCharactersInSet:trimSet];
             NSString *value = [(NSString *)[pairComponents objectAtIndex:1] stringByTrimmingCharactersInSet:trimSet];
             [bindings setValue:value forKey:key];
         }
     }
-    
+
     return bindings;
 }
 
 + (NSString *)bindingsStringForBindingsDictionary:(NSDictionary *)bindingsDictionary
 {
     NSArray *keysArray = [bindingsDictionary allKeys];
-    if(!keysArray.count)
+    if (!keysArray.count) {
         return nil;
-    
+    }
+
     NSMutableString *bindingsString = [NSMutableString string];
     for(NSUInteger i=0; i<keysArray.count; i++)
     {
         NSString *key = [keysArray objectAtIndex:i];
-        if(i!=0)
+        if (i!=0) {
             [bindingsString appendString:@";"];
+        }
+
         [bindingsString appendFormat:@"%@:%@", key, [bindingsDictionary valueForKey:key]];
     }
      
@@ -731,10 +773,10 @@
         for (NSUInteger j = i; j < (i + 3); j++)
         {
             value <<= 8;
-            if (j < length)
-            {
+            if (j < length) {
                 value |= (0xFF & input[j]);
             }
+
         }
         
         static uint8_t const kAFBase64EncodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -805,24 +847,25 @@
 	
 	@synchronized(self)
 	{
-		if(!_sharedModelCenter)
-			_sharedModelCenter = [[SCModelCenter alloc] init];
-	}
+        if (!_sharedModelCenter) {
+            _sharedModelCenter = [[SCModelCenter alloc] init];
+        }
+
+    }
 	
 	return _sharedModelCenter;
 }
 
 - (instancetype) init
 {
-	if( (self = [super init]) )
-	{
-		keyboardIssuer = nil;
-		[self registerForKeyboardNotifications];
+    if ( (self = [super init]) ) {
+        keyboardIssuer = nil;
+        [self registerForKeyboardNotifications];
 		
-		modelsSet = CFSetCreateMutable(kCFAllocatorDefault, 0, NULL);
-	}
-	
-	return self;
+        modelsSet = CFSetCreateMutable(kCFAllocatorDefault, 0, NULL);
+    }
+
+    return self;
 }
 
 - (void)dealloc
@@ -848,31 +891,41 @@
 
 - (void)keyboardWillShow:(NSNotification *)aNotification
 {
-	if(!self.keyboardIssuer)
-		return;
-	
-	for(SCTableViewModel *model in (__bridge id)modelsSet)
-		if(model.viewController == self.keyboardIssuer)
-			[model keyboardWillShow:aNotification];
+    if (!self.keyboardIssuer) {
+        return;
+    }
+
+    for(SCTableViewModel *model in (__bridge id)modelsSet)
+        if (model.viewController == self.keyboardIssuer) {
+            [model keyboardWillShow:aNotification];
+        }
+
 }
 
 - (void)keyboardWillChangeFrame:(NSNotification *)aNotification
 {
-    if(!self.keyboardIssuer)
+    if (!self.keyboardIssuer) {
         return;
+    }
+
     for(SCTableViewModel *model in (__bridge id)modelsSet)
-        if(model.viewController == self.keyboardIssuer)
+        if (model.viewController == self.keyboardIssuer) {
             [model keyboardWillChangeFrame:aNotification];
+        }
+
 }
 
 - (void)keyboardWillHide:(NSNotification *)aNotification
 {
-	if(!self.keyboardIssuer)
-		return;
-	
-	for(SCTableViewModel *model in (__bridge id)modelsSet)
-		if(model.viewController == self.keyboardIssuer)
-			[model keyboardWillHide:aNotification];
+    if (!self.keyboardIssuer) {
+        return;
+    }
+
+    for(SCTableViewModel *model in (__bridge id)modelsSet)
+        if (model.viewController == self.keyboardIssuer) {
+            [model keyboardWillHide:aNotification];
+        }
+
 }
 
 
@@ -890,9 +943,10 @@
 - (SCTableViewModel *)modelForViewController:(UIViewController *)viewController
 {
     for(SCTableViewModel *model in (__bridge id)modelsSet)
-        if(model.viewController == viewController)
+        if (model.viewController == viewController) {
             return model;
-    
+        }
+
     return nil;
 }
 

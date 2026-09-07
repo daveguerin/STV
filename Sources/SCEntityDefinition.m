@@ -64,11 +64,9 @@
 	SCDataType dataType = SCDataTypeUnknown;
 	
     NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:self.entity];
-    
-    if(propertyDescription)
-    {
-        if([propertyDescription isKindOfClass:[NSAttributeDescription class]])
-        {
+
+    if (propertyDescription) {
+        if ([propertyDescription isKindOfClass:[NSAttributeDescription class]]) {
             NSAttributeDescription *attribute = (NSAttributeDescription *)propertyDescription;
             switch ([attribute attributeType]) 
             {
@@ -105,30 +103,34 @@
                     break;
             }
         }
-        if([propertyDescription isKindOfClass:[NSRelationshipDescription class]])
-        {
+
+        if ([propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
             NSRelationshipDescription *relationship = (NSRelationshipDescription *)propertyDescription;
-            
-            if([relationship isToMany])
-            {
-                if(relationship.ordered)
+
+            if ([relationship isToMany]) {
+                if (relationship.ordered) {
                     dataType = SCDataTypeNSMutableOrderedSet;
-                else
+                }
+
+                else {
                     dataType = SCDataTypeNSMutableSet;
+                }
+
             }
-            else
-            {
+
+            else {
                 dataType = SCDataTypeNSObject;
             }
+
         }
-        else
-            if([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]])
-            {
-                dataType = SCDataTypeNSMutableSet;
-            }
+
+        else if ([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]]) {
+            dataType = SCDataTypeNSMutableSet;
+        }
+
     }
-	
-	return dataType;
+
+    return dataType;
 }
 
 - (instancetype)initWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate
@@ -145,17 +147,18 @@
 {
 	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:entityName
 														 inManagedObjectContext:context];
-    if(!entityDescription)
+    if (!entityDescription) {
         SCDebugLog(@"Warning: unable to load entity with name: %@", entityName);
-	
-	if(!autoGenerate)
-	{
-		self = [self init];
-		_managedObjectContext = context;
-		_entity = entityDescription;
-		return self;
-	}
-	//else
+    }
+
+    if (!autoGenerate) {
+        self = [self init];
+        _managedObjectContext = context;
+        _entity = entityDescription;
+        return self;
+    }
+
+    //else
 	
 	NSMutableArray *propertyNames = [NSMutableArray arrayWithCapacity:entityDescription.properties.count];
 	for(NSPropertyDescription *propertyDescription in entityDescription.properties)
@@ -167,17 +170,16 @@
 
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString
 {
-	if( (self = [self init]) )
-	{
-		_managedObjectContext = context;
-		_entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
+    if ( (self = [self init]) ) {
+        _managedObjectContext = context;
+        _entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
 		
-		[self generatePropertiesFromPropertyNamesString:propertyNamesString];
+        [self generatePropertiesFromPropertyNamesString:propertyNamesString];
 		
-		[self setupDefaultConfiguration];
-	}
-	
-	return self;
+        [self setupDefaultConfiguration];
+    }
+
+    return self;
 }
 
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames
@@ -187,17 +189,16 @@
 
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles
 {
-	if( (self = [self init]) )
-	{
-		_managedObjectContext = context;
-		_entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
+    if ( (self = [self init]) ) {
+        _managedObjectContext = context;
+        _entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
 		
-		[self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:propertyTitles];
+        [self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:propertyTitles];
 		
-		[self setupDefaultConfiguration];
-	}
-	
-	return self;
+        [self setupDefaultConfiguration];
+    }
+
+    return self;
 }
 
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups
@@ -209,15 +210,14 @@
         for(NSInteger j=0; j<propertyGroup.propertyNameCount; j++)
             [propertyNames addObject:[propertyGroup propertyNameAtIndex:j]];
     }
-    
-    if( (self=[self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames]) )
-    {
+
+    if ( (self=[self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames]) ) {
         for(NSInteger i=0; i<groups.groupCount; i++)
         {
             [self.propertyGroups addGroup:[groups groupAtIndex:i]];
         }
     }
-      
+
     return self;
 }
 
@@ -228,12 +228,11 @@
     [ibDictionary removeObjectForKey:@"entityName"];
     
     self = [self initWithEntityName:entityName autoGeneratePropertyDefinitions:NO];
-    
-    if(self)
-    {
+
+    if (self) {
         [self setAllPropertiesFromibDictionary:ibDictionary];
     }
-    
+
     return self;
 }
 
@@ -241,13 +240,15 @@
 - (NSManagedObjectContext *)defaultManagedObjectContext
 {
     NSManagedObjectContext *context = nil;
-    
-    if([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(managedObjectContext)])
+
+    if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(managedObjectContext)]) {
         context = [[[UIApplication sharedApplication] delegate] performSelector:@selector(managedObjectContext) withObject:nil];
-    
-    if(!context)
+    }
+
+    if (!context) {
         SCDebugLog(@"Warning: %@ unable to automatically determine the default managed object context.", self);
-    
+    }
+
     return context;
 }
 
@@ -260,62 +261,66 @@
         NSEntityDescription *_dynamicentity = self.entity;
         NSString *propertyName = nil;
         NSString *keyPath = [propertyNamesArray objectAtIndex:i];
-        
-        if([keyPath characterAtIndex:0] == '~')  // A custom property
+
+        if ([keyPath characterAtIndex:0] == '~')  // A custom property
         {
             [self addPropertyDefinitionWithName:keyPath title:[SCUtilities getUserFriendlyTitleFromName:keyPath] type:SCPropertyTypeCustom];
             
             continue;
         }
-        
+
         NSArray *keyPathArray = [keyPath componentsSeparatedByString:@"."];
         for(int i=0; i<keyPathArray.count; i++)
         {
             propertyName = [keyPathArray objectAtIndex:i];
             NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:_dynamicentity];
-            if(!propertyDescription)
-            {
+            if (!propertyDescription) {
                 SCDebugLog(@"Warning: Attribute '%@' does not exist in entity '%@'.", propertyName, _dynamicentity.name);
                 propertyName = nil;
                 break;
             }
-            
-            if(i<keyPathArray.count-1) // if not last property in keyPath
+
+            if (i<keyPathArray.count-1) // if not last property in keyPath
             {
-                if(![propertyDescription isKindOfClass:[NSRelationshipDescription class]])
+                if (![propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
                     break;
+                }
+
                 NSRelationshipDescription *relationship = (NSRelationshipDescription *)propertyDescription;
-                if(![relationship isToMany])
-                {
+                if (![relationship isToMany]) {
                     _dynamicentity = relationship.destinationEntity;
                 }
-                else
-                {
+
+                else {
                     SCDebugLog(@"Invalid: Class definition key path '%@' for entity '%@' has a to-many relationship (%@).", keyPath, _dynamicentity.name, propertyName);
                     propertyName = nil;
                     break;
                 }
+
             }
+
         }
         
         
         NSString *propertyTitle;
-        if(i < propertyTitlesArray.count)
+        if (i < propertyTitlesArray.count) {
             propertyTitle = [propertyTitlesArray objectAtIndex:i];
-        else
+        }
+
+        else {
             propertyTitle = [SCUtilities getUserFriendlyTitleFromName:propertyName];
+        }
+
         NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:_dynamicentity];
-        
-        if(propertyDescription)
-        {
+
+        if (propertyDescription) {
             SCPropertyDefinition *propertyDef = [SCPropertyDefinition 
                                                  definitionWithName:keyPath
                                                  title:propertyTitle
                                                  type:SCPropertyTypeUndefined];
             propertyDef.required = ![propertyDescription isOptional];
-            
-            if([propertyDescription isKindOfClass:[NSAttributeDescription class]])
-            {
+
+            if ([propertyDescription isKindOfClass:[NSAttributeDescription class]]) {
                 NSAttributeDescription *attribute = (NSAttributeDescription *)propertyDescription;
                 switch ([attribute attributeType]) 
                 {
@@ -358,35 +363,37 @@
                         break;
                 }
             }
-            else
-                if([propertyDescription isKindOfClass:[NSRelationshipDescription class]])
-                {
-                    NSRelationshipDescription *relationship = (NSRelationshipDescription *)propertyDescription;
-                    
-                    if([relationship isToMany])
-                    {
-                        if(relationship.ordered)
-                            propertyDef.dataType = SCDataTypeNSMutableOrderedSet;
-                        else
-                            propertyDef.dataType = SCDataTypeNSMutableSet;
-                        
-                        propertyDef.type = SCPropertyTypeArrayOfObjects;
+
+            else if ([propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
+                NSRelationshipDescription *relationship = (NSRelationshipDescription *)propertyDescription;
+
+                if ([relationship isToMany]) {
+                    if (relationship.ordered) {
+                        propertyDef.dataType = SCDataTypeNSMutableOrderedSet;
                     }
-                    else
-                    {
-                        propertyDef.dataType = SCDataTypeNSObject;
-                        propertyDef.type = SCPropertyTypeObject;
+
+                    else {
+                        propertyDef.dataType = SCDataTypeNSMutableSet;
                     }
+
+                    propertyDef.type = SCPropertyTypeArrayOfObjects;
                 }
-                else
-                    if([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]])
-                    {
-                        propertyDef.dataType = SCDataTypeNSMutableArray;
-                        propertyDef.type = SCPropertyTypeArrayOfObjects;
-                    }
-            
+
+                else {
+                    propertyDef.dataType = SCDataTypeNSObject;
+                    propertyDef.type = SCPropertyTypeObject;
+                }
+
+            }
+
+            else if ([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]]) {
+                propertyDef.dataType = SCDataTypeNSMutableArray;
+                propertyDef.type = SCPropertyTypeArrayOfObjects;
+            }
+
             [self addPropertyDefinition:propertyDef];
         }
+
     }
 }
 
@@ -398,25 +405,25 @@
 
 - (void)setOrderAttributeName:(NSString *)orderAttributeName
 {
-    if(![self isValidPropertyName:orderAttributeName])
-    {
+    if (![self isValidPropertyName:orderAttributeName]) {
         SCDebugLog(@"Warning: orderAttributeName '%@' is not valid for entity '%@'.", orderAttributeName, self.entity.name);
         
         return;
     }
-    
+
     SCDataType dataType = [self propertyDataTypeForPropertyWithName:orderAttributeName];
     BOOL dataTypeValid = NO;
-    if(dataType==SCDataTypeNSNumber || dataType==SCDataTypeDouble || dataType==SCDataTypeFloat || dataType==SCDataTypeInt)
+    if (dataType==SCDataTypeNSNumber || dataType==SCDataTypeDouble || dataType==SCDataTypeFloat || dataType==SCDataTypeInt) {
         dataTypeValid = YES;
-    if(!dataTypeValid)
-    {
+    }
+
+    if (!dataTypeValid) {
         SCDebugLog(@"Warning: orderAttributeName '%@' must be of Integer type.", orderAttributeName);
         
         return;
     }
-	
-	_orderAttributeName = [orderAttributeName copy];
+
+    _orderAttributeName = [orderAttributeName copy];
 }
 
 // overrides superclass
@@ -426,42 +433,40 @@
     
     NSArray *keyPathArray = [propertyName componentsSeparatedByString:@"."];
     NSString *_propertyName = nil;
-    
-    if(self.entity)
-    {
+
+    if (self.entity) {
         NSEntityDescription *_dynamicentity = self.entity;
         for(int i=0; i<keyPathArray.count; i++)
         {
             _propertyName = [keyPathArray objectAtIndex:i];
             NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:_propertyName inEntity:_dynamicentity];
-            if(!propertyDescription)
-            {
+            if (!propertyDescription) {
                 valid = FALSE;
                 break;
             }
-            
-            if(i<keyPathArray.count-1) // if not last property in keyPath
+
+            if (i<keyPathArray.count-1) // if not last property in keyPath
             {
-                if(![propertyDescription isKindOfClass:[NSRelationshipDescription class]])
-                {
+                if (![propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
                     valid = FALSE;
                     break;
                 }
-                
+
                 NSRelationshipDescription *relationship = (NSRelationshipDescription *)propertyDescription;
-                if(![relationship isToMany])
-                {
+                if (![relationship isToMany]) {
                     _dynamicentity = relationship.destinationEntity;
                 }
-                else
-                {
+
+                else {
                     valid = FALSE;
                     break;
                 }
+
             }
+
         }
     }
-    
+
     return valid;
 }
 
@@ -485,17 +490,14 @@
 - (NSPropertyDescription *)propertyDescriptionForAttributeWithName:(NSString *)attributeName inEntity:(NSEntityDescription *)attributeEntity
 {
     NSPropertyDescription *propertyDescription = [[attributeEntity propertiesByName] valueForKey:attributeName];
-    
-    if(!propertyDescription)
-    {
+
+    if (!propertyDescription) {
         // Check if the attribute is a calculated attribute defined in an NSManagedObject subclass
         Class entityClass = NSClassFromString([attributeEntity managedObjectClassName]);
-        if(entityClass)
-        {
+        if (entityClass) {
             SCClassDefinition *entityClassDef = [SCClassDefinition definitionWithClass:entityClass propertyNamesString:attributeName];
             SCPropertyDefinition *attributePDef = [entityClassDef propertyDefinitionWithName:attributeName];
-            if(attributePDef)
-            {
+            if (attributePDef) {
                 // Create attributeDescription based on attributePDef
                 NSAttributeDescription *attributeDescription = [[NSAttributeDescription alloc] init];
                 attributeDescription.name = attributeName;
@@ -523,9 +525,11 @@
                 
                 propertyDescription = attributeDescription;
             }
+
         }
+
     }
-    
+
     return propertyDescription;
 }
 

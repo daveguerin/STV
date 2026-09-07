@@ -34,8 +34,7 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _sort = FALSE;
         _sortKey = nil;
         _sortAscending = TRUE;
@@ -44,27 +43,27 @@
         _batchSize = 0;
         _batchStartingOffset = 0;
         _batchCurrentOffset = 0;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate
 {
-    if( (self = [self init]) )
-    {
-        if(key)
-        {
+    if ( (self = [self init]) ) {
+        if (key) {
             _sort = TRUE;
             _sortKey = key;
             _sortAscending = ascending;
         }
-        
-        if(predicate)
-        {
+
+        if (predicate) {
             _filter = TRUE;
             _filterPredicate = predicate;
         }
+
     }
+
     return self;
 }
 
@@ -78,17 +77,18 @@
 - (void)setBatchStartingOffset:(NSUInteger)offset
 {
     _batchStartingOffset = offset;
-    
-    if(_batchStartingOffset > _batchCurrentOffset)
+
+    if (_batchStartingOffset > _batchCurrentOffset) {
         _batchCurrentOffset = _batchStartingOffset;
+    }
+
 }
 
 - (NSArray *)sortDescriptors
 {
     NSMutableArray *descriptors = [NSMutableArray array];
-    
-    if(self.sortKey)
-    {
+
+    if (self.sortKey) {
         NSArray *sortKeys = [self.sortKey componentsSeparatedByString:@";"];
         for(NSString *key in sortKeys)
         {
@@ -96,14 +96,13 @@
             [descriptors addObject:descriptor];
         }
     }
-    
+
     return descriptors;
 }
 
 - (void)sortMutableArray:(NSMutableArray *)array
 {
-    if(self.sort && self.sortKey)
-    {
+    if (self.sort && self.sortKey) {
         @try 
         {
             [array sortUsingDescriptors:[self sortDescriptors]];
@@ -113,12 +112,12 @@
             SCDebugLog(@"Warning: Invalid sort key: %@.", self.sortKey);
         }
     }
+
 }
 
 - (void)filterMutableArray:(NSMutableArray *)array
 {
-    if(self.filterPredicate)
-    {
+    if (self.filterPredicate) {
         @try 
         {
             [array filterUsingPredicate:self.filterPredicate];
@@ -128,6 +127,7 @@
             SCDebugLog(@"Warning: Invalid filter predicate: %@.", self.filterPredicate);
         }
     }
+
 }
 
 - (void)setBatchOffset:(NSUInteger)offset

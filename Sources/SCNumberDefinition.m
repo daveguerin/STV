@@ -26,16 +26,15 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _numberPropertyDefinition = [[SCPropertyDefinition alloc] initWithName:@"number"];
         _numberPropertyDefinition.dataType = SCDataTypeNSNumber;
         _numberPropertyDefinition.type = SCPropertyTypeNumericTextField;
         
         [propertyDefinitions addObject:_numberPropertyDefinition];
-	}
-    
-	return self;
+    }
+
+    return self;
 }
 
 
@@ -51,20 +50,18 @@
 {
     NSString *numberString;
     NSNumberFormatter *numberFormatter = nil;
-    if([self.numberPropertyDefinition.attributes isKindOfClass:[SCNumericTextFieldAttributes class]])
-    {
+    if ([self.numberPropertyDefinition.attributes isKindOfClass:[SCNumericTextFieldAttributes class]]) {
         numberFormatter = [(SCNumericTextFieldAttributes *)self.numberPropertyDefinition.attributes numberFormatter];
     }
-    
-    if(numberFormatter)
-    {
+
+    if (numberFormatter) {
         numberString = [numberFormatter stringFromNumber:(NSNumber *)object];
     }
-    else
-    {
+
+    else {
         numberString = [(NSNumber *)object stringValue];
     }
-    
+
     return numberString; 
 }
 

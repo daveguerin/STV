@@ -27,15 +27,15 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		imageView = nil;
-		imageViewArray = nil;
+    if ( (self = [super init]) ) {
+        imageView = nil;
+        imageViewArray = nil;
         
         expandContentInCurrentView = FALSE;
         _expandedContentSectionActions = [[SCSectionActions alloc] init];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 
@@ -64,27 +64,27 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		minimumHeight = FLT_MIN;		// will be ignored
-		maximumHeight = FLT_MIN;		// will be ignored
-		autoResize = TRUE;
-		editable = TRUE;
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        minimumHeight = FLT_MIN;		// will be ignored
+        maximumHeight = FLT_MIN;		// will be ignored
+        autoResize = TRUE;
+        editable = TRUE;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight
 				 autoResize:(BOOL)_autoResize editable:(BOOL)_editable
 {
-	if( (self=[self init]) )
-	{
-		self.minimumHeight = minHeight;
-		self.maximumHeight = maxHeight;
-		self.autoResize = _autoResize;
-		self.editable = _editable;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.minimumHeight = minHeight;
+        self.maximumHeight = maxHeight;
+        self.autoResize = _autoResize;
+        self.editable = _editable;
+    }
+
+    return self;
 }
 
 
@@ -115,35 +115,35 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		placeholder = nil;		// will be ignored
+    if ( (self = [super init]) ) {
+        placeholder = nil;		// will be ignored
         secureTextEntry = FALSE;
         autocorrectionType = UITextAutocorrectionTypeDefault;
         autocapitalizationType = UITextAutocapitalizationTypeSentences;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithPlaceholder:(NSString *)_placeholder
 {
-	if( (self=[self init]) )
-	{
-		self.placeholder = _placeholder;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.placeholder = _placeholder;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithPlaceholder:(NSString *)_placeholder secureTextEntry:(BOOL)secure autocorrectionType:(UITextAutocorrectionType)autocorrection autocapitalizationType:(UITextAutocapitalizationType)autocapitalization
 {
-    if( (self=[self init]) )
-	{
-		self.placeholder = _placeholder;
+    if ( (self=[self init]) ) {
+        self.placeholder = _placeholder;
         self.secureTextEntry = secure;
         self.autocorrectionType = autocorrection;
         self.autocapitalizationType = autocapitalization;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 
@@ -178,40 +178,40 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		minimumValue = nil;		// will be ignored
-		maximumValue = nil;		// will be ignored
-		allowFloatValue = TRUE;
+    if ( (self = [super init]) ) {
+        minimumValue = nil;		// will be ignored
+        maximumValue = nil;		// will be ignored
+        allowFloatValue = TRUE;
         
         numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithMinimumValue:(NSNumber *)minValue maximumValue:(NSNumber *)maxValue
 		   allowFloatValue:(BOOL)allowFloat
 {
-	if( (self=[self init]) )
-	{
-		self.maximumValue = maxValue;
-		self.minimumValue = minValue;
-		self.allowFloatValue = allowFloat;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.maximumValue = maxValue;
+        self.minimumValue = minValue;
+        self.allowFloatValue = allowFloat;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithMinimumValue:(NSNumber *)minValue maximumValue:(NSNumber *)maxValue
 		   allowFloatValue:(BOOL)allowFloat placeholder:(NSString *)_placeholder
 {
-	if( (self=[self initWithPlaceholder:_placeholder]) )
-	{
-		self.maximumValue = maxValue;
-		self.minimumValue = minValue;
-		self.allowFloatValue = allowFloat;
-	}
-	return self;
+    if ( (self=[self initWithPlaceholder:_placeholder]) ) {
+        self.maximumValue = maxValue;
+        self.minimumValue = minValue;
+        self.allowFloatValue = allowFloat;
+    }
+
+    return self;
 }
 
 
@@ -235,22 +235,22 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		minimumValue = FLT_MIN;		// will be ignored
-		maximumValue = FLT_MIN;		// will be ignored
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        minimumValue = FLT_MIN;		// will be ignored
+        maximumValue = FLT_MIN;		// will be ignored
+    }
+
+    return self;
 }
 
 - (instancetype)initWithMinimumValue:(float)minValue maximumValue:(float)maxValue
 {
-	if( (self=[self init]) )
-	{
-		self.minimumValue = minValue;
-		self.maximumValue = maxValue;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.minimumValue = minValue;
+        self.maximumValue = maxValue;
+    }
+
+    return self;
 }
 
 
@@ -273,20 +273,20 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		segmentTitlesArray = nil;		// will be ignored
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        segmentTitlesArray = nil;		// will be ignored
+    }
+
+    return self;
 }
 
 - (instancetype)initWithSegmentTitlesArray:(NSArray *)titles
 {
-	if( (self=[self init]) )
-	{
-		self.segmentTitlesArray = titles;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.segmentTitlesArray = titles;
+    }
+
+    return self;
 }
 
 @end
@@ -319,35 +319,35 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		dateFormatter = nil;		// will be ignored
-		datePickerMode = UIDatePickerModeDateAndTime;
-		displayDatePickerAsInputAccessoryView = FALSE;
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        dateFormatter = nil;		// will be ignored
+        datePickerMode = UIDatePickerModeDateAndTime;
+        displayDatePickerAsInputAccessoryView = FALSE;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithDateFormatter:(NSDateFormatter *)formatter
 {
-	if( (self=[self init]) )
-	{
-		self.dateFormatter = formatter;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.dateFormatter = formatter;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithDateFormatter:(NSDateFormatter *)formatter
 			 datePickerMode:(UIDatePickerMode)mode
 	displayDatePickerAsInputAccessoryView:(BOOL)displayAsInputAccessoryView
 {
-	if( (self=[self init]) )
-	{
-		self.dateFormatter = formatter;
-		self.datePickerMode = mode;
-		self.displayDatePickerAsInputAccessoryView = displayAsInputAccessoryView;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.dateFormatter = formatter;
+        self.datePickerMode = mode;
+        self.displayDatePickerAsInputAccessoryView = displayAsInputAccessoryView;
+    }
+
+    return self;
 }
 
 @end
@@ -393,51 +393,51 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		selectionItemsStore = nil;	
+    if ( (self = [super init]) ) {
+        selectionItemsStore = nil;
         selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
         
-		allowMultipleSelection = FALSE;
-		allowNoSelection = FALSE;
-		maximumSelections = 0;
-		autoDismissDetailView = FALSE;
-		hideDetailViewNavigationBar = FALSE;
+        allowMultipleSelection = FALSE;
+        allowNoSelection = FALSE;
+        maximumSelections = 0;
+        autoDismissDetailView = FALSE;
+        hideDetailViewNavigationBar = FALSE;
         
         allowAddingItems = FALSE;
-		allowDeletingItems = FALSE;
-		allowMovingItems = FALSE;
-		allowEditingItems = FALSE;
+        allowDeletingItems = FALSE;
+        allowMovingItems = FALSE;
+        allowEditingItems = FALSE;
         
         addNewObjectuiElement = nil;
         placeholderuiElement = nil;
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithItems:(NSArray *)items allowMultipleSelection:(BOOL)allowMultipleSel
    allowNoSelection:(BOOL)allowNoSel
 {
-	if( (self=[self init]) )
-	{
-		self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:items] defaultDefiniton:[SCStringDefinition definition]];
+    if ( (self=[self init]) ) {
+        self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:items] defaultDefiniton:[SCStringDefinition definition]];
         
-		self.allowMultipleSelection = allowMultipleSel;
-		self.allowNoSelection = allowNoSel;
-	}
-	return self;
+        self.allowMultipleSelection = allowMultipleSel;
+        self.allowNoSelection = allowNoSel;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithItems:(NSArray *)items allowMultipleSelection:(BOOL)allowMultipleSel
    allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss
 		hideDetailViewNavigationBar:(BOOL)hideNavBar
 {
-	if( (self=[self initWithItems:items allowMultipleSelection:allowMultipleSel allowNoSelection:allowNoSel]) )
-	{
-		self.autoDismissDetailView = autoDismiss;
-		self.hideDetailViewNavigationBar = hideNavBar;
-	}
-	return self;
+    if ( (self=[self initWithItems:items allowMultipleSelection:allowMultipleSel allowNoSelection:allowNoSel]) ) {
+        self.autoDismissDetailView = autoDismiss;
+        self.hideDetailViewNavigationBar = hideNavBar;
+    }
+
+    return self;
 }
 
 
@@ -490,11 +490,11 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		intermediateEntityDefinition = nil;
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        intermediateEntityDefinition = nil;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithSelectionObjects:(NSArray *)objects
@@ -502,14 +502,14 @@
         allowMultipleSelection:(BOOL)allowMultipleSel
               allowNoSelection:(BOOL)allowNoSel
 {
-	if( (self=[self init]) )
-	{
-		self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:objects] defaultDefiniton:definition];
+    if ( (self=[self init]) ) {
+        self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:objects] defaultDefiniton:definition];
         
-		self.allowMultipleSelection = allowMultipleSel;
-		self.allowNoSelection = allowNoSel;
-	}
-	return self;
+        self.allowMultipleSelection = allowMultipleSel;
+        self.allowNoSelection = allowNoSel;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithObjectsEntityDefinition:(SCEntityDefinition *)entityDefinition
@@ -517,19 +517,19 @@
                allowMultipleSelection:(BOOL)allowMultipleSel
                      allowNoSelection:(BOOL)allowNoSel
 {
-	if( (self=[self init]) )
-	{
-		self.selectionItemsStore = [SCCoreDataStore storeWithManagedObjectContext:entityDefinition.managedObjectContext defaultEntityDefinition:entityDefinition];
+    if ( (self=[self init]) ) {
+        self.selectionItemsStore = [SCCoreDataStore storeWithManagedObjectContext:entityDefinition.managedObjectContext defaultEntityDefinition:entityDefinition];
 
-        if(predicate)
-        {
+        if (predicate) {
             self.selectionItemsFetchOptions.filter = YES;
             self.selectionItemsFetchOptions.filterPredicate = predicate;
         }
-		self.allowMultipleSelection = allowMultipleSel;
-		self.allowNoSelection = allowNoSel;
-	}
-	return self;
+
+        self.allowMultipleSelection = allowMultipleSel;
+        self.allowNoSelection = allowNoSel;
+    }
+
+    return self;
 }
 
 @end
@@ -556,28 +556,28 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
-		objectDefinition = nil;
-	}
-	return self;
+    if ( (self = [super init]) ) {
+        objectDefinition = nil;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithObjectDefinition:(SCDataDefinition *)definition
 {
-	if( (self=[self init]) )
-	{
-		self.objectDefinition = definition;
-	}
-	return self;
+    if ( (self=[self init]) ) {
+        self.objectDefinition = definition;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithObjectDefinition:(SCDataDefinition *)definition expandContentInCurrentView:(BOOL)expandContent
 {
-    if( (self=[self initWithObjectDefinition:definition]) )
-    {
+    if ( (self=[self initWithObjectDefinition:definition]) ) {
         self.expandContentInCurrentView = expandContent;
     }
+
     return self;
 }
 
@@ -636,38 +636,38 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         defaultObjectsDefinition = nil;
         objectsFetchOptions = nil; // will be re-initialized when defaultObjectsDefinition is set
         
-		allowAddingItems = TRUE;
-		allowDeletingItems = TRUE;
-		allowMovingItems = TRUE;
-		allowEditingItems = TRUE;
+        allowAddingItems = TRUE;
+        allowDeletingItems = TRUE;
+        allowMovingItems = TRUE;
+        allowEditingItems = TRUE;
         placeholderuiElement = nil;
         addNewObjectuiElement = nil;
         addNewObjectuiElementExistsInNormalMode = TRUE;
         addNewObjectuiElementExistsInEditingMode = TRUE;
         
         _sectionActions = [[SCSectionActions alloc] init];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithObjectDefinition:(SCDataDefinition *)definition
 				   allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting
 				   allowMovingItems:(BOOL)allowMoving
 {
-	if( (self=[self init]) )
-	{
+    if ( (self=[self init]) ) {
         self.defaultObjectsDefinition = definition;
         
-		allowAddingItems = allowAdding;
-		allowDeletingItems = allowDeleting;
-		allowMovingItems = allowMoving;
-	}
-	return self;
+        allowAddingItems = allowAdding;
+        allowDeletingItems = allowDeleting;
+        allowMovingItems = allowMoving;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithObjectDefinition:(SCDataDefinition *)definition
@@ -678,14 +678,14 @@
 addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode 
 addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode
 {
-    if( (self=[self initWithObjectDefinition:definition allowAddingItems:allowAdding allowDeletingItems:allowDeleting allowMovingItems:allowMoving]) )
-    {
+    if ( (self=[self initWithObjectDefinition:definition allowAddingItems:allowAdding allowDeletingItems:allowDeleting allowMovingItems:allowMoving]) ) {
         self.expandContentInCurrentView = expandContent;
         self.placeholderuiElement = placeholderUI;
         self.addNewObjectuiElement = newObjectUI;
         self.addNewObjectuiElementExistsInNormalMode = existsInNormalMode;
         self.addNewObjectuiElementExistsInEditingMode = existsInEditingMode;
     }
+
     return self;
 }
 

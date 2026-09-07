@@ -32,32 +32,31 @@
 
 - (instancetype) init
 {
-	if( (self = [super init]) )
-	{
-		propertyDefinitions = [[NSMutableArray alloc] init];
+    if ( (self = [super init]) ) {
+        propertyDefinitions = [[NSMutableArray alloc] init];
         requireEditingModeToEditPropertyValues = FALSE;
         keyPropertyName = nil;
-		titlePropertyName = nil;
-		titlePropertyNameDelimiter = @" ";
-		descriptionPropertyName = nil;
+        titlePropertyName = nil;
+        titlePropertyNameDelimiter = @" ";
+        descriptionPropertyName = nil;
 		
         defaultPropertyGroup = [[SCPropertyGroup alloc] init];
         propertyGroups = [[SCPropertyGroupArray alloc] init];
         
         _cellActions = [[SCCellActions alloc] init];
-	}
-	return self;
+    }
+
+    return self;
 }
 
 - (instancetype)initWithibDictionary:(NSMutableDictionary *)ibDictionary
 {
     self = [self init];
-    
-    if(self)
-    {
+
+    if (self) {
         [self setAllPropertiesFromibDictionary:ibDictionary];
     }
-    
+
     return self;
 }
 
@@ -74,13 +73,13 @@
         for(NSDictionary *propertyDefDictionary in propertyDefArray)
         {
             NSString *propertyName = [propertyDefDictionary valueForKey:@"name"];
-            
-            if(propertyName)
-            {
+
+            if (propertyName) {
                 [groupPropertyNames addObject:propertyName];
                 [allPropertiesDictionary setValue:propertyDefDictionary forKey:propertyName];
                 [allPropertyNamesArray addObject:propertyName];
             }
+
         }
         
         NSString *headerTitle = [groupDictionary valueForKey:@"headerTitle"];
@@ -88,9 +87,10 @@
         SCPropertyGroup *propertyGroup = [SCPropertyGroup groupWithHeaderTitle:headerTitle footerTitle:footerTitle propertyNames:groupPropertyNames];
         [self.propertyGroups addGroup:propertyGroup];
     }
-    if(propertyGroupArray)
+    if (propertyGroupArray) {
         [ibDictionary removeObjectForKey:kPropertyGroups];
-    
+    }
+
     // generate the property definitions
     [self generatePropertiesFromPropertyNamesArray:allPropertyNamesArray propertyTitlesArray:nil];
     for(SCPropertyDefinition *propertyDef in propertyDefinitions)
@@ -102,63 +102,68 @@
     {
         [self setValue:[ibDictionary valueForKey:key] forKey:key];
     }
-    
-    if(propertyDefinitions.count && ![self.keyPropertyName length])
+
+    if (propertyDefinitions.count && ![self.keyPropertyName length]) {
         self.keyPropertyName = [(SCPropertyDefinition *)[propertyDefinitions objectAtIndex:0] name];
+    }
+
 }
 
 - (void)resolveibRelationshipsUsingDictionary:(NSDictionary *)dictionary
 {
     for(SCPropertyDefinition *propertyDef in propertyDefinitions)
     {
-        if([propertyDef.attributes isKindOfClass:[SCObjectSelectionAttributes class]])
-        {
+        if ([propertyDef.attributes isKindOfClass:[SCObjectSelectionAttributes class]]) {
             SCObjectSelectionAttributes *attributes = (SCObjectSelectionAttributes *)propertyDef.attributes;
-            if([attributes.objectsDefinitionibUniqueId length])
-            {
+            if ([attributes.objectsDefinitionibUniqueId length]) {
                 attributes.selectionItemsStore = [(SCDataDefinition *)[dictionary objectForKey:attributes.objectsDefinitionibUniqueId] generateCompatibleDataStore];
-                if([attributes.ibPredicateString length])
-                {
+                if ([attributes.ibPredicateString length]) {
                     attributes.selectionItemsFetchOptions.filter = YES;
                     attributes.selectionItemsFetchOptions.filterPredicate = [NSPredicate predicateWithFormat:attributes.ibPredicateString];
                 }
+
             }
+
         }
-        else if([propertyDef.attributes isKindOfClass:[SCObjectAttributes class]])
-        {
+
+        else if ([propertyDef.attributes isKindOfClass:[SCObjectAttributes class]]) {
             SCObjectAttributes *attributes = (SCObjectAttributes *)propertyDef.attributes;
-            if([attributes.objectDefinitionibUniqueId length])
+            if ([attributes.objectDefinitionibUniqueId length]) {
                 attributes.objectDefinition = [dictionary objectForKey:attributes.objectDefinitionibUniqueId];
+            }
+
         }
-        else if([propertyDef.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]])
-        {
+
+        else if ([propertyDef.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]]) {
             SCArrayOfObjectsAttributes *attributes = (SCArrayOfObjectsAttributes *)propertyDef.attributes;
-            if([attributes.defaultObjectsDefinitionibUniqueId length])
-            {
+            if ([attributes.defaultObjectsDefinitionibUniqueId length]) {
                 attributes.defaultObjectsDefinition = [dictionary objectForKey:attributes.defaultObjectsDefinitionibUniqueId];
-                if([attributes.ibPredicateString length])
-                {
+                if ([attributes.ibPredicateString length]) {
                     attributes.objectsFetchOptions.filter = YES;
                     attributes.objectsFetchOptions.filterPredicate = [NSPredicate predicateWithFormat:attributes.ibPredicateString];
                 }
+
             }
+
         }
+
     }
 }
 
 - (void)setKeyPropertyName:(NSString *)propertyName
 {
-	if([self isValidPropertyName:propertyName])
-	{
-        if(![self.titlePropertyName length] || [self.titlePropertyName isEqualToString:keyPropertyName])
+    if ([self isValidPropertyName:propertyName]) {
+        if (![self.titlePropertyName length] || [self.titlePropertyName isEqualToString:keyPropertyName]) {
             self.titlePropertyName = propertyName;
-        
-		keyPropertyName = [propertyName copy];
-	}
-    else
-    {
+        }
+
+        keyPropertyName = [propertyName copy];
+    }
+
+    else {
         SCDebugLog(@"Warning: Invalid keyPropertyName: '%@'.", propertyName);
     }
+
 }
 
 - (NSString *)dataStructureName
@@ -177,25 +182,25 @@
 								title:(NSString *)propertyTitle
 								 type:(SCPropertyType)propertyType
 {
-    if(![propertyName length])
+    if (![propertyName length]) {
         return FALSE;
-    
-	SCPropertyDefinition *propertyDefinition;
-    if( [propertyName characterAtIndex:0] == '~' )
-    {
+    }
+
+    SCPropertyDefinition *propertyDefinition;
+    if ( [propertyName characterAtIndex:0] == '~' ) {
         // A custom property definition
         propertyDefinition = [SCCustomPropertyDefinition definitionWithName:propertyName uiElementClass:nil objectBindingsString:nil];
         propertyDefinition.title = propertyTitle;
     }
-    else
-    {
+
+    else {
         propertyDefinition =
         [[SCPropertyDefinition alloc] initWithName:propertyName
                                              title:propertyTitle
                                               type:propertyType];
     }
-    
-	BOOL success = [self addPropertyDefinition:propertyDefinition];
+
+    BOOL success = [self addPropertyDefinition:propertyDefinition];
 	
 	return success;
 }
@@ -223,8 +228,10 @@
 - (void)removePropertyDefinitionWithName:(NSString *)propertyName
 {
 	NSUInteger index = [self indexOfPropertyDefinitionWithName:propertyName];
-	if(index != NSNotFound)
-		[propertyDefinitions removeObjectAtIndex:index];
+    if (index != NSNotFound) {
+        [propertyDefinitions removeObjectAtIndex:index];
+    }
+
 }
 
 - (SCPropertyDefinition *)propertyDefinitionAtIndex:(NSUInteger)index
@@ -235,9 +242,11 @@
 - (SCPropertyDefinition *)propertyDefinitionWithName:(NSString *)propertyName
 {
 	NSUInteger index = [self indexOfPropertyDefinitionWithName:propertyName];
-	if(index != NSNotFound)
-		return [propertyDefinitions objectAtIndex:index];
-	//else
+    if (index != NSNotFound) {
+        return [propertyDefinitions objectAtIndex:index];
+    }
+
+    //else
 	return nil;
 }
 
@@ -246,9 +255,11 @@
 	for(NSUInteger i=0; i<propertyDefinitions.count; i++)
 	{
 		SCPropertyDefinition *propertyDefinition = [propertyDefinitions objectAtIndex:i];
-		if([propertyDefinition.name isEqualToString:propertyName])
-			return i;
-	}
+        if ([propertyDefinition.name isEqualToString:propertyName]) {
+            return i;
+        }
+
+    }
 	return NSNotFound;
 }
 
@@ -257,12 +268,11 @@
 {
     // Setup keyPropertyName
     for(SCPropertyDefinition *propertyDef in propertyDefinitions)
-        if([self isValidPropertyName:propertyDef.name])
-        {
+        if ([self isValidPropertyName:propertyDef.name]) {
             self.keyPropertyName = propertyDef.name;
             break;
         }
-    
+
     // Setup titlePropertyName
     self.titlePropertyName = self.keyPropertyName;
 }
@@ -291,8 +301,10 @@
 {
     for(NSObject *object in objectsArray)
     {
-        if([[self titleValueForObject:object] isEqualToString:title])
+        if ([[self titleValueForObject:object] isEqualToString:title]) {
             return object;
+        }
+
     }
     
     return nil;
@@ -319,24 +331,28 @@
     for(NSString *untrimmedPropertyComponent in propertiesComponents)
     {
         NSString *propertyComponent = [untrimmedPropertyComponent stringByTrimmingCharactersInSet:spaceTrimSet];
-        if(![propertyComponent length])
+        if (![propertyComponent length]) {
             continue;
-            
+        }
+
         // Check if the propertyComponent has a group
         NSArray *groupComponents = [propertyComponent componentsSeparatedByString:@":"];
-        if(groupComponents.count > 1)  // has a group
+        if (groupComponents.count > 1)  // has a group
         {
             NSString *groupName = [(NSString *)[groupComponents objectAtIndex:0] stringByTrimmingCharactersInSet:spaceTrimSet];
-            if(![groupName length])
+            if (![groupName length]) {
                 groupName = nil;
-            NSString *groupFooter = nil;
-            if(groupComponents.count > 2)
-            {
-                groupFooter = [(NSString *)[groupComponents objectAtIndex:2] stringByTrimmingCharactersInSet:spaceTrimSet];
-                if(![groupFooter length])
-                    groupFooter = nil;
             }
-            
+
+            NSString *groupFooter = nil;
+            if (groupComponents.count > 2) {
+                groupFooter = [(NSString *)[groupComponents objectAtIndex:2] stringByTrimmingCharactersInSet:spaceTrimSet];
+                if (![groupFooter length]) {
+                    groupFooter = nil;
+                }
+
+            }
+
             NSCharacterSet *trimSet = [NSCharacterSet characterSetWithCharactersInString:@" ()"];
             NSString *groupPropertiesString = [groupComponents objectAtIndex:1];
             groupPropertiesString = [groupPropertiesString stringByTrimmingCharactersInSet:trimSet];
@@ -353,10 +369,11 @@
             
             [propertyNames addObjectsFromArray:trimmedGroupProperties];
         }
-        else 
-        {
+
+        else {
             [propertyNames addObject:propertyComponent];
         }
+
     }
     
     [self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:nil];
@@ -371,14 +388,16 @@
         for(NSInteger i=0; i<propertyGroups.groupCount; i++)
         {
             SCPropertyGroup *propertyGroup = [propertyGroups groupAtIndex:i];
-            if([propertyGroup containsPropertyName:propertyDef.name])
-            {
+            if ([propertyGroup containsPropertyName:propertyDef.name]) {
                 propertyHasGroup = TRUE;
                 break;
             }
+
         }
-        if(!propertyHasGroup)
+        if (!propertyHasGroup) {
             [self.defaultPropertyGroup addPropertyName:propertyDef.name];
+        }
+
     }
 }
 

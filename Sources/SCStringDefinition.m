@@ -26,16 +26,15 @@
 
 - (instancetype)init
 {
-	if( (self = [super init]) )
-	{
+    if ( (self = [super init]) ) {
         _stringPropertyDefinition = [[SCPropertyDefinition alloc] initWithName:@"string"];
         _stringPropertyDefinition.dataType = SCDataTypeNSString;
         _stringPropertyDefinition.type = SCPropertyTypeTextField;
         
         [propertyDefinitions addObject:_stringPropertyDefinition];
-	}
-    
-	return self;
+    }
+
+    return self;
 }
 
 

@@ -38,8 +38,7 @@
 
 - (instancetype)init
 {
-    if( (self=[super init]) )
-    {
+    if ( (self=[super init]) ) {
         _presentationMode = SCPresentationModeAuto;
         _modalPresentationStyle = UIModalPresentationFormSheet;
         _navigationBarType = SCNavigationBarTypeAuto;
@@ -48,6 +47,7 @@
         _tableViewStyle = UITableViewStyleGrouped;
         _hidesBottomBarWhenPushed = TRUE;
     }
+
     return self;
 }
 

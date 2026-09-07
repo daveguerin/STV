@@ -35,13 +35,13 @@
 
 - (instancetype)initWithDictionaryKeyNamesString:(NSString *)keyNamesString
 {
-    if( (self=[self init]) )
-	{
-		[self generatePropertiesFromPropertyNamesString:keyNamesString];
+    if ( (self=[self init]) ) {
+        [self generatePropertiesFromPropertyNamesString:keyNamesString];
 		
-		[self setupDefaultConfiguration];
-	}
-	return self;
+        [self setupDefaultConfiguration];
+    }
+
+    return self;
 }
 
 - (instancetype)initWithDictionaryKeyNames:(NSArray *)keyNames
@@ -51,13 +51,13 @@
 
 - (instancetype)initWithDictionaryKeyNames:(NSArray *)keyNames keyTitles:(NSArray *)keyTitles
 {
-	if( (self=[self init]) )
-	{
-		[self generatePropertiesFromPropertyNamesArray:keyNames propertyTitlesArray:keyTitles];
+    if ( (self=[self init]) ) {
+        [self generatePropertiesFromPropertyNamesArray:keyNames propertyTitlesArray:keyTitles];
 		
-		[self setupDefaultConfiguration];
-	}
-	return self;
+        [self setupDefaultConfiguration];
+    }
+
+    return self;
 }
 
 
@@ -68,10 +68,14 @@
     {
         NSString *keyName = [propertyNamesArray objectAtIndex:i];
         NSString *keyTitle;
-        if(i < propertyTitlesArray.count)
+        if (i < propertyTitlesArray.count) {
             keyTitle = [propertyTitlesArray objectAtIndex:i];
-        else
+        }
+
+        else {
             keyTitle = [SCUtilities getUserFriendlyTitleFromName:keyName];
+        }
+
         [self addPropertyDefinitionWithName:keyName
                                       title:keyTitle
                                        type:SCPropertyTypeTextField];
