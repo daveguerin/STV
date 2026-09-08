@@ -216,7 +216,16 @@
         XCTAssertNil([model tableView:table viewForHeaderInSection:index.integerValue]);
         XCTAssertNil([model tableView:table viewForFooterInSection:index.integerValue]);
         XCTAssertLessThan([table rectForHeaderInSection:index.integerValue].size.height, 0.01);
-        XCTAssertLessThan([table rectForFooterInSection:index.integerValue].size.height, 0.01);
+        XCTAssertNil([table footerViewForSection:index.integerValue]);
+        if (index.integerValue == 1) {
+            XCTAssertEqual([model tableView:table heightForFooterInSection:index.integerValue], UITableViewAutomaticDimension);
+            XCTAssertGreaterThan([table rectForFooterInSection:index.integerValue].size.height, 1.0);
+        }
+
+        else {
+            XCTAssertLessThan([table rectForFooterInSection:index.integerValue].size.height, 0.01);
+        }
+
     }
     window.hidden = YES;
 }

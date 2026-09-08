@@ -1577,16 +1577,34 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    SCTableViewSection *scSection = [self sectionAtIndex:section];
+    if ([self section:scSection hasSupplementaryHeader:YES]) {
+        return UITableViewAutomaticDimension;
+    }
+
     /*
-    UIKit treats zero as its default spacing, not a hidden supplementary view.
-    A least-positive height with a nil view suppresses absent section content.
-    Visible content is always measured by UIKit from constraints.
-    */
-    return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:YES] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
+     Automatic dimension with a nil header view gives only half the gap that
+     SwiftUI gives, but OK.
+     */
+    if (section == 0 && tableView.style != UITableViewStylePlain &&
+        scSection.cellCount && ![self sectionHidesSupplementaryViews:scSection]) {
+        return UITableViewAutomaticDimension;
+    }
+
+    return CGFLOAT_MIN;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:NO] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
+    if ([self sectionHidesSupplementaryViews:[self sectionAtIndex:section]]) {
+        return CGFLOAT_MIN;
+    }
+
+    /*
+    hermes:
+    Let UIKit provide automatic footer spacing even without footer content.
+    STV still returns nil for absent footer views rather than adding a spacer.
+    */
+    return UITableViewAutomaticDimension;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
