@@ -11,7 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// SCFetchItemsCell is a special cell that is automatically displayed by an SCArrayOfItemsSection when more section items need to be fetched. This is typically the case when the section's dataFetchOptions property has specified a batchSize for the fetched items.
+/// A special row that requests another batch from an `SCArrayOfItemsSection`.
+///
+/// The section supplies a "Load more..." cell by default. Normal batch-row
+/// visibility requires a positive `dataFetchOptions.batchSize`; an initial
+/// asynchronous fetch can also show this cell as a loading indicator.
 ///
 /// Sample use:
 /// ```objective-c
@@ -21,31 +25,42 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// - SeeAlso: ``SCArrayOfItemsSection``
 ///
-/// - Note: SCExpandCollapseCell is always displayed at the bottom of the section.
+/// - Note: In an expanded section, the fetch row follows the data items and
+///   precedes the add-new-item row, when present.
 @interface SCFetchItemsCell : SCCustomCell
 
 
 #pragma mark - Configuration
 
-/// When set to TRUE, the cell automatically starts fetching the items when it scrolls into view. When set to FALSE, the cell must be tapped in order to fetch the items. Default: FALSE.
+/// Whether displaying the row schedules a fetch after a short delay.
+/// Defaults to `NO`. Tapping requests a fetch regardless of this setting.
 @property (nonatomic, readwrite) BOOL autoFetchItems;
 
-/// When set to TRUE, the cell automatically disappears as soon as there are no more items to fetch. Default: TRUE.
+/// Whether the section hides this row when its batch-count check indicates
+/// that fetching is complete. Defaults to `YES`.
+///
+/// The check compares the accumulated item count with
+/// `batchCurrentOffset * batchSize`; a full final batch can leave the row
+/// visible until another fetch returns fewer items. Setting this to `NO`
+/// retains the row only while batching is enabled.
 @property (nonatomic, readwrite) BOOL autoHide;
 
 
 #pragma mark - Internal Methods (should only be used by the framework or when subclassing)
 
-/// Method called internally by the framework to fetch the section's items.
+/// Starts the indicator and requests items from an `SCArrayOfItemsSection`
+/// owner. Does nothing for a missing owner or any other section type.
 - (void)fetchItems;
 
-/// Method called internally by the framework once the items have been fetched.
+/// Stops the activity indicator and restores the text label after completion.
+/// The section calls this after processing fetched items; asynchronous failure
+/// stops the indicator directly instead.
 - (void)didFetchItems;
 
-/// Method called internally by the framework to start the cell's activity indicator.
+/// Starts the centered activity indicator and hides the text label.
 - (void)startActivityIndicator;
 
-/// Method called internally by the framework to stop the cell's activity indicator.
+/// Stops the activity indicator and unhides the text label.
 - (void)stopActivityIndicator;
 
 @end

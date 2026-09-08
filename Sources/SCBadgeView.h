@@ -11,8 +11,11 @@
 #import "SCGlobals.h"
 
 #pragma mark - SCBadgeView
-/// This class provides as a badge view similar to the one used by iPhone's mail application to
-/// display the number of messages in an inbox. SCBadgeView is typically used by SCTableViewCell to display these kind of badges.
+/// A label used by `SCTableViewCell` to display badge text, such as a count.
+///
+/// Programmatic frame initialization uses a 15-point system font, gray text,
+/// and a clear background. The view does not draw a badge shape; customize it
+/// using the inherited `UILabel` properties.
 ///
 /// Sample use:
 /// ```objective-c

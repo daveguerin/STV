@@ -52,7 +52,6 @@
 - (void)performInitialization {
     self.allowsSelfSizing = YES;
     /*
-    hermes:
     UIKit requires this native input-root hint to use the intrinsic height.
     Without it the keyboard reserves zero height despite valid constraints.
     The toolbar itself uses constraints; STV never assigns either frame.
@@ -80,7 +79,6 @@
     _toolbar.items = [NSArray arrayWithObjects:segmentedItem, spacerItem, _doneButton, nil];
     [self addSubview:_toolbar];
     /*
-    hermes:
     The keyboard owns the accessory width. Constraints fit its toolbar in
     local coordinates, including when the accessory has a nonzero origin.
     */

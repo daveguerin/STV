@@ -14,14 +14,27 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCUserDefaultsStore
-/// SCUserDefaultsStore is an SCDataStore subclass that encapsulates the NSUserDefaults storage, providing means for the SC framework to communicate with this storage to fetch, add, update and remove user defaults.
+/// A synchronous binding store for standardUserDefaults.
 ///
-/// - Note: It is very rare when you'll need to create an SCUserDefaultsStore instance yourself, as it's typically automatically created for you when you use SCUserDefaultsDefinition. For example, when you use the SCTableViewModel method called [SCTableViewModel generateSectionsForUserDefaultsDefinition:], the model automatically sets its sections' dataStore property by calling your userDefaultsDefinition's [SCDataDefinition generateCompatibleDataStore:] method.
+/// Fetches always return an array containing the standard NSUserDefaults object,
+/// ignoring fetch options. Property access uses the inherited KVC binding methods;
+/// collection insertion, deletion, and update methods remain unsupported base
+/// hooks rather than operations on individual preference keys.
 ///
-/// - Note: For more information on data stores, check out the SCDataStore base class documentation.
+/// SCUserDefaultsDefinition generates this store for
+/// SCTableViewModel's generateSectionsForUserDefaultsDefinition: method.
+/// Assigning defaultsDictionary also calls registerDefaults:; it does not overwrite
+/// stored preferences. commitData calls synchronize and does not expose its result.
+///
+/// - Note: Use property-list values. Standard user defaults are not secure storage
+///   and are not a substitute for Keychain storage of passwords or tokens.
+/// - SeeAlso: ``SCDataStore``, ``SCUserDefaultsDefinition``
 @interface SCUserDefaultsStore : SCDataStore
 
-/// The user defaults object managed by the data store.
+/// The NSUserDefaults standardUserDefaults singleton used by this store.
+///
+/// It is returned on every access; this property does not configure an app-group
+/// or custom-suite defaults object.
 @property (nonatomic, readonly) NSUserDefaults *standardUserDefaultsObject;
 
 @end

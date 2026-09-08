@@ -12,10 +12,25 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCBadgeView
-/// This class provides a way for UIImageViews to bind themselves to a specific object property.
+/// An image view that supplies a property name for `SCCustomCell` binding.
+///
+/// The containing custom cell discovers this view among its direct
+/// `contentView` subviews and loads the bound value. This class stores and
+/// archives the binding name; it does not observe or load values by itself.
 @interface SCImageView : UIImageView
 
-/// The property the image view is bound to. The runtime value of this property must be one of the following: 1. A UIImage object. 2. An NSURL object containing a URL to the image. 3. The literal name of an image in the app's Resource folder (e.g. "MyImage.png").
+/// The bound object's property name or key path, not the image value itself.
+/// Defaults to `nil`, which supplies no automatic binding name.
+///
+/// The custom cell accepts these property values:
+/// - A `UIImage`, assigned directly.
+/// - An `NSString` containing a URL with a scheme and host, loaded on a
+///   background queue and assigned on the main queue.
+/// - Any other `NSString`, passed to `UIImage imageNamed:`.
+///
+/// `NSURL`, `nil`, and other value types leave the existing image unchanged.
+/// A failed string-based load assigns `nil`. URL loads have no cancellation
+/// or reuse check, so an earlier request can overwrite a newer image.
 @property (nonatomic, copy, nullable) IBInspectable NSString *boundPropertyName;
 
 @end

@@ -96,7 +96,6 @@
 
 - (void)invalidateCellSizingPolicy {
     /*
-     hermes:
      Access only materialized cells: an array section's cells getter may fetch
      data. New cells inherit current model policy when they are prepared.
      */

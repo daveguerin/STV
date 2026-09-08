@@ -1,21 +1,31 @@
 # STV CHANGELOG
 
-## Unreleased — Objective-C API modernization
+## STV 7.1.0
+
+This release includes source and behavior changes.
+Review the migration notes in [README.md](README.md) and rebuild consumers.
+
+### Objective-C API modernization
 * Fixes search reattachment across navigation-bar visibility changes, including visible editing and restoration of UIKit layout ownership.
 * Defaults properties to automatic synthesis, migrates same-named ivars to underscored storage, and moves implementation-only ivars into private extensions.
 * Retains documented synthesis only where custom accessors or property metadata require it; preserves protected subclass-used storage.
 * Audits public nullability and lightweight generics, including optional callbacks, missing lookups, store errors, and heterogeneous item collections.
 * Replaces UIPopoverController with weak UIPopoverPresentationController associations and real detail-controller modal presentation, with anchored popovers and compact adaptation.
 * Removes deprecation-warning suppressions and adds public Objective-C/Swift contract checks plus app-hosted presentation regressions.
-* Leaves release version metadata unchanged.
+* Updates `kSTVCurrentVersion` and its regression assertion to 7.1.0.
 
-## Unreleased — Auto Layout migration
+### Auto Layout migration
 * Replaces STV-owned frame layout and manual row measurement with constraints and UIKit self-sizing.
 * Defaults models to automatic sizing; retained numeric height settings configure constraints instead of overriding UIKit row measurement.
 * Removes split-view discovery, hierarchy rewriting, delegate conformance and collapse/separation special cases. Apps own their split containers.
 * Migrates keyboard accessories, loading indicators, search and supplementary-view layouts; native accessory roots remain UIKit-managed.
 * Adds simulator regression coverage and a source guard against reintroducing manual geometry or split ownership.
-* Leaves release version metadata unchanged; these are local, unreleased changes.
+
+### Documentation and maintenance
+* Audits DocC comments against the current implementation, including sizing, binding, callbacks, data stores, search, and detail presentation.
+* Updates consumer requirements, release notes, migration guidance, and documentation links.
+* Standardizes dgApps notices to Copyright © 2019-2026 dgApps. All rights reserved.
+* Normalizes Objective-C formatting and conditional/loop braces without changing behavior.
 
 ## STV 7.0.0
 * Requires iOS 16 or later and Swift tools 5.9.
@@ -89,6 +99,7 @@ The default font of the label in a SCLabelCell is now UIFontTextStyleCallout.
 
 
 ## VERSION HISTORY
+* STV 7.1.0 Sep 08 2026
 * STV 7.0.0 Aug 06 2026
 * STV 6.0.5 Sep 30 2023
 * STV 6.0.3 Sep 14 2020

@@ -15,7 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol SCInputAccessoryViewDelegate;
 
 #pragma mark - SCInputAccessoryView
-/// This special view provides an accessory view that automatically appears on top of the keyboard, providing navigation functionality between the different text controls. The view provides `Next`, `Previous`, and `Done` buttons. It also provides a special `Clear` button for cells such as SCDateCell.
+/// A self-sizing keyboard accessory with Previous, Next, Done, and optional
+/// Clear controls.
+///
+/// STV assigns this view to supported input controls. Button actions notify
+/// its delegate; `SCTableViewModel` implements navigation, clearing, and
+/// keyboard dismissal. A standalone instance does not perform those actions
+/// without a delegate. Programmatic initialization uses a constrained toolbar
+/// with a minimum height of 44 points.
 ///
 /// Sample use:
 /// ```objective-c
@@ -37,40 +44,49 @@ NS_ASSUME_NONNULL_BEGIN
 /// The `Done` button control.
 @property (nonatomic, readonly) UIBarButtonItem *doneButton;
 
-/// Set to TRUE to show the Prev and Next buttons. Default: TRUE.
+/// Whether the toolbar includes the Previous/Next control. Defaults to `YES`.
+/// - Warning: The current setter removes the initial toolbar item when hidden,
+///   but does not rebuild its bar-button wrapper when shown again. Avoid
+///   toggling this back to `YES` after hiding the control.
 @property (nonatomic, readwrite) BOOL showPrevNextButtons;
 
-/// Set to TRUE to show the `Clear` button for the cells that need it (e.g. SCDateCell). Default: TRUE.
+/// Whether the toolbar includes the Clear button. Defaults to `NO`.
+/// STV updates this as controls begin editing, using the cell's
+/// `showClearButtonInInputAccessoryView` setting.
 @property (nonatomic, readwrite) BOOL showClearButton;
 
 /// The `Clear` button control.
 @property (nonatomic, readonly) UIBarButtonItem *clearButton;
 
-/// Set to TRUE to rewind to the top or bottom text controls when the bottom or top is reached. Default: TRUE.
+/// Whether the model wraps Previous/Next navigation at the first or last
+/// eligible input control. Defaults to `YES`. This is a navigation preference
+/// read by the delegate; the accessory does not move focus itself.
 @property (nonatomic, readwrite) BOOL rewind;
 
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
-/// Used internally to set a delegate for the accessory view.
+/// The weak event recipient, normally the owning `SCTableViewModel`.
+/// Defaults to `nil`; actions with no implementing delegate are no-ops.
 @property (nonatomic, weak, nullable) id<SCInputAccessoryViewDelegate> delegate;
 
-/// Method called internally when the `Previous` button is tapped.
+/// Sends the optional Previous callback to the delegate.
 - (void)previousTapped;
 
-/// Method called internally when the `Next` button is tapped.
+/// Sends the optional Next callback to the delegate.
 - (void)nextTapped;
 
-/// Method called internally when the `Clear` button is tapped.
+/// Sends the optional Clear callback to the delegate.
 - (void)clearTapped;
 
-/// Method called internally when the `Done` button is tapped.
+/// Sends the optional Done callback to the delegate.
 - (void)doneTapped;
 
 @end
 
 
-/// Used internally
+/// Receives accessory button requests. Used internally by `SCTableViewModel`
+/// to perform the corresponding operation; all callbacks are optional.
 @protocol SCInputAccessoryViewDelegate <NSObject>
 
 @optional

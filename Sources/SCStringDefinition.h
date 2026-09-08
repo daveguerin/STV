@@ -13,10 +13,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCStringDefinition
-/// This class functions as a means to represent the definition of an NSString class.
+/// Describes NSString values for generated collection and detail UI.
 ///
-/// This class is typically used when you need to work with a collection of NSString objects in classes like SCArrayOfObjectsSection and SCArrayOfObjectsModel. The class automatically generates only one property definition representing how the NSString automatically generated UI should be defined.
-
+/// Initialization creates one synthetic property named `string` with type
+/// `SCPropertyTypeTextField`. It represents the value itself, not a KVC property
+/// on NSString. Compatible stores are SCArrayStore instances with no backing
+/// array until configured.
+///
+/// The string itself supplies its title. Description values are always nil.
 @interface SCStringDefinition : SCDataDefinition
 
 #pragma mark - Creation and Initialization
@@ -26,7 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Configuration
 
-/// The property definition representing the string automatically generated UI element.
+/// The retained, customizable definition of the synthetic `string` property.
+///
+/// Initially uses SCDataTypeNSString and SCPropertyTypeTextField.
+/// The property reference is read-only, but its display configuration is mutable.
 @property (nonatomic, readonly) SCPropertyDefinition *stringPropertyDefinition;
 
 

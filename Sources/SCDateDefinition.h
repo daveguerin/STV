@@ -13,10 +13,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCDateDefinition
-/// This class functions as a means to represent the definition of an NSDate class.
+/// Describes NSDate values for generated collection and detail UI.
 ///
-/// This class is typically used when you need to work with a collection of NSDate objects in classes like SCArrayOfObjectsSection and SCArrayOfObjectsModel. The class automatically generates only one property definition representing how the NSDate automatically generated UI should be defined.
-
+/// Initialization creates one synthetic property named `date` with type
+/// `SCPropertyTypeDate`. It represents the value itself, not a KVC property
+/// on NSDate. Compatible stores are SCArrayStore instances with no backing
+/// array until configured.
+///
+/// Titles use the SCDateAttributes dateFormatter when supplied, otherwise the
+/// object description. Description values are always nil.
 @interface SCDateDefinition : SCDataDefinition
 
 #pragma mark - Creation and Initialization
@@ -26,7 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Configuration
 
-/// The property definition representing the NSDate automatically generated UI element.
+/// The retained, customizable definition of the synthetic `date` property.
+///
+/// Initially uses SCDataTypeNSDate and SCPropertyTypeDate.
+/// The property reference is read-only, but its display configuration is mutable.
 @property (nonatomic, readonly) SCPropertyDefinition *datePropertyDefinition;
 
 

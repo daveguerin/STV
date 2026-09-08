@@ -13,16 +13,18 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCCoreDataFetchOptions
-/// SCCoreDataFetchOptions further extends the SCDataFetchOptions subclass to control how data is fetched from SCCoreDataStore.
+/// Fetch options with an optional ordering attribute for SCCoreDataStore.
 ///
-/// - Note: For more information on fetch options, check out the SCDataFetchOptions documentation.
-
+/// - SeeAlso: ``SCDataFetchOptions``
 @interface SCCoreDataFetchOptions : SCDataFetchOptions
 
 
-/// 	The name of the attribute that will be used to determine the fetch order of the objects.
+/// The ordering attribute used instead of sortKey to build sort descriptors.
 ///
-/// - Note: This value is automatically set by the framework to the value in [SCEntityDefinition orderAttributeName], which makes you rarely need to set this value yourself.
+/// Defaults to nil. When set, sortDescriptors returns one descriptor using this
+/// attribute and sortAscending, regardless of sort. Otherwise it uses the base
+/// implementation. SCEntityDefinition copies its ordering attribute into new
+/// compatible options; later definition changes are not synchronized.
 @property (nonatomic, copy, nullable) NSString *orderAttributeName;
 
 @end

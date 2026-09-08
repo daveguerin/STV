@@ -27,7 +27,6 @@
     window.hidden = YES;
     window.rootViewController = nil;
     /*
-    hermes:
     SwiftPM's hostless xctest process can post keyboard notifications without
     attaching an accessory window. The simulator app fixture verifies that
     UIKit boundary; this assertion also runs when an app hosts the test suite.

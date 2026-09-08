@@ -3,18 +3,16 @@
  *  Sensible TableView
  *
  *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright 2019-2026 dgApps. All rights reserved.
+ *  Copyright © 2019-2026 dgApps. All rights reserved.
  *
  *
  */
 
 
-/*
- Define the current STV version and ensure to keep the runtime version in step
- with the STV 7 package and documentation.
-*/
-/// The current STV framework version.
-#define kSTVCurrentVersion @"7.0.0"
+/// The STV release version as an Objective-C string literal.
+///
+/// Version 7.1.0 requires iOS 16 or later.
+#define kSTVCurrentVersion @"7.1.0"
 
 // Sensible TableView
 

@@ -81,7 +81,6 @@
     UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
 
     /*
-    hermes:
     Generated controls fit the safe area from their first layout. The search
     bar supplies its intrinsic height; no frame seed or appearance-time size
     correction is needed. Interface Builder retains supplied-view layout.

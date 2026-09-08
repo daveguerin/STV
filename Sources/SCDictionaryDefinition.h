@@ -44,55 +44,67 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Allocates and returns an initialized `SCDictionaryDefinition` given the key names string of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNamesString: A string with the key names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter keyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Key names string syntax options:
-///     @"key1;key2;key3;..."
-///     @"group1 header:(key1, key2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 + (instancetype)definitionWithDictionaryKeyNamesString:(nullable NSString *)keyNamesString;
 
 /// Allocates and returns an initialized `SCDictionaryDefinition` given the key names of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
+/// - Parameter keyNames: Ordered, nonempty string names; nil generates nothing.
 + (instancetype)definitionWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames;
 
 /// Allocates and returns an initialized `SCDictionaryDefinition` given the key names and titles of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
-/// - Parameter keyTitles: An array of titles to the keys in keyNames. All array elements must be of type NSString.
+/// - Parameter keyNames: Ordered, nonempty string names; nil generates nothing.
+/// - Parameter keyTitles: Titles matched by index. Nil or missing entries use
+///   generated titles; extra entries are ignored.
 + (instancetype)definitionWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames keyTitles:(nullable NSArray<NSString *> *)keyTitles;
 
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names string of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNamesString: A string with the key names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter keyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Key names string syntax options:
-///     @"key1;key2;key3;..."
-///     @"group1 header:(key1, key2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 - (instancetype)initWithDictionaryKeyNamesString:(nullable NSString *)keyNamesString;
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
+/// - Parameter keyNames: Ordered, nonempty string names; nil generates nothing.
 - (instancetype)initWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames;
 
 /// Returns an initialized `SCDictionaryDefinition` given the key names and titles of the mutable dictionary to be defined.
 ///
-/// By default, all property definitions generated for the given keyNames will have a type of SCPropertyTypeTextField. This can be fully customized after initialization.
+/// Ordinary names generate SCPropertyTypeTextField definitions; names beginning
+/// with `~` generate custom definitions. Types can be customized afterward.
 ///
-/// - Parameter keyNames: An array of the dictionary key names. All array elements must be of type NSString.
-/// - Parameter keyTitles: An array of titles to the keys in keyNames. All array elements must be of type NSString.
+/// - Parameter keyNames: Ordered, nonempty string names; nil generates nothing.
+/// - Parameter keyTitles: Titles matched by index. Nil or missing entries use
+///   generated titles; extra entries are ignored.
 - (instancetype)initWithDictionaryKeyNames:(nullable NSArray<NSString *> *)keyNames keyTitles:(nullable NSArray<NSString *> *)keyTitles;
 
 @end

@@ -21,24 +21,21 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCPropertyAttributes
-/// This class is an abstract base class that represents a set of SCPropertyDefinition attributes.
+/// Common attributes used to customize UI generated from a property definition.
 ///
-/// Each subclass of `SCPropertyAttributes` is used to extend the definition of an SCPropertyDefinition
-/// instance according to its respective type. Set the attributes property of an SCPropertyDefinition instance
-/// to a subclass to be able to further customize the user interface element that will be generated for
-/// this property definition.
-///
-/// - Note: You should never make instances of this class. Use subclasses instead.
+/// Assign an instance to `SCPropertyDefinition.attributes`, using a subclass
+/// for settings specific to that property's UI type. The base class provides
+/// images and inline-expansion configuration.
 @interface SCPropertyAttributes : NSObject
 
 
-/// The image view assigned to the generated UI element.
+/// The source image view for the generated cell's image. Default: nil.
+/// The cell copies its `image`; the image-view instance is not installed.
 @property (nonatomic, strong, nullable) UIImageView *imageView;
 
-/// The array of image views assigned to the detail elements of the generated UI element.
-///
-/// The property is applicable to property definitions of type SCPropertyTypeSelection,
-/// SCPropertyTypeObject, and SCPropertyTypeArrayOfObjects.
+/// Source image views for generated detail rows or expanded sections.
+/// Their images are copied to the corresponding cells. Default: nil.
+/// Applicable to selection, object-selection, object, and object-array content.
 @property (nonatomic, strong, nullable) NSArray<UIImageView *> *imageViewArray;
 
 /// When TRUE, the generated user interface element will expand its content in the current view, instead of generating its own detail view. Default: FALSE.
@@ -54,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 #pragma mark - SCTextViewAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeTextView, thus allowing further customization of the generated control by the user.
 @interface SCTextViewAttributes : SCPropertyAttributes
 
@@ -63,40 +60,50 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Allocates and returns an initialized `SCTextViewAttributes`.
 ///
-/// - Parameter minHeight: The minimum height of the generated UITextView control. Set to a negative value to ignore.
-/// - Parameter maxHeight: The maximum height of the generated UITextView control. Set to a negative value to ignore.
+/// - Parameter minHeight: The editor minimum height in points. A nonpositive value leaves the cell setting unchanged.
+/// - Parameter maxHeight: The editor maximum height in points. A nonpositive value leaves the cell setting unchanged.
 /// - Parameter _autoResize: Determines whether the generated UITextView control will auto resize.
 /// - Parameter _editable: Determines whether the generated UITextView control will be editable.
 + (instancetype)attributesWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
 
 /// Returns an initialized `SCTextViewAttributes`.
 ///
-/// - Parameter minHeight: The minimum height of the generated UITextView control. Set to a negative value to ignore.
-/// - Parameter maxHeight: The maximum height of the generated UITextView control. Set to a negative value to ignore.
+/// - Parameter minHeight: The editor minimum height in points. A nonpositive value leaves the cell setting unchanged.
+/// - Parameter maxHeight: The editor maximum height in points. A nonpositive value leaves the cell setting unchanged.
 /// - Parameter _autoResize: Determines whether the generated UITextView control will auto resize.
 /// - Parameter _editable: Determines whether the generated UITextView control will be editable.
 - (instancetype)initWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
 
 #pragma mark - Configuration
 
-/// The minimum height of the generated UITextView control. Set to a negative value to ignore.
+/// The minimum editor height applied by `SCTextViewCell`, in points.
+/// Values at or below zero leave the cell setting unchanged. Default: `FLT_MIN`.
+/// The positive default is applied by the current cell implementation.
 @property (nonatomic, readwrite) CGFloat minimumHeight;
 
-/// The maximum height of the generated UITextView control. Set to a negative value to ignore.
+/// The maximum editor height applied by `SCTextViewCell`, in points.
+/// Values at or below zero leave the cell setting unchanged. Default: `FLT_MIN`.
+/// The positive default is applied by the current cell implementation; set
+/// explicit limits when configuring a text-view cell.
 @property (nonatomic, readwrite) CGFloat maximumHeight;
 
-/// Determines whether the generated UITextView control will auto resize.
+/// Whether a generated text-view editor grows with its content. Default: YES.
+/// When NO, the programmatic editor is constrained to its minimum height.
+/// Longer text remains editable by scrolling; authored nib constraints are retained.
 @property (nonatomic, readwrite) BOOL autoResize;
 
-/// Determines whether the generated UITextView control will be editable.
+/// Whether the generated text view is editable. Default: YES.
+/// Not applied to a control created in Interface Builder.
 @property (nonatomic, readwrite) BOOL editable;
 
 @end
 
 
 #pragma mark - SCTextFieldAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
-/// SCPropertyTypeTextField, thus allowing further customization of the generated control by the user.
+/// Customizes a generated text-field control for `SCPropertyDefinition`.
+/// `SCTextFieldCell` applies these settings to programmatic controls, not
+/// controls created in Interface Builder. Numeric text-field attributes inherit
+/// these settings.
 @interface SCTextFieldAttributes : SCPropertyAttributes
 
 
@@ -146,7 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCNumericTextFieldAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeNumericTextField, thus allowing further customization of the generated control by the user.
 @interface SCNumericTextFieldAttributes : SCTextFieldAttributes
 
@@ -191,17 +198,20 @@ NS_ASSUME_NONNULL_BEGIN
 /// The maximum value allowed for the generated numeric text field control. Set to nil to ignore.
 @property (nonatomic, copy, nullable) NSNumber *maximumValue;
 
-/// Determines if the generated numeric text field control allows float values.
+/// Whether the generated numeric field's formatter permits floating-point
+/// input. Default: YES.
 @property (nonatomic, readwrite) BOOL allowFloatValue;
 
-/// The number formatter responsible for converting the numeric value to a string and vice versa.
+/// The decimal-style formatter supplied to generated numeric cells.
+/// The same formatter instance is retained by a cell, which reapplies its
+/// minimum, maximum, and floating-point policy before display or parsing.
 @property (nonatomic, readonly) NSNumberFormatter *numberFormatter;
 
 @end
 
 
 #pragma mark - SCSliderAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeSlider, thus allowing further customization of the generated control by the user.
 @interface SCSliderAttributes : SCPropertyAttributes
 
@@ -210,22 +220,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Allocates and returns an initialized `SCSliderAttributes`.
 ///
-/// - Parameter minValue: The minimum value of the generated UISlider control. Set to nil to ignore.
-/// - Parameter maxValue: The maximum value of the generated UISlider control. Set to nil to ignore.
+/// - Parameter minValue: The slider minimum. A negative value leaves the cell setting unchanged.
+/// - Parameter maxValue: The slider maximum. A negative value leaves the cell setting unchanged.
 + (instancetype)attributesWithMinimumValue:(float)minValue maximumValue:(float)maxValue;
 
 /// Returns an initialized `SCSliderAttributes`.
 ///
-/// - Parameter minValue: The minimum value of the generated UISlider control. Set to nil to ignore.
-/// - Parameter maxValue: The maximum value of the generated UISlider control. Set to nil to ignore.
+/// - Parameter minValue: The slider minimum. A negative value leaves the cell setting unchanged.
+/// - Parameter maxValue: The slider maximum. A negative value leaves the cell setting unchanged.
 - (instancetype)initWithMinimumValue:(float)minValue maximumValue:(float)maxValue;
 
 #pragma mark - Configuration
 
-/// The minimum value of the generated UISlider control. Set to nil to ignore.
+/// The slider minimum. Nonnegative values are applied to programmatic controls;
+/// negative values leave the current minimum unchanged. Default: `FLT_MIN`.
+/// This positive default is applied, not ignored.
 @property (nonatomic, readwrite) float minimumValue;
 
-/// The maximum value of the generated UISlider control. Set to nil to ignore.
+/// The slider maximum. Nonnegative values are applied to programmatic controls;
+/// negative values leave the current maximum unchanged. Default: `FLT_MIN`.
+/// Set an explicit range: the positive default is applied, not ignored.
 @property (nonatomic, readwrite) float maximumValue;
 
 
@@ -233,8 +247,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCSegmentedAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
-/// SCPropertyTypeSegmented, thus allowing further customization of the generated control by the user.
+/// Configures segment titles for a generated segmented control.
+/// `SCSegmentedCell` preserves Interface Builder segments when the authored
+/// control already has at least two segments.
 @interface SCSegmentedAttributes : SCPropertyAttributes
 
 
@@ -245,7 +260,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter titles: The segment titles of the generated UISegmentedControl. Set to nil to ignore.
 + (instancetype)attributesWithSegmentTitlesArray:(nullable NSArray<NSString *> *)titles;
 
-/// Returns an initialized `SCSegmentedFieldAttributes`.
+/// Returns an initialized `SCSegmentedAttributes`.
 ///
 /// - Parameter titles: The segment titles of the generated UISegmentedControl. Set to nil to ignore.
 - (instancetype)initWithSegmentTitlesArray:(nullable NSArray<NSString *> *)titles;
@@ -259,7 +274,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCDateAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeDate, thus allowing further customization of the generated control by the user.
 @interface SCDateAttributes : SCPropertyAttributes
 
@@ -275,7 +290,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// - Parameter formatter: The date formatter used to display the date of generated control. Set to nil to ignore.
 /// - Parameter mode: The date picker mode.
-/// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell.
+/// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard-replacement input view, instead of displaying it inside the cell.
 + (instancetype)attributesWithDateFormatter:(nullable NSDateFormatter *)formatter datePickerMode:(UIDatePickerMode)mode displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
 
 /// Returns an initialized `SCDateAttributes`.
@@ -287,7 +302,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// - Parameter formatter: The date formatter used to display the date of generated control. Set to nil to ignore.
 /// - Parameter mode: The date picker mode.
-/// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell.
+/// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard-replacement input view, instead of displaying it inside the cell.
 - (instancetype)initWithDateFormatter:(nullable NSDateFormatter *)formatter datePickerMode:(UIDatePickerMode)mode displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
 
 #pragma mark - Configuration
@@ -298,14 +313,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// The date picker mode. Default:UIDatePickerModeDateAndTime.
 @property (nonatomic, readwrite) UIDatePickerMode datePickerMode;
 
-/// Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell. Default: FALSE.
+/// Requests a keyboard-replacement picker input view instead of an embedded
+/// picker. Default: NO. Applying NO does not turn off an already-enabled
+/// input-view setting on `SCDateCell`. The input accessory toolbar is separate.
 @property (nonatomic, readwrite) BOOL displayDatePickerAsInputAccessoryView;
 
 @end
 
 
 #pragma mark - SCSelectionAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeSelection, thus allowing further customization of the generated control by the user.
 @interface SCSelectionAttributes : SCPropertyAttributes
 
@@ -314,14 +331,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Allocates and returns an initialized `SCSelectionAttributes`.
 ///
-/// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
+/// - Parameter _items: The string items copied into a new array store. Nil supplies no initial items.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 + (instancetype)attributesWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Allocates and returns an initialized `SCSelectionAttributes`.
 ///
-/// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
+/// - Parameter _items: The string items copied into a new array store. Nil supplies no initial items.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 /// - Parameter autoDismiss: Set to TRUE to automatically dismiss the selection detail view when an item is selected.
@@ -331,14 +348,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Returns an initialized `SCSelectionAttributes`.
 ///
-/// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
+/// - Parameter _items: The string items copied into a new array store. Nil supplies no initial items.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 - (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Returns an initialized `SCSelectionAttributes`.
 ///
-/// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
+/// - Parameter _items: The string items copied into a new array store. Nil supplies no initial items.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 /// - Parameter autoDismiss: Set to TRUE to automatically dismiss the selection detail view when an item is selected.
@@ -347,30 +364,34 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss hideDetailViewNavigationBar:(BOOL)hideNavBar;
 
 
-/// The data store for the selection items.
+/// The selection-items store. Default: nil. Assigning it replaces
+/// `selectionItemsFetchOptions` with options generated by its default definition.
 @property (nonatomic, strong, nullable) SCDataStore *selectionItemsStore;
 
-/// The fetch options for the selection items.
+/// Options used when fetching selection items. Initially nil; assigning
+/// `selectionItemsStore` replaces them with compatible defaults.
 @property (nonatomic, strong, nullable) SCDataFetchOptions *selectionItemsFetchOptions;
 
-/// The items stored in selectionItemsStore.
+/// Synchronously fetches selection items using `selectionItemsFetchOptions`.
+/// Returns nil when there is no store or the store returns no result.
 @property (nonatomic, readonly, nullable) NSArray<id> *items;
 
-/// Determines if the generated selection control allows multiple selection.
+/// Whether the generated selection control permits multiple selections. Default: NO.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
 
-/// Determines if the generated selection control allows no selection.
+/// Whether the generated selection control permits no selection. Default: NO.
 @property (nonatomic, readwrite) BOOL allowNoSelection;
 
 /// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
 /// - Note: Only applicable when allowMultipleSelection is TRUE.
 @property (nonatomic, readwrite) NSUInteger maximumSelections;
 
-/// Set to TRUE to automatically dismiss the selection detail view when an item is selected.
+/// Whether selecting an item automatically dismisses its detail view. Default: NO.
 @property (nonatomic, readwrite) BOOL autoDismissDetailView;
 
-/// Set to TRUE to hide the detail view's navigation bar.
-/// - Note: This property only applies when `autoDismissDetailView` is TRUE.
+/// Whether to hide the owner's navigation bar during selection detail display.
+/// Default: NO. Applies to the cell detail flow only when `autoDismissDetailView`
+/// is YES; it does not hide every custom or modal controller's navigation bar.
 @property (nonatomic, readwrite) BOOL hideDetailViewNavigationBar;
 
 /// 	Determines if the generated control allows adding new items. Default: FALSE.
@@ -385,17 +406,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// 	Determines if the generated control allows editing items. Default: FALSE.
 @property (nonatomic) BOOL allowEditingItems;
 
-/// The user interface element that is used to add new objects when selected. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.
+/// The placeholder displayed when no items exist, typically an `SCTableViewCell`.
+/// Nil leaves the generated section or cell placeholder unchanged. Default: nil.
 @property (nonatomic, strong, nullable) NSObject *placeholderuiElement;
 
-/// The uiElement that is displayed when no items are available to display. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.
+/// The row used to add a new object when tapped, typically an `SCTableViewCell`.
+/// Nil leaves the generated section or cell add-item row unchanged. Default: nil.
 @property (nonatomic, strong, nullable) NSObject *addNewObjectuiElement;
 
 @end
 
 
 #pragma mark - SCObjectSelectionAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeObjectSelection, thus allowing further customization of the generated control by the user.
 @interface SCObjectSelectionAttributes : SCSelectionAttributes
 
@@ -403,7 +426,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Allocates and returns an initialized `SCObjectSelectionAttributes`.
 ///
-/// - Parameter objects: The array of objects that will be used to select from.
+/// - Parameter objects: The objects copied into a new array store for selection; nil supplies no initial objects.
 /// - Parameter definition: The data structure definition of the objects.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
@@ -411,7 +434,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Returns an initialized `SCObjectSelectionAttributes`.
 ///
-/// - Parameter objects: The array of objects that will be used to select from.
+/// - Parameter objects: The objects copied into a new array store for selection; nil supplies no initial objects.
 /// - Parameter definition: The data structure definition of the objects.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
@@ -422,7 +445,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter entityDefinition: The entity definition of the entity whose objects are to be presented for selection.
 /// - Parameter predicate: The predicate used to filter the selection objects. Set to nil to ignore.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
-/// - Warning: allowMultipleSel should only be set to TRUE if relationship is many to many.
+/// - Warning: Use multiple selection for a to-many relationship, not a to-one relationship.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 + (instancetype)attributesWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition usingPredicate:(nullable NSPredicate *)predicate allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
@@ -431,20 +454,22 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter entityDefinition: The entity definition of the entity whose objects are to be presented for selection.
 /// - Parameter predicate: The predicate used to filter the selection objects. Set to nil to ignore.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
-/// - Warning: allowMultipleSel should only be set to TRUE if relationship is many to many.
+/// - Warning: Use multiple selection for a to-many relationship, not a to-one relationship.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
 - (instancetype)initWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition usingPredicate:(nullable NSPredicate *)predicate allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 #pragma mark - Configuration
 
-/// Set this to the definition of the intermediate entity between the property's definition and the objectsDefinition. This is useful in complex many-to-many relationships where you have created an intermediate entity between you main two entities. Default: nil.
+/// Reserved configuration for an intermediate relationship entity. Default: nil.
+/// The generated object-selection cell does not implement intermediate-entity
+/// loading or committing. Leave nil for supported direct relationships.
 @property (nonatomic, strong, nullable) SCDataDefinition *intermediateEntityDefinition;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// Internal framework properties
 //////////////////////////////////////////////////////////////////////////////////////////
 
+/// The Interface Builder identifier for the selection-objects definition.
 @property (nonatomic, strong, nullable) NSString *objectsDefinitionibUniqueId;
 /// The Interface Builder predicate string.
 @property (nonatomic, strong, nullable) NSString *ibPredicateString;
@@ -459,7 +484,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCObjectAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type
 /// SCPropertyTypeObject, thus allowing further customization of the generated control by the user.
 @interface SCObjectAttributes : SCPropertyAttributes
 
@@ -495,16 +520,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// Internal framework properties
 //////////////////////////////////////////////////////////////////////////////////////////
 
+/// The Interface Builder identifier for the object definition.
 @property (nonatomic, strong, nullable) NSString *objectDefinitionibUniqueId;
 
 @end
 
 
 #pragma mark - SCArrayOfObjectsAttributes
-/// This class is used to extend the definition of an `SCPropertyAttributes` instance of type SCPropertyTypeArrayOfObjects, thus allowing further customization of the generated control by the user.
+/// This class is used to extend the definition of an `SCPropertyDefinition` instance of type SCPropertyTypeArrayOfObjects, thus allowing further customization of the generated control by the user.
 @interface SCArrayOfObjectsAttributes : SCPropertyAttributes
 
 
@@ -528,8 +553,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter expandContent: When TRUE, the generated user interface element will expand its content in the current view, instead of generating its own detail view.
 /// - Parameter placeholderUI: The uiElement that is displayed when no items are available. This object is typically of type SCTableViewCell.
 /// - Parameter newObjectUI: The uiElement that is used to add new objects when tapped. This object is typically of type SCTableViewCell.
-/// - Parameter existsInNormalMode: Determines if uiElement is displayed in `Normal Mode`.
-/// - Parameter existsInEditingMode: Determines if uiElement is displayed in `Editing Mode`.
+/// - Parameter existsInNormalMode: Determines if the add-new-object row is displayed in `Normal Mode`.
+/// - Parameter existsInEditingMode: Determines if the add-new-object row is displayed in `Editing Mode`.
 + (instancetype)attributesWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving expandContentInCurrentView:(BOOL)expandContent placeholderuiElement:(nullable NSObject *)placeholderUI addNewObjectuiElement:(nullable NSObject *)newObjectUI addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
 
 /// Returns an initialized `SCArrayOfObjectsAttributes`.
@@ -549,17 +574,20 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter expandContent: When TRUE, the generated user interface element will expand its content in the current view, instead of generating its own detail view.
 /// - Parameter placeholderUI: The uiElement that is displayed when no items are available to display. This object is typically of type SCTableViewCell.
 /// - Parameter newObjectUI: The uiElement that is used to add new objects when tapped. This object is typically of type SCTableViewCell.
-/// - Parameter existsInNormalMode: Determines if uiElement is displayed in `Normal Mode`.
-/// - Parameter existsInEditingMode: Determines if uiElement is displayed in `Editing Mode`.
+/// - Parameter existsInNormalMode: Determines if the add-new-object row is displayed in `Normal Mode`.
+/// - Parameter existsInEditingMode: Determines if the add-new-object row is displayed in `Editing Mode`.
 - (instancetype)initWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving expandContentInCurrentView:(BOOL)expandContent placeholderuiElement:(nullable NSObject *)placeholderUI addNewObjectuiElement:(nullable NSObject *)newObjectUI addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
 
 
 #pragma mark - Configuration
 
-/// The default data definition for the objects.
+/// The default definition for the objects. Assigning it replaces
+/// `objectsFetchOptions` with compatible options generated by the definition.
+/// Default: nil.
 @property (nonatomic, strong, nullable) SCDataDefinition *defaultObjectsDefinition;
 
-/// The fetch options for the objects.
+/// The fetch options for the objects. Initially nil; assigning
+/// `defaultObjectsDefinition` replaces them with compatible defaults.
 @property (nonatomic, strong, nullable) SCDataFetchOptions *objectsFetchOptions;
 
 /// 	Determines if the generated control allows adding new objects. Default: TRUE.
@@ -574,16 +602,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// 	Determines if the generated control allows editing objects. Default: TRUE.
 @property (nonatomic) BOOL allowEditingItems;
 
-/// The uiElement that is displayed when no items are available to display. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.
+/// The row used to add a new object when tapped, typically an `SCTableViewCell`.
+/// Nil leaves the generated section or cell add-item row unchanged. Default: nil.
 @property (nonatomic, strong, nullable) NSObject *addNewObjectuiElement;
 
-/// The user interface element that is used to add new objects when selected. This object is typically of type SCTableViewCell. Set to nil to ignore. Default:nil.
+/// The placeholder displayed when no items exist, typically an `SCTableViewCell`.
+/// Nil leaves the generated section or cell placeholder unchanged. Default: nil.
 @property (nonatomic, strong, nullable) NSObject *placeholderuiElement;
 
-/// Determines if uiElement is displayed in `Normal Mode`. Default: TRUE.
+/// Determines if the add-new-object row is displayed in `Normal Mode`. Default: TRUE.
 @property (nonatomic) BOOL addNewObjectuiElementExistsInNormalMode;
 
-/// Determines if uiElement is displayed in `Editing Mode`. Default: TRUE.
+/// Determines if the add-new-object row is displayed in `Editing Mode`. Default: TRUE.
 @property (nonatomic) BOOL addNewObjectuiElementExistsInEditingMode;
 
 /// The actions of the generated SCArrayOfObjectsSection.
@@ -591,9 +621,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// Internal framework properties
 //////////////////////////////////////////////////////////////////////////////////////////
 
+/// The Interface Builder identifier for the default objects definition.
 @property (nonatomic, strong, nullable) NSString *defaultObjectsDefinitionibUniqueId;
 /// The Interface Builder predicate string.
 @property (nonatomic, strong, nullable) NSString *ibPredicateString;

@@ -23,8 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCTableViewSection
-/// This class functions as a section for SCTableViewModel. Every `SCTableViewSection` can contain
-/// any number of SCTableViewCell(s).
+/// A table-model section containing static cells or subclass-generated rows.
+/// Add sections through `SCTableViewModel` so ownership is configured. Static
+/// cell mutations do not reload UIKit automatically; coordinate table updates
+/// with the model's new structure.
 @interface SCTableViewSection : NSObject {
   @protected
     // Backing storage used by subclasses; use properties for ordinary access.
@@ -40,39 +42,46 @@ NS_ASSUME_NONNULL_BEGIN
 /// Allocates and returns an initialized SCTableViewSection.
 + (instancetype)section;
 
-/// Allocates and returns an initialized SCTableViewSection given a header title.
+/// Allocates and returns an initialized SCTableViewSection given a header
+/// title.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle;
 
-/// Allocates and returns an initialized SCTableViewSection given a header and a footer title.
+/// Allocates and returns an initialized SCTableViewSection given a header and a
+/// footer title.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionFooterTitle: A footer title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter sectionFooterTitle: A footer title for the section, or nil.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle footerTitle:(nullable NSString *)sectionFooterTitle;
 
 /// Returns an initialized SCTableViewSection given a header title.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle;
 
 /// Returns an initialized SCTableViewSection given a header and a footer title.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionFooterTitle: A footer title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter sectionFooterTitle: A footer title for the section, or nil.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle footerTitle:(nullable NSString *)sectionFooterTitle;
 
 #pragma mark - Configuration
 
 /// The owner table view model of the section.
 ///
-/// - Warning: This property gets set automatically by the section's owner, you should never set this property manually
+/// - Warning: This property gets set automatically by the section's owner, you
+///   should never set this property manually
 @property (nonatomic, nullable, weak) SCTableViewModel *ownerTableViewModel;
 
-/// The section header title.
+/// Optional title rendered in uppercase by STV's generated header label.
+/// Defaults to nil; a custom `headerView` supplies its own content instead.
 @property (nonatomic, nullable, copy) NSString *headerTitle;
 
-/// An optional fixed header content-height constraint; defaults to Automatic.
+/// Optional fixed constraint on the header container's content height, in
+/// points. Defaults to `UITableViewAutomaticDimension`. Nonnegative values
+/// install a constraint at priority 999; negative values leave content
+/// self-sizing. UIKit still measures the supplementary view using Auto Layout.
 @property (nonatomic) CGFloat headerHeight;
 
 /// Custom header content with intrinsic size or a complete constraint chain.
@@ -80,10 +89,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// policy. A UITableViewHeaderFooterView is used directly.
 @property (nonatomic, nullable, strong) UIView *headerView;
 
-/// The section footer title.
+/// Optional title rendered by STV's generated footer label. Defaults to nil; a
+/// custom `footerView` supplies its own content instead.
 @property (nonatomic, nullable, copy) NSString *footerTitle;
 
-/// An optional fixed footer content-height constraint; defaults to Automatic.
+/// Optional fixed constraint on the footer container's content height, in
+/// points. Defaults to `UITableViewAutomaticDimension`. Nonnegative values
+/// install a constraint at priority 999; negative values leave content
+/// self-sizing. UIKit still measures the supplementary view using Auto Layout.
 @property (nonatomic) CGFloat footerHeight;
 
 /// Custom footer content with intrinsic size or a complete constraint chain.
@@ -95,23 +108,34 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) SCSectionActions *sectionActions;
 
 /// The set of cell action blocks that get applied to all the section's cells.
-/// - Note: Cell actions defined in the section's individual cells will override any actions set here.
+/// - Note: Cell actions defined in the section's individual cells will override
+///   any actions set here.
 @property (nonatomic, readonly) SCCellActions *cellActions;
 
-/// Set this property to an array of UIImageView objects to be set to each of the section's cells.
+/// Optional row-indexed image sources; defaults to nil. During cell
+/// preparation, the model copies each corresponding image view's `image` into
+/// the cell's existing `imageView`. It does not install the supplied image view
+/// itself. Rows beyond the array are unchanged.
 @property (nonatomic, nullable, strong) NSArray<UIImageView *> *cellsImageViews;
 
-/// Options for the generated detail view controller (only applicable to subclasses with a detail view controller).
+/// Options for the generated detail view controller (only applicable to
+/// subclasses with a detail view controller).
 @property (nonatomic, readonly) SCDetailViewControllerOptions *detailViewControllerOptions;
 
-/// Options for the generated detail view controller for new items (only applicable to subclasses with a detail view controller).
+/// Lazily created options for new-item controller content/navigation settings
+/// in supporting subclasses.
+/// - Note: Array sections currently choose the add flow's presentation mode
+///   from `detailViewControllerOptions.presentationMode`, not this object's
+///   mode.
 @property (nonatomic, readonly) SCDetailViewControllerOptions *newItemDetailViewControllerOptions;
 
 #pragma mark - Configuring Special Cells
 
-/// When set to a valid SCExpandCollapseCell, the cell will control if the section's content is expanded or collapsed.
-///
-/// - Note: Setting this property automatically adds expandCollapseCell to the section at index 0, making it the first cell.
+/// Optional controlling row for the section's expanded/collapsed state.
+/// Assignment inserts it as the first static row; array-backed sections insert
+/// it during special-cell assembly. Do not also add it manually. Defaults to
+/// nil, but assigning nil to remove an installed cell is unsupported. Set the
+/// cell's `ownerSectionExpanded` property to change state.
 @property (nonatomic, nullable, strong) SCExpandCollapseCell *expandCollapseCell;
 
 /// Assigns the controlling cell. The getter is nil before configuration, but
@@ -121,72 +145,103 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Managing Cells
 
-/// The number of cells in the section.
+/// The number of rows exposed by the section, including special rows. A
+/// collapsed section with an expand/collapse cell reports one row. In array
+/// sections, querying the count can trigger item fetching.
 @property (nonatomic, readonly) NSUInteger cellCount;
 
-/// Adds a new cell to the section.
-/// - Parameter cell: Must be a valid non nil SCTableViewCell.
+/// Appends a static cell and assigns its owners and live-commit policy. Does
+/// not insert a UIKit row automatically.
+/// - Parameter cell: The nonnil cell to append.
 - (void)addCell:(SCTableViewCell *)cell;
 
-/// Inserts a new cell into the section at the specified index.
-/// - Parameter cell: Must be a valid non nil SCTableViewCell.
-/// - Parameter index: Must be less than the total number of cells.
+/// Inserts a static cell and assigns its owners and live-commit policy. Does
+/// not insert a UIKit row automatically.
+/// - Parameter cell: The nonnil cell to insert.
+/// - Parameter index: An index from zero through the stored cell count,
+///   inclusive. Use an expanded section when computing this from `cellCount`.
 - (void)insertCell:(SCTableViewCell *)cell atIndex:(NSUInteger)index;
 
-/// Returns the cell at the specified index.
-/// - Parameter index: Must be less than the total number of cells.
+/// Retrieves a cell by its row index. The base implementation returns nil
+/// outside `cellCount`. Array-backed subclasses can generate/reuse a cell and
+/// require an in-range item index.
+/// - Parameter index: The zero-based row index.
+/// - Returns: The cell, or nil when unavailable; array-backed subclasses may
+///   raise for out-of-range indexes instead of returning nil.
 - (nullable SCTableViewCell *)cellAtIndex:(NSUInteger)index;
 
-/// Removes the cell at the specified index.
-/// - Parameter index: Must be less than the total number of cells.
+/// Removes a stored cell, asking it to resign first responder and clearing the
+/// owner's active cell if it matches. Does not delete a UIKit row
+/// automatically.
+/// - Parameter index: An index within the stored cell array; invalid indexes
+///   raise an array bounds exception.
 - (void)removeCellAtIndex:(NSUInteger)index;
 
-/// Removes the cell identical to the given cell.
-/// - Parameter cell: That cell to be matched against.
+/// Removes the cell resolved by `indexForCell:` if that lookup succeeds. Does
+/// not update UIKit's row structure automatically.
+/// - Parameter cell: The cell to locate and remove.
 - (void)removeCellIdenticalTo:(SCTableViewCell *)cell;
 
-/// Removes all cells in section.
+/// Clears the stored cells without updating UIKit or individually resigning
+/// cells. For array-backed subclasses this clears the item cache, not the data
+/// store.
 - (void)removeAllCells;
 
-/// Returns the index of the specified cell.
-/// - Parameter cell: Must be a valid non nil SCTableViewCell.
-/// - Returns: If cell is not found, method returns NSNotFound.
+/// Returns a cell's index using identity in the base implementation.
+/// - Parameter cell: The cell to locate.
+/// - Returns: The stored index, or `NSNotFound` when not found.
+/// - Warning: Array-backed subclasses instead consult UIKit. A cell without a
+///   UIKit index path can currently be misreported as row zero when this is the
+///   model's first section. Use this lookup only for attached generated cells.
 - (NSUInteger)indexForCell:(SCTableViewCell *)cell;
 
 #pragma mark - Managing Cell Values
 
-/// 	This property is TRUE if all the section cells' values are valid, otherwise it's FALSE.
+/// This property is TRUE if all the section cells' values are valid, otherwise
+/// it's FALSE.
 @property (nonatomic, readonly) BOOL valuesAreValid;
 
-/// 	This property is TRUE if any of the section's cells need to be commited, otherwise it's FALSE.
+/// YES if any stored cell reports `needsCommit`. This does not separately track
+/// changes to an object-selection index cache or arbitrary external changes to
+/// bound objects.
 @property (nonatomic, readonly) BOOL needsCommit;
 
-/// Set this property to TRUE for the section cells to commit their values as soon as they
-/// are changed. If this value is FALSE, the user must explicitly call commitCellChanges
-/// for the cells to commit their value changes. Default: TRUE.
+/// Sets live committing for existing static cells and cells subsequently added
+/// through `addCell:` or `insertCell:atIndex:`. Defaults to YES. With NO,
+/// commit those cells using `commitCellChanges` or the owner's `commitChanges`.
+/// `SCObjectSelectionSection` also uses this flag for selection changes;
+/// string/index selection sections update their bindings directly.
 @property (nonatomic, readwrite) BOOL commitCellChangesLive;
 
-/// Commits value changes for all cells in section. This method needs to be called only if the commitCellChangesLive property is FALSE.
+/// Calls `commitChanges` on each stored cell without first validating it.
+/// `SCObjectSelectionSection` also writes its cached object selection to the
+/// binding. Use this for deferred commits when `commitCellChangesLive` is NO.
 - (void)commitCellChanges;
 
 /// Overrides optimization and sets all cells as needing to be committed.
 - (void)invalidateCellCommits;
 
-/// Reload's the section's bound values in case the associated bound objects or keys valuea has changed by means other than the cells themselves (e.g. external custom code).
+/// Reloads stored cells from their bindings without reloading the table.
+/// Array-backed subclasses instead clear cached items and reset batching so the
+/// next access can refetch. Selection subclasses also read the bound selection.
 - (void)reloadBoundValues;
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
-/// Provides subclasses with the framework to bind an SCTableViewSection to an NSObject
+/// Optional bound object used by binding-aware section subclasses. In
+/// `SCObjectSection`, assignment regenerates cells in normal mode.
 @property (nonatomic, nullable, strong) NSObject *boundObject;
 
-/// The data store of the cell's bound object.
+/// The store used by subclasses to access the section's bound object. When nil,
+/// `boundValue` uses STV's store-free property access.
 @property (nonatomic, nullable, strong) SCDataStore *boundObjectStore;
 
-/// Provides subclasses with the framework to bind an SCTableViewSection to an NSObject
+/// The optional property name used by a binding-aware section subclass.
 @property (nonatomic, nullable, readonly) NSString *boundPropertyName;
 
-/// Provides subclasses with the framework to bind an SCTableViewSection to a value
+/// Reads or writes the section's bound property through its store, or through
+/// STV property access when no store is supplied. Without both a bound object
+/// and property name, reads return nil and writes do nothing.
 @property (nonatomic, nullable, strong) NSObject *boundValue;
 
 /// Compatibility sizing query; always returns UITableViewAutomaticDimension.
@@ -195,135 +250,171 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter indexPath: The row index path.
 - (CGFloat)heightForCellAtIndexPath:(NSIndexPath *)indexPath;
 
-/// Method called internally whenever the owner table view's editing mode is about to change.
+/// Method called internally whenever the owner table view's editing mode is
+/// about to change.
 - (void)editingModeWillChange;
 
-/// Method called internally whenever the owner table view's editing mode has changed.
+/// Method called internally whenever the owner table view's editing mode has
+/// changed.
 - (void)editingModeDidChange;
 
-/// Method should be overridden by subclasses to support property attributes.
-///
-/// The method should be able to set the subclass' specific attributes to its corresponding SCPropertyAttributes subclass.
-/// - Parameter attributes: The property attributes to apply.
+/// Subclass hook for applying supported property attributes to section
+/// settings. The base implementation does nothing.
+/// - Parameter attributes: The attributes to apply, or nil.
 - (void)setAttributesTo:(nullable SCPropertyAttributes *)attributes;
 
-/// Method called internally.
-/// - Parameter options: The detail-view-controller options.
+/// Internal hook that replaces the stored detail options.
+/// - Parameter options: The options to retain, or nil to recreate default
+///   options on the next getter access.
 - (void)setDetailViewControllerOptions:(nullable SCDetailViewControllerOptions *)options;
 
-/// Method called internally.
-/// - Parameter options: The detail-view-controller options.
+/// Internal hook that replaces the stored detail options.
+/// - Parameter options: The options to retain, or nil to recreate default
+///   options on the next getter access.
 - (void)setNewItemDetailViewControllerOptions:(nullable SCDetailViewControllerOptions *)options;
 
-/// Internal method that sets the section's expanded state. Never set this property to expand/collapse the section. Use the expandCollapseCell property instead.
-/// - Parameter expanded: Whether the expandable section is expanded.
+/// Internal row-update hook used after the controlling cell changes state. Set
+/// `expandCollapseCell.ownerSectionExpanded` instead of calling this directly.
+/// - Parameter expanded: YES to insert the content rows; NO to remove them.
 - (void)setExpanded:(BOOL)expanded;
 
-/// Internal method. *
-/// - Parameter indexPath: The row index path.
+/// Internal hook that asks the indexed cell to generate its detail controller.
+/// Array-backed subclasses generate an item detail controller instead.
+/// - Parameter indexPath: A valid current row path.
+/// - Returns: The detail controller, or nil if no controller is available.
 - (nullable UIViewController *)generatedDetailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath;
 
-/// Called internally to rollback to initial cell bound values when their bound object was first assigned.
+/// Internal hook that asks static cells to restore their initial bound values.
+/// Array-backed sections are skipped; this is not a general data-store
+/// rollback.
 - (void)rollbackToInitialCellValues;
 
 @end
 
 
 #pragma mark - SCObjectSection
-/// This class functions as an SCTableViewModel section that is able to automatically generate
-/// its cells from a given bound object's properties. If the bound object is given without an extended
-/// class definition (SCClassDefinition), then cells will only be generated for properties of type
-/// NSString and NSNumber, and will be either of type SCTextFieldCell or SCNumericTextFieldCell,
-/// respectively. If an SCClassDefinition is provided for the bound object, a full fledged
-/// section of cells will be generated.
+/// Generates cells for a bound object's property group using a data definition.
+/// When no definition is supplied, a class definition is inferred from the
+/// object's runtime class. Auto-detection handles supported strings, numbers,
+/// dates, scalars, and object/array properties; explicit definitions configure
+/// types, attributes, actions, and editing-mode visibility.
 ///
-/// - Note: For your convenience, the tag property of each generated cell will have a number corresponding
-///   to the index of it's corresponding property in bound object.
-///
-/// - SeeAlso: ``SCArrayOfObjectsSection``, ``SCObjectCell``.
+/// Each generated cell's tag is the property's index in `propertyGroup`, not
+/// the runtime object's property order. Unsupported or excluded properties can
+/// leave gaps in tags.
+/// - SeeAlso: `SCArrayOfObjectsSection`, `SCObjectCell`
 @interface SCObjectSection : SCTableViewSection
 
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized `SCObjectSection` given a header title and a bound object.
+/// Allocates and returns an initialized `SCObjectSection` given a header title
+/// and a bound object.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object;
 
-/// Allocates and returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition.
+/// Allocates and returns an initialized `SCObjectSection` given a header title,
+/// a bound object and its data definition.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter definition: The definition for the object.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter definition: The object definition, or nil to infer a class
+///   definition from the object.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
-/// Allocates and returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition along with a property group.
+/// Allocates and returns an initialized `SCObjectSection` given a header title,
+/// a bound object and its data definition along with a property group.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter definition: The definition for the object.
-/// - Parameter group: Limits the generated properties to the ones in the property group only.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter definition: The object definition, or nil to infer a class
+///   definition from the object.
+/// - Parameter group: The property group to render, or nil to use the
+///   definition's default group.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition propertyGroup:(nullable SCPropertyGroup *)group;
 
-/// Allocates and returns an initialized `SCObjectSection` given a header title, a bound object and its data store along with a property group.
+/// Allocates and returns an initialized `SCObjectSection` given a header title,
+/// a bound object and its data store along with a property group.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter store: The data store for the bound object.
-/// - Parameter group: Limits the generated properties to the ones in the property group only.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter store: The store supplying the object definition. Nil supplies
+///   no definition and generates no property cells.
+/// - Parameter group: The property group to render, or nil to use the
+///   definition's default group.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store propertyGroup:(nullable SCPropertyGroup *)group;
 
 
-/// Returns an initialized `SCObjectSection` given a header title and a bound object.
+/// Returns an initialized `SCObjectSection` given a header title and a bound
+/// object.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object;
 
-/// Returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition.
+/// Returns an initialized `SCObjectSection` given a header title, a bound
+/// object and its data definition.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter definition: The definition for the object.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter definition: The object definition, or nil to infer a class
+///   definition from the object.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
-/// Returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition along with a property group.
+/// Returns an initialized `SCObjectSection` given a header title, a bound
+/// object and its data definition along with a property group.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter definition: The definition for the object.
-/// - Parameter group: Limits the generated properties to the ones in the property group only.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter definition: The object definition, or nil to infer a class
+///   definition from the object.
+/// - Parameter group: The property group to render, or nil to use the
+///   definition's default group.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition propertyGroup:(nullable SCPropertyGroup *)group;
 
-/// Returns an initialized `SCObjectSection` given a header title, a bound object and its data store along with a property group.
+/// Returns an initialized `SCObjectSection` given a header title, a bound
+/// object and its data store along with a property group.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-/// - Parameter store: The boundObject data store.
-/// - Parameter group: Limits the generated properties to the ones in the property group only.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter object: The object to bind, or nil for unbound cells when a
+///   usable definition/store is supplied.
+/// - Parameter store: The store supplying the object definition. Nil supplies
+///   no definition and generates no property cells.
+/// - Parameter group: The property group to render, or nil to use the
+///   definition's default group.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store propertyGroup:(nullable SCPropertyGroup *)group;
 
 #pragma mark - Cell Management
 
-/// 	Returns the cell associated with the given bound object's property name.
-/// - Parameter propertyName: The bound object's property name.
-/// - Returns: Returns nil if no cell have been generated for the given property name, or if the property name does not exist within the bound object.
+/// Returns the first cell whose bound property name equals the supplied name.
+/// - Parameter propertyName: The property name to match; nil matches no cell.
+/// - Returns: The matching generated or manually added cell, or nil.
 - (nullable SCTableViewCell *)cellForPropertyName:(nullable NSString *)propertyName;
 
 #pragma mark - Other
 
-/// The section's bound object's group of properties that are rendered into cells.
+/// The ordered property group used for cell generation. Initializers use the
+/// definition's default group when no group is supplied. Assigning this
+/// property alone does not regenerate existing cells.
 @property (nonatomic, nullable, strong) SCPropertyGroup *propertyGroup;
 
 #pragma mark - Internal Methods (should only be used by the framework or when subclassing)
 
 // internal
-/// Configures the section's bound object and optionally generates its cells.
-/// - Parameter boundObject: The object bound to the section.
-/// - Parameter boundObjectStore: The data store for the bound object.
-/// - Parameter autoGenerateCells: Whether the section should generate cells automatically.
+/// Internal hook that changes the object and store together.
+/// - Parameter boundObject: The new bound object, or nil.
+/// - Parameter boundObjectStore: The corresponding store, or nil.
+/// - Parameter autoGenerateCells: YES to regenerate cells in normal mode; NO to
+///   retain cells and bind only those that currently have no bound object.
 - (void)setBoundObject:(nullable NSObject *)boundObject withStore:(nullable SCDataStore *)boundObjectStore autoGenerateCells:(BOOL)autoGenerateCells;
 
 /// Configures the cell for the given property definition.
@@ -332,35 +423,29 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter editing: Whether the table is in editing mode.
 - (void)configureCell:(SCTableViewCell *)cell forPropertyDefinition:(SCPropertyDefinition *)propertyDefinition inEditingMode:(BOOL)editing;
 
-/// Generates cells based on boundObjectClassDefinition and the given editing state.
-/// - Parameter editing: Whether the table is in editing mode.
+/// Removes existing cells and regenerates them from `propertyGroup` and the
+/// bound object's store definition for the requested editing state.
+/// - Parameter editing: YES to use editing-mode visibility and settings.
 - (void)generateCellsForEditingState:(BOOL)editing;
 
-/// Method called internally by framework to reload cells values, if needed.
+/// Internal hook that asks each custom cell to reload control values when
+/// needed.
 - (void)reloadCellsIfNeeded;
 
 @end
 
 
 #pragma mark - SCArrayOfItemsSection
-/// This class functions as an SCTableViewModel section that is able to represent an array
-/// of any kind of items and automatically generate its cells from these items. The section
-/// is also able to handle all end-user interaction with the generated cells, including adding,
-/// editing, deleting, and moving the cells. When cells are added or edited, detail views are
-/// automatically generated for this purpose. To enable adding cells, the class' user should
-/// set the addButtonItem property of the section to a valid UIBarButtonItem, the section then
-/// will automatically add new items when the button is tapped.
+/// Base section for store-backed item lists and generated item detail flows.
+/// Concrete subclasses build detail-model contents. Item creation uses the
+/// store's `createNewObject`, followed by `sectionActions.didCreateItem` (or
+/// the owner's fallback action) for customization. Use `addButtonItem` or
+/// `addNewItemCell` to expose adding in the UI.
 ///
-/// When adding new items to the array, the section starts by first asking the model's data source
-/// to provide a new item using its tableViewModel:newItemForArrayOfItemsSectionAtIndex:
-/// SCTableViewModelDataSource protocol method.
-///
-/// This class is an abstract base class. Subclasses of this class must override the
-/// buildDetailTableModel method. This method should return a model for the detail view to display.
-///
-/// - Warning: This is an abstract base class,  you should never make any direct instances of it.
-///
-/// - SeeAlso: ``SCArrayOfStringsSection``, ``SCArrayOfObjectsSection``.
+/// The section handles fetching, row reuse, and item insert/update/delete/move
+/// operations. Implement `buildDetailTableModel:forItem:` in custom subclasses
+/// to populate the supplied detail model; it does not return a model.
+/// - SeeAlso: `SCArrayOfStringsSection`, `SCArrayOfObjectsSection`
 @interface SCArrayOfItemsSection : SCTableViewSection <SCViewControllerDelegate, SCTableViewControllerDelegate> {
   @protected
     // Backing storage used by subclasses; use properties for ordinary access.
@@ -374,94 +459,128 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized `SCArrayOfItemsSection` given a data store.
+/// Allocates and returns an initialized `SCArrayOfItemsSection` given a data
+/// store.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter store: The data store containing the section's items.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter store: The store supplying items, or nil until configured.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle dataStore:(nullable SCDataStore *)store;
 
 
 /// Returns an initialized `SCArrayOfItemsSection` given a data store.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter store: The data store containing the section's items.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
+/// - Parameter store: The store supplying items, or nil until configured.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle dataStore:(nullable SCDataStore *)store;
 
 
 #pragma mark - Configuration
 
-/// The data store that's used to store and fetch the section's items.
+/// Optional store used to fetch and persist the section's items. Assignment
+/// invalidates the item cache and creates compatible fetch options only when
+/// none are already assigned. Existing fetch options are retained when
+/// replacing the store; configure them explicitly if the new store needs
+/// different options.
 @property (nonatomic, nullable, strong) SCDataStore *dataStore;
 
-/// The options used to fetch the section's items from dataStore.
+/// Optional options used for item fetching, filtering, sorting, and batching.
+/// Assigning options invalidates cached items. If the assigned options have no
+/// sort key and a store exists, the setter supplies the definition's key
+/// property name. In-place option changes require explicit reload/invalidation.
 @property (nonatomic, nullable, strong) SCDataFetchOptions *dataFetchOptions;
 
-/// The items fetched from dataStore.
+/// The current fetched item list, including any configured special cells.
+/// Reading it can trigger fetching or special-cell insertion. It is not a
+/// cell-only array or a domain-object-only array; do not mutate it directly.
 @property (nonatomic, nullable, readonly) NSArray<id> *items;
 
-/// Set to FALSE to disable the section from automatically fetching its items from dataStore. Default: TRUE.
+/// Whether stale items are fetched automatically when accessed. Defaults to
+/// YES. Set to NO only when the section's items are supplied by
+/// framework/subclass coordination rather than automatic store fetching.
 @property (nonatomic, readwrite) BOOL autoFetchItems;
 
-/// This property is TRUE when the section is in a state of fetching its items from their dataStore.
+/// YES while an asynchronous item fetch is outstanding. Defaults to NO.
+/// Synchronous fetches do not set this flag.
 @property (nonatomic, readonly) BOOL isFetchingItems;
 
-/// The accessory type of the generated cells.
+/// The accessory type assigned to ordinary generated detail rows. Defaults to
+/// `UITableViewCellAccessoryDisclosureIndicator` in the base class; selection
+/// and string-section specializations can override the appearance.
 @property (nonatomic, readwrite) UITableViewCellAccessoryType itemsAccessoryType;
 
-/// Automatically hides section if it has no items. Default: FALSE.
+/// Suppresses the section's header/footer when it exposes no rows. Defaults to
+/// NO. It does not remove the section from the model. Placeholder, add, fetch,
+/// and expand/collapse rows count as rows and prevent this suppression.
 @property (nonatomic, readwrite) BOOL hideWhenEmpty;
 
 /// Allows/disables adding new cells/items to the items array. Default: TRUE.
 @property (nonatomic, readwrite) BOOL allowAddingItems;
 
-/// Allows/disables deleting new cells/items from the items array. Default: TRUE.
+/// Allows/disables deleting cells/items from the items array. Default: TRUE.
 @property (nonatomic, readwrite) BOOL allowDeletingItems;
 
 /// Allows/disables moving cells/items from one row to another. Default: TRUE.
+/// Moving also requires the data store to validate ordering changes; the flag
+/// alone does not make an unordered store reorderable.
 @property (nonatomic, readwrite) BOOL allowMovingItems;
 
-/// Allows/disables a detail view for editing items' values. Default: TRUE.
-///
-/// Detail views are automatically generated for editing new items. You can control wether the
-/// view appears as a modal view or gets pushed to the navigation stack using the detailViewModal
-/// property. Modal views have the added feature of giving the end user a Cancel and Done buttons.
-/// The Cancel button cancels all user's actions, while the Done button commits them. Also, if the
-/// cell's validation is enabled, the Done button will remain disabled until all cells' values
-/// are valid.
+/// Whether selecting an existing item opens its detail editor. Defaults to YES
+/// in the base class. Selection subclasses and string sections can disable it.
+/// Use `detailViewControllerOptions` for existing-item presentation and
+/// `newItemDetailViewControllerOptions` for new-item content/navigation
+/// settings. This flag does not disable the separate new-item creation flow.
 @property (nonatomic, readwrite) BOOL allowEditDetailView;
 
-/// Allows/disables row selection. Default: TRUE.
+/// Controls the selection appearance/accessory of ordinary generated rows.
+/// Defaults to YES.
+/// - Warning: The current implementation does not make these rows nonselectable
+///   or gate direct selection dispatch. Use the model's `lockCellSelection` or
+///   a cell's `selectable` property to prevent user selection.
 @property (nonatomic, readwrite) BOOL allowRowSelection;
 
 
-/// Set to TRUE to directly add the new item without displaying a detail view. This is useful in situations where the item details will be filled in programmatically by implementing the SCTableViewModelDelegate `tableViewModel:itemAddedForSectionAtIndexPath:item:` method. Default: FALSE.
+/// Inserts a newly created item without presenting a detail editor. Defaults to
+/// NO. Use `sectionActions.didCreateItem` to populate the item before
+/// insertion; `willInsertItem` receives a nil item model on this path.
 @property (nonatomic, readwrite) BOOL skipNewItemDetailView;
 
-/// Allows/disables automatic cell selection of newly created items. Default: TRUE.
+/// Whether a newly inserted row remains selected after insertion. Defaults to
+/// NO. The insertion path scrolls to and briefly selects the row even when this
+/// is NO. An explicitly supplied active detail controller can subsequently
+/// select it.
 @property (nonatomic, readwrite) BOOL autoSelectNewItemCell;
 
-/// Automatically commits any changes to detail model. Set to FALSE if you're planning to commit the changes yourself, or if detail model is in read-only mode. Default: TRUE.
+/// Enables the normal detail-processing path to commit cell values and request
+/// item insertion/update. Defaults to YES. Set to NO when managing that path
+/// manually. This does not disable individual live commits or every store
+/// write, such as the separate `skipNewItemDetailView` insertion path.
 @property (nonatomic, readwrite) BOOL autoCommitDetailModelChanges;
 
 
-/// Set this property to a valid UIBarButtonItem. When addButtonItem is tapped and allowAddingItems
-/// is TRUE, a detail view is automatically generated for the user to enter the new items
-/// properties. If the properties are commited, a new item is added to the array.
-///
-/// - SeeAlso: ``addNewItemCell-property``
+/// Optional button that starts item creation when `allowAddingItems` is YES.
+/// Assignment replaces its target and action. A new item is created by the
+/// store and normally edited in a generated detail controller before insertion.
+/// Defaults to nil.
 @property (nonatomic, nullable, strong) UIBarButtonItem *addButtonItem;
 
 
 #pragma mark - Configuring Special Cells
 
-/// This cell is automatically displayed when more section items need to be fetched. This is typically the case when the section's dataFetchOptions has specified a batchSize.
+/// Special loading/batch-fetch row; initialized with the text "Load more...".
+/// It is shown while initially fetching asynchronously and, for batched
+/// fetches, when the batch/auto-hide rules indicate more items may be
+/// available. Nil removes this loading-row affordance.
 @property (nonatomic, nullable, strong) SCFetchItemsCell *fetchItemsCell;
 
-/// When set to a valid cell object, `placeholderCell` will be displayed when no items exist in the section. As soon as any items are added, this cell automatically disappears. Default: nil.
+/// Optional nonselectable placeholder for an empty item list. Defaults to nil.
+/// Special-cell assembly inserts it only if the list is empty after adding an
+/// expand/collapse cell, so an expand/collapse cell suppresses the placeholder.
 @property (nonatomic, nullable, strong) SCTableViewCell *placeholderCell;
 
-/// When set to a valid cell object, `addNewItemCell` will be displayed as the last cell of the section, and will add a new item to the section whenever it gets tapped by the user. This cell can be used as an alternative to addButtonItem. Default: nil.
-/// - SeeAlso: ``addButtonItem-property``
+/// Optional special row appended when adding is allowed and the current mode's
+/// visibility flag is enabled. Tapping it starts item creation. Defaults to
+/// nil. Assign this property rather than manually appending the row.
+/// - SeeAlso: `addButtonItem`
 @property (nonatomic, nullable, strong) SCTableViewCell *addNewItemCell;
 
 /// When TRUE, addNewItemCell will be displayed in Normal Mode. Default: TRUE.
@@ -473,370 +592,442 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Manual Event Control
 
-/// User can call this method to dispatch an AddNewItem event, the same event dispached when the end-user taps addButtonItem.
+/// Starts the new-item flow directly; does nothing while an item fetch is
+/// active or when the store cannot create an item. Unlike the add-button
+/// handler, this method does not test `allowAddingItems`.
 - (void)dispatchEventAddNewItem;
 
-/// User can call this method to dispatch a SelectRow event, the same event dispached when the end-user selects a cell.
-/// - Parameter indexPath: The row index path.
+/// Dispatches directly to the section's row-selection behavior, such as opening
+/// an item editor or toggling a selection in selection-section subclasses. This
+/// does not reproduce all of UIKit's selection delegate callbacks.
+/// - Parameter indexPath: A valid current row path in the owning table.
 - (void)dispatchEventSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
-/// User can call this method to dispatch a RemoveRow event, the same event dispached when the end-user taps the delete button on a cell.
-/// - Parameter indexPath: The row index path.
+/// Requests deletion through the section's `willDeleteItem` action and store,
+/// then updates cached items and table rows. It does not test
+/// `allowDeletingItems`. Asynchronous deletion is requested without waiting for
+/// store completion.
+/// - Parameter indexPath: A valid current item row, not a special cell.
 - (void)dispatchEventRemoveRowAtIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
-/// Called internally by framework to store the currently selected cell index path.
+/// Internal path of the existing item being edited, or nil for a new-item flow.
+/// It is not always identical to UIKit's currently highlighted row.
 @property (nonatomic, nullable, strong) NSIndexPath *selectedCellIndexPath;
 
-/// Subclasses should use this property when creating new dequeable cells
+/// Internal default reuse identifier for generated rows. Initialization creates
+/// a unique UUID string; row-specific reuse-identifier actions can override it.
 @property (nonatomic, copy) NSString *cellIdentifier;
 
 /* For internal use only. */
-/// The Interface Builder identifier for the new-item view controller.
+/// Internal storyboard identifier for a supplied new-item controller. Nil or an
+/// empty string uses the generated-controller path.
 @property (nonatomic, nullable, copy) NSString *ibNewItemViewControllerIdentifier;
 
-/// Used internally by the framework.
+/// Internal access to the section's mutable item cache without triggering a
+/// fetch. This is framework/subclass storage access, not a separate public data
+/// source.
 - (nullable NSMutableArray<id> *)mutableItems;
 
-/// Used internally by the framework.
-/// - Parameter mutableItems: The replacement mutable items.
+/// Internal hook that replaces the section's mutable item cache directly. Does
+/// not set synchronization flags or update the table.
+/// - Parameter mutableItems: The replacement cache, or nil.
 - (void)setMutableItems:(nullable NSMutableArray<id> *)mutableItems;
 
-/// Used internally by the framework.
-/// - Parameter sender: The object sending the action.
+/// Internal hook that fetches items using the current store and batch options.
+/// - Parameter sender: The fetch initiator, or nil. Passing the section itself
+///   suppresses explicit table updates for a synchronous fetch.
 - (void)fetchItems:(nullable id)sender;
 
-/// Used internally by the framework.
-/// - Parameter fetchedItems: The items returned by the fetch.
-/// - Parameter sender: The object sending the action.
+/// Internal fetch-completion hook that invokes fetch actions, replaces or
+/// appends cached items, restores special cells, and updates UIKit when
+/// required.
+/// - Parameter fetchedItems: The returned items; nil is treated as an empty
+///   batch.
+/// - Parameter sender: The original fetch initiator, or nil.
 - (void)didFetchItems:(nullable NSArray<id> *)fetchedItems sender:(nullable id)sender;
 
-/// Used internally by the framework.
+/// Internal hook that inserts configured expand/collapse, placeholder, fetch,
+/// and add rows into the item cache, then invokes `didAddSpecialCells`. It does
+/// not first remove existing special rows.
 - (void)addSpecialCellsToItems;
 
-/// Used internally by the framework.
+/// Internal hook that removes configured special-cell instances from the item
+/// cache.
 - (void)removeSpecialCellsFromItems;
 
-/// 	Subclasses should override this method to handle the creation of section cells
-/// - Parameter index: The index involved in the operation.
-/// - Parameter cellId: The reuse identifier for the generated cell.
+/// Subclass factory hook for a generated cell when neither reuse nor a custom
+/// cell action provides one. The base creates an `SCTableViewCell` and assigns
+/// ownership.
+/// - Parameter index: The item index.
+/// - Parameter cellId: The reuse identifier, or nil.
 - (SCTableViewCell *)createCellAtIndex:(NSUInteger)index usingCellId:(nullable NSString *)cellId;
 
-/// 	Subclasses should override this method to manage setting the properties cells after being dequed from the table view
+/// Internal/subclass hook that assigns ownership, item bindings, text,
+/// accessories, and editing/moving flags to a newly created or reused row.
 /// - Parameter cell: The cell to configure.
-/// - Parameter index: The index involved in the operation.
+/// - Parameter index: A valid item index.
 - (void)setPropertiesForCell:(SCTableViewCell *)cell withIndex:(NSUInteger)index;
 
-/// Subclasses should override this method to set the text for each generated cell
-/// - Parameter index: The index involved in the operation.
+/// Returns the item's definition-based title, or a dictionary-value fallback
+/// when no definition is available. Subclasses can supply custom text.
+/// - Parameter index: A valid item index.
+/// - Returns: The title text, or nil when no text is available.
 - (nullable NSString *)textForCellAtIndex:(NSUInteger)index;
 
-/// Subclasses should override this method to set the detail text for each generated cell
-/// - Parameter index: The index involved in the operation.
+/// Returns the definition's description text when it has a title property name.
+/// Subclasses can supply custom detail text.
+/// - Parameter index: A valid item index.
+/// - Returns: The description, or nil when unavailable.
 - (nullable NSString *)detailTextForCellAtIndex:(NSUInteger)index;
 
 /// Method is called internally when the generated cells are selected
 /// - Parameter indexPath: The row index path.
 - (void)didSelectCellAtIndexPath:(NSIndexPath *)indexPath;
 
-/// Method is called internally when the generated cells will deselect
-/// - Parameter indexPath: The row index path.
+/// Internal hook that processes an active detail model's pending changes and
+/// reloads the row before deselection.
+/// - Parameter indexPath: The row being deselected.
 - (void)willDeselectCellAtIndexPath:(NSIndexPath *)indexPath;
 
-/// Subclasses should override this method to handle when generated cells are deleted
-/// - Parameter editingStyle: The editing operation to perform.
-/// - Parameter indexPath: The row index path.
+/// Dispatches insertion for `UITableViewCellEditingStyleInsert`; other styles
+/// dispatch deletion.
+/// - Parameter editingStyle: The requested editing operation.
+/// - Parameter indexPath: The affected row path.
 - (void)commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forCellAtIndexPath:(NSIndexPath *)indexPath;
 
-/// Subclasses should override this method to handle when generated cells are about to move.
-/// - Parameter sourceIndexPath: The source row index path.
-/// - Parameter proposedIndexPath: The proposed destination row index path.
+/// Constrains interactive moves to this section and before its trailing add
+/// row.
+/// - Parameter sourceIndexPath: The current item row.
+/// - Parameter proposedIndexPath: UIKit's proposed destination.
+/// - Returns: The source for a cross-section proposal, the preceding row when
+///   targeting the trailing add row, or the proposed path otherwise.
 - (NSIndexPath *)targetIndexPathForMoveFromCellAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath;
 
-/// Subclasses should override this method to handle when generated cells are moved
-/// - Parameter fromIndexPath: The source row index path.
-/// - Parameter toIndexPath: The destination row index path.
+/// Internal hook that reorders cached items and asks the store to persist
+/// ordering for same-section moves. Normal interactive moves are constrained to
+/// one section.
+/// - Parameter fromIndexPath: The current item path.
+/// - Parameter toIndexPath: The destination path.
+/// - Warning: Calling this across sections removes the item from the source
+///   store and inserts it into the destination cache, not the destination
+///   store.
 - (void)moveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
-/// Subclasses should override this method to handle when addButtonItem is tapped
+/// Add-button action that dispatches item creation only when `allowAddingItems`
+/// is YES. Subclasses may extend this behavior.
 - (void)didTapAddButtonItem;
 
-/// Subclasses should override this method to handle creating a new item
+/// Subclass hook that asks `dataStore` to create a new object.
+/// - Returns: The new object, or nil if creation is unavailable. The framework
+///   later inserts or discards the uninserted object.
 - (nullable NSObject *)createNewItem;
 
-/// 	Subclasses must override this method to build a model for the generated detail view.
-/// - Parameter detailTableModel: This is an empty model. Method should add sections and cells to this model.
-/// - Parameter item: The item that the model should be built for. If item is nil, a model should be built for a new item.
+/// Subclass hook for populating a generated detail model; the base does
+/// nothing.
+/// - Parameter detailTableModel: The model to populate. It can be nil for a
+///   plain UIKit custom controller; do not assume an existing custom model is
+///   empty.
+/// - Parameter item: The existing or already-created new item to edit. Nil is
+///   not the signal for creating a new item.
 - (void)buildDetailTableModel:(nullable SCTableViewModel *)detailTableModel forItem:(NSObject *)item;
 
-/// 	Subclasses must override this method to configure the generated detail view.
-/// - Parameter detailViewController: The generated detail view.
-/// - Parameter item: The item that the detail view is generated for.
-/// - Parameter newItem: TRUE if the item is a newly created item.
+/// Configures STV controller delegates, navigation buttons, and editing cancel
+/// options. Subclasses may extend this behavior rather than replace it.
+/// - Parameter detailViewController: The generated or supplied controller.
+/// - Parameter item: The item being edited.
+/// - Parameter newItem: YES for an already-created new item; NO for an existing
+///   one.
 - (void)configureDetailViewController:(UIViewController *)detailViewController item:(NSObject *)item newItem:(BOOL)newItem;
 
-/// 	Subclasses must override this method to configure the model for the generated detail view.
-/// - Parameter detailTableModel: The model to be configured.
-/// - Parameter item: The item that the model is configured for.
+/// Subclass hook to configure a detail model after generation or storyboard
+/// loading. The base implementation does nothing.
+/// - Parameter detailTableModel: The model to configure, or nil when a custom
+///   controller has no STV model.
+/// - Parameter item: The item whose values the detail model represents.
 - (void)configureDetailTableModel:(nullable SCTableViewModel *)detailTableModel forItem:(NSObject *)item;
 
-/// Subclasses must override this method to determine the navigation bar type of the detail view for the given item.
-/// - Parameter item: The item involved in the operation.
-/// - Parameter newItem: Whether the item is newly created.
+/// Returns the applicable new-item or existing-item navigation-bar option.
+/// Subclasses can override this for item-specific editing requirements.
+/// - Parameter item: The object represented by the detail controller.
+/// - Parameter newItem: YES for new-item options; NO for existing-item options.
 - (SCNavigationBarType)getDetailViewNavigationBarTypeForItem:(NSObject *)item newItem:(BOOL)newItem;
 
-/// Commits the newly created item.
-/// - Parameter newItem: Whether the item is newly created.
-/// - Parameter detailModel: The detail table-view model.
+/// Internal hook that inserts a new item through the owner array model or
+/// store. For basic value types, a detail control's value can replace the
+/// original item.
+/// - Parameter newItem: The created object to insert, not a Boolean flag.
+/// - Parameter detailModel: The detail model supplying edited values, or nil.
 - (void)commitNewItem:(NSObject *)newItem detailModel:(nullable SCTableViewModel *)detailModel;
 
-/// Subclasses should override this method to handle adding a cell for newItem (method called internally by framework)
-/// - Parameter newItem: Whether the item is newly created.
+/// Internal hook that displays an already inserted item, handles the
+/// placeholder and collapsed state, scrolls to the row, and invokes the
+/// insertion action.
+/// - Parameter newItem: The object already present in the current item list.
 - (void)addCellForNewItem:(NSObject *)newItem;
 
-/// Subclasses should override this method to handle an item getting modified (method called internally by framework)
-/// - Parameter item: The item involved in the operation.
+/// Internal hook that re-sorts and refreshes an edited item's row, updating its
+/// selected path if ordering changes. Basic-value items trigger a refetch
+/// because the value may have been replaced.
+/// - Parameter item: The item that was edited.
 - (void)itemModified:(NSObject *)item;
 
-/// Subclasses should override this method to handle an item that got removed (method called internally by framework)
-/// - Parameter index: The index involved in the operation.
+/// Subclass hook called after an item is removed. The base implementation does
+/// nothing; selection subclasses adjust cached indexes and bindings.
+/// - Parameter index: The former item index.
 - (void)itemRemovedAtIndex:(NSInteger)index;
 
-/// Method gets called internally by framework.
-/// - Parameter detailModel: The detail table-view model.
+/// Internal hook that checks `autoCommitDetailModelChanges` and insert/update
+/// actions, commits detail values, and requests the corresponding store
+/// operation.
+/// - Parameter detailModel: The detail model to commit, or nil for a custom
+///   flow.
 - (void)commitAndProcessChangesForDetailModel:(nullable SCTableViewModel *)detailModel;
 
 @end
 
 
 #pragma mark - SCArrayOfObjectsSection
-/// This class functions as an SCTableViewModel section that is able to represent an array
-/// of any kind of objects and automatically generate its cells from these objects. In addition,
-/// `SCArrayOfObjectsSection` generates its detail views from the properties of the corresponding
-/// object in its items array. Objects in the items array need not all be of the same object type, but
-/// they must all decend from NSObject. If more than one type of object is present in the items
-/// array, then their respective class definitions should be added to the itemsClassDefinitions
-/// set.
-///
-/// - SeeAlso: ``SCObjectSection``, ``SCObjectCell``.
+/// Generates object-list rows and property-based detail editors from a data
+/// store. Objects can have different types if the store resolves a definition
+/// for each one. Register additional definitions with `dataStore`'s
+/// `addDataDefinition:` method.
+/// - SeeAlso: `SCObjectSection`, `SCObjectCell`
 @interface SCArrayOfObjectsSection : SCArrayOfItemsSection
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized `SCArrayOfObjectsSection` given a header title and an array of objects.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionItems: A mutable array of objects that the section will use to generate its cells.
-/// - Parameter definition: The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsDefinitions dictionary after initialization.
+/// Creates a `SCArrayOfObjectsSection` backed by an `SCArrayStore`.
+/// - Parameter sectionHeaderTitle: The header title, or nil for no title.
+/// - Parameter sectionItems: The mutable backing array, retained rather than
+///   copied. Nil leaves the store without a backing array; provide a mutable
+///   array before expecting persistent additions.
+/// - Parameter definition: The default object definition. Register additional
+///   definitions with the resulting data store when items have different types.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems itemsDefinition:(SCDataDefinition *)definition;
 
-/// Returns an initialized `SCArrayOfObjectsSection` given a header title and an array of objects.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionItems: A mutable array of objects that the section will use to generate its cells.
-/// - Parameter definition: The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsDefinitions dictionary after initialization.
+/// Creates a `SCArrayOfObjectsSection` backed by an `SCArrayStore`.
+/// - Parameter sectionHeaderTitle: The header title, or nil for no title.
+/// - Parameter sectionItems: The mutable backing array, retained rather than
+///   copied. Nil leaves the store without a backing array; provide a mutable
+///   array before expecting persistent additions.
+/// - Parameter definition: The default object definition. Register additional
+///   definitions with the resulting data store when items have different types.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems itemsDefinition:(SCDataDefinition *)definition;
 
-/// Allocates and returns an initialized `SCArrayOfObjectsSection` given a header title and
-/// an entity definition.
+/// Allocates and returns an initialized `SCArrayOfObjectsSection` given a
+/// header title and an entity definition.
 ///
-/// - Note: This method creates a section with all the objects that
-///   exist in classDefinition's entity's managedObjectContext. To create a section with only a subset
-///   of these objects, consider using the other section initializers.
+/// - Note: Fetches objects of the specified entity in its managed object
+///   context, not every entity in the context. Fetch options can further
+///   restrict results.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 /// - Parameter definition: The entity definition of the objects to fetch.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition;
 
-/// Allocates and returns an initialized `SCArrayOfObjectsSection` given a header title, an entity definition, and an NSPredicate.
+/// Allocates and returns an initialized `SCArrayOfObjectsSection` given a
+/// header title, an entity definition, and an NSPredicate.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 /// - Parameter definition: The entity definition of the objects to fetch.
-/// - Parameter predicate: The predicate that will be used to filter the fetched objects.
+/// - Parameter predicate: The predicate used to filter fetched objects, or nil
+///   for no additional predicate.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(nullable NSPredicate *)predicate;
 
-/// Returns an initialized `SCArrayOfObjectsSection` given a header title and
-/// an entity definition.
+/// Returns an initialized `SCArrayOfObjectsSection` given a header title and an
+/// entity definition.
 ///
-/// - Note: This method creates a section with all the objects that
-///   exist in classDefinition's entity's managedObjectContext. To create a section with only a subset
-///   of these objects, consider using the other section initializers.
+/// - Note: Fetches objects of the specified entity in its managed object
+///   context, not every entity in the context. Fetch options can further
+///   restrict results.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 /// - Parameter definition: The entity definition of the objects to fetch.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition;
 
-/// Returns an initialized `SCArrayOfObjectsSection` given a header title, an entity definition, and an NSPredicate.
+/// Returns an initialized `SCArrayOfObjectsSection` given a header title, an
+/// entity definition, and an NSPredicate.
 ///
-/// - Parameter sectionHeaderTitle: A header title for the section.
+/// - Parameter sectionHeaderTitle: A header title for the section, or nil.
 /// - Parameter definition: The entity definition of the objects to fetch.
-/// - Parameter predicate: The predicate that will be used to filter the fetched objects.
+/// - Parameter predicate: The predicate used to filter fetched objects, or nil
+///   for no additional predicate.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle entityDefinition:(SCEntityDefinition *)definition filterPredicate:(nullable NSPredicate *)predicate;
 
 @end
 
 
 #pragma mark - SCArrayOfStringsSection
-/// This class functions as an SCTableViewModel section that is able to represent an array
-/// of string items and automatically generate its cells from these items. The class inherits
-/// all its funtionality from its superclass: SCArrayOfItemsSection, except that its items
-/// array can only contain items of type NSString.
+/// An object-list section specialized for `NSString` items. Its string-array
+/// initializer creates an `SCArrayStore` with `SCStringDefinition`, disables
+/// existing-item detail editing, and selects no item accessory. Set
+/// `allowEditDetailView` explicitly if existing strings should be editable. The
+/// inherited new-item flow remains available.
 
 @interface SCArrayOfStringsSection : SCArrayOfObjectsSection
 
-/// Allocates and returns an initialized `SCArrayOfItemsSection` given a header title and an array of NSString items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionItems: An array of items that the section will use to generate its cells. This array must be of type NSMutableArray, as it must support the section's add, delete, and move operations. All array objects must be of type NSString.
+/// Creates a `SCArrayOfStringsSection` backed by an `SCArrayStore`.
+/// - Parameter sectionHeaderTitle: The header title, or nil for no title.
+/// - Parameter sectionItems: The mutable backing array, retained rather than
+///   copied. Nil leaves the store without a backing array; provide a mutable
+///   array before expecting persistent additions. Entries must be NSString
+///   values.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems;
 
-/// Returns an initialized `SCArrayOfItemsSection` given a header title and an array of NSString items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter sectionItems: An array of items that the section will use to generate its cells. This array must be of type NSMutableArray, as it must support the section's add, delete, and move operations. All array objects must be of type NSString.
+/// Creates a `SCArrayOfStringsSection` backed by an `SCArrayStore`.
+/// - Parameter sectionHeaderTitle: The header title, or nil for no title.
+/// - Parameter sectionItems: The mutable backing array, retained rather than
+///   copied. Nil leaves the store without a backing array; provide a mutable
+///   array before expecting persistent additions. Entries must be NSString
+///   values.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems;
 
 @end
 
 
 #pragma mark - SCSelectionSection
-/// This class functions as an SCTableViewModel section that is able to provide selection functionality.
-/// The cells in this section represent different items that the end-user can select from, and they
-/// are generated from NSStrings in its items array. Once a cell is selected, a checkmark appears next
-/// to it, similar to Apple's Settings application where a user selects a Ringtone for their
-/// iPhone. The section can be configured to allow multiple selection and to allow no selection at all.
+/// Presents string items as a checkmarked single- or multiple-selection
+/// section. Bind a writable NSNumber property to an item index, an NSMutableSet
+/// of NSNumber indexes to selections, or an NSString to selected item text
+/// separated by semicolons. Alternatively, configure cached indexes directly.
+/// Adding, deleting, moving, and detail editing default to NO.
 ///
-/// There are three ways to set/retrieve the section's selection:
-/// - Through binding an object to the section, and specifying a property name to bind the selection index
-/// result to. The bound property must be of type NSMutableSet if multiple selection is allowed, otherwise
-/// it must be of type NSNumber or NSString.
-/// - Through binding a key to the section and setting/retrieving through the ownerTableViewModel modelKeyValues property.
-/// - Through the selectedItemsIndexes or selectedItemIndex properties.
-///
-/// - SeeAlso: ``SCSelectionCell``.
+/// Indexes refer to the section's `items`. String bindings resolve selected
+/// values by equality, so duplicate item strings map to the first equal item.
+/// - SeeAlso: `SCSelectionCell`
 @interface SCSelectionSection : SCArrayOfStringsSection
 
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized `SCSelectionSection` given a header title, a bound object, an NSNumber bound property name, and an array of selection items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection. This property must
-///   be of type NSNumber and can't be a readonly property. The section will also initialize its selection
-///   from the value present in this property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
+/// Creates a `SCSelectionSection` with index selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A writable NSNumber property storing a zero-based
+///   item index, or -1 for no selection. A missing bound value is initialized
+///   to -1. Nil or an unrecognized property name leaves the instance without a
+///   property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
-/// Allocates and returns an initialized `SCSelectionSection` given a header title, a bound object,
-/// an NSMutableSet bound property name, an array of selection items, and wether to allow multiple selection.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection(s). This property must
-///   be of type NSMutableSet. The section will also initialize its selection(s) from the value present
-///   in this property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
-/// - Parameter multipleSelection: Determines if multiple selection is allowed.
+/// Creates a `SCSelectionSection` with index-set selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A property holding an NSMutableSet of NSNumber
+///   item indexes. A missing value is initialized to an empty mutable set when
+///   binding is available. Nil or an unrecognized property name leaves the
+///   instance without a property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
+/// - Parameter multipleSelection: Whether more than one item can be selected.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems allowMultipleSelection:(BOOL)multipleSelection;
 
-/// Allocates and returns an initialized `SCSelectionSection` given a header title, a bound object,
-/// an NSString bound property name, and an array of selection items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection. This property must
-///   be of type NSString and can't be a readonly property. The section will also initialize its selection
-///   from the value present in this property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
+/// Creates a `SCSelectionSection` with string selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A writable NSString property containing selected
+///   item text, separated by semicolons for multiple selections. Nil or an
+///   unrecognized property name leaves the instance without a property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
+/// - Note: Semicolons in item text are not escaped. Multiple selections are
+///   serialized in set enumeration order, not guaranteed item order.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 
-/// Returns an initialized `SCSelectionSection` given a header title, a bound object,
-/// an NSNumber bound property name, and an array of selection items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection. This property must
-///   be of type NSNumber and can't be a readonly property. The section will also initialize its selection
-///   from the value present in this property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
+/// Creates a `SCSelectionSection` with index selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A writable NSNumber property storing a zero-based
+///   item index, or -1 for no selection. A missing bound value is initialized
+///   to -1. Nil or an unrecognized property name leaves the instance without a
+///   property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
-/// Returns an initialized `SCSelectionSection` given a header title, a bound object,
-/// a bound property name, an array of selection items, and wether to allow multiple selection.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection(s). This property must
-///   be of type NSMutableSet. The section will also initialize its selection(s) from the value present
-///   in this property. Every item in this set must be an NSNumber that represent the index of the selected cell(s).
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
-/// - Parameter multipleSelection: Determines if multiple selection is allowed.
+/// Creates a `SCSelectionSection` with index-set selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A property holding an NSMutableSet of NSNumber
+///   item indexes. A missing value is initialized to an empty mutable set when
+///   binding is available. Nil or an unrecognized property name leaves the
+///   instance without a property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
+/// - Parameter multipleSelection: Whether more than one item can be selected.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems allowMultipleSelection:(BOOL)multipleSelection;
 
-/// Returns an initialized `SCSelectionSection` given a header title, a bound object,
-/// an NSString bound property name, and an array of selection items.
-///
-/// - Parameter sectionHeaderTitle: A header title for the section.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The property name present in the bound object that the section will bind to and
-///   will automatically change the value of to reflect the section's current selection. This property must
-///   be of type NSString and can't be a readonly property. The section will also initialize its selection
-///   from the value present in this property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
-///   an NSString type.
+/// Creates a `SCSelectionSection` with string selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: A writable NSString property containing selected
+///   item text, separated by semicolons for multiple selections. Nil or an
+///   unrecognized property name leaves the instance without a property binding.
+/// - Parameter sectionItems: Selectable NSString values, copied into a mutable
+///   backing array. Nil supplies no initial items.
+/// - Note: Semicolons in item text are not escaped. Multiple selections are
+///   serialized in set enumeration order, not guaranteed item order.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 #pragma mark - Configuration
 
-/// This property reflects the current section's selection. You can set this property
-/// to define the section's selection.
-///
-/// - Note: If you have bound this section to an object or a key, you can define the section's selection
-///   using either the bound property value or the key value, respectively.
-/// - Note: In case of no selection, this property will be set to an NSNumber of value -1.
+/// One selected item index, or `@(-1)` when the selected-index set is empty.
+/// With multiple selections, the returned index is an arbitrary member, not
+/// necessarily the lowest. Assignment clears the previous indexes and adds the
+/// supplied nonnegative index; an NSNumber-bound instance also writes that
+/// binding. It does not refresh visible checkmarks or serialize an NSString
+/// binding.
 @property (nonatomic, copy) NSNumber *selectedItemIndex;
 
-/// This property reflects the current section's selection(s). You can add index(es) to the set
-/// to define the section's selection.
-///
-/// - Note: If you have bound this section to an object or a key, you can define the section's selection
-///   using either the bound property value or the key value, respectively.
+/// The mutable set of selected `NSNumber` item indexes. For a set-bound object
+/// this is the bound set itself and may be nil if the bound value is nil;
+/// otherwise it is an internal selection cache. Direct mutation does not update
+/// NSNumber/NSString bindings or reload the table. Use only valid indexes into
+/// `items`.
 @property (nonatomic, nullable, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
-/// If TRUE, the section allows multiple selection. Default: FALSE.
+/// Allows the user to select more than one item. Plain initialization defaults
+/// to NO; the set-binding initializer uses its `multipleSelection` argument.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
 
-/// If TRUE, the section allows no selection at all. Default: FALSE.
+/// Allows the user to uncheck the final selected item. Defaults to NO. NO does
+/// not automatically select an item when the initial selection is empty.
 @property (nonatomic, readwrite) BOOL allowNoSelection;
 
-/// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
-/// - Note: Only applicable when allowMultipleSelection is TRUE.
+/// User-interaction limit for multiple selection. Zero means no limit; default:
+/// 0. This does not validate or trim programmatically assigned indexes. It
+/// applies only when `allowMultipleSelection` is YES.
 @property (nonatomic, readwrite) NSUInteger maximumSelections;
 
-/// If TRUE, the section automatically dismisses the current view controller when a value is selected. Default: FALSE.
+/// Requests Done-style dismissal from an `SCTableViewController` owner after
+/// selection handling. Defaults to NO. A newly checked item dismisses for
+/// single selection, an unlimited selection count, a reached maximum, or all
+/// items selected. Tapping an already-selected final item that cannot be
+/// unchecked, or attempting to exceed the maximum, also requests dismissal.
+/// Unchecking an item does not.
 @property (nonatomic, readwrite) BOOL autoDismissViewController;
 
-/// The text color of the selected cell(s).
+/// Text color assigned to selected rows. Defaults to `UIColor.linkColor`.
 @property (nonatomic, nullable, strong) UIColor *selectedCellTextColor;
 
-/// The text color of the deselected cell(s).
+/// Text color assigned to unselected rows. Defaults to `UIColor.labelColor`.
 @property (nonatomic, nullable, strong) UIColor *deselectedCellTextColor;
 
-/// The accessoryView of the selected cell(s).
+/// Optional view assigned directly as the selected row's accessory instead of a
+/// checkmark. Defaults to nil. The same view instance is assigned, not copied;
+/// a UIView cannot remain installed in several selected rows simultaneously.
+/// Use per-cell configuration for distinct accessories in multiple-selection
+/// lists.
 @property (nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
 
 
@@ -851,85 +1042,124 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - SCObjectSelectionSection
-/// This class functions as a section that provides the end-user with an automatically generated
-/// list objects to choose from.
-///
-/// The selection items are provided in the form of an array of
-/// NSObjects, called the items array. `SCObjectSelectionSection` can be configured to allow multiple
-/// selection and to allow no selection at all. If allow multiple selection is disabled, then
-/// the bound property name of this section must be of type NSObject, otherwise
-/// it must be of type NSMutableSet.
-///
-/// - SeeAlso: ``SCObjectSelectionCell``.
+/// Presents store-backed objects as a checkmarked selection section. Single
+/// selection binds an object-valued property; multiple selection uses an
+/// existing mutable set of selected objects. Initializers infer multiple
+/// selection from an `NSMutableSet` bound value. Items are matched by identity
+/// when bound values are reloaded. Adding, deleting, moving, and detail editing
+/// default to NO.
 @interface SCObjectSelectionSection : SCArrayOfObjectsSection
 
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and a selection items store.
-/// - Parameter sectionHeaderTitle: The section's header title.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
-/// - Parameter store: The store containing the selection objects.
+/// Creates a `SCObjectSelectionSection` with object selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: An object-valued property for single selection, or
+///   a property holding an existing mutable set of objects for multiple
+///   selection. The initializer infers the mode from the current value. Nil or
+///   an unrecognized property name leaves the instance without a property
+///   binding.
+/// - Parameter store: The store supplying selectable objects, or nil until
+///   configured.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
-/// Allocates and returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and an array of selection items.
-/// - Parameter sectionHeaderTitle: The section's header title.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
-/// - Parameter definition: The definition of the selection items.
+/// Creates a `SCObjectSelectionSection` with object selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: An object-valued property for single selection, or
+///   a property holding an existing mutable set of objects for multiple
+///   selection. The initializer infers the mode from the current value. Nil or
+///   an unrecognized property name leaves the instance without a property
+///   binding.
+/// - Parameter sectionItems: Selectable objects, copied into a mutable backing
+///   array. Nil supplies no initial items.
+/// - Parameter definition: The default definition for selectable objects.
+///   Register other object definitions with the resulting data store as needed.
 + (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
-/// Returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and a selection items store.
-/// - Parameter sectionHeaderTitle: The section's header title.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
-/// - Parameter store: The store containing the selection objects.
+/// Creates a `SCObjectSelectionSection` with object selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: An object-valued property for single selection, or
+///   a property holding an existing mutable set of objects for multiple
+///   selection. The initializer infers the mode from the current value. Nil or
+///   an unrecognized property name leaves the instance without a property
+///   binding.
+/// - Parameter store: The store supplying selectable objects, or nil until
+///   configured.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
-/// Returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and an array of selection items.
-/// - Parameter sectionHeaderTitle: The section's header title.
-/// - Parameter object: The object the section will bind to.
-/// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
-/// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
-/// - Parameter definition: The definition of the selection items.
+/// Creates a `SCObjectSelectionSection` with object selection binding.
+/// - Parameter sectionHeaderTitle: The section header title, or nil for no
+///   title.
+/// - Parameter object: The binding object, or nil for an unbound selection.
+/// - Parameter propertyName: An object-valued property for single selection, or
+///   a property holding an existing mutable set of objects for multiple
+///   selection. The initializer infers the mode from the current value. Nil or
+///   an unrecognized property name leaves the instance without a property
+///   binding.
+/// - Parameter sectionItems: Selectable objects, copied into a mutable backing
+///   array. Nil supplies no initial items.
+/// - Parameter definition: The default definition for selectable objects.
+///   Register other object definitions with the resulting data store as needed.
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration
 
-/// This property reflects the current section's selection. You can set this property
-/// to define the section's selection.
-///
-/// - Note: In case of no selection, this property will be set to an NSNumber of value -1.
+/// One cached selected item index, or `@(-1)` when no indexes are selected.
+/// With multiple selection, the getter returns an arbitrary member. Assignment
+/// clears the cache and adds a nonnegative index, but does not commit the bound
+/// object selection or refresh visible checkmarks.
 @property (nonatomic, copy) NSNumber *selectedItemIndex;
 
-/// This property reflects the current section's selection(s). You can add index(es) to the set
-/// to define the section's selection.
+/// The mutable cache of selected `NSNumber` indexes into `items`. Direct
+/// mutation does not itself commit or reload the table. Call
+/// `commitCellChanges` to write a manually changed cache to the binding, and
+/// reload UIKit to refresh checkmarks. `reloadBoundValues` instead discards
+/// cached indexes and reconstructs them from bound objects by identity.
 @property (nonatomic, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
-/// If TRUE, the section allows multiple selection. Default: FALSE.
+/// Enables selection of multiple objects. Plain initialization defaults to NO;
+/// binding initializers set it to YES when the current bound value is an
+/// `NSMutableSet`. When enabling this manually, provide an existing mutable
+/// bound set; this property does not create one.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
 
-/// If TRUE, the section allows no selection at all. Default: FALSE.
+/// Allows the user to uncheck the final selected object. Defaults to NO. NO
+/// does not automatically choose an object for an initially empty selection.
 @property (nonatomic, readwrite) BOOL allowNoSelection;
 
-/// The maximum number of items that can be selected. Set to zero to allow an infinite number of selections. Default: 0.
-/// - Note: Only applicable when allowMultipleSelection is TRUE.
+/// User-interaction limit for multiple selection. Zero means no limit; default:
+/// 0. This does not validate or trim programmatically assigned indexes. It
+/// applies only when `allowMultipleSelection` is YES.
 @property (nonatomic, readwrite) NSUInteger maximumSelections;
 
-/// If TRUE, the section automatically dismisses the current view controller when a value is selected. Default: FALSE.
+/// Requests Done-style dismissal from an `SCTableViewController` owner after
+/// selection handling. Defaults to NO. A newly checked item dismisses for
+/// single selection, an unlimited selection count, a reached maximum, or all
+/// items selected. Tapping an already-selected final item that cannot be
+/// unchecked, or attempting to exceed the maximum, also requests dismissal.
+/// Unchecking an item does not.
 @property (nonatomic, readwrite) BOOL autoDismissViewController;
 
-/// The text color of the selected cell(s).
+/// Text color assigned to selected rows. Defaults to `UIColor.linkColor`.
 @property (nonatomic, nullable, strong) UIColor *selectedCellTextColor;
 
-/// The text color of the deselected cell(s).
+/// Text color assigned to unselected rows. Defaults to `UIColor.labelColor`.
 @property (nonatomic, nullable, strong) UIColor *deselectedCellTextColor;
 
-/// The accessoryView of the selected cell(s).
+/// Optional view assigned directly as the selected row's accessory instead of a
+/// checkmark. Defaults to nil. The same view instance is assigned, not copied;
+/// a UIView cannot remain installed in several selected rows simultaneously.
+/// Use per-cell configuration for distinct accessories in multiple-selection
+/// lists.
 @property (nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
 
 
@@ -943,7 +1173,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Other
 
-/// Set this to the definition of the intermediate entity between the bound object's class definition and the itemsEntityClassDefinition. This is useful in complex many-to-many relationships where you have created an intermediate entity between you main two entities. Default: nil.
+/// Reserved definition for an intermediate relationship entity; defaults to
+/// nil. The current implementation stores this value (including from
+/// attributes), but its selection reload/commit paths still compare and bind
+/// the items directly. Setting it does not create, traverse, or synchronize
+/// intermediary entities.
 @property (nonatomic, nullable, strong) SCDataDefinition *intermediateEntityDefinition;
 
 

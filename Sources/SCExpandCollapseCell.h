@@ -12,7 +12,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// SCExpandCollapseCell is a special cell class that, once tapped, collapses its owner section's contents into a single cell. When tapped again, it will expand the section's contents to their original state.
+/// A special row that toggles the visibility of its owner section's other rows.
+///
+/// Assign the cell to the section's `expandCollapseCell` property rather than
+/// adding it as an ordinary cell. A collapsed section shows only this row.
 ///
 /// Sample use:
 /// ```objective-c
@@ -28,28 +31,37 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Creation and Initialization
 
-/// Allocates and returns an initialized SCExpandCollapseCell given its expandText, collapseText, an initial owner section expand state.
-/// - Parameter expandText: The text that will be displayed in the cell when the section is collapsed.
-/// - Parameter collapseText: The text that will be displayed in the cell when the section is expanded.
+/// Creates a cell with labels for each state and an initial expanded state.
+/// - Parameter expandText: The collapsed-state label, or `nil` for no text.
+/// - Parameter collapseText: The expanded-state label, or `nil` for no text.
 /// - Parameter expanded: The initial expanded state of the cell's owner section.
 + (instancetype)cellWithExpandText:(nullable NSString *)expandText collapseText:(nullable NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
 
-/// Returns an initialized SCExpandCollapseCell given its expandText, collapseText, an initial owner section expand state.
-/// - Parameter expandText: The text that will be displayed in the cell when the section is collapsed.
-/// - Parameter collapseText: The text that will be displayed in the cell when the section is expanded.
+/// Initializes a cell with labels for each state and an initial expanded state.
+/// - Parameter expandText: The collapsed-state label, or `nil` for no text.
+/// - Parameter collapseText: The expanded-state label, or `nil` for no text.
 /// - Parameter expanded: The initial expanded state of the cell's owner section.
 - (instancetype)initWithExpandText:(nullable NSString *)expandText collapseText:(nullable NSString *)collapseText ownerSectionExpanded:(BOOL)expanded;
 
 
 #pragma mark - Configuration
 
-/// The text that will be displayed in the cell when the section is collapsed.
+/// The label used when `ownerSectionExpanded` is set to `NO`. Defaults to `nil`.
+/// Changing this property alone does not refresh the currently displayed text;
+/// assign `ownerSectionExpanded` again to apply it.
 @property (nonatomic, nullable, copy) NSString *expandText;
 
-/// The text that will be displayed in the cell when the section is expanded.
+/// The label used when `ownerSectionExpanded` is set to `YES`. Defaults to `nil`.
+/// Changing this property alone does not refresh the currently displayed text;
+/// assign `ownerSectionExpanded` again to apply it.
 @property (nonatomic, nullable, copy) NSString *collapseText;
 
-/// The expanded state of the ownerSection. Set to TRUE to expand the ownerSection's content. Default:FALSE.
+/// Whether the owner section's other rows are visible. Defaults to `NO` unless
+/// an expanded state is supplied to the initializer.
+///
+/// Assigning this property updates the label and disclosure accessory, and
+/// asks the attached owner section to expand or collapse. Before attachment,
+/// the cell stores the state for the section to use.
 @property (nonatomic, readwrite) BOOL ownerSectionExpanded;
 
 @end

@@ -125,7 +125,6 @@
         keyboardShown = FALSE;
         keyboardOverlap = 0;
         /*
-        hermes:
         UIKit owns row measurement; numeric height options configure content
         constraints rather than replacing automatic table sizing.
         */
@@ -1358,7 +1357,6 @@
     }
 
     /*
-    hermes:
     Static rows must not be both the old and new reload-animation participant.
     Refit the existing cells in one update cycle. Active editors keep their
     bindings, marked text, selection and control identity throughout the fit.
@@ -1427,7 +1425,6 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     /*
-    hermes:
     Our constrained supplementary view owns its label. Returning a title here
     also makes UIKit populate the native label, drawing the title twice.
     */
@@ -1581,7 +1578,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     /*
-    hermes:
     UIKit treats zero as its default spacing, not a hidden supplementary view.
     A least-positive height with a nil view suppresses absent section content.
     Visible content is always measured by UIKit from constraints.
@@ -2196,7 +2192,6 @@
 
     if (!_keyboardGeometryObserver) {
         /*
-        hermes:
         A noninteractive constrained observer follows the viewport, not scroll
         content. Layout and safe-area callbacks recompute our inset delta;
         neither the observer nor the model writes the table's frame.
@@ -2690,7 +2685,6 @@
     UIViewController *controller = self.viewController;
     UINavigationController *navigation = controller.navigationController;
     /*
-     hermes:
      A hidden navigation bar cannot host visible search. Reevaluate the mode
      on attachment without changing the application's navigation-bar policy.
      */
@@ -2709,7 +2703,6 @@
     if (useNavigationItem) {
         bar.translatesAutoresizingMaskIntoConstraints = YES;
         /*
-         hermes:
          Integrated navigation search may move the text field out of its bar.
          Stacked placement keeps the complete bar available for table-header
          reattachment. Restore the host's preference when releasing the item.
@@ -3074,7 +3067,6 @@
     [self removeKeyboardInset];
     if (searchController == _searchController && !_searchAttachedToNavigationItem) {
         /*
-         hermes:
          UIKit reparents the active search bar into its presentation container.
          Release header constraints and return root layout ownership to UIKit;
          otherwise the editing field can be constrained outside the window.

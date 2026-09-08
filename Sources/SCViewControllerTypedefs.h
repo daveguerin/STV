@@ -12,15 +12,22 @@
 
 /// The types of presentation modes used with SCViewController and SCTableViewController.
 typedef NS_ENUM(NSInteger, SCPresentationMode) {
-    /// The presenting control automatically determines how to present the view controller.
+    /// Uses an active detail host when supported; otherwise pushes when a navigation
+    /// controller is available and presents modally when it is not. New-item
+    /// section flows resolve Auto to Modal before presentation.
     SCPresentationModeAuto,
-    /// The the view controller gets presented modally.
+    /// Presents the detail controller modally inside a navigation controller.
     SCPresentationModeModal,
-    /// The the view controller is pushed into the navigation stack (when possible).
+    /// Pushes onto the owner's navigation stack, falling back to modal presentation
+    /// when no navigation controller is available.
     SCPresentationModePush,
-    /// The the view controller is presented inside a popover (only valid on supported devices).
+    /// Uses UIModalPresentationPopover and UIPopoverPresentationController with a
+    /// cell, table, or Add-item anchor. UIKit adapts compact-width presentations.
+    /// An already-active section detail host may gain focus instead.
     SCPresentationModePopover,
-    /// The user will handle presenting the detail view. The presentation is typically handeled by implementing the customPresentDetalViewController action/delegate.
+    /// Skips STV's automatic push/modal/popover operation. Application code must
+    /// present the detail; array sections offer `customPresentDetailModel`.
+    /// Merely selecting this mode does not itself provide a presentation hook.
     SCPresentationModeCustom,
 };
 
@@ -29,7 +36,8 @@ typedef NS_ENUM(NSInteger, SCPresentationMode) {
 typedef NS_ENUM(NSInteger, SCNavigationBarType) {
     /// Have the presenter control determine the best navigation bar type. Only applicable when the view controller is a detail view controller.
     SCNavigationBarTypeAuto,
-    /// Navigation bar with no buttons. If the view controller is on a navigation stack, the default back button is displayed.
+    /// Adds no STV buttons. UIKit can display Back for a pushed controller; this
+    /// does not create a dismiss button for a modal or popover root.
     SCNavigationBarTypeNone,
     /// Navigation bar with an Add button on the left.
     SCNavigationBarTypeAddLeft,
@@ -61,14 +69,17 @@ typedef NS_ENUM(NSInteger, SCNavigationBarType) {
 
 /// The types of SCViewController and SCTableViewController states.
 typedef NS_ENUM(NSInteger, SCViewControllerState) {
-    /// View controller is being displayed for the first time. A view controller remains in this state
-    /// 	until the viewDidAppear method has been called.
+    /// Initial state, retained through first-appearance callbacks until STV finishes
+    /// `viewDidAppear:`. Presenting the same instance again does not reset it.
     SCViewControllerStateNew,
-    /// View controller is visible and active.
+    /// STV has activated the controller during appearance. On later appearances
+    /// this is set in `viewWillAppear:`, so it does not guarantee visibility yet.
     SCViewControllerStateActive,
-    /// View controller has disappeared and is inactive.
+    /// STV has begun a nondismissal disappearance; set in `viewWillDisappear:`.
     SCViewControllerStateInactive,
-    /// View controller has been dismissed (using either the Done or Cancel buttons).
+    /// STV accepted a dismissal request, detected a navigation pop, or received
+    /// completed interactive popover dismissal. Explicit requests set this before
+    /// UIKit completes the transition; focus loss alone does not set it.
     SCViewControllerStateDismissed
 
 };

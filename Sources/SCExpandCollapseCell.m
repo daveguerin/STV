@@ -28,7 +28,6 @@
         self.tintColor = UIColor.secondaryLabelColor;
         self.contentMode = UIViewContentModeCenter;
         /*
-        hermes:
         UIKit owns the accessory root's placement. UIImageView supplies its
         intrinsic size; disabling the root's autoresizing translation would
         detach it from UITableView's accessory layout.

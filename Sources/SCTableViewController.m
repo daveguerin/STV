@@ -44,7 +44,10 @@
     BOOL _rightBarButtonItemInitialEnabledState;
 }
 
-/// Receives the ibSTVSectionsString from IB *
+/// Copied legacy Interface Builder section-serialization string.
+/// `addStaticContentToModel` parses its section and key/value delimiters to
+/// configure imported sections. A nil or empty string leaves static content to
+/// the ordinary UIKit import path.
 @property (nonatomic, copy) NSString *ibSTVSectionsString;
 
 // Actual Data definitions converted from _STV_ibDataDefinitions NSDictionary objects
@@ -271,7 +274,6 @@
 
 
     /*
-    hermes:
     Embedded tables wait for explicit parent model configuration. Standalone
     tables load their own content without inferring a container's columns.
     */
@@ -1216,7 +1218,6 @@
 
     if (_hasFocus) {
         /*
-        hermes:
         Explicitly configured detail models end their editing focus without
         dismissing their host controller. Container topology is irrelevant.
         */

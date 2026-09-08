@@ -16,25 +16,31 @@
  *	object, or subclassing it.
  */
 // -----------------------------------------------------------------------------
-/// The default cell style.
+/// The subtitle style used by STV cell convenience initializers.
 #define SC_DefaultCellStyle UITableViewCellStyleSubtitle
-/// Default maximum width of SCTableViewCell textLabel.
+/// The initial maximum text-label width for `SCControlCell`, in points.
 #define SC_DefaultMaxTextLabelWidth 200 // Default maximum width of SCTableViewCell textLabel
-/// Default margin between different controls.
+/// Legacy control-spacing constant, in points. Current `SCControlCell`
+/// initialization uses `kDefaultControlMargin` instead.
 #define SC_DefaultControlMargin 10 // Default margin between different controls
-/// Default control height.
+/// Legacy control-height constant, in points; current Auto Layout controls
+/// are not assigned this fixed height.
 #define SC_DefaultControlHeight 22 // Default control height
-/// Default control indentation from table left border.
+/// The initial control indentation for `SCControlCell`, in points.
 #define SC_DefaultControlIndentation 120 // Default control indentation from table left border
-/// Default font size of UILabel.
+/// Legacy label font-size constant, in points; not a UIKit-wide default.
 #define SC_DefaultLabelFontSize 15 // Default font size of UILabel
-/// Default font size of UITextView.
+/// Legacy text-view font-size constant, in points; not the font assigned to
+/// current generated text views.
 #define SC_DefaultTextViewFontSize 15 // Default font size of UITextView
-/// Default font size of UITextField.
+/// Legacy text-field font-size constant, in points; not the font assigned to
+/// current generated text fields.
 #define SC_DefaultTextFieldFontSize 15 // Default font size of UITextField
-/// Default height of UITextField.
+/// Legacy text-field height constant, in points; current generated controls
+/// use Auto Layout rather than this fixed height.
 #define SC_DefaultTextFieldHeight 31 // Default height of UITextField
-/// Default height of UISegmentedControl.
+/// Legacy segmented-control height constant, in points; current generated
+/// controls use intrinsic sizing rather than this fixed height.
 #define SC_DefaultSegmentedControlHeight 29 // Default height of UISegmentedControl
 // -----------------------------------------------------------------------------
 
@@ -70,7 +76,9 @@ NS_ASSUME_NONNULL_BEGIN
 /* SCDebugLog definition               */
 // -----------------------------------------------------------------------------
 
-/// Logs a formatted STV debug message with source context.
+/// Logs an STV-prefixed formatted message, receiver address, filename, line,
+/// and function using `NSLog`. Requires `self` in scope and is not disabled
+/// in Release builds. The first argument is an NSString format string.
 #define SCDebugLog(s, ...) NSLog(@"**STV** %p (%@:%d) %s %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __FUNCTION__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
 // -----------------------------------------------------------------------------
@@ -121,21 +129,29 @@ typedef NS_ENUM(NSInteger, SCDataType) {
 /// Adds STV's extended key-path accessors to all objects.
 @interface NSObject (SensibleCocoa)
 
-/// This method allows accessing array values in a regular key-path string by placing the array item index between brakets.
+/// Reads a KVC key path extended with zero-based array indexes.
+/// Use `[n]` for the last element and `[n-1]` for the penultimate element.
+/// Detected missing brackets, non-indexable values, empty arrays, and invalid
+/// indexes log and return `nil`. KVC exceptions propagate; syntax validation
+/// is not exhaustive.
+/// - Parameter keyPath: The key path, or `nil` to return `nil`.
+/// - Returns: The resolved value (not necessarily the receiver's class), or
+///   `nil` for a nil result or detected array-access error.
 ///
-/// - Parameter keyPath: A key path that may contain array indexes in brackets.
-///
-/// Examples:
 /// ```objective-c
-/// firstSaleAmount = [customer valueForSensibleKeyPath:@"salesData.invoices[0].amount"];
-/// lastSaleAmount = [customer valueForSensibleKeyPath:@"salesData.invoices[n].amount"];
-/// saleBeforeLastAmount = [customer valueForSensibleKeyPath:@"salesData.invoices[n-1].amount"];
+/// id first = [customer valueForSensibleKeyPath:@"salesData.invoices[0].amount"];
+/// id last = [customer valueForSensibleKeyPath:@"salesData.invoices[n].amount"];
+/// id prior = [customer valueForSensibleKeyPath:@"salesData.invoices[n-1].amount"];
 /// ```
 - (nullable instancetype)valueForSensibleKeyPath:(nullable NSString *)keyPath;
 
-/// Similar to valueForSensibleKeyPath, this method uses a Sensible keyPath to set a value.
-/// - Parameter value: The value to set.
-/// - Parameter keyPath: A key path that may contain array indexes in brackets.
+/// Writes a KVC property, allowing bracket indexes in intermediate components
+/// with the same syntax as `valueForSensibleKeyPath:`. The final component must
+/// be a property key: a path ending in brackets does not replace an array item.
+/// Detected intermediate array-access errors abort the assignment; KVC
+/// exceptions propagate.
+/// - Parameter value: The value; `nil` requires a nil-compatible target.
+/// - Parameter keyPath: The key path, or `nil` to do nothing.
 - (void)setValue:(nullable id)value forSensibleKeyPath:(nullable NSString *)keyPath;
 
 @end
@@ -144,9 +160,14 @@ typedef NS_ENUM(NSInteger, SCDataType) {
 /// For internal framework use only
 @interface UILabel (SensibleCocoa)
 
-/// Text prepended to the label's value.
+/// Text prepended by STV when loading a custom-cell label binding. Reading an
+/// unset or nil-assigned prefix returns an empty string. Setting this alone
+/// does not modify the label text.
 @property (nonatomic, copy, nullable) NSString *prefix;
-/// Text appended to the label's value.
+/// Text appended by STV when loading a custom-cell label binding. Reading an
+/// unset or nil-assigned suffix returns an empty string. For numeric bindings,
+/// a leading decimal-zero pattern such as `.00` requests a precision. Setting
+/// this alone does not modify the label text.
 @property (nonatomic, copy, nullable) NSString *suffix;
 
 @end
@@ -155,7 +176,8 @@ typedef NS_ENUM(NSInteger, SCDataType) {
 /// Adds STV's keyboard-dismissal behavior to navigation controllers.
 @interface UINavigationController (SensibleCocoa)
 
-/// Returns whether the navigation controller prevents automatic keyboard dismissal.
+/// Returns `NO`, allowing automatic keyboard dismissal for navigation
+/// controllers. This does not itself dismiss the keyboard.
 - (BOOL)disablesAutomaticKeyboardDismissal;
 
 @end
@@ -168,108 +190,163 @@ typedef NS_ENUM(NSInteger, SCDataType) {
 @interface SCUtilities : NSObject {
 }
 
-/// Method determines if code is being run on an iPad
+/// Returns whether the current device reports the iPad user-interface idiom.
 + (BOOL)is_iPad;
 
-/// Method determines if the given view is inside a popover view
-/// - Parameter view: The view to inspect.
+/// Checks the responder chain and controller ancestors for a presented,
+/// window-attached popover that has not adapted to another presentation style.
+/// - Parameter view: The view to inspect; `nil` returns `NO`.
 + (BOOL)isViewInsidePopover:(nullable UIView *)view;
 
-/// Returns whether an Internet connection is currently available.
+/// Synchronously attempts to resolve `google.com` using the system DNS resolver.
+/// - Returns: `YES` on successful resolution, which may use cached data. This
+///   does not verify Internet connectivity or service reachability.
+/// - Warning: This legacy helper can block its calling thread.
 + (BOOL)IsInternetConnectionAvailable;
 
-/// Returns whether the supplied URL string is valid.
-/// - Parameter urlString: The URL string to validate.
+/// Checks whether `NSURL` parses a string with both a scheme and a host.
+/// Does not restrict the scheme, make a request, or test reachability.
+/// - Parameter urlString: The nonnull string to inspect.
 + (BOOL)isURLValid:(NSString *)urlString;
 
-/// Loads and returns the first top-level object in the named nib.
-/// - Parameter nibName: The nib name to load.
+/// Instantiates a nib with a nil owner and returns its first top-level object.
+/// - Parameter nibName: A main-bundle name without underscores, or exactly
+///   `PackageName_TargetName_NIBName` for a SwiftPM resource bundle. Individual
+///   components must not contain underscores. `nil` returns `nil`.
+/// - Returns: The first object, or `nil` for an unsupported name format,
+///   unfound package bundle, or empty top-level array. Nib-loading exceptions
+///   propagate; a missing nib is not guaranteed to return `nil`.
 + (nullable NSObject *)getFirstNodeInNibWithName:(nullable NSString *)nibName;
 
-/// Returns a user-facing title derived from a property name.
-/// - Parameter propertyName: The property name.
+/// Uppercases the first character and inserts a space before every subsequent
+/// uppercase character. A leading `~` is omitted. This is a simple name
+/// transformation, not localized title generation.
+/// - Parameter propertyName: The source; nil or empty input returns `@""`.
 + (NSString *)getUserFriendlyTitleFromName:(nullable NSString *)propertyName;
 
-/// Returns the class identified by a name using Swift-compatible lookup rules.
-/// - Parameter className: The class name to resolve.
+/// Tries `NSClassFromString`, then a legacy Swift mangled name formed from the
+/// main bundle's `CFBundleName` and the supplied class name. This fallback is
+/// not general module discovery.
+/// - Parameter className: The nonnull class name.
+/// - Returns: The resolved class, or `Nil` if neither lookup succeeds.
 + (nullable Class)swiftCompatibleNSClassFromString:(NSString *)className;
 
-/// Returns whether a class represents a string type.
-/// - Parameter aClass: The class to inspect.
+/// Tests whether a class responds to `availableStringEncodings`, rather than
+/// checking inheritance.
+/// - Parameter aClass: The class; `Nil` returns `NO`.
 + (BOOL)isStringClass:(nullable Class)aClass;
 
-/// Returns whether a class represents a number type.
-/// - Parameter aClass: The class to inspect.
+/// Tests whether a class responds to `numberWithUnsignedLongLong:`, rather
+/// than checking inheritance.
+/// - Parameter aClass: The class; `Nil` returns `NO`.
 + (BOOL)isNumberClass:(nullable Class)aClass;
 
-/// Returns whether a class represents a date type.
-/// - Parameter aClass: The class to inspect.
+/// Tests whether a class responds to `timeIntervalSinceReferenceDate`, rather
+/// than checking inheritance.
+/// - Parameter aClass: The class; `Nil` returns `NO`.
 + (BOOL)isDateClass:(nullable Class)aClass;
 
-/// Returns whether a class represents a dictionary type.
-/// - Parameter aClass: The class to inspect.
+/// Tests whether a class responds to `dictionaryWithDictionary:`, rather than
+/// checking inheritance.
+/// - Parameter aClass: The class; `Nil` returns `NO`.
 + (BOOL)isDictionaryClass:(nullable Class)aClass;
 
-/// Returns whether a class represents an STV basic data type.
-/// - Parameter aClass: The class to inspect.
+/// Returns whether STV's string, number, or date class heuristics match.
+/// Dictionary and collection classes are not included.
+/// - Parameter aClass: The class; `Nil` returns `NO`.
 + (BOOL)isBasicDataTypeClass:(nullable Class)aClass;
 
-/// Returns the STV data-structure name associated with a class.
-/// - Parameter aClass: The class to inspect.
+/// Normalizes matching classes to `NSString`, `NSNumber`, `NSDate`, or
+/// `NSDictionary`, in that order, using STV's class heuristics. Otherwise
+/// returns `NSStringFromClass(aClass)`.
+/// - Parameter aClass: The class; `Nil` produces `nil`.
 + (nullable NSString *)dataStructureNameForClass:(nullable Class)aClass;
 
-/// Returns whether an object exposes the specified property name.
-/// - Parameter propertyName: The property name.
-/// - Parameter object: The object involved in the operation.
+/// Tests whether a property read raises an exception, not whether it has a
+/// value or is a declared Objective-C property. Returns `YES` unconditionally
+/// for basic types and dictionaries. Other objects use extended key-path
+/// lookup, or direct key lookup for `NSUbiquitousKeyValueStore`.
+/// - Parameter propertyName: The path to probe; a nil path can succeed.
+/// - Parameter object: The object; `nil` returns `YES`.
+/// - Returns: `NO` only when the probe throws; a nil result still succeeds.
 + (BOOL)propertyName:(nullable NSString *)propertyName existsInObject:(nullable NSObject *)object;
 
-///  Returns the the value for the given property in the given object.
-/// - Parameter propertyName: The name of the property whose value is requested. propertyName can be
-///   given in a key-path format (e.g.: "subObject1.subObject2.subObject3"). More than one property
-///   can be given, separated by `;` (e.g.: "property1;property2;property3").
-/// - Parameter object: The owner object of the given property.
-/// - Returns: Returns the value of the given property. If more than one property name is given
-///   (separated by `;`), the return value is an NSArray. Returns nil if property does not exist
-///   in object (or NSNull if more than one property name is given).
+/// Reads one or more properties using extended key-path lookup, catching
+/// lookup exceptions. `NSUbiquitousKeyValueStore` uses direct keys instead.
+/// String, number, and date objects recognized as basic types are returned
+/// unchanged, regardless of the name.
+/// - Parameter propertyName: A key path or semicolon-separated paths. `nil`
+///   returns `nil` except when the object is a basic type.
+/// - Parameter object: The source, which may be `nil`.
+/// - Returns: A single value, or `nil` for a missing, nil, or `NSNull` value.
+///   Multiple paths return an array with `NSNull` for missing or nil values.
 + (nullable NSObject *)valueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object;
 
-/// Returns a string representation of an object's property value.
-/// - Parameter propertyName: The property name.
-/// - Parameter object: The object involved in the operation.
-/// - Parameter delimiter: The delimiter used to separate multiple values.
+/// Formats `valueForPropertyName:inObject:` results using `%@`. Array results
+/// are flattened, skipping `NSNull`. A delimiter precedes each nonnull entry
+/// whose original index is nonzero, so skipped leading entries can produce
+/// a leading delimiter.
+/// - Parameter propertyName: A key path or semicolon-separated paths; ignored
+///   for basic-type objects.
+/// - Parameter object: The source, which may be `nil`.
+/// - Parameter delimiter: The separator, or `nil` to concatenate values.
+/// - Returns: The formatted value, `nil` for a nil lookup result, or an empty
+///   string for an empty array or one containing only `NSNull`.
 + (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
-/// Sets an object's property to the supplied value.
-/// - Parameter value: The value to assign or convert.
-/// - Parameter propertyName: The property name.
-/// - Parameter object: The object involved in the operation.
+/// Assigns a value after STV's property-existence probe succeeds. Does nothing
+/// for basic-type objects. Ubiquitous stores use direct key assignment; other
+/// objects use ordinary KVC key paths, not bracket indexing. Assignment
+/// exceptions are not caught.
+/// - Parameter value: The value. Nil becomes zero only for direct properties
+///   with runtime encodings `c`, `i`, `f`, or `d`; other scalar encodings and
+///   scalar key paths are not covered by this fallback.
+/// - Parameter propertyName: A nonnull property name or ordinary KVC key path.
+/// - Parameter object: The destination, or `nil` to do nothing.
 + (void)setValue:(nullable NSObject *)value forPropertyName:(NSString *)propertyName inObject:(nullable NSObject *)object;
 
-/// Returns a value converted for the requested STV data type.
-/// - Parameter dataType: The target STV data type.
-/// - Parameter value: The value to assign or convert.
+/// Performs limited conversion for string, number, and date types. Strings
+/// use `%@`; numbers parse strings with a decimal `NSNumberFormatter`; dates
+/// parse strings with an otherwise unconfigured `NSDateFormatter`. Existing
+/// number/date instances are preserved; nonstring alternatives are rejected.
+/// - Parameter dataType: The target. All other types, including scalar types,
+///   return the value unchanged rather than validating it.
+/// - Parameter value: The source; `nil` returns `nil`.
+/// - Returns: The converted or unchanged value, or `nil` if conversion fails.
 + (nullable NSObject *)getValueCompatibleWithDataType:(SCDataType)dataType fromValue:(nullable NSObject *)value;
 
-/// Returns a bindings dictionary parsed from its string representation.
-/// - Parameter bindingsString: The bindings string to parse.
+/// Parses semicolon-separated `key:value` pairs and trims whitespace/newlines.
+/// Pairs without exactly one colon are logged and skipped. Later duplicate
+/// keys overwrite earlier values; delimiter characters cannot be escaped.
+/// - Parameter bindingsString: The text; nil or empty produces an empty dictionary.
+/// - Returns: A dictionary of string keys and values, possibly empty.
 + (NSDictionary<NSString *, NSString *> *)bindingsDictionaryForBindingsString:(nullable NSString *)bindingsString;
 
-/// Returns the string representation of a bindings dictionary.
-/// - Parameter bindingsDictionary: The bindings dictionary to encode.
+/// Joins entries as semicolon-separated `key:value` pairs. Ordering is
+/// unspecified and delimiter characters are not escaped.
+/// - Parameter bindingsDictionary: The dictionary to encode.
+/// - Returns: The text, or `nil` for a nil or empty dictionary.
 + (nullable NSString *)bindingsStringForBindingsDictionary:(nullable NSDictionary<NSString *, NSString *> *)bindingsDictionary;
 
 
-/// Returns the Base64 representation of a string.
-/// - Parameter string: The source string.
+/// Encodes UTF-8 bytes as standard Base64 with `=` padding and no line breaks.
+/// This is encoding, not encryption.
+/// - Parameter string: The nonnull input; an empty string produces `@""`.
 + (NSString *)base64EncodedStringFromString:(NSString *)string;
 
-/// We need our own instantiator for cases where we need to port Xcode 6 view controller id naming conventions to Xcode 7
-/// - Parameter identifier: The identifier.
-/// - Parameter storyboard: The storyboard.
+/// Instantiates a storyboard controller. If lookup throws, retries after
+/// replacing every `UIViewController` substring with `UITableViewController`
+/// in the identifier for legacy storyboard compatibility. Retry exceptions
+/// propagate.
+/// - Parameter identifier: The nonnull identifier.
+/// - Parameter storyboard: The storyboard, or `nil` to return `nil`.
+/// - Returns: The controller, or `nil` when the storyboard is nil.
 + (nullable UIViewController *)instantiateViewControllerWithIdentifier:(NSString *)identifier usingStoryboard:(nullable UIStoryboard *)storyboard;
 
-/// Returns a date with its time components removed.
-/// - Parameter date: The source date.
+/// Reconstructs a date from year, month, and day using the current calendar
+/// and its time zone, not UTC truncation.
+/// - Parameter date: The nonnull source date.
+/// - Returns: The reconstructed date, or `nil` if the calendar cannot form it.
 + (nullable NSDate *)stripTimeFromDate:(NSDate *)date;
 
 @end
@@ -277,26 +354,32 @@ typedef NS_ENUM(NSInteger, SCDataType) {
 
 @class SCTableViewModel;
 
-/// This class defines a tabel view model center.
-/// IMPORTANT: This class is usually only used internally by the framework.
+/// An internal registry that routes keyboard notifications to table models.
+/// Models are not retained and must unregister before deallocation.
 @interface SCModelCenter : NSObject
 
 
-/// The view controller currently responsible for keyboard input.
+/// The weak controller used to route keyboard show, frame-change, and hide
+/// notifications to registered models with the same `viewController`.
+/// Defaults to `nil`, which disables forwarding.
 @property (nonatomic, weak, nullable) UIViewController *keyboardIssuer;
 
 /// Returns the shared STV model center.
 + (SCModelCenter *)sharedModelCenter;
 
-/// Registers a table-view model with the model center.
-/// - Parameter model: The table-view model.
+/// Registers a model by pointer identity without retaining it. Re-registering
+/// the same model does not add a duplicate.
+/// - Parameter model: The nonnull model; unregister it before deallocation.
 - (void)registerModel:(SCTableViewModel *)model;
-/// Unregisters a table-view model from the model center.
-/// - Parameter model: The table-view model.
+/// Removes a model from the registry; an unregistered model is a no-op.
+/// - Parameter model: The nonnull model to remove.
 - (void)unregisterModel:(SCTableViewModel *)model;
 
-/// Returns the table-view model associated with a view controller.
-/// - Parameter viewController: The view controller associated with the operation.
+/// Finds a registered model with a pointer-equal `viewController`. If several
+/// match, the returned model is unspecified.
+/// - Parameter viewController: The controller; `nil` can match a model whose
+///   `viewController` is also nil.
+/// - Returns: A matching model, or `nil` if no registered model matches.
 - (nullable SCTableViewModel *)modelForViewController:(nullable UIViewController *)viewController;
 
 @end

@@ -13,10 +13,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCNumberDefinition
-/// This class functions as a means to represent the definition of an NSNumber class.
+/// Describes NSNumber values for generated collection and detail UI.
 ///
-/// This class is typically used when you need to work with a collection of NSNumber objects in classes like SCArrayOfObjectsSection and SCArrayOfObjectsModel. The class automatically generates only one property definition representing how the NSNumber automatically generated UI should be defined.
-
+/// Initialization creates one synthetic property named `number` with type
+/// `SCPropertyTypeNumericTextField`. It represents the value itself, not a KVC property
+/// on NSNumber. Compatible stores are SCArrayStore instances with no backing
+/// array until configured.
+///
+/// Titles use the SCNumericTextFieldAttributes numberFormatter when supplied,
+/// otherwise stringValue. Description values are always nil.
 @interface SCNumberDefinition : SCDataDefinition
 
 #pragma mark - Creation and Initialization
@@ -26,7 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Configuration
 
-/// The property definition representing the NSDate automatically generated UI element.
+/// The retained, customizable definition of the synthetic `number` property.
+///
+/// Initially uses SCDataTypeNSNumber and SCPropertyTypeNumericTextField.
+/// The property reference is read-only, but its display configuration is mutable.
 @property (nonatomic, readonly) SCPropertyDefinition *numberPropertyDefinition;
 
 

@@ -18,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// A block invoked with a table-view cell and its index path.
 /// The index path is nil when the cell is detached from its model.
 typedef void (^SCCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
-/// A block that returns a Boolean decision for a table-view cell.
+/// A block receiving a cell and possibly nil index path.
+/// The owning hook defines the BOOL decision: selection/menu permission or
+/// validation. Programmatic active-cell selection notifications ignore it.
 typedef BOOL (^SCBOOLReturnCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies a table-view cell's editing style.
 typedef UITableViewCellEditingStyle (^SCCellCustomEditingStyleAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
@@ -29,9 +31,9 @@ typedef NSArray *_Nullable (^SCCellEditActionsAction_Block)(SCTableViewCell *cel
 typedef NSArray<UIContextualAction *> *_Nullable (^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies the trailing swipe actions for a table-view cell.
 typedef NSArray<UIContextualAction *> *_Nullable (^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
-/// A block that calculates a value for a table-view cell, or nil for no value.
+/// A block that calculates a value, or returns nil to use ordinary binding.
 typedef NSObject *_Nullable (^SCCellCalculatedValueAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
-/// A block that transforms a value loaded from a table-view cell's binding.
+/// A block that transforms a value read from or written to a cell binding.
 /// Both the supplied value and the transformed result may be nil.
 typedef NSObject *_Nullable (^SCCellBoundValueAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, NSObject *_Nullable value);
 /// A block invoked when a table-view cell's custom button is tapped.
@@ -51,21 +53,30 @@ typedef SCTableViewModel *_Nullable (^SCCellDetailTableViewModelAction_Block)(SC
 /// A block invoked with a table-view cell and its detail model.
 /// A custom controller without an STV model supplies a nil detail model.
 typedef void (^SCDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SCTableViewModel *_Nullable detailModel);
-/// A block that returns a Boolean decision for a table-view cell's detail model.
+/// A block receiving a cell, possibly nil index path, and possibly nil detail model.
+/// Return YES to allow dismissal or NO to veto; see detailModelShouldDismiss
+/// for the current section/model fallback limitation.
 typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SCTableViewModel *_Nullable detailModel);
 
 
 #pragma mark - SCCellActions
-/// This class hosts a set of cell action blocks. Once an action is set to a desired code block, it will execute the block as soon as the action occurs.
+/// Optional, copied callbacks for cell events and customization.
+/// Hooks default to nil. Normally STV chooses the first installed hook on the
+/// cell, then its section, then its model; it does not broadcast to every level
+/// or retry a hook because a result is nil. Individual properties document
+/// current fallback exceptions. Blocks retain captured objects: capture owners
+/// weakly to avoid cycles.
 ///
 /// - SeeAlso: ``SCSectionActions``, ``SCModelActions``.
 @interface SCCellActions : NSObject
 
 #pragma mark - Actions
 
-/// Action gets called before the cell is configured.
-///
-/// This action is typically used to set any attribute that will affect the cell's configuration and layout.
+/// Configures a cell before STV marks it configured.
+/// The block receives the cell and its index path, which can be nil when
+/// detached. Binding values may already have been loaded. Use this repeatable
+/// callback to set configuration and sizing properties, not to install
+/// duplicate subviews or constraints.
 ///
 /// Example:
 ///
@@ -78,16 +89,17 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block willConfigure;
 
-/// Action gets called after the cell has laid out all its subviews.
-///
-/// Use this callback to observe the completed layout or update drawing.
-/// Install constraints once when constructing custom content, rather than
-/// adding constraints or assigning subview frames in this repeatable callback.
+/// Runs after the cell lays out its subviews.
+/// The block receives the cell and its possibly nil index path. Observe layout
+/// or update drawing here. Install constraints once when constructing custom
+/// content rather than adding constraints or assigning subview frames on every
+/// layout pass.
 @property (nonatomic, copy, nullable) SCCellAction_Block didLayoutSubviews;
 
-/// Action gets called before the cell is displayed.
-///
-/// This action is typically used to set any attributes that will affect how the cell is displayed.
+/// Customizes a cell when UIKit is about to display it.
+/// The block receives the cell and row index path, after section-specific
+/// display configuration. Prefer `willConfigure` for sizing and structural
+/// changes; use this repeatable callback for display attributes.
 ///
 /// Example:
 ///
@@ -98,12 +110,14 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     cell.backgroundColor = [UIColor yellowColor];
 /// };
 /// ```
-/// - Note: Changing cell properties that influence its layout (such as the cell's height) cannot be set here, and must be set in the willConfigure action instead.
 @property (nonatomic, copy, nullable) SCCellAction_Block willDisplay;
 
-/// Action gets called after the cell has been displayed and the table view has stopped scrolling.
-///
-/// This action is typically used to load any cell content that is too expensive to load in willDisplay, such as retrieving data from a web service. This guarantees smooth and uninterrupted scrolling of the table view.
+/// Loads visible-cell content when dragging or deceleration finishes.
+/// The block receives the visible cell and its index path. It runs
+/// synchronously in the scroll delegate callback, not on a background queue,
+/// and is not called merely because an initial row appears. Start expensive
+/// work asynchronously and verify cell identity before applying results after
+/// reuse.
 ///
 /// Example:
 ///
@@ -111,14 +125,16 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// // Objective-C
 /// cellActions.lazyLoad = ^(SCTableViewCell *cell, NSIndexPath *indexPath)
 /// {
-///     cell.imageView.image = [self retrieveImageForRowAtIndexPath:indexPath];
+///     // Start an asynchronous load; check cell identity before applying it.
 /// };
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block lazyLoad;
 
-/// Action gets called when the cell is about to be selected.
-///
-/// The block returns `NO` to prevent selection, or `YES` to allow it.
+/// Decides whether UIKit may select a row.
+/// The block receives the cell and its index path. Return `YES` to allow
+/// selection or `NO` to veto UIKit's selection request; without a hook
+/// selection is allowed subject to the model's selection locks. Programmatic
+/// active-cell changes also invoke this hook but ignore its return value.
 ///
 /// Example:
 ///
@@ -133,7 +149,11 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCBOOLReturnCellAction_Block willSelect;
 
-/// Action gets called when the cell has been selected.
+/// Handles selection of a cell.
+/// The block receives the selected cell and its index path. For table
+/// selection, installing this hook replaces the default section/cell selection
+/// handler, including automatic detail presentation. It can also run when STV
+/// programmatically selects an active cell.
 ///
 /// Example:
 ///
@@ -146,9 +166,11 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block didSelect;
 
-/// Action gets called when the cell is about to be deselected.
-///
-/// The block returns `NO` to prevent deselection, or `YES` to allow it.
+/// Decides whether UIKit may deselect a row.
+/// The block receives the cell being deselected and its saved index path.
+/// Return `YES` to allow or `NO` to veto UIKit's request; the default is `YES`.
+/// Active-cell replacement also invokes this hook for the old cell but ignores
+/// its return value.
 ///
 /// Example:
 ///
@@ -163,7 +185,10 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCBOOLReturnCellAction_Block willDeselect;
 
-/// Action gets called when the cell has been deselected.
+/// Reports deselection of a cell.
+/// The block receives the deselected cell and its index path, not the incoming
+/// replacement cell. It can also run when the model replaces or clears its
+/// active cell.
 ///
 /// Example:
 ///
@@ -171,14 +196,15 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// // Objective-C
 /// cellActions.didDeselect = ^(SCTableViewCell *cell, NSIndexPath *indexPath)
 /// {
-///     NSLog(@"Cell at indexPath:%@ has been selected.", indexPath);
+///     NSLog(@"Cell at indexPath:%@ has been deselected.", indexPath);
 /// };
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block didDeselect;
 
-/// Action gives you the opportunity to provide your own custom cell editing style.
-///
-/// The block returns the desired `UITableViewCellEditingStyle` value.
+/// Supplies the editing style for a cell.
+/// The block receives the cell and row index path and returns a
+/// `UITableViewCellEditingStyle`. Without a hook STV returns
+/// `cell.cellEditingStyle`.
 ///
 /// Example:
 ///
@@ -196,11 +222,11 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellCustomEditingStyleAction_Block customEditingStyle;
 
-/// Action gets called to provide custom edit action buttons that appear when the user swipes the cell horizontally.
-///
-/// Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
-///
-/// The block returns an array of `UITableViewRowAction` objects representing the actions for the cell. Each action creates a button that the user can tap.
+/// Supplies legacy row-editing buttons.
+/// The block receives the cell and row index path and returns an array of
+/// `UITableViewRowAction` objects, or nil to leave the result to UIKit. Prefer
+/// `leadingSwipeActions` and `trailingSwipeActions` for modern contextual
+/// actions; this hook serves the legacy table delegate API.
 ///
 /// Example:
 ///
@@ -229,13 +255,13 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 @property (nonatomic, copy, nullable) SCCellEditActionsAction_Block editActions;
 
 
-/// Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's leading edge. For example, in a left-to-right language environment, they are displayed on the left side of the row when the user swipes from left to right.
-///
-/// Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
-///
-/// - Note: It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
-///
-/// - Returns: An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the leading edge of the cell.
+/// Supplies contextual actions revealed from the row's leading edge.
+/// The block receives the cell and row index path. Return an array of
+/// `UIContextualAction` objects, not a `UISwipeActionsConfiguration`. STV wraps
+/// a nonnil array and copies
+/// `cell.leadingSwipePerformsFirstActionWithFullSwipe` into the configuration.
+/// An empty array supplies no actions; nil returns no custom configuration to
+/// UIKit. Each action handler must call its completion handler.
 ///
 /// Example:
 ///
@@ -263,15 +289,17 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 
 @property (nonatomic, copy, nullable) SCCellLeadingSwipeActionsAction_Block leadingSwipeActions;
 
-/// Action gets called to provide custom swipe action buttons that appear when the user swipes the cell horizontally from it's trailing edge. For example, in a left-to-right language environment, they are displayed on the right side of the row when the user swipes from right to left.
-///
-/// Use this action when you want to provide custom edit actions for your cell. When the user swipes horizontally, the table view moves the cell content aside to reveal your actions. Tapping one of the action buttons executes the handler block stored with the action object.
-///
-/// Return nil if you want the cell to display the default set of actions, although trailingSwipePerformsFirstActionWithFullSwipe will then always be the default of YES. You have to return your own Delete UIContextualAction, and set trailingSwipePerformsFirstActionWithFullSwipe to NO, if you want the Delete with no full swipe.
-///
-/// - Note: It's an NSArray that is returned here, not a UISwipeActionsConfiguration.
-///
-/// - Returns: An array of UIContextualAction objects representing the actions for the cell. Each action you provide is used to create a button that the user can tap on the trailing edge of the cell.
+/// Supplies contextual actions revealed from the row's trailing edge.
+/// The block receives the cell and row index path. Return an array of
+/// `UIContextualAction` objects, not a `UISwipeActionsConfiguration`. STV wraps
+/// a nonnil array and uses
+/// `cell.trailingSwipePerformsFirstActionWithFullSwipe`. An empty array
+/// suppresses custom buttons; nil leaves the configuration to UIKit, including
+/// any default Delete action and its full-swipe behavior. Call each action's
+/// completion handler.
+/// - Warning: The current model-level fallback tests `leadingSwipeActions`
+/// before invoking `trailingSwipeActions`. Prefer a cell- or section-level
+/// hook; a model with only a leading hook can invoke a nil trailing block.
 ///
 /// Example:
 ///
@@ -299,7 +327,9 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 @property (nonatomic, copy, nullable) SCCellTrailingSwipeActionsAction_Block trailingSwipeActions;
 
 
-/// Action gets called when the cell (or more typically one of the cell's controls) becomes the first responder.
+/// Reports that a cell or its control became first responder.
+/// The block receives the cell and its possibly nil index path. This is a
+/// notification, not a request to approve focus.
 ///
 /// Example:
 ///
@@ -312,7 +342,9 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block didBecomeFirstResponder;
 
-/// Action gets called when the cell (or more typically one of the cell's controls) resigns the first responder.
+/// Reports that a cell or its control resigned first responder.
+/// The block receives the cell and its possibly nil index path. This is a
+/// notification, not a request to approve focus loss.
 ///
 /// Example:
 ///
@@ -325,7 +357,10 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block didResignFirstResponder;
 
-/// Action gets called when the cell's accessory button has been tapped.
+/// Handles a row's accessory-button tap.
+/// The block receives the cell and index path. Use a tappable UIKit accessory,
+/// such as a detail button or detail-disclosure button. Without a hook STV
+/// routes the tap through its row-selection handler.
 ///
 /// Example:
 ///
@@ -336,12 +371,13 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     NSLog(@"Cell at indexPath:%@ accessory button has been tapped.", indexPath);
 /// };
 /// ```
-/// - Note: For this action to get called, you must first have the cell's accessory button appear by setting its accessoryType property to UITableViewCellAccessoryDetailDisclosureButton.
 @property (nonatomic, copy, nullable) SCCellAction_Block accessoryButtonTapped;
 
-/// Action gets called when the cell keyboard's return button has been tapped.
-///
-/// This action is typically used to override STV's behavior when the return button is tapped, and define a custom one.
+/// Overrides the text field's default Return-key behavior.
+/// The block receives the cell and its possibly nil index path. After calling a
+/// hook, STV accepts Return without performing its default responder
+/// navigation; the block must move or resign focus when desired. This applies
+/// to the cell's text-field delegate path, not every keyboard-bearing control.
 ///
 /// Example:
 ///
@@ -349,16 +385,15 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// // Objective-C
 /// cellActions.returnButtonTapped = ^(SCTableViewCell *cell, NSIndexPath *indexPath)
 /// {
-///     [self doMyCustomAction];
 ///     [cell.ownerTableViewModel moveToNextCellControl:YES];
 /// };
 /// ```
-/// - Note: Action is only applicable to cells with controls that display a keyboard.
 @property (nonatomic, copy, nullable) SCCellAction_Block returnButtonTapped;
 
-/// Action gets called when the cell's bound property value has changed via a cell control or a detail model.
-///
-/// This action is typically used to provide a custom behavior when the cell's value changes.
+/// Reports a cell-control or detail-model value-change event.
+/// The block receives the cell and row index path after the model updates its
+/// modification and validation state. This notification does not guarantee that
+/// pending control values have been committed to the bound object.
 ///
 /// Example:
 ///
@@ -371,11 +406,11 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellAction_Block valueChanged;
 
-/// Action gets called when the cell's value needs to be validated.
-///
-/// This action is typically used to provide a custom cell value validation.
-///
-/// The block returns `YES` if the current cell value is valid, or `NO` otherwise.
+/// Validates an enabled cell in place of its built-in validation.
+/// The block receives the cell and its possibly nil index path and returns
+/// `YES` for valid or `NO` for invalid. Disabled cells return `YES` without
+/// calling the block. Without a hook STV uses automatic validation when
+/// enabled, otherwise it accepts the value.
 ///
 /// Example:
 ///
@@ -399,9 +434,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCBOOLReturnCellAction_Block valueIsValid;
 
-/// Action is used to provide a value for calculated cells.
-///
-/// Cells implementing this action are typically calculated cells that do not have their own values in the data store and depend on this action to provide a value. The return value is typically a mathematical operation on serveral other boundObject properties. For a more elaborate example on calculated cells, please refer to the CalculatedCellsApp bundled sample application.
+/// Supplies a calculated result when `boundValue` is read.
+/// The block receives the cell and its possibly nil index path. A nonnil result
+/// is returned immediately, bypassing ordinary binding and `didLoadBoundValue`.
+/// A nil result falls through to ordinary binding; it does not unconditionally
+/// force a nil bound value. Do not read `cell.boundValue` inside the block,
+/// which would recurse.
 ///
 /// Example:
 ///
@@ -420,9 +458,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellCalculatedValueAction_Block calculatedValue;
 
-/// Action gets called whenever a cell's bound value has been loaded.
-///
-/// This action is typically used to do any customization to the loaded bound value.
+/// Transforms an ordinary bound-value read.
+/// The block receives the cell, its possibly nil index path, and the loaded
+/// value, which may be nil. Its result replaces the read value, including when
+/// the result is nil. It is skipped for a nonnil calculated result and for `~`
+/// placeholder property names. Avoid reading `cell.boundValue` here because
+/// that recurses.
 ///
 /// Example:
 ///
@@ -432,7 +473,7 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// {
 ///     // Make sure all string spaces are trimmed before displaying string.
 ///
-///     NSString *stringValue = (NSStirng *)value;
+///     NSString *stringValue = (NSString *)value;
 ///     NSString *trimmedString = [stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 ///
 ///     return trimmedString;
@@ -440,9 +481,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellBoundValueAction_Block didLoadBoundValue;
 
-/// Action gets called before a cell's bound value is committed to its bound object.
-///
-/// This action is typically used to do any customization to the bound value before being committed.
+/// Transforms a value before `setBoundValue:` writes it.
+/// The block receives the cell, its possibly nil index path, and the proposed
+/// value, which may be nil. Its result is written through the binding;
+/// returning nil supplies nil rather than cancelling the write. It runs only
+/// with a bound object and a nonempty, non-placeholder property name. This is
+/// not a data-store save-completion notification.
 ///
 /// Example:
 ///
@@ -452,7 +496,7 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// {
 ///     // Make sure all string spaces are trimmed before committing the string.
 ///
-///     NSString *stringValue = (NSStirng *)value;
+///     NSString *stringValue = (NSString *)value;
 ///     NSString *trimmedString = [stringValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 ///
 ///     return trimmedString;
@@ -460,9 +504,10 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// ```
 @property (nonatomic, copy, nullable) SCCellBoundValueAction_Block willCommitBoundValue;
 
-/// Action gets called whenever a cell's user defined custom button is tapped.
-///
-/// This action is typically used to easily provide a custom behavior for the cell's custom button(s).
+/// Handles a custom button connected to the cell's button action.
+/// The block receives the cell, its possibly nil index path, and the tapped
+/// button. The hook does not automatically connect arbitrary buttons added by
+/// application code.
 ///
 /// Example:
 ///
@@ -470,7 +515,7 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// // Objective-C
 /// cellActions.customButtonTapped = ^(SCTableViewCell *cell, NSIndexPath *indexPath, UIButton *button)
 /// {
-///     NSLog(@"Custom button with tag:%i has been tapped for cell at indexPath:%@.", button.tag, indexPath);
+///     NSLog(@"Custom button with tag:%ld has been tapped for cell at indexPath:%@.", (long)button.tag, indexPath);
 /// };
 /// ```
 @property (nonatomic, copy, nullable) SCCellCustomButtonTappedAction_Block customButtonTapped;
@@ -478,9 +523,10 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 
 #pragma mark - Copying and Pasting
 
-/// Action gets called to ask if the editing menu should be shown for the cell.
-///
-/// The block returns `YES` to show the editing menu, or `NO` otherwise.
+/// Decides whether the legacy row editing menu is available.
+/// The block receives the cell and row index path and returns `YES` to allow
+/// the menu or `NO` to suppress it. With no hook STV returns `NO`. This is the
+/// legacy table editing-menu path, not a context-menu provider.
 ///
 /// Example:
 ///
@@ -494,10 +540,14 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 @property (nonatomic, copy, nullable) SCBOOLReturnCellAction_Block shouldShowMenu;
 
 
-/// Action gets called to ask if the editing menu should omit the Copy or Paste command for the cell.
-///
-/// The block receives `action`, a selector identifying a method in the `UIResponderStandardEditActions` informal protocol, and `sender`, the object that initiated the action.
-/// The block returns `YES` if the command should appear in the editing menu, or `NO` otherwise.
+/// Decides whether a command in the legacy editing menu is available.
+/// The block receives the cell, index path, command selector, and possibly nil
+/// sender. Return `YES` to enable the command or `NO` to reject it. Without a
+/// matching hook the default is `NO`.
+/// - Warning: Section- and model-level fallbacks currently test
+/// `shouldShowMenu` rather than this property. Configure all three menu hooks
+/// together at those levels, or use cell-level hooks, to avoid invoking a nil
+/// block.
 ///
 /// Example:
 ///
@@ -511,9 +561,14 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 @property (nonatomic, copy, nullable) SCCellCanPerformAction_Block canPerformAction;
 
 
-/// Action gets called to perform a copy or paste operation on the content of the cell.
-///
-/// The block receives `action`, a selector identifying a method in the `UIResponderStandardEditActions` informal protocol, and `sender`, the object that initiated the action.
+/// Performs a command from the legacy row editing menu.
+/// The block receives the cell, index path, command selector, and possibly nil
+/// sender. Implement the requested operation; STV provides no default
+/// copy/paste implementation.
+/// - Warning: Section- and model-level fallbacks currently test
+/// `shouldShowMenu` rather than this property. Configure all three menu hooks
+/// together at those levels, or use cell-level hooks, to avoid invoking a nil
+/// block.
 ///
 /// Example:
 ///
@@ -530,11 +585,13 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 #pragma mark - Detail Model Actions
 
 
-/// Action gets called to give you the chance to return a custom detail view controller for the cell.
-///
-/// This action is typically used to provide your own custom detail view controller, instead of the one automatically generated by the cell.
-///
-/// The block returns the custom view controller, which must be an ``SCViewController`` or ``SCTableViewController``. Returning `nil` ignores the action.
+/// Supplies a controller for a cell-generated detail screen.
+/// The block receives the cell and its possibly nil index path. Return a
+/// controller, or nil to create the standard controller; returning nil does not
+/// try lower-priority hooks or the model's preassigned detail controller. Use
+/// `SCViewController` or `SCTableViewController` for automatic model/delegate
+/// integration. Plain UIKit controllers can be presented but do not gain that
+/// integration.
 ///
 /// Example:
 ///
@@ -542,21 +599,19 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// // Objective-C
 /// cellActions.detailViewController = ^UIViewController*(SCTableViewCell *cell, NSIndexPath *indexPath)
 /// {
-///     MyCustomViewController *customVC = [[MyCustomViewController alloc] initWithNib:@"MyCustomViewController" bundle:nil];
+///     MyCustomViewController *customVC = [[MyCustomViewController alloc] initWithNibName:@"MyCustomViewController" bundle:nil];
 ///
 ///     return customVC;
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell and SCArrayOfObjectsCell.
 @property (nonatomic, copy, nullable) SCCellDetailViewControllerAction_Block detailViewController;
 
-/// Action gets called to give you the chance to return a custom detail model for the cell's detail view controller.
-///
-/// This action is typically used to provide your own custom detail model, instead of the one automatically generated by the cell. This might be needed in cases where the cell generates a detail SCArrayOfObjectsSection for example, and you need an SCArrayOfObjectsModel instead (to automatically generate sections for instance).
-///
-/// - Note: It is much more common to use the detailViewController action instead, assigning the custom model in the custom view controller's viewDidLoad method. This also gives you the chance to add a search bar (for example, to make use of SCArrayOfObjectsModel automatic searching functionality), or any other controls.
-///
-/// The block returns the custom detail model. It must not already be associated with a table view because the framework handles that association. Returning `nil` ignores the action.
+/// Supplies the model for a cell-generated detail controller.
+/// The block receives the cell and its possibly nil index path. Return a model
+/// to assign to an STV detail controller, or nil to keep that controller's
+/// existing model. Lower-priority hooks are not retried on a nil result. The
+/// controller retains the supplied model and associates it with its table;
+/// avoid sharing a model with another live table.
 ///
 /// Example:
 ///
@@ -573,13 +628,15 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     return detailModel;
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell and SCArrayOfObjectsCell.
 @property (nonatomic, copy, nullable) SCCellDetailTableViewModelAction_Block detailTableViewModel;
 
 
-/// Action gets called right after the cell's detail model is created, before configuration is set or any sections are added.
-///
-/// This action is typically used to initially configure the detail model (like set a custom tag for example). Most of the model's settings can also be configure in the detailModelConfigured action.
+/// Configures the resolved detail model before the cell builds its detail
+/// sections.
+/// The block receives the cell, its possibly nil index path, and the detail
+/// model, which can be nil for a plain UIKit controller. A reused or custom
+/// model may already contain sections; this event does not guarantee a newly
+/// allocated, empty model.
 ///
 /// Example:
 ///
@@ -590,14 +647,13 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     detailModel.tag = 100;
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
-///
-/// - SeeAlso: ``detailModelConfigured``
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelCreated;
 
-/// Action gets called after the cell's detail model is fully configured, including the addition of all automatically generated sections.
-///
-/// This action is typically used to add additional custom sections, or modify the already existing automatically generated ones.
+/// Customizes the detail model after the cell's build/configuration steps.
+/// The block receives the cell, its possibly nil index path, and the possibly
+/// nil detail model. A generated controller may not yet have loaded its view,
+/// so `detailModel.viewController` may still be nil. Use
+/// `detailModelWillPresent` for controller UI customization.
 ///
 /// Example:
 ///
@@ -612,14 +668,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     [detailModel addSection:customSection];
 /// };
 /// ```
-/// - Note: In general, it is easier (and more recommended) to add your custom sections and cells using the data definitions, instead of using this action to do so. For more information, please refer to SCDataDefinition and SCCustomPropertyDefinition.
-///
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelConfigured;
 
-/// Action gets called when the cell's detail model is about to be presented in its own view controller.
-///
-/// This action is typically used to further customize the detail model's view controller.
+/// Reports that an STV detail controller is about to present or gain focus.
+/// The block receives the cell, its possibly nil index path, and the detail
+/// model. Plain UIKit controllers do not automatically forward STV lifecycle
+/// events; model arguments can be nil where no STV model exists.
 ///
 /// Example:
 ///
@@ -630,10 +684,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     detailModel.viewController.title = @"My custom title";
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelWillPresent;
 
-/// Action gets called when the cell's detail model has been presented in its own view controller.
+/// Reports that an STV detail controller has presented or gained focus.
+/// The block receives the cell, its possibly nil index path, and the possibly
+/// nil detail model. This depends on STV controller delegate/focus forwarding,
+/// not simply on a call to UIKit presentation.
 ///
 /// Example:
 ///
@@ -644,10 +700,15 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     NSLog(@"Detail model has been presented.");
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelDidPresent;
 
-/// Action gets called to give you a chance to decide if the detail model should be dismissed. Return YES to allow the detail model to be dismissed, otherwise return NO.
+/// Approves dismissal or focus loss of a cell's STV detail controller.
+/// The block receives the cell, its possibly nil index path, and the possibly
+/// nil detail model. A cell-level hook returns `YES` to allow or `NO` to veto;
+/// without a hook dismissal is allowed.
+/// - Warning: The current section- and model-level fallback calls discard this
+/// block's BOOL result. Install the hook on the cell itself when a veto is
+/// required.
 ///
 /// Example:
 ///
@@ -658,10 +719,13 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     return YES;  // allow detail model to be dismissed
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCConditionalDetailModelCellAction_Block detailModelShouldDismiss;
 
-/// Action gets called when the cell's detail model's view controller is about to be dismissed.
+/// Reports dismissal or focus loss of an STV detail controller.
+/// The block receives the cell, its possibly nil index path, and the possibly
+/// nil detail model. For interactive popover dismissal, notification waits
+/// until UIKit confirms completion and can therefore arrive after the visual
+/// transition.
 ///
 /// Example:
 ///
@@ -672,10 +736,12 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     NSLog(@"Detail model will be dismissed.");
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelWillDismiss;
 
-/// Action gets called when the cell's detail model's view controller has been dismissed.
+/// Reports completed dismissal or focus loss of an STV detail controller.
+/// The block receives the cell, its possibly nil index path, and the possibly
+/// nil detail model. The cell processes non-Cancel detail changes before this
+/// callback. It does not itself confirm a successful persistent-store save.
 ///
 /// Example:
 ///
@@ -686,7 +752,6 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 ///     NSLog(@"Detail model has been dismissed.");
 /// };
 /// ```
-/// - Note: This action is only applicable to cells that generate detail views, such as SCSelectionCell.
 @property (nonatomic, copy, nullable) SCDetailModelCellAction_Block detailModelDidDismiss;
 
 
@@ -695,7 +760,11 @@ typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, 
 /// A block that determines whether a text-field edit should be accepted.
 typedef BOOL (^SCTextFieldShouldChangeCharactersInRangeAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, UITextField *textField, NSRange range, NSString *replacementString);
 
-/// Implement action to control whether the specified text field's text should change.
+/// Approves a proposed text-field edit.
+/// The block receives the cell, its possibly nil index path, the text field,
+/// the range in its current text, and the replacement string (empty for
+/// deletion). Return `YES` to accept the edit or `NO` to reject it. Without a
+/// hook STV accepts the edit.
 ///
 /// Example:
 ///
@@ -717,15 +786,20 @@ PhotosUI redesign, but are not part of STV 7.
 */
 #if 0
 /// A block invoked after an image picker finishes selecting media.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 typedef void(^SCImagePickerDidFinishPickingMediaAction_Block)(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath, NSDictionary *mediaInfo, ALAsset *mediaAsset);
 /// A block that supplies a file name for an image-picker cell's selected image.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 typedef NSString*(^SCImagePickerImageNameAction_Block)(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath);
 /// A block that saves an image selected by an image-picker cell.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 typedef void(^SCImagePickerSaveImageAction_Block)(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath, NSString *imagePath);
 /// A block that loads an image for an image-picker cell.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath, NSString *imagePath);
 
 /// Implement action to get notified when media is selected by SCImagePickerCell.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 ///
 /// Example:
 ///
@@ -741,6 +815,7 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
 @property (nonatomic, copy) SCImagePickerDidFinishPickingMediaAction_Block didFinishPickingMedia;
 
 /// Implement action to provide your own custom image name of the SCImagePickerCell image.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 ///
 /// Example:
 ///
@@ -754,6 +829,7 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
 @property (nonatomic, copy) SCImagePickerImageNameAction_Block imageName;
 
 /// Implement action to provide your own custom code for saving the SCImagePickerCell image to imagePath.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 ///
 /// Example:
 ///
@@ -761,12 +837,13 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
 /// // Objective-C
 /// cellActions.saveImage = ^(SCImagePickerCell *imagePickerCell, NSIndexPath *indexPath, NSString *imagePath)
 /// {
-///     [UIImageJPEGRepresentation(imagePickerCell.selectedImage, 80) writeToFile:imagePath atomically:YES];
+///     [UIImageJPEGRepresentation(imagePickerCell.selectedImage, 0.8) writeToFile:imagePath atomically:YES];
 /// };
 /// ```
 @property (nonatomic, copy) SCImagePickerSaveImageAction_Block saveImage;
 
 /// Implement action to provide your own custom code for loading the SCImagePickerCell image from imagePath.
+/// Unavailable in STV 7; retained only with the excluded image-picker source.
 ///
 /// Example:
 ///
@@ -783,10 +860,13 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
 
 #pragma mark - Miscellaneous
 
-/// Method assigns all the actions of another `SCCellActions` class to the current one.
-///
-/// - Parameter actions: The source actions, or nil to leave existing hooks alone.
-/// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
+/// Copies the source's nonnil hooks into this actions object.
+/// Nil source hooks never clear an existing destination hook, even when
+/// overriding. Each assigned block is copied; the source object itself is not
+/// retained.
+/// - Parameter actions: Source actions, or nil to leave all hooks unchanged.
+/// - Parameter override: `YES` replaces existing hooks where the source is
+/// nonnil; `NO` fills only currently nil hooks.
 - (void)setActionsTo:(SCCellActions *_Nullable)actions overrideExisting:(BOOL)override;
 
 @end

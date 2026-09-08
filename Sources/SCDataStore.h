@@ -16,7 +16,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /* Data store notifications (used internally) */
-/// Posted before a data store discards all uninserted objects.
+/// Posted synchronously before tracked uninserted objects are discarded.
+///
+/// The notification object is the store, with no userInfo dictionary. Nothing is
+/// posted when the store has no tracked uninserted objects.
 extern NSString *const SCDataStoreWillDiscardAllUninsertedObjectsNotification;
 
 
@@ -39,23 +42,36 @@ typedef void (^SCDataStoreDeleteSuccess_Block)(void);
 /// A block invoked when a data-store operation fails.
 /// The abstract asynchronous methods supply nil when no error is available.
 typedef void (^SCDataStoreFailure_Block)(NSError *_Nullable error);
-/// A block that determines how to handle an unavailable network connection.
+/// An optional retry decision for asynchronous store subclasses.
+///
+/// By convention, YES requests a retry when connected; NO requests failure. The
+/// base store never calls this block or implements retries. Concrete asynchronous
+/// stores define connection monitoring and callback queues.
 typedef BOOL (^SCNoConnection_Block)(void);
-/// A completion block for asynchronous post-fetch processing.
-/// Supply nil for error on success; results may be nil on failure.
+/// Completes post-fetch processing with replacement results or an error.
+///
+/// A nil error selects success even if results is nil. A nonnil error selects
+/// failure and ignores results. Call once per fetch.
 typedef void (^SCPostFetchAsyncronousCompletionHandler_Block)(NSArray<id> *_Nullable results, NSError *_Nullable error);
-/// A block that performs asynchronous post-fetch processing.
+/// Processes nullable fetch results before delivery to the caller.
+///
+/// The block receives results and a nonnull completion handler. Call completion
+/// once with replacement results and a nil error, or with an error. There is no
+/// implicit queue dispatch or automatic completion.
 typedef void (^SCPostFetchAsyncronousAction_Block)(NSArray<id> *_Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler);
 
 
 #pragma mark - SCDataStore
 /// SCDataStore is an abstract base class that can encapsulate any kind of data storage, providing means for the SC framework to communicate with this storage to fetch, add, update and remove data.
 ///
-/// Several SCDataStore subclasses have been implemented to enable the SC framework to communicate with Core Data, web services, iCloud storage, and even NSUserDefaults storage. Feel free to subclass SCDataStore to enable any kind of data storage not currently implemented by framework.
+/// Bundled stores support mutable arrays, Core Data, and standard user defaults.
+/// Subclass SCDataStore for other backends. Setting storeMode alone does not
+/// supply asynchronous operations.
 ///
 /// Sample use:
 /// ```objective-c
-/// // Display all the TaskEntity objects
+/// // context is a configured main-queue context; TaskEntityDef describes its
+/// // TaskEntity entity. Run this UI setup on the main thread.
 /// SCCoreDataStore *coreDataStore = [SCCoreDataStore storeWithManagedObjectContext:context defaultEntityDefinition:TaskEntityDef];
 /// SCArrayOfObjectsSection *tasksSection = [SCArrayOfObjectsSection sectionWithHeaderTitle:@"Task Objects" dataStore:coreDataStore];
 /// [self.tableViewModel addSection:tasksSection];
@@ -78,298 +94,346 @@ typedef void (^SCPostFetchAsyncronousAction_Block)(NSArray<id> *_Nullable result
 
 #pragma mark - Creation and Initialization
 
-/// Allocated and returns an initialized SCDataStore given a default SCDataDefinition of the data stored.
-/// - Parameter definition: The data definition involved in the operation.
+/// Allocates and returns an initialized SCDataStore given a default SCDataDefinition of the data stored.
+/// - Parameter definition: The default definition, or nil to leave it unset.
 + (instancetype)storeWithDefaultDataDefinition:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized SCDataStore given a default SCDataDefinition of the data stored.
-/// - Parameter definition: The data definition involved in the operation.
+/// - Parameter definition: The default definition, or nil to leave it unset.
 - (instancetype)initWithDefaultDataDefinition:(nullable SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration
 
-/// Specifies the mode that the SC framework should use to communicate with the store. Set to SCStoreModeSynchronous to have the framework communicate synchronously, otherwise set to SCStoreModeAsynchronous for asynchronous communication.
+/// Selects which data-access methods the framework calls. Defaults to synchronous.
+///
+/// Asynchronous mode requires subclass implementations of asynchronous methods.
+/// This property does not dispatch operations to another queue.
 @property (nonatomic, readwrite) SCStoreMode storeMode;
 
-/// The data store's default data definition. To add more data definitions (other than the default one), use addDataDefinition:.
+/// The retained default definition, initially nil.
+///
+/// Assignment also attempts to register it with addDataDefinition:. Clearing or
+/// replacing the default does not remove registered definitions. Register other
+/// structures using addDataDefinition:.
 @property (nonatomic, strong, nullable) SCDataDefinition *defaultDataDefinition;
 
-/// Whether the data store supports nil values. Default: YES.
+/// Whether the base KVC setter leaves nil values as nil. Defaults to YES.
+///
+/// When NO, that setter substitutes NSNull; a property defined as scalar instead
+/// receives numeric zero. Subclass setters and NSUbiquitousKeyValueStore writes
+/// can bypass this conversion.
 @property (nonatomic, readwrite) BOOL supportsNilValues;
 
-/// Adds a definition to dataDefinitions.
-/// - Parameter definition: The data definition involved in the operation.
+/// Registers a definition by its nonnil dataStructureName.
+///
+/// - Parameter definition: The definition to retain. Nil, unnamed definitions,
+///   and definitions whose name is already registered are ignored; registration
+///   does not replace an existing definition.
 - (void)addDataDefinition:(nullable SCDataDefinition *)definition;
 
-/// Returns the data definition for the given object.
-/// - Parameter object: The object involved in the operation.
-/// - Returns: The applicable definition, or nil if none is configured or found.
+/// Looks up the definition used to interpret an object.
+///
+/// - Parameter object: The object to describe.
+/// - Returns: The default definition in the base implementation. Array and Core
+///   Data stores look up registered class or entity names instead, returning nil
+///   when no definition matches.
 - (nullable SCDataDefinition *)definitionForObject:(NSObject *)object;
 
 
 #pragma mark - Synchronous Data Access
 
-/// Returns a newly allocated and initialized object based on the store's default data definition.
-/// - Returns: The new object, or nil when creation is unsupported or unavailable.
-/// - Warning: Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
+/// Creates an object using the store's default data definition.
+///
+/// Array stores allocate a supported class, dictionary, or basic value without
+/// adding it to the backing array. Core Data inserts into the context and bound
+/// collection immediately, tracking the object as not yet accepted by the store.
+///
+/// - Returns: The created object, or nil in the base implementation or for an
+///   unsupported definition. Invalid Core Data configuration can raise exceptions.
+/// - Warning: Accept the new object with insertObject: or discard it with
+///   discardUninsertedObject: before finishing the editing workflow.
 - (nullable NSObject *)createNewObject;
 
-/// Returns a newly allocated and initialized object based on the given data definition.
-/// - Parameter definition: The data definition that describes the object to be created.
-/// - Returns: The new object, or nil when creation is unsupported or unavailable.
-/// - Warning: Any newly created objects should be later either added to the data store using insertObject:, or discarded using discardUninsertedObject:.
+/// Creates an object using the store's given data definition.
+///
+/// Array stores allocate a supported class, dictionary, or basic value without
+/// adding it to the backing array. Core Data inserts into the context and bound
+/// collection immediately, tracking the object as not yet accepted by the store.
+///
+/// - Parameter definition: The definition to instantiate. Nil is unsupported and
+///   does not substitute the default definition.
+///
+/// - Returns: The created object, or nil in the base implementation or for an
+///   unsupported definition. Invalid Core Data configuration can raise exceptions.
+/// - Warning: Accept the new object with insertObject: or discard it with
+///   discardUninsertedObject: before finishing the editing workflow.
 - (nullable NSObject *)createNewObjectWithDefinition:(nullable SCDataDefinition *)definition;
 
-/// Discards the given uninserted object.
+/// Discards an object created by the store but not accepted with insertObject:.
 ///
-/// Any object created with createNewObject: or createNewObjectWithDefinition: and not later inserted to the store using insertObject: must be discarded using this method.
-///
-/// - Parameter object: The uninserted newly created object to be discarded.
-/// - Returns: Returns TRUE if successful.
+/// - Parameter object: The uninserted object to discard.
+/// - Returns: YES in the base implementation, which does nothing. Concrete stores
+///   remove tracking or delete/unbind the object. Core Data bound collections use
+///   their ownership setting to decide whether to delete the managed object.
 - (BOOL)discardUninsertedObject:(NSObject *)object;
 
-/// Inserts the given object into the data store.
-/// - Parameter object: The object to be inserted.
-/// - Returns: Returns TRUE if successful.
+/// Inserts an object as implemented by the concrete subclass.
+///
+/// Array stores append to their configured array. Core Data accepts tracked new
+/// objects into its context or bound collection without saving the context.
+/// - Parameter object: The object to insert.
+/// - Returns: NO in the base implementation; otherwise the subclass result.
+///   A YES result is not a persistence guarantee.
 - (BOOL)insertObject:(NSObject *)object;
 
-/// Inserts the given object into the data store at the specified order.
-/// - Parameter object: The object to be inserted.
-/// - Parameter order: The order index that the object should be inserted at.
-/// - Returns: Returns TRUE if successful.
-/// - Note: Only applicable for data stores that maintain ordered object storage.
+/// Inserts an object at an explicit position in an ordered store.
+///
+/// - Parameter object: The object to insert.
+/// - Parameter order: A valid insertion index for the backing collection.
+/// - Returns: NO in the base implementation. SCArrayStore inserts at this index;
+///   invalid indexes raise an exception. SCCoreDataStore does not implement this
+///   insertion variant.
 - (BOOL)insertObject:(NSObject *)object atOrder:(NSUInteger)order;
 
-/// Changes the order of the given object to the specified order.
-/// - Parameter object: The object that the order of will change.
-/// - Parameter toOrder: The new order index of the object.
-/// - Parameter subsetArray: The ordered subset containing the object.
-/// - Returns: Returns TRUE if successful.
-/// - Note: Only applicable for data stores that maintain ordered object storage.
+/// Moves an object within an ordered store.
+///
+/// - Parameter object: The object to move.
+/// - Parameter toOrder: A valid destination index in the applicable ordering.
+/// - Parameter subsetArray: The displayed subset for Core Data attribute-based
+///   ordering. Array stores and ordered Core Data sets ignore it and use backing
+///   collection indexes instead.
+/// - Returns: NO in the base implementation; otherwise the subclass result.
+/// - Warning: Invalid collection indexes can raise an exception.
 - (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray<id> *)subsetArray;
 
-/// Updates the given object in the data store.
-/// - Parameter object: The object to be updated.
-/// - Returns: Returns TRUE if successful.
+/// Subclass hook to update an object in storage.
+///
+/// The base implementation does nothing. Bundled stores inherit this method;
+/// changes to bound objects are made by property setters instead.
+/// - Parameter object: The object to update.
+/// - Returns: NO in the base implementation.
 - (BOOL)updateObject:(NSObject *)object;
 
-/// Deletes the given object from the data store.
-/// - Parameter object: The object to be deleted.
-/// - Returns: Returns TRUE if successful.
+/// Deletes an object according to the concrete store's collection semantics.
+///
+/// Array stores remove the identical object from the backing array. Core Data
+/// unbinds it and, depending on collection ownership, may mark it for deletion.
+/// - Parameter object: The object to delete.
+/// - Returns: NO in the base implementation; otherwise the subclass result.
+///   A YES result does not imply persistent changes have been saved.
 - (BOOL)deleteObject:(NSObject *)object;
 
-/// Fetches objects from the data store that satisfy the given fetch options.
-/// - Parameter fetchOptions: Fetch settings, or nil to use the store's defaults.
-/// - Returns: The fetched objects, or nil when fetching is unsupported or fails.
+/// Fetches objects according to the concrete store's options handling.
+///
+/// - Parameter fetchOptions: Options, or nil for no array transformations or for
+///   the Core Data definition's default options. User-defaults stores ignore it.
+/// - Returns: Nil in the base implementation. Concrete stores return their fetched
+///   collection; consult the subclass for error handling and batching behavior.
 /// - SeeAlso: ``SCDataFetchOptions``
 - (nullable NSArray<id> *)fetchObjectsWithOptions:(nullable SCDataFetchOptions *)fetchOptions;
 
-/// Returns the value for the given property name in the given object.
-/// - Parameter propertyName: The name of the property.
-/// - Parameter object: The object containing propertyName.
-/// - Returns: The value for the given propertyName.
+/// Reads property values, with optional defaults for a missing single value.
+///
+/// Basic string, number, and date objects return themselves regardless of the
+/// name. Other objects use sensible key-path lookup, or objectForKey: for
+/// NSUbiquitousKeyValueStore. Lookup exceptions are caught and logged.
+/// - Parameter propertyName: A key path, semicolon-separated paths, or nil.
+/// - Parameter object: The object to read.
+/// - Returns: A single value or nil, or an array for multiple paths with NSNull
+///   placeholders for missing values. A missing single value may be supplied by
+///   defaultsDictionary. Nil names on nonbasic objects return nil.
 - (nullable NSObject *)valueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object;
 
-/// Returns the string value for the given property name in the given object.
-/// - Parameter propertyName: The name of the property.
-/// - Parameter object: The object containing propertyName.
-/// - Parameter delimiter: If the property returns more than one value, this delimiter is used to separate the values in the returned string.
-/// - Returns: The value for the given propertyName.
+/// Formats property values using their object descriptions.
+///
+/// - Parameter propertyName: A key path, semicolon-separated paths, or nil.
+/// - Parameter object: The object to read; basic values are formatted directly.
+/// - Parameter delimiter: Separator for array values, or nil to concatenate.
+/// - Returns: Nil if lookup returns nil; otherwise a string. NSNull array entries
+///   are skipped, but a later nonnull entry receives a delimiter when its source
+///   index is not zero, so leading delimiters are possible.
 - (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
-/// Sets the value for the given property name in the given object.
-/// - Parameter value: The value of the property.
-/// - Parameter propertyName: The name of the property.
-/// - Parameter object: The object containing propertyName.
+/// Writes a property value using the concrete store's binding behavior.
+///
+/// The base implementation ignores basic values and unavailable properties. For
+/// ordinary KVC writes, nil becomes NSNull if supportsNilValues is NO, or numeric
+/// zero for a property defined as scalar. Setter exceptions propagate. Array
+/// stores replace a basic value in their backing array instead. Core Data can
+/// create missing intermediate objects along a to-one relationship key path.
+/// - Parameter value: The new value, including nil when the binding supports it.
+/// - Parameter propertyName: The property key path to set.
+/// - Parameter object: The object containing the property.
 - (void)setValue:(nullable NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object;
 
 
 #pragma mark - Asynchronous Data Access
 
-/// Asynchronously inserts the given object into the data store.
-/// - Parameter object: The object to be inserted.
-/// - Parameter success_block: The code block called after the object has been successfully inserted.
+/// Subclass hook for an asynchronous insert operation.
 ///
-/// SCDataStoreInsertSuccess_Block syntax:
-///     ^()
-///     {
-///         // Your code here
-///     }
+/// The base immediately calls a nonnil failure block with nil error on the calling
+/// queue. It never calls success or noConnection. Concrete asynchronous subclasses
+/// define scheduling and retry behavior.
 ///
-/// - Parameter failure_block: The code block called in case the object could not be inserted.
-///
-/// SCDataStoreFailure_Block syntax:
-///     ^(NSError *error)
-///     {
-///         // Your code here
-///     }
-///
-/// - Parameter noConnection_block: The code block called in case no connection could be established to data store.
-///
-/// SCNoConnection_Block syntax:
-///     ^BOOL()
-///     {
-///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
-///     }
+/// - Parameter object: The object to insert.
+/// - Parameter success_block: Optional success callback with no arguments.
+/// - Parameter failure_block: Optional failure callback receiving a nullable error.
+/// - Parameter noConnection_block: Optional retry decision. By convention, YES
+///   requests retry when connected and NO requests failure; unused by the base.
 - (void)asynchronousInsertObject:(NSObject *)object success:(nullable SCDataStoreInsertSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
-/// Asynchronously updates the given object into the data store.
-/// - Parameter object: The object to be updated.
-/// - Parameter success_block: The code block called after the object has been successfully updated.
+/// Subclass hook for an asynchronous update operation.
 ///
-/// SCDataStoreUpdateSuccess_Block syntax:
-///     ^()
-///     {
-///         // Your code here
-///     }
+/// The base immediately calls a nonnil failure block with nil error on the calling
+/// queue. It never calls success or noConnection. Concrete asynchronous subclasses
+/// define scheduling and retry behavior.
 ///
-/// - Parameter failure_block: The code block called in case the object could not be updated.
-///
-/// SCDataStoreFailure_Block syntax:
-///     ^(NSError *error)
-///     {
-///         // Your code here
-///     }
-///
-/// - Parameter noConnection_block: The code block called in case no connection could be established to data store.
-///
-/// SCNoConnection_Block syntax:
-///     ^BOOL()
-///     {
-///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
-///     }
+/// - Parameter object: The object to update.
+/// - Parameter success_block: Optional success callback with no arguments.
+/// - Parameter failure_block: Optional failure callback receiving a nullable error.
+/// - Parameter noConnection_block: Optional retry decision. By convention, YES
+///   requests retry when connected and NO requests failure; unused by the base.
 - (void)asynchronousUpdateObject:(NSObject *)object success:(nullable SCDataStoreUpdateSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
-/// Asynchronously deletes the given object from the data store.
-/// - Parameter object: The object to be deleted.
-/// - Parameter success_block: The code block called after the object has been successfully deleted.
+/// Subclass hook for an asynchronous delete operation.
 ///
-/// SCDataStoreDeleteSuccess_Block syntax:
-///     ^()
-///     {
-///         // Your code here
-///     }
+/// The base immediately calls a nonnil failure block with nil error on the calling
+/// queue. It never calls success or noConnection. Concrete asynchronous subclasses
+/// define scheduling and retry behavior.
 ///
-/// - Parameter failure_block: The code block called in case the object could not be deleted.
-///
-/// SCDataStoreFailure_Block syntax:
-///     ^(NSError *error)
-///     {
-///         // Your code here
-///     }
-///
-/// - Parameter noConnection_block: The code block called in case no connection could be established to data store.
-///
-/// SCNoConnection_Block syntax:
-///     ^BOOL()
-///     {
-///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
-///     }
+/// - Parameter object: The object to delete.
+/// - Parameter success_block: Optional success callback with no arguments.
+/// - Parameter failure_block: Optional failure callback receiving a nullable error.
+/// - Parameter noConnection_block: Optional retry decision. By convention, YES
+///   requests retry when connected and NO requests failure; unused by the base.
 - (void)asynchronousDeleteObject:(NSObject *)object success:(nullable SCDataStoreDeleteSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
-/// Asynchronously fetches objects from the data store that satisfy the given fetch options.
-/// - Parameter fetchOptions: The fetch options that the data store must satisfy when returning the objects.
-/// - Parameter success_block: The code block called after the data has been successfully fetched.
+/// Subclass hook for an asynchronous fetch operation.
 ///
-/// SCDataStoreFetchSuccess_Block syntax:
-///     ^(NSArray<id> * _Nullable results)
-///     {
-///         // Your code here
-///     }
-/// Where `results` is the fetched data array.
-/// - Parameter failure_block: The code block called in case the data could not be fetched.
+/// The base immediately calls a nonnil failure block with nil error on the calling
+/// queue. It never calls success or noConnection. Concrete asynchronous subclasses
+/// define scheduling and retry behavior.
 ///
-/// SCDataStoreFailure_Block syntax:
-///     ^(NSError *error)
-///     {
-///         // Your code here
-///     }
-///
-/// - Parameter noConnection_block: The code block called in case no connection could be established to data store.
-///
-/// SCNoConnection_Block syntax:
-///     ^BOOL()
-///     {
-///         // Return YES to try operation again when connection is established, otherwise return NO to call failure_block
-///     }
-///
-/// - SeeAlso: ``SCDataFetchOptions``
+/// - Parameter fetchOptions: Options, or nil for subclass defaults.
+/// - Parameter success_block: Optional success callback receiving nullable results.
+/// - Parameter failure_block: Optional failure callback receiving a nullable error.
+/// - Parameter noConnection_block: Optional retry decision. By convention, YES
+///   requests retry when connected and NO requests failure; unused by the base.
 - (void)asynchronousFetchObjectsWithOptions:(nullable SCDataFetchOptions *)fetchOptions success:(nullable SCDataStoreFetchSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block noConnection:(nullable SCNoConnection_Block)noConnection_block;
 
-/// Action gets called right after asynchronousFetchObjectsWithOptions has successfully finished.
+/// Optional processing performed by fetchObjectsSuccessful:successBlock:failure:.
 ///
-/// This action is typically used to asynchronously load further objects or data in addition to the ones fetched in asynchronousFetchObjectsWithOptions.
-///
-/// The block must call its completion handler with the updated results and any error.
-///
-/// Example:
+/// The helper passes nullable results and a nonnull completion block. Call
+/// completion exactly once with updated results and nil error, or a nonnil error
+/// to select failure. Delivery occurs on the queue that calls completion. There
+/// is no automatic dispatch or completion. Subclasses must use the helper for
+/// this action to run; synchronous fetching does not invoke it.
 ///
 /// ```objective-c
-/// // Objective-C
-/// myDataStore.postAsynchronousFetchObjectsAction = ^(NSArray<id> * _Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler)
-/// {
-///     // ... load your data here asynchronously ...
-///
-///     NSError *error = nil;
-///     completionHandler(myUpdatedResultsArray, error);
-/// };
+/// myDataStore.postAsynchronousFetchObjectsAction =
+///     ^(NSArray<id> * _Nullable results,
+///       SCPostFetchAsyncronousCompletionHandler_Block completionHandler) {
+///         // Replace this pass-through with application-specific processing.
+///         completionHandler(results, nil);
+///     };
 /// ```
+///
+/// Defaults to nil. Avoid capturing the store strongly in its retained block.
 @property (nonatomic, copy, nullable) SCPostFetchAsyncronousAction_Block postAsynchronousFetchObjectsAction;
 
 
 #pragma mark - Data Validation
 
-/// Returns TRUE if the given object can be inserted into the data store, otherwise returns FALSE.
-/// - Parameter object: The object involved in the operation.
+/// Checks whether the store considers an object valid for insertion.
+///
+/// - Parameter object: The candidate object.
+/// - Returns: NO in the base implementation, YES for SCArrayStore. Core Data calls
+///   the managed object's validateForInsert: without returning its error. This check
+///   does not perform or persist the operation.
 - (BOOL)validateInsertForObject:(NSObject *)object;
 
-/// Returns TRUE if the given object can be updated into the data store, otherwise returns FALSE.
-/// - Parameter object: The object involved in the operation.
+/// Checks whether the store considers an object valid for updating.
+///
+/// - Parameter object: The candidate object.
+/// - Returns: NO in the base implementation, YES for SCArrayStore. Core Data calls
+///   the managed object's validateForUpdate: without returning its error. This check
+///   does not perform or persist the operation.
 - (BOOL)validateUpdateForObject:(NSObject *)object;
 
-/// Returns TRUE if the given object can be deleted from the data store, otherwise returns FALSE.
-/// - Parameter object: The object involved in the operation.
+/// Checks whether the store considers an object valid for deletion.
+///
+/// - Parameter object: The candidate object.
+/// - Returns: NO in the base implementation, YES for SCArrayStore. Core Data calls
+///   the managed object's validateForDelete: without returning its error. This check
+///   does not perform or persist the operation.
 - (BOOL)validateDeleteForObject:(NSObject *)object;
 
-/// Returns TRUE if the order of the given object can be changed in the data store, otherwise returns FALSE.
-/// - Parameter object: The object involved in the operation.
+/// Checks whether the store has ordering support for an object.
+///
+/// - Parameter object: The candidate object.
+/// - Returns: NO in the base implementation, YES for SCArrayStore. Core Data returns
+///   YES for a bound ordered set or a registered entity definition with a nonnil
+///   orderAttributeName. This does not validate destination indexes or membership.
 - (BOOL)validateOrderChangeForObject:(NSObject *)object;
 
 
 #pragma mark - Data Management
 
-/// Commits the data store objects to the persistent store. This method is only applicable to data stores that store their objects in memory before persisting them to a permenant persistant storage.
+/// Requests persistence of pending changes, where supported by the subclass.
+///
+/// The base implementation does nothing. Every store registers this method for
+/// application-background and termination notifications. Core Data saves its
+/// context and reports failures through its error API and compatibility callback;
+/// user-defaults stores call synchronize without exposing its result.
 - (void)commitData;
 
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
-/// Should be used by subclasses to store their data when heap memory storage is needed.
+/// Retained backing storage for subclasses that keep data in memory.
+///
+/// Defaults to nil. The base implementation imposes no storage type. SCArrayStore
+/// accepts only NSMutableArray and clears storage for other assigned types.
 @property (nonatomic, strong, nullable) NSObject *storedData;
 
-/// Should be used by subclasses to store any default values needed.
+/// Fallback values for missing single-property reads. Defaults to nil.
+///
+/// Retained, not copied. SCUserDefaultsStore also registers assigned defaults with
+/// standardUserDefaults without overwriting stored preferences. Pass a valid
+/// dictionary when registering defaults.
 @property (nonatomic, strong, nullable) NSDictionary<NSString *, id> *defaultsDictionary;
 
-/// Binds the store to a property name that will be used to fetch all the store's data.
+/// Records an object, property, and definition for collection-backed subclasses.
 ///
-/// Should only be used by the framework all must be implemented by all subclasses.
-/// - Parameter propertyName: The property name.
-/// - Parameter object: The object involved in the operation.
-/// - Parameter definition: The data definition involved in the operation.
+/// The base only retains binding information. Array and Core Data subclasses
+/// additionally bind their backing collection to a supported property value.
+/// - Parameter propertyName: Collection property, or nil to clear the name.
+/// - Parameter object: Owning object, or nil to clear the object.
+/// - Parameter definition: The owner's definition, or nil when unavailable.
 - (void)bindStoreToPropertyName:(nullable NSString *)propertyName forObject:(nullable NSObject *)object withDefinition:(nullable SCDataDefinition *)definition;
 
-/// This method is typically called internally by the framework when all unadded objects must be discarded. The method will issue the `SCDataStoreWillDiscardAllUnaddedObjectsNotification` notification to inform all classes using the store that this will happen.
+/// Asks the subclass to discard tracked uninserted objects in reverse order.
+///
+/// When tracking is nonempty, first posts
+/// SCDataStoreWillDiscardAllUninsertedObjectsNotification synchronously with this
+/// store as the notification object. The helper does not itself clear tracking.
 - (void)forceDiscardAllUnaddedObjects;
 
-/// Method called when the application is about to leave the background state. Subclasses should override this method when any initialization is needed at this point.
+/// Handles the application-will-enter-foreground notification.
+///
+/// The base implementation does nothing. Subclasses may restore transient state.
 - (void)applicationWillEnterForeground;
 
 // Internally checks if the 'postAsynchronousFetchObjectsAction' property has been set before calling success_block
-/// Completes a fetch operation with either the success or failure callback.
-/// - Parameter objects: The fetched objects.
-/// - Parameter success_block: The success_block.
-/// - Parameter failure_block: The failure_block.
+/// Delivers successful results, optionally running the post-fetch action.
+///
+/// Without an action, calls success immediately on the calling queue. Otherwise,
+/// the action's completion selects success for nil error or failure for nonnil
+/// error. Callbacks run on the completion's queue. Nil callbacks are skipped.
+/// - Parameter objects: Fetched results, which may be nil.
+/// - Parameter success_block: Optional callback for original or updated results.
+/// - Parameter failure_block: Optional callback for a post-processing error.
 - (void)fetchObjectsSuccessful:(nullable NSArray<id> *)objects successBlock:(nullable SCDataStoreFetchSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block;
 
 @end
@@ -389,7 +453,10 @@ typedef void (^SCPostFetchAsyncronousAction_Block)(NSArray<id> *_Nullable result
 /// Represents a data store whose required framework is unavailable.
 @interface SCMissingFrameworkDataStore : SCDataStore
 
-/// The placeholder definition for an unavailable framework.
+/// The default definition cast to a missing-framework definition.
+///
+/// Nil if no default is configured. Callers must configure the expected type;
+/// the getter does not validate the cast.
 @property (nonatomic, readonly, nullable) SCMissingFrameworkDataDefinition *missingFrameworkDataDefinition;
 
 @end

@@ -28,13 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// Sample use:
 /// ```objective-c
-/// // Extend the definition of `TaskEntity` (user defined Core Data entity)
+/// // TaskEntity has name and notes strings, an integer category index,
+/// // a date dueDate, and a Boolean completed attribute. Use its context queue.
 /// SCEntityDefinition *taskDef = [SCEntityDefinition definitionWithEntityName:@"TaskEntity"
 ///     managedObjectContext:context
-///     propertyNamesString:@"Task Details:(name,description,category,dueDate);Task Status:(completed)"];
+///     propertyNamesString:@"Task Details:(name,notes,category,dueDate);Task Status:(completed)"];
 /// SCPropertyDefinition *namePropertyDef = [taskDef propertyDefinitionWithName:@"name"];
 /// namePropertyDef.required = TRUE;
-/// SCPropertyDefinition *descPropertyDef = [taskDef propertyDefinitionWithName:@"description"];
+/// SCPropertyDefinition *descPropertyDef = [taskDef propertyDefinitionWithName:@"notes"];
 /// descPropertyDef.type = SCPropertyTypeTextView;
 /// SCPropertyDefinition *categoryPropertyDef = [taskDef propertyDefinitionWithName:@"category"];
 /// categoryPropertyDef.type = SCPropertyTypeSelection;
@@ -55,10 +56,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// the generated properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter autoGenerate: If TRUE, `SCClassDefinition` will automatically generate all the property definitions for the given entity's attributes.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter autoGenerate: If YES, generates the entity's modeled properties,
+///   including relationships and fetched properties, not just attributes.
 ///
-/// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions: instead.
+/// - Warning: Queries the application delegate's `managedObjectContext` selector.
+///   It does not create a context or recover when none is available. Prefer
+///   `definitionWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:` with an explicitly configured context.
 + (instancetype)definitionWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.
@@ -67,14 +72,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter propertyNamesString: A string with the property names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter propertyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Property names string syntax options:
-///     @"property1;property2;property3;..."
-///     @"group1 header:(property1, property2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 ///
-/// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use definitionWithEntityName:managedObjectContext:propertyNamesString: instead.
+/// - Warning: Queries the application delegate's `managedObjectContext` selector.
+///   It does not create a context or recover when none is available. Prefer
+///   `definitionWithEntityName:managedObjectContext:propertyNamesString:` with an explicitly configured context.
 + (instancetype)definitionWithEntityName:(NSString *)entityName propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity's properties.
@@ -83,9 +93,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// the generated properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter autoGenerate: If TRUE, `SCClassDefinition` will automatically generate all the property definitions for the given entity's attributes.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter autoGenerate: If YES, generates the entity's modeled properties,
+///   including relationships and fetched properties, not just attributes.
 + (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.
@@ -94,13 +107,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNamesString: A string with the property names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Property names string syntax options:
-///     @"property1;property2;property3;..."
-///     @"group1 header:(property1, property2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 + (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.
@@ -109,26 +126,35 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNames: Ordered, nonempty string names; nil generates nothing.
 + (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Allocates and returns an initialized `SCEntityDefinition` given a Core Data entity name, an array of
 /// the property names to generate property definitions for, and array of titles
 /// for these properties.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-/// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNames: Ordered, nonempty string names; nil generates nothing.
+/// - Parameter propertyTitles: Titles matched by index. Nil or missing entries use
+///   generated titles; extra entries are ignored.
+///   Custom names beginning with `~` use generated titles.
 + (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Allocates and returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter groups: A collection of property groups.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter groups: Groups whose names generate definitions. Group objects
+///   are retained, not copied; nil generates no properties or groups.
 + (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 
@@ -138,10 +164,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// the generated properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter autoGenerate: If TRUE, SCEntityDefinition will automatically generate all the property definitions for the given entity's attributes.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter autoGenerate: If YES, generates the entity's modeled properties,
+///   including relationships and fetched properties, not just attributes.
 ///
-/// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions: instead.
+/// - Warning: Queries the application delegate's `managedObjectContext` selector.
+///   It does not create a context or recover when none is available. Prefer
+///   `initWithEntityName:managedObjectContext:autoGeneratePropertyDefinitions:` with an explicitly configured context.
 - (instancetype)initWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.
@@ -150,14 +180,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter propertyNamesString: A string with the property names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter propertyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Property names string syntax options:
-///     @"property1;property2;property3;..."
-///     @"group1 header:(property1, property2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 ///
-/// - Warning: Note: This method attempts to automatically determine the required NSManagedObjectContext by querying the current app delegate. If your app delegate does not provide an NSManagedObjectContext, or if you'd like to provide a diffrerent one, please use initWithEntityName:managedObjectContext:propertyNamesString: instead.
+/// - Warning: Queries the application delegate's `managedObjectContext` selector.
+///   It does not create a context or recover when none is available. Prefer
+///   `initWithEntityName:managedObjectContext:propertyNamesString:` with an explicitly configured context.
 - (instancetype)initWithEntityName:(NSString *)entityName propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and the option to auto generate property definitions for the given entity's properties.
@@ -166,9 +201,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// the generated properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter autoGenerate: If TRUE, SCEntityDefinition will automatically generate all the property definitions for the given entity's attributes.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter autoGenerate: If YES, generates the entity's modeled properties,
+///   including relationships and fetched properties, not just attributes.
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.
@@ -177,13 +215,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNamesString: A string with the property names separated by semi-colons. Example string: @"firstName;lastName". Property groups can also be defined in the string using the following format: @"Personal Details:(firstName, lastName); Address:(street, state, country)". The group title can also be ommitted to create a group with no title. For example: @":(firstName, lastName)".
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNamesString: Semicolon-separated names, or nil to generate
+///   no properties. Groups use `@"Details:(firstName,lastName):Footer"`;
+///   an empty header before the colon creates an untitled group. Names must
+///   be nonempty. Delimiters are syntax and cannot be escaped.
 ///
-/// Property names string syntax options:
-///     @"property1;property2;property3;..."
-///     @"group1 header:(property1, property2,...):group1 footer;group2..."
+/// Examples: `@"firstName;lastName"` and
+/// `@"Details:(firstName,lastName):Footer;address"`.
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(nullable NSString *)propertyNamesString;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and an array of the property names to generate property definitions for.
@@ -192,42 +234,56 @@ NS_ASSUME_NONNULL_BEGIN
 /// the given properties. These titles can be modified by the user later as part of
 /// the property definition customization.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNames: Ordered, nonempty string names; nil generates nothing.
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name, an array of
 /// the property names to generate property definitions for, and array of titles
 /// for these properties.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
-/// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter propertyNames: Ordered, nonempty string names; nil generates nothing.
+/// - Parameter propertyTitles: Titles matched by index. Nil or missing entries use
+///   generated titles; extra entries are ignored.
+///   Custom names beginning with `~` use generated titles.
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and an SCPropertyGroupArray.
 ///
-/// - Parameter entityName: The name of the entity for which the definition will be extended.
-/// - Parameter context: The managed object context of the entity.
-/// - Parameter groups: A collection of property groups.
+/// - Parameter entityName: The modeled entity name. An unresolved entity may leave
+///   entity nil; initialization does not provide an NSError failure result.
+/// - Parameter context: A configured context whose model contains entityName.
+///   Call on the context's queue; initialization performs no queue dispatch.
+/// - Parameter groups: Groups whose names generate definitions. Group objects
+///   are retained, not copied; nil generates no properties or groups.
 - (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(nullable SCPropertyGroupArray *)groups;
 
 #pragma mark - Configuration
 
-/// The entity associated with the definition.
+/// The resolved entity, or nil when no entity was configured or found.
 @property (nonatomic, readonly, strong, nullable) NSEntityDescription *entity;
 
-/// The managed object context of the entity associated with the definition.
+/// The retained context used to resolve the entity and generate its store.
+///
+/// Nil for plain init. Entity-based initializers require a usable context.
+/// Unbound Core Data stores fetch using each registered definition's context.
 @property (nonatomic, readonly, strong, nullable) NSManagedObjectContext *managedObjectContext;
 
-/// 	The name of the entity attribute that will be used to store the display order of its objects.
+/// The attribute storing custom display order. Defaults to nil.
 ///
-/// Setting this property to a valid attribute name allows for custom re-ordering of the generated
-/// user interface elements representing the Core Data objects (e.g. custom re-ordering of cells).
-/// Setting this property overrides the value set for the keyPropertyName property.
-/// - Warning: Important: This Core Data attribute must be of integer type.
+/// Compatible Core Data options use it instead of sortKey; setting it does not
+/// change keyPropertyName. Invalid or nonnumeric names are ignored. Assigning
+/// nil does not clear a previously accepted ordering attribute.
+///
+/// - Warning: Use an integer Core Data attribute. The setter accepts other numeric
+///   types, but the store reads and writes ordering values as integers.
 @property (nonatomic, copy, nullable) NSString *orderAttributeName;
 
 

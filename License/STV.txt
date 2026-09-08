@@ -2,7 +2,7 @@ Sensible TableView
 
 Copyright (c) 2010 - 2018 SensibleCocoa
 Copyright (c) 2018 Wizgod
-Copyright (c) 2019 - 2026 dgApps
+Copyright (c) 2019-2026 dgApps. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

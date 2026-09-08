@@ -22,124 +22,155 @@
 NS_ASSUME_NONNULL_BEGIN
 
 // Keys
-/// The legacy plug-in dictionary key for custom class name.
+/// Internal legacy plug-in serialization key for custom class name.
 #define kCustomClassName @"_STV_CustomClassName"
-/// The legacy plug-in string representing a Boolean true value.
+/// Internal legacy plug-in string representing a Boolean true value.
 #define kYesString @"Y"
-/// The legacy plug-in string representing a Boolean false value.
+/// Internal legacy plug-in string representing a Boolean false value.
 #define kNoString @"N"
-/// The legacy plug-in dictionary key for interface builder unique id.
+/// Internal legacy plug-in serialization key for Interface Builder unique identifier.
 #define kibUniqueID @"ibUniqueID"
 
-/// The legacy plug-in dictionary key for section index key.
+/// Internal legacy plug-in serialization key for section index.
 #define kSectionIndexKey @"index"
-/// The legacy plug-in dictionary key for section type key.
+/// Internal legacy plug-in serialization key for section type.
 #define kSectionTypeKey @"type"
-/// The legacy plug-in dictionary key for section data def identifier key.
+/// Internal legacy plug-in serialization key for section data-definition identifier.
 #define kSectionDataDefIdKey @"dataDefinitionID"
-/// The legacy plug-in dictionary key for section data def group index key.
+/// Internal legacy plug-in serialization key for section data-definition group index.
 #define kSectionDataDefGroupIndexKey @"dataDefinitionGroupIndex"
-/// The legacy plug-in dictionary key for section predicate string key.
+/// Internal legacy plug-in serialization key for section predicate string.
 #define kSectionPredicateStringKey @"predicateString"
-/// The legacy plug-in dictionary key for section placeholder text key.
+/// Internal legacy plug-in serialization key for section placeholder text.
 #define kSectionPlaceholderTextKey @"placeholderText"
-/// The legacy plug-in dictionary key for section placeholder text alignment key.
+/// Internal legacy plug-in serialization key for section placeholder text alignment.
 #define kSectionPlaceholderTextAlignmentKey @"placeholderTextAlignment"
-/// The legacy plug-in dictionary key for section add new item text key.
+/// Internal legacy plug-in serialization key for section add new item text.
 #define kSectionAddNewItemTextKey @"addNewItemText"
-/// The legacy plug-in dictionary key for section hide when empty key.
+/// Internal legacy plug-in serialization key for section hide when empty.
 #define kSectionHideWhenEmptyKey @"hideWhenEmpty"
-/// The legacy plug-in dictionary key for section allow adding key.
+/// Internal legacy plug-in serialization key for section allow adding.
 #define kSectionAllowAddingKey @"allowAdding"
-/// The legacy plug-in dictionary key for section allow deleting key.
+/// Internal legacy plug-in serialization key for section allow deleting.
 #define kSectionAllowDeletingKey @"allowDeleting"
-/// The legacy plug-in dictionary key for section allow moving key.
+/// Internal legacy plug-in serialization key for section allow moving.
 #define kSectionAllowMovingKey @"allowMoving"
-/// The legacy plug-in dictionary key for section allow editing key.
+/// Internal legacy plug-in serialization key for section allow editing.
 #define kSectionAllowEditingKey @"allowEditing"
-/// The legacy plug-in dictionary key for section batch size key.
+/// Internal legacy plug-in serialization key for section batch size.
 #define kSectionBatchSizeKey @"batchSize"
-/// The legacy plug-in dictionary key for section strings array key.
+/// Internal legacy plug-in serialization key for section strings array.
 #define kSectionStringsArrayKey @"stringsArray"
-/// The legacy plug-in dictionary key for the section's master bound property name.
+/// Internal legacy plug-in serialization key for the section's master bound property name.
 #define kSectionMasterBoundPropertyName @"masterBoundPropertyName"
-/// The legacy plug-in dictionary key for the section's Interface Builder new-item view-controller identifier.
+/// Internal legacy plug-in serialization key for the section's Interface Builder new-item view-controller identifier.
 #define kSectionibNewItemViewControllerIdentifier @"ibNewItemViewControllerIdentifier"
 
-/// The legacy plug-in default for default data definition name.
+/// Internal legacy plug-in sentinel for no selected data definition.
 #define kDefaultDataDefinitionName @"(none selected)"
-/// The legacy plug-in dictionary key for property groups.
+/// Internal legacy plug-in serialization key for property groups.
 #define kPropertyGroups @"propertyGroups"
-/// The legacy plug-in dictionary key for property definitions.
+/// Internal legacy plug-in serialization key for property definitions.
 #define kPropertyDefinitions @"propertyDefinitions"
 
 
 // UI Related
-/// The legacy plug-in default for title label x margin.
+/// Internal legacy plug-in layout constant for title label x margin.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kTitleLabelXMargin 15
-/// The legacy plug-in default for default title label width.
+/// Internal legacy plug-in layout constant for title label width.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultTitleLabelWidth 110
-/// The legacy plug-in default for default title label height.
+/// Internal legacy plug-in layout constant for title label height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultTitleLabelHeight 22
-/// The legacy plug-in default for y margin.
+/// Internal legacy plug-in layout constant for y margin.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kYMargin 11
-/// The legacy plug-in default for default control margin.
+/// Internal initial `SCControlCell.controlMargin`, in points; also retained
+/// for legacy plug-in compatibility. Not a public customization switch.
 #define kDefaultControlMargin 20
-/// The legacy plug-in default for text view margin.
+/// Internal legacy plug-in layout constant for text view margin.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kTextViewMargin 7
-/// The legacy plug-in default for text view x margin.
+/// Internal legacy plug-in layout constant for text view x margin.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kTextViewXMargin 10
-/// The legacy plug-in default for text view padding.
+/// Internal legacy plug-in layout constant for text view padding.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kTextViewPadding 5
-/// The legacy plug-in default for text view title label height.
+/// Internal legacy plug-in layout constant for text view title label height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kTextViewTitleLabelHeight 19
-/// The legacy plug-in default for default control height.
+/// Internal legacy plug-in layout constant for control height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultControlHeight 22
-/// The legacy plug-in default for default segmented height.
+/// Internal legacy plug-in layout constant for segmented height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultSegmentedHeight 29
-/// The legacy plug-in default for default slider height.
+/// Internal legacy plug-in layout constant for slider height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultSliderHeight 31
-/// The legacy plug-in default for default switch height.
+/// Internal legacy plug-in layout constant for switch height.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultSwitchHeight 31
-/// The legacy plug-in default for default switch width.
+/// Internal legacy plug-in layout constant for switch width.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultSwitchWidth 51
 
-/// The legacy plug-in default for default title label font size.
+/// Internal legacy plug-in layout constant for title label font size.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultTitleLabelFontSize 16
-/// The legacy plug-in default for default title label font description.
+/// Internal legacy plug-in font-description expression. Requires the plug-in
+/// class `IBUIFontDescription`; it is not a UIKit font factory.
 #define kDefaultTitleLabelFontDescription [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultTitleLabelFontSize]
-/// The legacy plug-in default for default control font size.
+/// Internal legacy plug-in layout constant for control font size.
+/// Not a current UIKit sizing guarantee or a public customization switch.
 #define kDefaultControlFontSize 15
-/// The legacy plug-in default for default control font description.
+/// Internal legacy plug-in font-description expression. Requires the plug-in
+/// class `IBUIFontDescription`; it is not a UIKit font factory.
 #define kDefaultControlFontDescription [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultControlFontSize]
 
-/// 3 lines with default font.
+/// Internal initial `SCTextViewCell.minimumHeight`, in points. The legacy
+/// three-line estimate is not a guarantee for every font or content size.
 #define kMinTextViewHeight 65 // 3 lines with default font
-/// The legacy plug-in default for max text view height.
+/// Internal initial `SCTextViewCell.maximumHeight`, in points.
 #define kMaxTextViewHeight 500
 
-/// just a number to stay above any user-defined tag values.
+/// Internal baseline for generated custom-control tags. STV also checks the
+/// existing direct-subview tags; this number alone does not reserve all tags.
 #define kSTVTagStartRange 7777777 // just a number to stay above any user-defined tag values
 
 
 /* This class is used internally to provide STV plugin-related utilities */
 
 
-/// Provides helpers used to decode legacy STV Interface Builder plug-in data.
+/// Internal compatibility helpers for decoding legacy STV Interface Builder
+/// plug-in data. These are not a supported application-customization interface.
 @interface SCPluginUtilities : NSObject
 
-/// Creates the STV object represented by a plug-in dictionary.
-/// - Parameter pluginDictionary: The plugin dictionary.
+/// Instantiates the class named by `kCustomClassName` in trusted legacy data.
+/// Classes conforming to `SCibInitialization` receive a mutable shallow copy
+/// with the class-name key removed. Other classes receive `init`, then KVC
+/// assignments for every original key, including the class-name key.
+/// - Parameter pluginDictionary: A trusted, nonnull legacy configuration.
+/// - Returns: The initialized object, or `nil` if the class is unresolved or
+///   initialization returns nil. Recognized missing definition classes instead
+///   return an internal missing-framework placeholder.
+/// - Warning: This performs runtime class lookup and KVC without validation or
+///   exception handling. It is not a decoder for untrusted input.
 + (nullable id)objectForPluginDictionary:(NSDictionary<NSString *, id> *)pluginDictionary;
 
 @end
 
 
-/// Defines initialization from legacy STV Interface Builder configuration data.
+/// Internal initialization contract for legacy STV Interface Builder data.
 @protocol SCibInitialization <NSObject>
 
-/// Initializes an object from an Interface Builder configuration dictionary.
-/// - Parameter ibDictionary: The Interface Builder configuration dictionary.
+/// Initializes an object from trusted legacy configuration.
+/// - Parameter ibDictionary: A mutable dictionary that the implementation may
+///   consume or modify. The utility caller removes `kCustomClassName` first.
+/// - Returns: The initialized object, or `nil` on initialization failure.
 - (nullable instancetype)initWithibDictionary:(NSMutableDictionary<NSString *, id> *)ibDictionary;
 
 @end

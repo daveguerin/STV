@@ -3,7 +3,7 @@
  *  Sensible TableView
  *
  *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright 2019-2020 dgApps. All rights reserved.
+ *  Copyright © 2019-2026 dgApps. All rights reserved.
  *
  */
 
@@ -213,7 +213,6 @@
         [self performInitialization];
         self.sc_nativeStyle = style;
         /*
-         hermes:
          Keep spare row width in the text/control gap, not in the image. Native
          fixed-width controls must not stretch an icon and thereby grow the row.
          Image constraints use UIImageView's intrinsic alignment size, including
@@ -465,7 +464,6 @@
     [NSLayoutConstraint deactivateConstraints:self.sc_authoredContentBadgeConstraints];
     self.sc_authoredContentBadgeVisible = visible;
     /*
-     hermes:
      STV creates this badge after decoding; only the caller's authored views
      retain Interface Builder layout ownership.
      */
@@ -2559,7 +2557,6 @@
     [constraints addObject:[control.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
     [constraints addObject:[control.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
     /*
-     hermes:
      Native controls include their own internal vertical padding. A compact
      inset lets switches, sliders and segments share the standard row minimum
      without compressing their intrinsic height. Labels retain the text inset.
@@ -2776,7 +2773,6 @@
 
 
 /*
- hermes:
  A scrolling editor exposes UIKit's already-calculated content size as its
  intrinsic height. Constraints cap the viewport without measuring text,
  rejecting input, or replacing the user's selection. UIKit owns text layout.
@@ -3929,7 +3925,6 @@
 
     if (previousRowConstraints != self.sc_labelConstraints) {
         /*
-         hermes:
          The expanded row must follow the current control/title topology after
          the base installer rebuilds it, rather than retaining stale anchors.
          */

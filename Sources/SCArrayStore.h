@@ -13,27 +13,38 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCArrayStore
-/// SCArrayStore is an SCDataStore subclass that encapsulates NSArray memory storage, providing means for the SC framework to communicate with this array storage to fetch, add, update and remove data objects.
+/// An in-memory store backed by a retained mutable array.
 ///
-/// - Note: It is very rare when you'll need to create an SCArrayStore instance yourself, as it's typically automatically created for you when you use data definitions such as SCClassDefinition and SCDictionaryDefinition. For example, when you use the SCArrayOfObjectsSection initializer method called [SCArrayOfObjectsSection sectionWithHeaderTitle:items:itemsDefinition:], SCArrayOfObjectsSection automatically sets its dataStore property by calling your itemsDefinition's [SCDataDefinition generateCompatibleDataStore:] method.
+/// Class, dictionary, and basic-value definitions create this store through
+/// `generateCompatibleDataStore`. Object sections supply their items array to
+/// that generated store.
 ///
-/// - Note: For more information on data stores, check out the SCDataStore base class documentation.
+/// Fetches copy the array, filter and sort the copy, then optionally select a
+/// batch. Collection writes modify the original array. Reordering uses backing
+/// array indexes and ignores the supplied subset. `commitData` does nothing.
+///
+/// - Note: Configure `objectsArray` before collection operations. Generated stores
+///   have no backing array; the store does not allocate one automatically.
+/// - SeeAlso: ``SCDataStore``
 @interface SCArrayStore : SCDataStore
 
 
 #pragma mark - Creation and Initialization
 
 /// Allocates and returns an initialized SCArrayStore given an array of objects and their default data definition.
-/// - Parameter array: The mutable array to process.
-/// - Parameter definition: The data definition involved in the operation.
+/// - Parameter array: The retained backing array, or nil to leave storage unset.
+/// - Parameter definition: The default definition, or nil to configure it later.
 + (instancetype)storeWithObjectsArray:(nullable NSMutableArray<id> *)array defaultDefiniton:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized SCArrayStore given an array of objects and their default data definition.
-/// - Parameter array: The mutable array to process.
-/// - Parameter definition: The data definition involved in the operation.
+/// - Parameter array: The retained backing array, or nil to leave storage unset.
+/// - Parameter definition: The default definition, or nil to configure it later.
 - (id)initWithObjectsArray:(nullable NSMutableArray<id> *)array defaultDefiniton:(nullable SCDataDefinition *)definition;
 
-/// The objects array storage managed by the memory store.
+/// The retained mutable backing array, or nil when unconfigured.
+///
+/// Assignments are not copied. Nil clears storage. An assigned object that is not
+/// an NSMutableArray also clears storage and logs a warning.
 @property (nonatomic, strong, nullable) NSMutableArray<id> *objectsArray;
 
 @end

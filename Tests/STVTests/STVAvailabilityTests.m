@@ -86,7 +86,7 @@
 }
 
 - (void)testRuntimeVersionMatchesSTVSevenRelease {
-    XCTAssertEqualObjects(kSTVCurrentVersion, @"7.0.0");
+    XCTAssertEqualObjects(kSTVCurrentVersion, @"7.1.0");
 }
 
 @end

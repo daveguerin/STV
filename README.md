@@ -8,12 +8,12 @@ iOS compatibility and Swift Packaging by [dgApps](http://dgapps.ie/). Although i
 
 Based on countless user testimonials and feedback, [Sensible Cocoa](http://sensiblecocoa.com/) found that developers were saving on average about 70% of their development time when they started using STV in their apps. What this means is that an app that would normally take weeks or even months to develop alone, can now be conceived in just a matter of days using STV. Since STV keeps your code very short, simple and straight forward, maintenance suddenly becomes much easier.
 
-Unfortunley the phenomenal visual interface that [Sensible Cocoa](http://sensiblecocoa.com/) developed that worked in Interface Builder was [kiboshed by Apple with Xcode 8](http://sensiblecocoa.com/community/topic/2462-sad-news-for-stv-from-wwdc/). However all the code side of STV still works, and that's what's packaged here.
+Unfortunately the phenomenal visual interface that [Sensible Cocoa](http://sensiblecocoa.com/) developed that worked in Interface Builder was [kiboshed by Apple with Xcode 8](http://sensiblecocoa.com/community/topic/2462-sad-news-for-stv-from-wwdc/). However all the code side of STV still works, and that's what's packaged here.
 
 ## NOTE
-Version 7.0.0 targets iOS 16 and later. `SCImagePickerCell` is intentionally excluded until it can be redesigned around PhotosUI without deprecated APIs.
+Version 7.1.0 targets iOS 16 and later. `SCImagePickerCell` is intentionally excluded until it can be redesigned around PhotosUI without deprecated APIs.
 
-### Unreleased: Objective-C API modernization
+### 7.1.0: Objective-C API modernization
 
 - Properties use automatic synthesis by default, with underscored backing ivars.
   Six explicit syntheses remain for custom-accessor storage or runtime property
@@ -40,7 +40,8 @@ Version 7.0.0 targets iOS 16 and later. `SCImagePickerCell` is intentionally exc
 
 Rebuild consumers after migrating direct ivar access, popover types, and Swift
 optionals. Public property selectors remain available; private ivar layout is
-not an ABI compatibility guarantee. Release version metadata is unchanged.
+not an ABI compatibility guarantee. Version 7.1.0 includes source and behavior
+changes; review these migration notes before upgrading.
 
 Verify all standalone headers, required Clang misuse diagnostics, and a real
 Swift imported-API consumer against both SDKs:
@@ -54,9 +55,9 @@ Actual presentation and search-editing regressions use an app-hosted test runner
 separate from SwiftPM's hostless unit suite. See
 [Popover/presentation verification](Scripts/PopoverVerification/README.md).
 
-### Unreleased: constraint-based layout
+### 7.1.0: constraint-based layout
 
-This working tree uses Auto Layout and UIKit self-sizing throughout STV-owned
+Version 7.1.0 uses Auto Layout and UIKit self-sizing throughout STV-owned
 cell content and supporting views. Models default to automatic sizing. Generated
 controls fit their cell's `contentView`, not a screen or table-frame width.
 XIB/storyboard cells must provide complete constraints; their canvas heights are
@@ -110,7 +111,6 @@ explicit native-container exception is the keyboard accessory root's
 intrinsic height. The toolbar's content still uses constraints exclusively.
 The guard complements, rather than replaces, runtime fitting, editing,
 resizing, and presentation tests.
-Published version metadata remains unchanged until a release is requested.
 
 ### Real UIKit rendering fixture
 
@@ -141,7 +141,10 @@ xcrun simctl io <SIMULATOR-UDID> screenshot /tmp/STV-layout.png
 ```
 
 ## LICENSE
-**SensibleTableView** is now licensed under the MIT License. See [STV.txt](https://github.com/daveguerin/STV/tree/master/License/STV.txt) and [STV.plist](https://github.com/daveguerin/STV/tree/master/License/STV.plist) in the [License](https://github.com/daveguerin/STV/tree/master/License/) folder.
+**SensibleTableView** is licensed under the MIT License. See [STV.txt](License/STV.txt)
+and [STV.plist](License/STV.plist) in the [License](License/) folder.
+
+Copyright © 2019-2026 dgApps. All rights reserved.
 
 ## REQUIREMENTS
 * Xcode 15 and later.
@@ -152,7 +155,7 @@ Add STV to an Xcode project as simply as:
 
 * `File > Add Package Dependencies...`
 * Use the URL: [https://github.com/daveguerin/STV/](https://github.com/daveguerin/STV/)
-* Set the version to 'Up to next major'.
+* Select 'Up to Next Major Version' with a minimum version of `7.1.0`.
 * Choose the target where you want to use it.
 * Add an `@import STV;` in your code.
 * Marvel and enjoy! 
@@ -169,7 +172,11 @@ Add STV to an Xcode project as simply as:
 
 6.x Docset Feed: [https://daveguerin.github.io/STVDocumentation/docsets/STV.xml](https://daveguerin.github.io/STVDocumentation/docsets/STV.xml)  
 
-7.x Documentation is comimg soon!
+7.1.0 API documentation is maintained as DocC-compatible comments in the
+[public headers](Sources/). The older 5.x and 6.x references above are historical
+and do not describe the 7.x API removals or 7.1.0 migrations. A generated 7.x
+documentation archive and build script are not currently shipped in this
+repository.
 
 The Docset Feeds are for [Dash](https://kapeli.com/dash) and other documentation browsers.
 
@@ -179,4 +186,4 @@ Please report any issues and bugs with this Swift Package of STV via [https://gi
 [Pull requests](https://github.com/daveguerin/STV/pulls) are very much appreciated!
 
 ## CHANGELOG
-CHANGELOG: [https://github.com/daveguerin/STV/tree/master/CHANGELOG.md](https://github.com/daveguerin/STV/tree/master/CHANGELOG.md)
+See [CHANGELOG.md](CHANGELOG.md) for release history.

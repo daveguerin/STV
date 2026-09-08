@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - SCDetailViewControllerOptions
 /// This class is used to specify options for automatically generated detail view controllers.
 ///
-/// Use this class to specify options such has how the automatically generated detail views are presented, their navigation bar type, their title, and/or their table view style.
+/// Use this class to specify options such as how the automatically generated detail views are presented, their navigation bar type, their title, and/or their table view style.
 ///
 /// Sample use:
 /// ```objective-c
@@ -28,27 +28,49 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SCDetailViewControllerOptions : NSObject
 
-/// This value controls how the detail view controller is presented. Default: SCPresentationModeAuto.
+/// The requested detail presentation mode; initially `SCPresentationModeAuto`.
+/// Auto normally uses an active host or pushes when navigation is available,
+/// otherwise presents modally. In the current array-section new-item path, the
+/// presentation mode comes from the section's ordinary
+/// `detailViewControllerOptions`, not `newItemDetailViewControllerOptions`, and
+/// Auto resolves to Modal.
 @property (nonatomic, readwrite) SCPresentationMode presentationMode;
 
-/// The modal presentation style of the detail view. Default: UIModalPresentationFormSheet.
-/// - Note: Only applicable if presentationMode equals SCPresentationModeModal.
+/// The detail controller's requested modal style; initially
+/// `UIModalPresentationFormSheet`.
+/// The generated modal navigation wrapper copies this style, including when
+/// Auto or an unavailable Push resolves to Modal. Popover mode overrides the
+/// wrapper style with `UIModalPresentationPopover`.
 @property (nonatomic, readwrite) UIModalPresentationStyle modalPresentationStyle;
 
-/// The navigation bar type of the detail view controller. Default: SCNavigationBarTypeAuto. Set to SCNavigationBarTypeNone to have simple back button navigation.
+/// The requested STV detail navigation buttons; initially
+/// `SCNavigationBarTypeAuto`.
+/// Auto lets the presenting cell/section choose. None adds no STV buttons:
+/// UIKit Back is available only when pushed, not at a modal/popover root. A
+/// custom STV controller with an explicit non-Auto bar type keeps that choice.
 @property (nonatomic, readwrite) SCNavigationBarType navigationBarType;
 
-/// Set to TRUE to allow the cancel button to appear when entering editing mode in the detail view controller. Default: TRUE.
-/// - Note: Only applicable if navigationBarType == SCNavigationBarTypeEditRight.
+/// Whether an EditRight detail controller may show editing-mode Cancel.
+/// Initially `YES`. The controller also suppresses this item when its first
+/// section is an array-of-items section; the option has no effect on other bar
+/// types.
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
-/// The title of the detail view controller. Set to nil to have the presenting control set a title automatically. Default: nil.
+/// A copied title override for the detail controller; initially nil.
+/// With nil, the presenting cell/section supplies its normal title behavior.
+/// Cell-generated details normally use the row text; section-generated details
+/// may preserve an existing custom controller title.
 @property (nonatomic, copy, nullable) NSString *title;
 
-/// The style of the detail view controller's table view. Default: Depends on the control presenting the view controller.
+/// The table style used when STV creates a detail table controller.
+/// Initially `UITableViewStyleGrouped`. Individual presenting controls may
+/// customize their options. This does not rebuild the table of a custom or
+/// already-created controller.
 @property (nonatomic, readwrite) UITableViewStyle tableViewStyle;
 
-/// Indicates whether the bar at the bottom of the screen is hidden when the detail view controller is pushed. Default: TRUE.
+/// Whether the generated detail hides the bottom bar when pushed.
+/// Initially `YES`; copied to the detail controller's UIKit property. It does
+/// not control modal or popover navigation bars.
 @property (nonatomic, readwrite) BOOL hidesBottomBarWhenPushed;
 
 @end

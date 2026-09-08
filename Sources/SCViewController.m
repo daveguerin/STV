@@ -590,7 +590,6 @@
 
     if (_hasFocus) {
         /*
-        hermes:
         Explicitly configured detail models end their editing focus without
         dismissing their host controller. Container topology is irrelevant.
         */
