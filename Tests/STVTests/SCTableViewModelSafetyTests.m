@@ -10,8 +10,7 @@
 
 @implementation SCTableViewModelSafetyTests
 
-- (void)testChangingActiveCellInvokesDeselectCallbackOnPreviousCell
-{
+- (void)testChangingActiveCellInvokesDeselectCallbackOnPreviousCell {
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0) style:UITableViewStylePlain];
     SCTableViewModel *model = [SCTableViewModel modelWithTableView:tableView];
     SCTableViewSection *section = [SCTableViewSection sectionWithHeaderTitle:nil];
@@ -32,8 +31,7 @@
     XCTAssertEqual(callbackCell, firstCell);
 }
 
-- (void)testCellCloneUsesAnInstanceScopedClassMapping
-{
+- (void)testCellCloneUsesAnInstanceScopedClassMapping {
     UITableViewCell *sourceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     sourceCell.textLabel.text = @"Source";
     NSString *sourceClassName = NSStringFromClass(sourceCell.class);
