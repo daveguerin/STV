@@ -2,7 +2,7 @@
  *  SCGlobals.m
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
  *
  *
  */
@@ -310,7 +310,6 @@
     }
 
     else if ([nibNameComponents count] == 3) {
-        // dgApps
         // It's a SwiftPM PackageName_TargetName_NIBName
         NSString *package = [nibNameComponents objectAtIndex:0];
         NSString *target = [nibNameComponents objectAtIndex:1];
@@ -464,7 +463,7 @@
         if (propertyName.length > 0) {
             // substringToIndex:1 will crash if length is 0
             if (![[propertyName substringToIndex:1] isEqualToString:@"~"]) {
-                // It's not a ~custom propertyName dgapps
+                // It's not a ~custom propertyName
                 SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, object);
             }
         }
@@ -499,7 +498,7 @@
             if (propertyName.length > 0) {
                 // substringToIndex:1 will crash if length is 0
                 if (![[propertyName substringToIndex:1] isEqualToString:@"~"]) {
-                    // It's not a ~custom propertyName dgapps
+                    // It's not a ~custom propertyName
                     SCDebugLog(@"Warning: Property '%@' does not exist in object '%@'.", propertyName, NSStringFromClass([object class]));
                 }
             }

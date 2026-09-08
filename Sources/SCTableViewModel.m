@@ -2,8 +2,8 @@
  *  SCTableViewModel.m
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright © 2019 dgApps. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2019-2026 dgApps. All rights reserved.
  *
  */
 
@@ -302,20 +302,6 @@
 
 - (BOOL)live {
     BOOL live;
-    /*
-     The if was previously
-
-     ([self.tableView.visibleCells count] && !_loading && !(self.tableView.dragging || self.tableView.decelerating))
-
-     but [self.tableView.visibleCells count]  was causing an assert on iOS 13:
-
-     "Attempted to access the table view's visibleCells while they were in the
-     process of being updated, which is not allowed."
-
-     dgApps
-     */
-
-
     if (!_loading && !(self.tableView.dragging || self.tableView.decelerating)) {
         live = TRUE;
     }
@@ -994,26 +980,6 @@
     }
 
     SCTableViewCell *cell = nil;
-
-    if (self.live) {
-        /*
-         In iOS 13 calling cellForRowAtIndexPath: here was causing an Assert:
-
-         "Attempted to call -cellForRowAtIndexPath: on the table view while it
-         was in the process of updating its visible cells, which is not
-         allowed."
-
-         The live method previously was checking if there were any cells by
-         using visbleCells which is also not allowed if the cells were being
-         updated, so the error has now moved here.
-
-         Not calling cellForRowAtIndexPath: will obviously be less efficient,
-         but it all works without any asserts!
-
-         dgApps
-         */
-        //cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    }
 
     if (!cell) {
         BOOL needsOptimization = FALSE;
@@ -1772,7 +1738,6 @@
 }
 
 
-// dgApps...
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *leadingSwipeActions = nil;
 
@@ -1800,8 +1765,8 @@
         swipeActionsConfiguration.performsFirstActionWithFullSwipe = cell.leadingSwipePerformsFirstActionWithFullSwipe;
         return swipeActionsConfiguration;
     }
-
     // else
+
     return nil;
 }
 
@@ -1833,12 +1798,11 @@
         swipeActionsConfiguration.performsFirstActionWithFullSwipe = cell.trailingSwipePerformsFirstActionWithFullSwipe;
         return swipeActionsConfiguration;
     }
-
     // else
+
     return nil;
 }
 
-// ...dgApps
 
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -2069,18 +2033,6 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-     In iOS 13 calling cellForRowAtIndexPath: here was causing an Assert:
-
-     "Attempted to call -cellForRowAtIndexPath: on the table view while it was
-     in the process of updating its visible cells, which is not allowed."
-
-     This is a bit of a kludge, but we're just going to return the default here,
-     which is YES.
-
-     dgApps
-     */
-    //    return [tableView cellForRowAtIndexPath:indexPath].shouldIndentWhileEditing;
     return YES;
 }
 
@@ -2483,13 +2435,13 @@
                 _loadingContents = TRUE;
 
                 [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions success:^(NSArray *results) {
-                    self->_loadingContents = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_loadingContents = FALSE; 
 
-                    self->_items = [NSMutableArray arrayWithArray:results]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    self->sectionsInSync = FALSE;                           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_items = [NSMutableArray arrayWithArray:results]; 
+                    self->sectionsInSync = FALSE;                           
                     [self.tableView reloadData];
                 } failure:^(NSError *error) {
-                    self->_loadingContents = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_loadingContents = FALSE; 
                 } noConnection:^BOOL() { return NO; }];
                 break;
         }
@@ -2933,7 +2885,7 @@
 
         case SCStoreModeAsynchronous:
             [self.dataStore asynchronousInsertObject:newItem success:^() {
-                [self->_items addObject:newItem]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                [self->_items addObject:newItem]; 
                 [self addNewItemToRespectiveSection:newItem];
             } failure:^(NSError *error) {} noConnection:^BOOL() { return NO; }];
             break;
@@ -3525,12 +3477,12 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cell.textLabel.textColor = [UIColor linkColor]; // dgApps
+        cell.textLabel.textColor = [UIColor linkColor]; 
     }
 
     else {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        cell.textLabel.textColor = [UIColor labelColor]; 
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -3573,7 +3525,7 @@
         }
 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        selectedCell.textLabel.textColor = [UIColor labelColor]; 
         [self valueChangedForSectionAtIndex:indexPath.section];
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
         return;
@@ -3595,7 +3547,7 @@
         [self.selectedItemsIndexes removeAllObjects];
         UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
         oldCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        selectedCell.textLabel.textColor = [UIColor labelColor]; 
     }
 
     //check selected cell
@@ -3610,7 +3562,7 @@
 
     selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
+    selectedCell.textLabel.textColor = [UIColor linkColor]; 
 
     [self valueChangedForSectionAtIndex:indexPath.section];
 
@@ -3858,12 +3810,12 @@
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-        cell.textLabel.textColor = [UIColor linkColor]; // dgApps
+        cell.textLabel.textColor = [UIColor linkColor]; 
     }
 
     else {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        cell.textLabel.textColor = [UIColor labelColor]; 
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -3908,7 +3860,7 @@
         [self selectedItemsIndexesModified];
 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        selectedCell.textLabel.textColor = [UIColor labelColor]; 
         [self valueChangedForSectionAtIndex:indexPath.section];
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 
@@ -3931,7 +3883,7 @@
         [self.selectedItemsIndexes removeAllObjects];
         UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
         oldCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
+        selectedCell.textLabel.textColor = [UIColor labelColor]; 
     }
 
     //check selected cell
@@ -3940,7 +3892,7 @@
 
     selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
+    selectedCell.textLabel.textColor = [UIColor linkColor]; 
 
     [self valueChangedForSectionAtIndex:indexPath.section];
 

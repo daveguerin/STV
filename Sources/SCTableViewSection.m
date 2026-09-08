@@ -2,8 +2,8 @@
  *  SCTableViewSection.m
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright 2019 dgApps. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2019-2026 dgApps. All rights reserved.
  *
  */
 
@@ -1371,10 +1371,10 @@
 
             _isFetchingItems = TRUE;
             [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions success:^(NSArray *results) {
-                self->_isFetchingItems = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                self->_isFetchingItems = FALSE; 
                 [self didFetchItems:results sender:sender];
             } failure:^(NSError *error) {
-                self->_isFetchingItems = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                self->_isFetchingItems = FALSE; 
                 [self.fetchItemsCell stopActivityIndicator];
 
                 if (self.sectionActions.fetchItemsFromStoreFailed) {
@@ -3346,8 +3346,8 @@
         _maximumSelections = 0;
         _autoDismissViewController = FALSE;
         _selectedItemsIndexes = [[NSMutableSet alloc] init];
-        _selectedCellTextColor = [UIColor linkColor];    // dgApps
-        _deselectedCellTextColor = [UIColor labelColor]; // dgApps
+        _selectedCellTextColor = [UIColor linkColor];    
+        _deselectedCellTextColor = [UIColor labelColor]; 
     }
 
     return self;
@@ -3494,7 +3494,7 @@
 - (void)configureCellForDisplay:(SCTableViewCell *)cell atIndex:(NSUInteger)index {
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:index]]) {
 
-        if (self.selectedCellAccessoryView) { // dgApps
+        if (self.selectedCellAccessoryView) { 
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.accessoryView = self.selectedCellAccessoryView;
         }
@@ -3507,7 +3507,7 @@
     }
 
     else {
-        cell.accessoryView = nil; //dgApps
+        cell.accessoryView = nil;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.textColor = self.deselectedCellTextColor;
     }
@@ -3621,7 +3621,7 @@
         }
 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.accessoryView = nil; //dgApps
+        selectedCell.accessoryView = nil;
         selectedCell.textLabel.textColor = self.deselectedCellTextColor;
         [self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
@@ -3645,7 +3645,7 @@
         NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:oldRowIndex inSection:indexPath.section];
         [self.selectedItemsIndexes removeAllObjects];
         UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
-        oldCell.accessoryView = nil; //dgApps
+        oldCell.accessoryView = nil;
         oldCell.accessoryType = UITableViewCellAccessoryNone;
         oldCell.textLabel.textColor = self.deselectedCellTextColor;
     }
@@ -3663,7 +3663,7 @@
         }
     }
 
-    if (self.selectedCellAccessoryView) { // dgApps
+    if (self.selectedCellAccessoryView) { 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
         selectedCell.accessoryView = self.selectedCellAccessoryView;
     }
@@ -3767,8 +3767,8 @@
         _maximumSelections = 0;
         _autoDismissViewController = FALSE;
         _selectedItemsIndexes = [[NSMutableSet alloc] init];
-        _selectedCellTextColor = [UIColor linkColor];    // dgApps
-        _deselectedCellTextColor = [UIColor labelColor]; // dgApps
+        _selectedCellTextColor = [UIColor linkColor];    
+        _deselectedCellTextColor = [UIColor labelColor]; 
 
         _intermediateEntityDefinition = nil;
     }
@@ -3921,7 +3921,7 @@
 
 - (void)configureCellForDisplay:(SCTableViewCell *)cell atIndex:(NSUInteger)index {
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:index]]) {
-        if (self.selectedCellAccessoryView) { // dgApps
+        if (self.selectedCellAccessoryView) { 
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.accessoryView = self.selectedCellAccessoryView;
         }
@@ -3934,7 +3934,7 @@
     }
 
     else {
-        cell.accessoryView = nil; // dgApps
+        cell.accessoryView = nil; 
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.textColor = self.deselectedCellTextColor;
     }
@@ -4029,7 +4029,7 @@
         [self selectedItemsIndexesModified];
 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
-        selectedCell.accessoryView = nil; // dgApps
+        selectedCell.accessoryView = nil; 
         selectedCell.textLabel.textColor = self.deselectedCellTextColor;
         [self.ownerTableViewModel valueChangedForSectionAtIndex:indexPath.section];
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
@@ -4055,7 +4055,7 @@
         [self.selectedItemsIndexes removeAllObjects];
         UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:oldIndexPath];
         oldCell.accessoryType = UITableViewCellAccessoryNone;
-        oldCell.accessoryView = nil; // dgApps
+        oldCell.accessoryView = nil; 
         oldCell.textLabel.textColor = self.deselectedCellTextColor;
     }
 
@@ -4063,7 +4063,7 @@
     [self.selectedItemsIndexes addObject:itemIndex];
     [self selectedItemsIndexesModified];
 
-    if (self.selectedCellAccessoryView) { // dgApps
+    if (self.selectedCellAccessoryView) { 
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
         selectedCell.accessoryView = self.selectedCellAccessoryView;
     }

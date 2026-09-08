@@ -2,7 +2,7 @@
  *  SCTableViewModel.h
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
  *
  *
  */
@@ -307,14 +307,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 	The UITableView bound to `SCTableViewModel`.
 @property (nonatomic, nullable, weak) UITableView *tableView;
 
-// dgApps remarked out the deprecated property
-// /**
-// The UITableView bound to 'SCTableViewModel'.
-//
-// Warning: This property has been deprecated. Use tableView instead.
-// */
-//@property (nonatomic, weak) UITableView *modeledTableView;
-
 /// 	The UIViewController of tableView.
 @property (nonatomic, nullable, readonly) UIViewController *viewController;
 
@@ -328,15 +320,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter editing: Whether the table is in editing mode.
 /// - Parameter animate: The animate.
 - (void)setTableViewEditing:(BOOL)editing animated:(BOOL)animate;
-
-// dgApps remarked out the deprecated method
-// /**
-// Sets the editing mode for tableView.
-//
-// Warning: This method has been deprecated. Use setTableViewEditing:animated: instead.
-// */
-//- (void)setModeledTableViewEditing:(BOOL)editing animated:(BOOL)animate;
-
 
 /// Returns the detail view controller that would normally be generated for the given cell.
 ///

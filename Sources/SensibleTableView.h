@@ -2,7 +2,7 @@
  *  SensibleTableView.h
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
  *  Copyright 2019-2026 dgApps. All rights reserved.
  *
  *

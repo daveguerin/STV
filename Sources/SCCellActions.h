@@ -2,8 +2,8 @@
  *  SCCellActions.h
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
- *  Copyright © 2019 dgApps. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2019-2026 dgApps. All rights reserved.
  *
  *
  */
@@ -26,9 +26,9 @@ typedef UITableViewCellEditingStyle (^SCCellCustomEditingStyleAction_Block)(SCTa
 /// The array is untyped to avoid exposing a deprecated UIKit class in its type.
 typedef NSArray *_Nullable (^SCCellEditActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies the leading swipe actions for a table-view cell.
-typedef NSArray<UIContextualAction *> *_Nullable (^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath); // dgApps
+typedef NSArray<UIContextualAction *> *_Nullable (^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies the trailing swipe actions for a table-view cell.
-typedef NSArray<UIContextualAction *> *_Nullable (^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath); // dgApps
+typedef NSArray<UIContextualAction *> *_Nullable (^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that calculates a value for a table-view cell, or nil for no value.
 typedef NSObject *_Nullable (^SCCellCalculatedValueAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that transforms a value loaded from a table-view cell's binding.

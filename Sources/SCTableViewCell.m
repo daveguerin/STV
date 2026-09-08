@@ -2,7 +2,7 @@
  *  SCTableViewCell.m
  *  Sensible TableView
  *
- *  Copyright 2011-2015 Sensible Cocoa. All rights reserved.
+ *  Copyright © 2011-2015 Sensible Cocoa. All rights reserved.
  *  Copyright 2019-2020 dgApps. All rights reserved.
  *
  */
@@ -121,9 +121,9 @@
         }
 
         /*
-        Scope the source-to-STV class substitution to this decoder instance so
-        unrelated process-wide unarchiving can never observe it.
-        */
+         Scope the source-to-STV class substitution to this decoder instance so
+         unrelated process-wide unarchiving can never observe it.
+         */
         [unarchiver setClass:self forClassName:sourceClassName];
         STVCell = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
         [unarchiver finishDecoding];
@@ -157,9 +157,9 @@
     }
 
     /*
-    STV 7 models choose the inherited policy; keeping this on the cell allows
-    fixed and legacy exceptions without subclass tests in the model.
-    */
+     STV 7 models choose the inherited policy; keeping this on the cell allows
+     fixed and legacy exceptions without subclass tests in the model.
+     */
     _sizingMode = SCTableViewCellSizingModeInherit;
     _estimatedHeight = 44.0;
     _selectable = TRUE;
@@ -213,13 +213,13 @@
         [self performInitialization];
         self.sc_nativeStyle = style;
         /*
-        hermes:
-        Keep spare row width in the text/control gap, not in the image. Native
-        fixed-width controls must not stretch an icon and thereby grow the row.
-        Image constraints use UIImageView's intrinsic alignment size, including
-        SF Symbol insets, rather than a bitmap ratio or a fixed maximum size.
-        Set the default here so callers can still choose another priority.
-        */
+         hermes:
+         Keep spare row width in the text/control gap, not in the image. Native
+         fixed-width controls must not stretch an icon and thereby grow the row.
+         Image constraints use UIImageView's intrinsic alignment size, including
+         SF Symbol insets, rather than a bitmap ratio or a fixed maximum size.
+         Set the default here so callers can still choose another priority.
+         */
         [self.imageView setContentHuggingPriority:751 forAxis:UILayoutConstraintAxisHorizontal];
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         self.textLabel.adjustsFontForContentSizeCategory = YES;
@@ -465,10 +465,10 @@
     [NSLayoutConstraint deactivateConstraints:self.sc_authoredContentBadgeConstraints];
     self.sc_authoredContentBadgeVisible = visible;
     /*
-    hermes:
-    STV creates this badge after decoding; only the caller's authored views
-    retain Interface Builder layout ownership.
-    */
+     hermes:
+     STV creates this badge after decoding; only the caller's authored views
+     retain Interface Builder layout ownership.
+     */
     SCBadgeView *badge = self.badgeView;
     badge.translatesAutoresizingMaskIntoConstraints = NO;
     UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
@@ -674,23 +674,8 @@
         return;
     }
 
-    /*
-     In iOS 14, if the color was nil, then the backgroundColor was being set to
-     black, not what was required, so we set the label backgrounds to clear to
-     make sure they will be correct for the cell backgroundColor. dgApps
-     */
-
-    //	if(self.selectionStyle==UITableViewCellSelectionStyleNone && !self.backgroundView)
-    //	{
-    //		// This is much more optimized than [UIColor clearColor]
-    //		self.textLabel.backgroundColor = color;
-    //		self.detailTextLabel.backgroundColor = color;
-    //	}
-    //	else
-    //	{
     self.textLabel.backgroundColor = [UIColor clearColor];
     self.detailTextLabel.backgroundColor = [UIColor clearColor];
-    //	}
 }
 
 //overrides superclass
@@ -863,10 +848,10 @@
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     [self.ownerTableViewModel valueChangedForRowAtIndexPath:indexPath];
     /*
-    Run app callbacks first so any bound summary text is current, then
-    invalidate automatic height even though the detail model has already been
-    cleared.
-    */
+     Run app callbacks first so any bound summary text is current, then
+     invalidate automatic height even though the detail model has already been
+     cleared.
+     */
     if (self.height == UITableViewAutomaticDimension) {
         [self.ownerTableViewModel invalidateHeightForCell:self animated:NO];
     }
@@ -1497,9 +1482,9 @@
         if ([cell isKindOfClass:[SCCustomCell class]]) {
             cell.reuseId = nibName;
             /*
-            A nib's canvas height is an estimate in STV 7; its constraints, not
-            the design-time frame, determine the runtime row height.
-            */
+             A nib's canvas height is an estimate in STV 7; its constraints, not
+             the design-time frame, determine the runtime row height.
+             */
             cell.estimatedHeight = MAX(cell.frame.size.height, 1.0);
             cell.sizingMode = SCTableViewCellSizingModeAutomatic;
         }
@@ -2463,7 +2448,7 @@
     _controlMargin = kDefaultControlMargin;
 
     if (!self.controlCreatedInIB) {
-        self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
+        self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
 }
 
@@ -2472,9 +2457,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     /*
-    Interface Builder control cells in STV 7 use their contentView constraints
-    instead of treating the design-time frame as a fixed runtime height.
-    */
+     Interface Builder control cells in STV 7 use their contentView constraints
+     instead of treating the design-time frame as a fixed runtime height.
+     */
     self.sizingMode = SCTableViewCellSizingModeAutomatic;
 
     if (self.control) {
@@ -2574,11 +2559,11 @@
     [constraints addObject:[control.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
     [constraints addObject:[control.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
     /*
-    hermes:
-    Native controls include their own internal vertical padding. A compact
-    inset lets switches, sliders and segments share the standard row minimum
-    without compressing their intrinsic height. Labels retain the text inset.
-    */
+     hermes:
+     Native controls include their own internal vertical padding. A compact
+     inset lets switches, sliders and segments share the standard row minimum
+     without compressing their intrinsic height. Labels retain the text inset.
+     */
     CGFloat controlInset = [control isKindOfClass:[UIControl class]] ? 4 : 8;
     NSLayoutConstraint *top = [control.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:controlInset];
     NSLayoutConstraint *bottom = [control.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-controlInset];
@@ -2702,13 +2687,8 @@
 
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
-    label.textColor = [UIColor secondaryLabelColor];                        //dgApps
-    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
-    /*
-     If self.backgroundColor was null then iOS 14 was causing
-     label.backgroundColor to display as black. Making the defaut clearColor
-     here makes the label disply as expected. dgApps
-     */
+    label.textColor = [UIColor secondaryLabelColor];
+    label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     label.backgroundColor = [UIColor clearColor];
     label.adjustsFontForContentSizeCategory = YES;
     self.control = label;
@@ -2796,11 +2776,11 @@
 
 
 /*
-hermes:
-A scrolling editor exposes UIKit's already-calculated content size as its
-intrinsic height. Constraints cap the viewport without measuring text,
-rejecting input, or replacing the user's selection. UIKit owns text layout.
-*/
+ hermes:
+ A scrolling editor exposes UIKit's already-calculated content size as its
+ intrinsic height. Constraints cap the viewport without measuring text,
+ rejecting input, or replacing the user's selection. UIKit owns text layout.
+ */
 @interface SCIntrinsicTextView : UITextView
 @property (nonatomic) CGFloat sc_previousWidth;
 @end
@@ -2858,8 +2838,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     textView.scrollEnabled = YES;
     [textView setContentCompressionResistancePriority:249 forAxis:UILayoutConstraintAxisVertical];
     [textView setContentHuggingPriority:249 forAxis:UILayoutConstraintAxisVertical];
-    textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
-    textView.textColor = [UIColor secondaryLabelColor];                     // dgApps
+    textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    textView.textColor = [UIColor secondaryLabelColor];
     self.control = textView;
 }
 
@@ -3120,8 +3100,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     UITextField *textField = [[UITextField alloc] init];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.textColor = [UIColor secondaryLabelColor];                     //dgApps
-    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
+    textField.textColor = [UIColor secondaryLabelColor];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     self.control = textField;
 }
@@ -3949,10 +3929,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     if (previousRowConstraints != self.sc_labelConstraints) {
         /*
-        hermes:
-        The expanded row must follow the current control/title topology after
-        the base installer rebuilds it, rather than retaining stale anchors.
-        */
+         hermes:
+         The expanded row must follow the current control/title topology after
+         the base installer rebuilds it, rather than retaining stale anchors.
+         */
         [NSLayoutConstraint deactivateConstraints:self.sc_pickerConstraints];
         self.sc_pickerConstraints = nil;
     }
@@ -4113,7 +4093,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 @interface SCSelectionCell () {
-  @protected
+@protected
     NSArray *_items;
     BOOL itemsInSync;
     BOOL _loadingContents;
@@ -4242,7 +4222,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
                 _loadingContents = TRUE;
                 self.selectable = FALSE;
                 if (!_activityIndicator) {
-                    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
+                    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
                     _activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.contentView addSubview:_activityIndicator];
                     [NSLayoutConstraint activateConstraints:@[[_activityIndicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor], [_activityIndicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
@@ -4250,22 +4230,22 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
                 [_activityIndicator startAnimating];
                 [self.selectionItemsStore asynchronousFetchObjectsWithOptions:self.selectionItemsFetchOptions success:^(NSArray *results) {
-                    self->_items = results; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_items = results;
 
                     if (!skipBuildingFromBoundValue) {
                         [self buildSelectedItemsIndexesFromBoundValue];
                     }
 
-                    self->_boundValueLoaded = NO; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_boundValueLoaded = NO;
                     [self loadBoundValueIntoControl];
 
-                    self->_loadingContents = FALSE;           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    [self->_activityIndicator stopAnimating]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_loadingContents = FALSE;           
+                    [self->_activityIndicator stopAnimating]; 
                     self.selectable = TRUE;
                 } failure:^(NSError *error) {
-                    self->_loadingContents = FALSE;           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    [self->_activityIndicator stopAnimating]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    self->itemsInSync = FALSE;                // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_loadingContents = FALSE;           
+                    [self->_activityIndicator stopAnimating]; 
+                    self->itemsInSync = FALSE;                
                     self.selectable = TRUE;
                 } noConnection:^BOOL() { return NO; }];
                 itemsInSync = TRUE;
@@ -4799,33 +4779,33 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             // TODO - Future implementation
 
             /*
-            NSEntityDescription *boundObjEntity = [(NSManagedObject *)self.boundObject entity];
-            NSEntityDescription *intermediateEntity = self.intermediateEntityClassDefinition.entity;
-            NSEntityDescription *itemsEntity = self.itemsClassDefinition.entity;
-            
-            // Determine the boundObjEntity relationship name that connects to intermediateEntity
-            NSString *intermediatesRel = nil;
-            NSArray *relationships = [boundObjEntity relationshipsWithDestinationEntity:intermediateEntity];
-            if(relationships.count)
-                intermediatesRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
-            
-            // Determine the intermediateEntity relationship name that connects to itemsEntity
-            NSString *itemRel = nil;
-            relationships = [intermediateEntity relationshipsWithDestinationEntity:itemsEntity];
-            if(relationships.count)
-                itemRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
-            
-            if(intermediatesRel && itemRel)
-            {
-                NSMutableSet *intermediatesSet = [(NSManagedObject *)self.boundObject mutableSetValueForKey:intermediatesRel];
-                for(NSManagedObject *intermediateObj in intermediatesSet)
-                {
-                    NSManagedObject *itemObj = [intermediateObj valueForKey:itemRel];
-                    int index = [self.items indexOfObjectIdenticalTo:itemObj];
-                    if(index != NSNotFound)
-                        [self.selectedItemsIndexes addObject:[NSNumber numberWithInt:index]];
-                }
-            }
+             NSEntityDescription *boundObjEntity = [(NSManagedObject *)self.boundObject entity];
+             NSEntityDescription *intermediateEntity = self.intermediateEntityClassDefinition.entity;
+             NSEntityDescription *itemsEntity = self.itemsClassDefinition.entity;
+
+             // Determine the boundObjEntity relationship name that connects to intermediateEntity
+             NSString *intermediatesRel = nil;
+             NSArray *relationships = [boundObjEntity relationshipsWithDestinationEntity:intermediateEntity];
+             if(relationships.count)
+             intermediatesRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
+
+             // Determine the intermediateEntity relationship name that connects to itemsEntity
+             NSString *itemRel = nil;
+             relationships = [intermediateEntity relationshipsWithDestinationEntity:itemsEntity];
+             if(relationships.count)
+             itemRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
+
+             if(intermediatesRel && itemRel)
+             {
+             NSMutableSet *intermediatesSet = [(NSManagedObject *)self.boundObject mutableSetValueForKey:intermediatesRel];
+             for(NSManagedObject *intermediateObj in intermediatesSet)
+             {
+             NSManagedObject *itemObj = [intermediateObj valueForKey:itemRel];
+             int index = [self.items indexOfObjectIdenticalTo:itemObj];
+             if(index != NSNotFound)
+             [self.selectedItemsIndexes addObject:[NSNumber numberWithInt:index]];
+             }
+             }
              */
         }
     }
@@ -5019,47 +4999,47 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             // TODO - Future implementation
 #ifdef _COREDATADEFINES_H
             /*
-            NSEntityDescription *boundObjEntity = [(NSManagedObject *)self.boundObject entity];
-            NSEntityDescription *intermediateEntity = self.intermediateEntityDefinition.entity;
-            NSEntityDescription *itemsEntity = self.itemsClassDefinition.entity;
-            
-            // Determine the boundObjEntity relationship name that connects to intermediateEntity
-            NSString *intermediatesRel = nil;
-            NSArray *relationships = [boundObjEntity relationshipsWithDestinationEntity:intermediateEntity];
-            if(relationships.count)
-                intermediatesRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
-            
-            // Determine the intermediateEntity relationship name that connects to itemsEntity
-            NSString *itemRel = nil;
-            NSString *invItemRel = nil;
-            relationships = [intermediateEntity relationshipsWithDestinationEntity:itemsEntity];
-            if(relationships.count)
-            {
-                itemRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
-                invItemRel = [[(NSRelationshipDescription *)[relationships objectAtIndex:0] inverseRelationship] name];
-            }
-                
-            
-            if(intermediatesRel && itemRel && invItemRel)
-            {
-                NSMutableSet *intermediatesSet = [(NSManagedObject *)self.boundObject mutableSetValueForKey:intermediatesRel];
-                
-                // remove all intermediate objects
-                for(NSManagedObject *intermediateObj in intermediatesSet)
-                {
-                    [self.intermediateEntityClassDefinition.managedObjectContext deleteObject:intermediateObj];
-                }
-                
-                // add new intermediate objects
-                for(NSNumber *index in self.selectedItemsIndexes)
-                {
-                    NSManagedObject *itemObj = [self.items objectAtIndex:[index intValue]];
-                    
-                    NSManagedObject *intermediateObj = [NSEntityDescription insertNewObjectForEntityForName:[intermediateEntity name] inManagedObjectContext:self.intermediateEntityClassDefinition.managedObjectContext];
-                    [intermediatesSet addObject:intermediateObj];
-                    [[itemObj mutableSetValueForKey:invItemRel] addObject:intermediateObj];
-                }
-            }
+             NSEntityDescription *boundObjEntity = [(NSManagedObject *)self.boundObject entity];
+             NSEntityDescription *intermediateEntity = self.intermediateEntityDefinition.entity;
+             NSEntityDescription *itemsEntity = self.itemsClassDefinition.entity;
+
+             // Determine the boundObjEntity relationship name that connects to intermediateEntity
+             NSString *intermediatesRel = nil;
+             NSArray *relationships = [boundObjEntity relationshipsWithDestinationEntity:intermediateEntity];
+             if(relationships.count)
+             intermediatesRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
+
+             // Determine the intermediateEntity relationship name that connects to itemsEntity
+             NSString *itemRel = nil;
+             NSString *invItemRel = nil;
+             relationships = [intermediateEntity relationshipsWithDestinationEntity:itemsEntity];
+             if(relationships.count)
+             {
+             itemRel = [(NSRelationshipDescription *)[relationships objectAtIndex:0] name];
+             invItemRel = [[(NSRelationshipDescription *)[relationships objectAtIndex:0] inverseRelationship] name];
+             }
+
+
+             if(intermediatesRel && itemRel && invItemRel)
+             {
+             NSMutableSet *intermediatesSet = [(NSManagedObject *)self.boundObject mutableSetValueForKey:intermediatesRel];
+
+             // remove all intermediate objects
+             for(NSManagedObject *intermediateObj in intermediatesSet)
+             {
+             [self.intermediateEntityClassDefinition.managedObjectContext deleteObject:intermediateObj];
+             }
+
+             // add new intermediate objects
+             for(NSNumber *index in self.selectedItemsIndexes)
+             {
+             NSManagedObject *itemObj = [self.items objectAtIndex:[index intValue]];
+
+             NSManagedObject *intermediateObj = [NSEntityDescription insertNewObjectForEntityForName:[intermediateEntity name] inManagedObjectContext:self.intermediateEntityClassDefinition.managedObjectContext];
+             [intermediatesSet addObject:intermediateObj];
+             [[itemObj mutableSetValueForKey:invItemRel] addObject:intermediateObj];
+             }
+             }
              */
 #endif
         }
