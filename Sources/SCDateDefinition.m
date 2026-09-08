@@ -17,19 +17,16 @@
 @implementation SCDateDefinition
 
 
-
-+ (instancetype)definition
-{
++ (instancetype)definition {
     return [[[self class] alloc] init];
 }
 
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _datePropertyDefinition = [[SCPropertyDefinition alloc] initWithName:@"date"];
         _datePropertyDefinition.dataType = SCDataTypeNSDate;
         _datePropertyDefinition.type = SCPropertyTypeDate;
-        
+
         [propertyDefinitions addObject:_datePropertyDefinition];
     }
 
@@ -37,16 +34,13 @@
 }
 
 
-
 // overrides superclass
-- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName
-{
+- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName {
     return SCDataTypeNSDate;
 }
 
 // overrides superclass
-- (NSString *)titleValueForObject:(NSObject *)object
-{
+- (NSString *)titleValueForObject:(NSObject *)object {
     NSString *dateString;
     NSDateFormatter *dateFormatter = nil;
     if ([self.datePropertyDefinition.attributes isKindOfClass:[SCDateAttributes class]]) {
@@ -61,25 +55,22 @@
         dateString = [NSString stringWithFormat:@"%@", object];
     }
 
-    return dateString; 
+    return dateString;
 }
 
 // overrides superclass
-- (NSString *)descriptionValueForObject:(NSObject *)object
-{
+- (NSString *)descriptionValueForObject:(NSObject *)object {
     // Not applicable for NSDate objects
     return nil;
 }
 
 // overrides superclass
-- (NSString *)dataStructureName
-{
-	return [SCUtilities dataStructureNameForClass:[NSDate class]];
+- (NSString *)dataStructureName {
+    return [SCUtilities dataStructureNameForClass:[NSDate class]];
 }
 
 // overrides superclass
-- (SCDataStore *)generateCompatibleDataStore
-{
+- (SCDataStore *)generateCompatibleDataStore {
     return [SCArrayStore storeWithObjectsArray:nil defaultDefiniton:self];
 }
 

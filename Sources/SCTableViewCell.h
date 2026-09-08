@@ -292,7 +292,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 ///
 /// The method should be able to set the subclass' specific attributes to its corresponding SCPropertyAttributes subclass.
 /// - Parameter attributes: The property attributes to apply.
-- (void) setAttributesTo:(nullable SCPropertyAttributes *)attributes;
+- (void)setAttributesTo:(nullable SCPropertyAttributes *)attributes;
 
 /// Method should be overridden by subclasses to provide subclass specific validation of the cell's value.
 ///
@@ -379,12 +379,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
-
-
-
-
 #pragma mark - SCCustomCell
 /// This class functions as a base class for all user defined custom cells.
 ///
@@ -399,9 +393,8 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - UISwitch: NSNumber
 /// - UIImage: NSString
 
-@interface SCCustomCell : SCTableViewCell <UITextViewDelegate, UITextFieldDelegate>
-{
-@protected
+@interface SCCustomCell : SCTableViewCell <UITextViewDelegate, UITextFieldDelegate> {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     BOOL _pauseControlEvents;
     BOOL _autoResize;
@@ -547,21 +540,15 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
-
-
-
 #pragma mark - SCControlCell
 /// This class functions as a base class for all cells that require user controls to be
 /// present inside their content view.
- 
-@interface SCControlCell : SCCustomCell  
-{
-@protected
+
+@interface SCControlCell : SCCustomCell {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     BOOL _boundValueLoaded;
-    UIColor * _Nullable _initialControlColor;
+    UIColor *_Nullable _initialControlColor;
 }
 
 
@@ -611,16 +598,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
-
-
-
 #pragma mark - SCLabelCell
 /// This class functions as a cell with a UILabel control. The bound property of this cell can be of any type the decends from NSObject.
 
-@interface SCLabelCell : SCControlCell
-{
+@interface SCLabelCell : SCControlCell {
 }
 
 #pragma mark - Creation and Initialization
@@ -650,7 +631,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 - (void)loadBoundValueIntoLabel;
 
 @end
-
 
 
 #pragma mark - SCTextViewCell
@@ -690,13 +670,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
 #pragma mark - SCTextFieldCell
 /// This class functions as a cell with a UITextField control. The bound property of this cell must be of type NSString.
 
-@interface SCTextFieldCell : SCControlCell 
-{
+@interface SCTextFieldCell : SCControlCell {
 }
 
 #pragma mark - Creation and Initialization
@@ -724,8 +701,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 
 @end
-
-
 
 
 #pragma mark - SCNumericTextFieldCell
@@ -759,14 +734,10 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
-
 #pragma mark - SCSliderCell
 /// This class functions as a cell with a UISlider control. The bound property of this cell must be of type NSNumber, int, float, or double.
 
-@interface SCSliderCell : SCControlCell
-{
+@interface SCSliderCell : SCControlCell {
 }
 
 #pragma mark - Creation and Initialization
@@ -794,12 +765,9 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
-
 #pragma mark - SCSegmentedCell
 /// This class functions as a cell with a UISegmentedControl. The bound property of this cell must be of type NSNumber, int, or NSString.
-@interface SCSegmentedCell : SCControlCell
-{
+@interface SCSegmentedCell : SCControlCell {
 }
 
 #pragma mark - Creation and Initialization
@@ -833,11 +801,9 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @end
 
 
-
 #pragma mark - SCSwitchCell
 /// This class functions as a cell with a UISwitch control. The bound property of this cell must be of type NSNumber or BOOL.
-@interface SCSwitchCell : SCControlCell
-{
+@interface SCSwitchCell : SCControlCell {
 }
 
 #pragma mark - Creation and Initialization
@@ -863,9 +829,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 
 @end
-
-
-
 
 
 #pragma mark - SCDateCell
@@ -907,9 +870,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readwrite) BOOL displayDatePickerAsInputAccessoryView;
 
 @end
-
-
-
 
 
 #pragma mark - SCSelectionCell
@@ -1041,11 +1001,7 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readwrite) BOOL addNewItemCellExistsInEditingMode;
 
 
-
 @end
-
-
-
 
 
 #pragma mark - SCObjectSelectionCell
@@ -1093,7 +1049,8 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// - Parameter propertyName: The cell's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter items: An array of the objects that the user will choose from. All objects must be of an NSObject type and must be instances of the same class.
 /// - Parameter definition: The definition of the selection objects.
-- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItems:(nullable NSArray<id> *)items itemsDefintion:(SCDataDefinition *)definition;;
+- (instancetype)initWithText:(nullable NSString *)cellText boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItems:(nullable NSArray<id> *)items itemsDefintion:(SCDataDefinition *)definition;
+;
 
 #pragma mark - Configuration
 
@@ -1102,9 +1059,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 
 @end
-
-
-
 
 
 #pragma mark - SCObjectCell
@@ -1175,9 +1129,6 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 
 
 @end
-
-
-
 
 
 #pragma mark - SCArrayOfObjectsCell

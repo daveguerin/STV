@@ -23,104 +23,103 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Keys
 /// The legacy plug-in dictionary key for custom class name.
-#define kCustomClassName                @"_STV_CustomClassName"
+#define kCustomClassName @"_STV_CustomClassName"
 /// The legacy plug-in string representing a Boolean true value.
-#define kYesString                      @"Y"
+#define kYesString @"Y"
 /// The legacy plug-in string representing a Boolean false value.
-#define kNoString                       @"N"
+#define kNoString @"N"
 /// The legacy plug-in dictionary key for interface builder unique id.
-#define kibUniqueID                     @"ibUniqueID"
+#define kibUniqueID @"ibUniqueID"
 
 /// The legacy plug-in dictionary key for section index key.
-#define kSectionIndexKey                @"index"
+#define kSectionIndexKey @"index"
 /// The legacy plug-in dictionary key for section type key.
-#define kSectionTypeKey                 @"type"
+#define kSectionTypeKey @"type"
 /// The legacy plug-in dictionary key for section data def identifier key.
-#define kSectionDataDefIdKey            @"dataDefinitionID"
+#define kSectionDataDefIdKey @"dataDefinitionID"
 /// The legacy plug-in dictionary key for section data def group index key.
-#define kSectionDataDefGroupIndexKey    @"dataDefinitionGroupIndex"
+#define kSectionDataDefGroupIndexKey @"dataDefinitionGroupIndex"
 /// The legacy plug-in dictionary key for section predicate string key.
-#define kSectionPredicateStringKey      @"predicateString"
+#define kSectionPredicateStringKey @"predicateString"
 /// The legacy plug-in dictionary key for section placeholder text key.
-#define kSectionPlaceholderTextKey      @"placeholderText"
+#define kSectionPlaceholderTextKey @"placeholderText"
 /// The legacy plug-in dictionary key for section placeholder text alignment key.
-#define kSectionPlaceholderTextAlignmentKey      @"placeholderTextAlignment"
+#define kSectionPlaceholderTextAlignmentKey @"placeholderTextAlignment"
 /// The legacy plug-in dictionary key for section add new item text key.
-#define kSectionAddNewItemTextKey       @"addNewItemText"
+#define kSectionAddNewItemTextKey @"addNewItemText"
 /// The legacy plug-in dictionary key for section hide when empty key.
-#define kSectionHideWhenEmptyKey        @"hideWhenEmpty"
+#define kSectionHideWhenEmptyKey @"hideWhenEmpty"
 /// The legacy plug-in dictionary key for section allow adding key.
-#define kSectionAllowAddingKey          @"allowAdding"
+#define kSectionAllowAddingKey @"allowAdding"
 /// The legacy plug-in dictionary key for section allow deleting key.
-#define kSectionAllowDeletingKey        @"allowDeleting"
+#define kSectionAllowDeletingKey @"allowDeleting"
 /// The legacy plug-in dictionary key for section allow moving key.
-#define kSectionAllowMovingKey          @"allowMoving"
+#define kSectionAllowMovingKey @"allowMoving"
 /// The legacy plug-in dictionary key for section allow editing key.
-#define kSectionAllowEditingKey         @"allowEditing"
+#define kSectionAllowEditingKey @"allowEditing"
 /// The legacy plug-in dictionary key for section batch size key.
-#define kSectionBatchSizeKey            @"batchSize"
+#define kSectionBatchSizeKey @"batchSize"
 /// The legacy plug-in dictionary key for section strings array key.
-#define kSectionStringsArrayKey         @"stringsArray"
+#define kSectionStringsArrayKey @"stringsArray"
 /// The legacy plug-in dictionary key for the section's master bound property name.
-#define kSectionMasterBoundPropertyName     @"masterBoundPropertyName"
+#define kSectionMasterBoundPropertyName @"masterBoundPropertyName"
 /// The legacy plug-in dictionary key for the section's Interface Builder new-item view-controller identifier.
-#define kSectionibNewItemViewControllerIdentifier    @"ibNewItemViewControllerIdentifier"
+#define kSectionibNewItemViewControllerIdentifier @"ibNewItemViewControllerIdentifier"
 
 /// The legacy plug-in default for default data definition name.
-#define kDefaultDataDefinitionName      @"(none selected)"
+#define kDefaultDataDefinitionName @"(none selected)"
 /// The legacy plug-in dictionary key for property groups.
-#define kPropertyGroups                 @"propertyGroups"
+#define kPropertyGroups @"propertyGroups"
 /// The legacy plug-in dictionary key for property definitions.
-#define kPropertyDefinitions            @"propertyDefinitions"
-
+#define kPropertyDefinitions @"propertyDefinitions"
 
 
 // UI Related
 /// The legacy plug-in default for title label x margin.
-#define kTitleLabelXMargin      15
+#define kTitleLabelXMargin 15
 /// The legacy plug-in default for default title label width.
 #define kDefaultTitleLabelWidth 110
 /// The legacy plug-in default for default title label height.
-#define kDefaultTitleLabelHeight    22
+#define kDefaultTitleLabelHeight 22
 /// The legacy plug-in default for y margin.
-#define kYMargin                11
+#define kYMargin 11
 /// The legacy plug-in default for default control margin.
-#define kDefaultControlMargin   20
+#define kDefaultControlMargin 20
 /// The legacy plug-in default for text view margin.
-#define kTextViewMargin         7
+#define kTextViewMargin 7
 /// The legacy plug-in default for text view x margin.
-#define kTextViewXMargin        10
+#define kTextViewXMargin 10
 /// The legacy plug-in default for text view padding.
-#define kTextViewPadding        5
+#define kTextViewPadding 5
 /// The legacy plug-in default for text view title label height.
-#define kTextViewTitleLabelHeight   19
+#define kTextViewTitleLabelHeight 19
 /// The legacy plug-in default for default control height.
-#define kDefaultControlHeight   22
+#define kDefaultControlHeight 22
 /// The legacy plug-in default for default segmented height.
 #define kDefaultSegmentedHeight 29
 /// The legacy plug-in default for default slider height.
-#define kDefaultSliderHeight    31
+#define kDefaultSliderHeight 31
 /// The legacy plug-in default for default switch height.
-#define kDefaultSwitchHeight    31
+#define kDefaultSwitchHeight 31
 /// The legacy plug-in default for default switch width.
-#define kDefaultSwitchWidth     51
+#define kDefaultSwitchWidth 51
 
 /// The legacy plug-in default for default title label font size.
-#define kDefaultTitleLabelFontSize  16
+#define kDefaultTitleLabelFontSize 16
 /// The legacy plug-in default for default title label font description.
-#define kDefaultTitleLabelFontDescription      [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultTitleLabelFontSize]
+#define kDefaultTitleLabelFontDescription [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultTitleLabelFontSize]
 /// The legacy plug-in default for default control font size.
-#define kDefaultControlFontSize     15
+#define kDefaultControlFontSize 15
 /// The legacy plug-in default for default control font description.
-#define kDefaultControlFontDescription         [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultControlFontSize]
+#define kDefaultControlFontDescription [IBUIFontDescription fontDescriptionWithName:@"System" family:@"Helvetica Neue" andPointSize:kDefaultControlFontSize]
 
 /// 3 lines with default font.
-#define kMinTextViewHeight  65              // 3 lines with default font
+#define kMinTextViewHeight 65 // 3 lines with default font
 /// The legacy plug-in default for max text view height.
-#define kMaxTextViewHeight  500
+#define kMaxTextViewHeight 500
 
 /// just a number to stay above any user-defined tag values.
-#define kSTVTagStartRange       7777777         // just a number to stay above any user-defined tag values
+#define kSTVTagStartRange 7777777 // just a number to stay above any user-defined tag values
 
 
 /* This class is used internally to provide STV plugin-related utilities */

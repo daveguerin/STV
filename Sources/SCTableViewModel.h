@@ -38,9 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// SCTableViewSection. Each SCTableViewSection can contain several cells, each cell being of type
 /// SCTableViewCell.
 
-@interface SCTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, SCInputAccessoryViewDelegate>
-{
-@protected
+@interface SCTableViewModel : NSObject <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, SCInputAccessoryViewDelegate> {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     NSMutableArray<SCTableViewSection *> *sections;
 }
@@ -346,7 +345,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable UIViewController *)detailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath;
 
 
- 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
 
 /// Returns true if the modeled table view is live and displaying cells.
@@ -452,26 +450,17 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
-
-
-
 #pragma mark - SCArrayOfItemsModel
 /// This class subclasses SCTableViewModel to represent an array of any kind of items and will automatically generate its cells from these items. `SCArrayOfItemsModel` will automatically generate a set of SCArrayOfItemsSection(s) if the sectionHeaderTitleForItem modelAction is implemented, otherwise it will only generate a single SCArrayOfItemsSection.
 ///
 /// - Warning: This is an abstract base class, you should never make any direct instances of it.
 ///
 /// - SeeAlso: ``SCArrayOfStringsModel``, ``SCArrayOfObjectsModel``, ``SCArrayOfStringsSection``, ``SCArrayOfObjectsSection``.
-@interface SCArrayOfItemsModel : SCTableViewModel <SCTableViewControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating>
-{
-@protected
+@interface SCArrayOfItemsModel : SCTableViewModel <SCTableViewControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating> {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
-    NSArray<id> * _Nullable filteredArray;
-    SCDataStore * _Nullable _dataStore;
+    NSArray<id> *_Nullable filteredArray;
+    SCDataStore *_Nullable _dataStore;
     BOOL sectionsInSync;
     UITableViewCellAccessoryType _itemsAccessoryType;
     BOOL _allowAddingItems;
@@ -633,10 +622,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
 #pragma mark - SCArrayOfObjectsModel
 /// This class functions as a table view model that is able to represent an array of any kind of objects and automatically generate its cells from these objects. In addition, `SCArrayOfObjectsModel` generates its detail views from the properties of the corresponding object in its items array. Objects in the items array need not all be of the same object type, but they must all decend from NSObject.
 ///
@@ -654,7 +639,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   move operations.
 /// - Parameter definition: The definition of the objects in the objects array.
 + (instancetype)modelWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items itemsDefinition:(SCDataDefinition *)definition;
-   
+
 
 /// Returns an initialized `SCArrayOfObjectsModel` given a UITableView and an array of objects.
 ///
@@ -712,11 +697,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
 #pragma mark - SCArrayOfStringsModel
 /// This class functions as a table view model that is able to represent an array
 /// of string items and automatically generate its cells from these items. The class inherits
@@ -743,13 +723,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithTableView:(nullable UITableView *)tableView items:(nullable NSMutableArray<id> *)items;
 
 @end
-
-
-
-
-
-
-
 
 
 #pragma mark - SCSelectionModel
@@ -785,10 +758,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithTableView:(nullable UITableView *)tableView
-            boundObject:(nullable NSObject *)object
-    selectedIndexPropertyName:(nullable NSString *)propertyName
-                  items:(nullable NSArray<id> *)sectionItems;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 /// Returns an initialized `SCSelectionModel` given a table view, a bound object,
 /// a bound property name, an array of selection items, and whether to allow multiple selection.
@@ -802,11 +772,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-- (instancetype)initWithTableView:(nullable UITableView *)tableView
-            boundObject:(nullable NSObject *)object
-    selectedIndexesPropertyName:(nullable NSString *)propertyName
-                  items:(nullable NSArray<id> *)sectionItems
- allowMultipleSelection:(BOOL)multipleSelection;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Returns an initialized `SCSelectionModel` given a table view, a bound object,
 /// an NSString bound property name, and an array of selection items.
@@ -819,10 +785,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithTableView:(nullable UITableView *)tableView
-            boundObject:(nullable NSObject *)object
-    selectionStringPropertyName:(nullable NSString *)propertyName
-                  items:(nullable NSArray<id> *)sectionItems;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 
 #pragma mark - Configuration
@@ -871,17 +834,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
-
-
-
-
-
-
 #pragma mark - SCObjectSelectionModel
 /// This class functions as a model that provides the end-user with an automatically generated
 /// list of objects to choose from.
@@ -904,9 +856,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object the model will bind to.
 /// - Parameter propertyName: The model's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-- (instancetype)initWithTableView:(nullable UITableView *)tableView
-            boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-    selectionItemsStore:(nullable SCDataStore *)store;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized `SCObjectSelectionModel` given a table view, bound object, a bound property name, and an array of selection items.
 /// - Parameter tableView: The model's table view.
@@ -914,9 +864,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyName: The model's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter selectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
 /// - Parameter definition: The definition of the selection items.
-- (instancetype)initWithTableView:(nullable UITableView *)tableView
-            boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-                  items:(nullable NSArray<id> *)selectionItems itemsDefintion:(SCDataDefinition *)definition;
+- (instancetype)initWithTableView:(nullable UITableView *)tableView boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)selectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration

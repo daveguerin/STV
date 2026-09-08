@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// this property definition.
 ///
 /// - Note: You should never make instances of this class. Use subclasses instead.
-@interface SCPropertyAttributes : NSObject 
+@interface SCPropertyAttributes : NSObject
 
 
 /// The image view assigned to the generated UI element.
@@ -67,8 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter maxHeight: The maximum height of the generated UITextView control. Set to a negative value to ignore.
 /// - Parameter _autoResize: Determines whether the generated UITextView control will auto resize.
 /// - Parameter _editable: Determines whether the generated UITextView control will be editable.
-+ (instancetype)attributesWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight
-					   autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
++ (instancetype)attributesWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
 
 /// Returns an initialized `SCTextViewAttributes`.
 ///
@@ -76,8 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter maxHeight: The maximum height of the generated UITextView control. Set to a negative value to ignore.
 /// - Parameter _autoResize: Determines whether the generated UITextView control will auto resize.
 /// - Parameter _editable: Determines whether the generated UITextView control will be editable.
-- (instancetype)initWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight
-				 autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
+- (instancetype)initWithMinimumHeight:(CGFloat)minHeight maximumHeight:(CGFloat)maxHeight autoResize:(BOOL)_autoResize editable:(BOOL)_editable;
 
 #pragma mark - Configuration
 
@@ -94,7 +92,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL editable;
 
 @end
-
 
 
 #pragma mark - SCTextFieldAttributes
@@ -148,7 +145,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 #pragma mark - SCNumericTextFieldAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
 /// SCPropertyTypeNumericTextField, thus allowing further customization of the generated control by the user.
@@ -162,8 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter minValue: The minimum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter maxValue: The maximum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter allowFloat: Determines if the generated numeric text field control allows float values.
-+ (instancetype)attributesWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue
-				 allowFloatValue:(BOOL)allowFloat;
++ (instancetype)attributesWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue allowFloatValue:(BOOL)allowFloat;
 
 /// Allocates and returns an initialized `SCNumericTextFieldAttributes`.
 ///
@@ -171,16 +166,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter maxValue: The maximum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter allowFloat: Determines if the generated numeric text field control allows float values.
 /// - Parameter _placeholder: The placeholder of the generated numeric text field control. Set to nil to ignore.
-+ (instancetype)attributesWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue
-				 allowFloatValue:(BOOL)allowFloat placeholder:(nullable NSString *)_placeholder;
++ (instancetype)attributesWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue allowFloatValue:(BOOL)allowFloat placeholder:(nullable NSString *)_placeholder;
 
 /// Returns an initialized `SCNumericTextFieldAttributes`.
 ///
 /// - Parameter minValue: The minimum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter maxValue: The maximum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter allowFloat: Determines if the generated numeric text field control allows float values.
-- (instancetype)initWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue
-				 allowFloatValue:(BOOL)allowFloat;
+- (instancetype)initWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue allowFloatValue:(BOOL)allowFloat;
 
 /// Returns an initialized `SCNumericTextFieldAttributes`.
 ///
@@ -188,8 +181,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter maxValue: The maximum value allowed for the generated numeric text field control. Set to nil to ignore.
 /// - Parameter allowFloat: Determines if the generated numeric text field control allows float values.
 /// - Parameter _placeholder: The placeholder of the generated numeric text field control. Set to nil to ignore.
-- (instancetype)initWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue
-				 allowFloatValue:(BOOL)allowFloat placeholder:(nullable NSString *)_placeholder;
+- (instancetype)initWithMinimumValue:(nullable NSNumber *)minValue maximumValue:(nullable NSNumber *)maxValue allowFloatValue:(BOOL)allowFloat placeholder:(nullable NSString *)_placeholder;
 
 #pragma mark - Configuration
 
@@ -206,7 +198,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSNumberFormatter *numberFormatter;
 
 @end
-
 
 
 #pragma mark - SCSliderAttributes
@@ -241,7 +232,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 #pragma mark - SCSegmentedAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
 /// SCPropertyTypeSegmented, thus allowing further customization of the generated control by the user.
@@ -268,7 +258,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 #pragma mark - SCDateAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
 /// SCPropertyTypeDate, thus allowing further customization of the generated control by the user.
@@ -287,9 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter formatter: The date formatter used to display the date of generated control. Set to nil to ignore.
 /// - Parameter mode: The date picker mode.
 /// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell.
-+ (instancetype)attributesWithDateFormatter:(nullable NSDateFormatter *)formatter
-				   datePickerMode:(UIDatePickerMode)mode
-	displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
++ (instancetype)attributesWithDateFormatter:(nullable NSDateFormatter *)formatter datePickerMode:(UIDatePickerMode)mode displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
 
 /// Returns an initialized `SCDateAttributes`.
 ///
@@ -301,9 +288,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter formatter: The date formatter used to display the date of generated control. Set to nil to ignore.
 /// - Parameter mode: The date picker mode.
 /// - Parameter displayDatePickerAsInputAccessoryView: Set to TRUE to display the date picker as a keyboard input accessory view that appears from the bottom of the screen, instead of displaying it inside the cell.
-- (instancetype)initWithDateFormatter:(nullable NSDateFormatter *)formatter
-			 datePickerMode:(UIDatePickerMode)mode
-	displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
+- (instancetype)initWithDateFormatter:(nullable NSDateFormatter *)formatter datePickerMode:(UIDatePickerMode)mode displayDatePickerAsInputAccessoryView:(BOOL)displayDatePickerAsInputAccessoryView;
 
 #pragma mark - Configuration
 
@@ -319,7 +304,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 #pragma mark - SCSelectionAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
 /// SCPropertyTypeSelection, thus allowing further customization of the generated control by the user.
@@ -333,8 +317,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-+ (instancetype)attributesWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel
-		 allowNoSelection:(BOOL)allowNoSel;
++ (instancetype)attributesWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Allocates and returns an initialized `SCSelectionAttributes`.
 ///
@@ -344,17 +327,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter autoDismiss: Set to TRUE to automatically dismiss the selection detail view when an item is selected.
 /// - Parameter hideNavBar: Set to TRUE to hide the detail view's navigation bar.
 /// - Note: `hideNavBar` only applies when `autoDismiss` is TRUE.
-+ (instancetype)attributesWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel
-		 allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss
-			hideDetailViewNavigationBar:(BOOL)hideNavBar;
++ (instancetype)attributesWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss hideDetailViewNavigationBar:(BOOL)hideNavBar;
 
 /// Returns an initialized `SCSelectionAttributes`.
 ///
 /// - Parameter _items: The items of the generated selection control. Set to nil to ignore.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-- (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel
-		 allowNoSelection:(BOOL)allowNoSel;
+- (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Returns an initialized `SCSelectionAttributes`.
 ///
@@ -364,9 +344,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter autoDismiss: Set to TRUE to automatically dismiss the selection detail view when an item is selected.
 /// - Parameter hideNavBar: Set to TRUE to hide the detail view's navigation bar.
 /// - Note: `hideNavBar` only applies when `autoDismiss` is TRUE.
-- (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel
-		 allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss
-			hideDetailViewNavigationBar:(BOOL)hideNavBar;
+- (instancetype)initWithItems:(nullable NSArray<id> *)_items allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel autoDismissDetailView:(BOOL)autoDismiss hideDetailViewNavigationBar:(BOOL)hideNavBar;
 
 
 /// The data store for the selection items.
@@ -416,11 +394,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
 #pragma mark - SCObjectSelectionAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type
 /// SCPropertyTypeObjectSelection, thus allowing further customization of the generated control by the user.
@@ -434,10 +407,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter definition: The data structure definition of the objects.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-+ (instancetype)attributesWithSelectionObjects:(nullable NSArray<id> *)objects
-                   objectsDefinition:(nullable SCDataDefinition *)definition
-              allowMultipleSelection:(BOOL)allowMultipleSel
-                    allowNoSelection:(BOOL)allowNoSel;
++ (instancetype)attributesWithSelectionObjects:(nullable NSArray<id> *)objects objectsDefinition:(nullable SCDataDefinition *)definition allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Returns an initialized `SCObjectSelectionAttributes`.
 ///
@@ -445,10 +415,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter definition: The data structure definition of the objects.
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-- (instancetype)initWithSelectionObjects:(nullable NSArray<id> *)objects
-             objectsDefinition:(nullable SCDataDefinition *)definition
-        allowMultipleSelection:(BOOL)allowMultipleSel
-              allowNoSelection:(BOOL)allowNoSel;
+- (instancetype)initWithSelectionObjects:(nullable NSArray<id> *)objects objectsDefinition:(nullable SCDataDefinition *)definition allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Allocates and returns an initialized SCObjectSelectionAttributes.
 ///
@@ -457,10 +424,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Warning: allowMultipleSel should only be set to TRUE if relationship is many to many.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-+ (instancetype)attributesWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition
-                             usingPredicate:(nullable NSPredicate *)predicate
-                     allowMultipleSelection:(BOOL)allowMultipleSel
-                           allowNoSelection:(BOOL)allowNoSel;
++ (instancetype)attributesWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition usingPredicate:(nullable NSPredicate *)predicate allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 /// Returns an initialized SCObjectSelectionAttributes.
 ///
@@ -469,10 +433,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter allowMultipleSel: Determines if the generated selection control allows multiple selection.
 /// - Warning: allowMultipleSel should only be set to TRUE if relationship is many to many.
 /// - Parameter allowNoSel: Determines if the generated selection control allows no selection.
-- (instancetype)initWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition
-                       usingPredicate:(nullable NSPredicate *)predicate
-               allowMultipleSelection:(BOOL)allowMultipleSel
-                     allowNoSelection:(BOOL)allowNoSel;
+- (instancetype)initWithObjectsEntityDefinition:(nullable SCEntityDefinition *)entityDefinition usingPredicate:(nullable NSPredicate *)predicate allowMultipleSelection:(BOOL)allowMultipleSel allowNoSelection:(BOOL)allowNoSel;
 
 #pragma mark - Configuration
 
@@ -495,9 +456,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSString *ibAddNewObjectText;
 
 @end
-
-
-
 
 
 #pragma mark - SCObjectAttributes
@@ -545,10 +503,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
 #pragma mark - SCArrayOfObjectsAttributes
 /// This class is used to extend the definition of an `SCPropertyAttributes` instance of type SCPropertyTypeArrayOfObjects, thus allowing further customization of the generated control by the user.
 @interface SCArrayOfObjectsAttributes : SCPropertyAttributes
@@ -562,10 +516,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter allowAdding: Determines if the generated control allows adding new objects.
 /// - Parameter allowDeleting: Determines if the generated control allows deleting objects.
 /// - Parameter allowMoving: Determines if the generated control allows moving objects.
-+ (instancetype)attributesWithObjectDefinition:(nullable SCDataDefinition *)definition
-						 allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting
-						 allowMovingItems:(BOOL)allowMoving;
-
++ (instancetype)attributesWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving;
 
 
 /// Allocates and returns an initialized `SCArrayOfObjectsAttributes`.
@@ -579,13 +530,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter newObjectUI: The uiElement that is used to add new objects when tapped. This object is typically of type SCTableViewCell.
 /// - Parameter existsInNormalMode: Determines if uiElement is displayed in `Normal Mode`.
 /// - Parameter existsInEditingMode: Determines if uiElement is displayed in `Editing Mode`.
-+ (instancetype)attributesWithObjectDefinition:(nullable SCDataDefinition *)definition
-						 allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving 
-               expandContentInCurrentView:(BOOL)expandContent
-                     placeholderuiElement:(nullable NSObject *)placeholderUI
-                    addNewObjectuiElement:(nullable NSObject *)newObjectUI
-  addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode 
- addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
++ (instancetype)attributesWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving expandContentInCurrentView:(BOOL)expandContent placeholderuiElement:(nullable NSObject *)placeholderUI addNewObjectuiElement:(nullable NSObject *)newObjectUI addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
 
 /// Returns an initialized `SCArrayOfObjectsAttributes`.
 ///
@@ -593,9 +538,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter allowAdding: Determines if the generated control allows adding new objects.
 /// - Parameter allowDeleting: Determines if the generated control allows deleting objects.
 /// - Parameter allowMoving: Determines if the generated control allows moving objects.
-- (instancetype)initWithObjectDefinition:(nullable SCDataDefinition *)definition
-				   allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting
-				   allowMovingItems:(BOOL)allowMoving;
+- (instancetype)initWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving;
 
 /// Returns an initialized `SCArrayOfObjectsAttributes`.
 ///
@@ -608,13 +551,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter newObjectUI: The uiElement that is used to add new objects when tapped. This object is typically of type SCTableViewCell.
 /// - Parameter existsInNormalMode: Determines if uiElement is displayed in `Normal Mode`.
 /// - Parameter existsInEditingMode: Determines if uiElement is displayed in `Editing Mode`.
-- (instancetype)initWithObjectDefinition:(nullable SCDataDefinition *)definition
-						 allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving 
-               expandContentInCurrentView:(BOOL)expandContent
-                     placeholderuiElement:(nullable NSObject *)placeholderUI
-                    addNewObjectuiElement:(nullable NSObject *)newObjectUI
-  addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode 
- addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
+- (instancetype)initWithObjectDefinition:(nullable SCDataDefinition *)definition allowAddingItems:(BOOL)allowAdding allowDeletingItems:(BOOL)allowDeleting allowMovingItems:(BOOL)allowMoving expandContentInCurrentView:(BOOL)expandContent placeholderuiElement:(nullable NSObject *)placeholderUI addNewObjectuiElement:(nullable NSObject *)newObjectUI addNewObjectuiElementExistsInNormalMode:(BOOL)existsInNormalMode addNewObjectuiElementExistsInEditingMode:(BOOL)existsInEditingMode;
 
 
 #pragma mark - Configuration

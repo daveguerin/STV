@@ -19,65 +19,65 @@ NS_ASSUME_NONNULL_BEGIN
 @class SCCustomCell;
 
 /// A block invoked with a table-view section and its index.
-typedef void(^SCSectionAction_Block)(SCTableViewSection *section, NSUInteger sectionIndex);
+typedef void (^SCSectionAction_Block)(SCTableViewSection *section, NSUInteger sectionIndex);
 /// A block invoked with a table-view section's header or footer view.
-typedef void(^SCSectionViewAction_Block)(SCTableViewSection *section, NSUInteger sectionIndex, UIView *view);
+typedef void (^SCSectionViewAction_Block)(SCTableViewSection *section, NSUInteger sectionIndex, UIView *view);
 
 /// A block invoked with a table-view section and its detail model.
 /// The model can be nil for a custom controller without an STV model. The
 /// index path can be nil during new-item configuration; other new-item events
 /// use an index path whose row is NSNotFound.
-typedef void(^SCDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel * _Nullable detailModel, NSIndexPath * _Nullable indexPath);
+typedef void (^SCDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel *_Nullable detailModel, NSIndexPath *_Nullable indexPath);
 /// A block that returns a Boolean decision for a section's detail model.
-typedef BOOL(^SCConditionalDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel * _Nullable detailModel, NSIndexPath * _Nullable indexPath);
+typedef BOOL (^SCConditionalDetailModelSectionAction_Block)(SCTableViewSection *section, SCTableViewModel *_Nullable detailModel, NSIndexPath *_Nullable indexPath);
 
 /// A block invoked after a section fetches its items.
-typedef void(^SCDidFetchSectionItemsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
+typedef void (^SCDidFetchSectionItemsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
 /// A block called when fetch section items fails.
 /// The error can be nil when the data store provides no failure details.
-typedef void(^SCFetchSectionItemsFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSError * _Nullable error);
+typedef void (^SCFetchSectionItemsFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSError *_Nullable error);
 /// A block invoked after a section creates an item.
-typedef void(^SCSectionItemDidCreateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
+typedef void (^SCSectionItemDidCreateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block that approves an item before a section inserts it.
 /// The item model is nil when the new-item detail screen is skipped.
-typedef BOOL(^SCSectionItemWillInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, SCTableViewModel * _Nullable itemModel);
+typedef BOOL (^SCSectionItemWillInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, SCTableViewModel *_Nullable itemModel);
 /// A block called when a section item insert cannot proceed without a connection.
-typedef BOOL(^SCSectionItemInsertNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
+typedef BOOL (^SCSectionItemInsertNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item insert fails.
-typedef void(^SCSectionItemInsertFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
+typedef void (^SCSectionItemInsertFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *_Nullable error);
 /// A block invoked after a section inserts an item.
-typedef void(^SCSectionItemDidInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
+typedef void (^SCSectionItemDidInsertAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
 /// A block that approves an item before a section updates it.
-typedef BOOL(^SCSectionItemWillUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath, SCTableViewModel * _Nullable itemModel);
+typedef BOOL (^SCSectionItemWillUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath, SCTableViewModel *_Nullable itemModel);
 /// A block called when a section item update cannot proceed without a connection.
-typedef BOOL(^SCSectionItemUpdateNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
+typedef BOOL (^SCSectionItemUpdateNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item update fails.
-typedef void(^SCSectionItemUpdateFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
+typedef void (^SCSectionItemUpdateFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *_Nullable error);
 /// A block invoked after a section updates an item.
-typedef void(^SCSectionItemDidUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
+typedef void (^SCSectionItemDidUpdateAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
 /// A block that approves an item before a section deletes it.
-typedef BOOL(^SCSectionItemWillDeleteAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
+typedef BOOL (^SCSectionItemWillDeleteAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSIndexPath *indexPath);
 /// A block called when a section item delete cannot proceed without a connection.
-typedef BOOL(^SCSectionItemDeleteNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
+typedef BOOL (^SCSectionItemDeleteNoConnectionAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item);
 /// A block called when a section item delete fails.
-typedef void(^SCSectionItemDeleteFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError * _Nullable error);
+typedef void (^SCSectionItemDeleteFailedAction_Block)(SCArrayOfItemsSection *itemsSection, NSObject *item, NSError *_Nullable error);
 /// A block invoked after a section deletes an item.
-typedef void(^SCSectionItemDidDeleteAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef void (^SCSectionItemDidDeleteAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block invoked after a section adds its special cells.
 /// The array contains fetched data objects as well as any special cells.
-typedef void(^SCDidAddSpecialCellsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
+typedef void (^SCDidAddSpecialCellsAction_Block)(SCArrayOfItemsSection *itemsSection, NSMutableArray<id> *items);
 
 /// A block that supplies the detail view controller for a row.
-typedef UIViewController * _Nullable (^SCDetailViewControllerForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
+typedef UIViewController *_Nullable (^SCDetailViewControllerForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
 /// A block that supplies the detail table-view model for a row.
-typedef SCTableViewModel * _Nullable (^SCDetailTableViewModelForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
+typedef SCTableViewModel *_Nullable (^SCDetailTableViewModelForRowAtIndexPathAction_Block)(SCTableViewSection *section, NSIndexPath *indexPath);
 
 /// A block that supplies the custom cell for a row.
-typedef SCCustomCell * _Nullable (^SCCellForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef SCCustomCell *_Nullable (^SCCellForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block that supplies the cell reuse identifier for a row.
-typedef NSString * _Nullable (^SCReuseIdForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef NSString *_Nullable (^SCReuseIdForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 /// A block that supplies the custom height for a row.
-typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
+typedef CGFloat (^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSection *itemsSection, NSIndexPath *indexPath);
 
 #pragma mark - SCSectionActions
 /// This class hosts a set of section action blocks. Once an action is set to a desired code block, it will execute the block as soon as the action occurs.
@@ -721,7 +721,7 @@ typedef CGFloat(^SCCustomHeightForRowAtIndexPathAction_Block)(SCArrayOfItemsSect
 ///
 /// - Parameter actions: The source actions, or nil to leave existing hooks alone.
 /// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
-- (void)setActionsTo:(SCSectionActions * _Nullable)actions overrideExisting:(BOOL)override;
+- (void)setActionsTo:(SCSectionActions *_Nullable)actions overrideExisting:(BOOL)override;
 
 @end
 

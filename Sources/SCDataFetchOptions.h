@@ -11,7 +11,6 @@
 #import "SCGlobals.h"
 
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCDataFetchOptions
@@ -27,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface SCDataFetchOptions : NSObject
-
 
 
 #pragma mark - Creation and Initialization
@@ -109,7 +107,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// Filters the given array based on the current filtering configuration.
 /// - Parameter array: The mutable array to process.
 - (void)filterMutableArray:(NSMutableArray<id> *)array;
-
 
 
 @end

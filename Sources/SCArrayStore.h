@@ -39,11 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
 // Create an SCArrayStore alias called SCMemoryStore (for backward compatibility with STV 3.0)
 /// A convenience alias for `SCArrayStore`.
-#define SCMemoryStore   SCArrayStore
+#define SCMemoryStore SCArrayStore
 
 NS_ASSUME_NONNULL_END

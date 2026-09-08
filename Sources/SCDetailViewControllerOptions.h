@@ -15,7 +15,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
 #pragma mark - SCDetailViewControllerOptions
 /// This class is used to specify options for automatically generated detail view controllers.
 ///
@@ -55,5 +54,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-

@@ -20,24 +20,20 @@
 @implementation SCArrayStore
 
 
-
-+ (instancetype)storeWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition
-{
-	return [[[self class] alloc] initWithObjectsArray:array defaultDefiniton:definition];
++ (instancetype)storeWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition {
+    return [[[self class] alloc] initWithObjectsArray:array defaultDefiniton:definition];
 }
 
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         // initialize here
     }
 
     return self;
 }
 
-- (instancetype)initWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition
-{
-    if ( (self=[self initWithDefaultDataDefinition:definition]) ) {
+- (instancetype)initWithObjectsArray:(NSMutableArray *)array defaultDefiniton:(SCDataDefinition *)definition {
+    if ((self = [self initWithDefaultDataDefinition:definition])) {
         self.objectsArray = array;
     }
 
@@ -45,21 +41,16 @@
 }
 
 
-
-
-- (NSMutableArray *)objectsArray
-{
+- (NSMutableArray *)objectsArray {
     return (NSMutableArray *)self.storedData;
 }
 
-- (void)setObjectsArray:(NSMutableArray *)objectsArray
-{
+- (void)setObjectsArray:(NSMutableArray *)objectsArray {
     self.storedData = objectsArray;
 }
 
 // overrides superclass
-- (void)setStoredData:(NSObject *)data
-{
+- (void)setStoredData:(NSObject *)data {
     // only set data of the correct type
     if ([data isKindOfClass:[NSMutableArray class]]) {
         [super setStoredData:data];
@@ -69,21 +60,18 @@
         [super setStoredData:nil];
 
         if (data) {
-            SCDebugLog(@"Warning: SCArrayStore expecting NSMutableArray but got %@ instead. (Data: %@)", NSStringFromClass([data class]) , data);
+            SCDebugLog(@"Warning: SCArrayStore expecting NSMutableArray but got %@ instead. (Data: %@)", NSStringFromClass([data class]), data);
         }
-
     }
-
 }
 
 // overrides superclass
-- (NSObject *)createNewObjectWithDefinition:(SCDataDefinition *)definition
-{
+- (NSObject *)createNewObjectWithDefinition:(SCDataDefinition *)definition {
     NSObject *object = nil;
 
     if ([definition isKindOfClass:[SCClassDefinition class]]) {
         SCClassDefinition *classDefinition = (SCClassDefinition *)definition;
-        
+
         object = [[classDefinition.cls alloc] init];
     }
 
@@ -113,26 +101,23 @@
 }
 
 // overrides superclass
-- (BOOL)discardUninsertedObject:(NSObject *)object
-{
+- (BOOL)discardUninsertedObject:(NSObject *)object {
     [_uninsertedObjects removeObjectIdenticalTo:object];
-    
+
     return TRUE;
 }
 
 // overrides superclass
-- (BOOL)insertObject:(NSObject *)object
-{
+- (BOOL)insertObject:(NSObject *)object {
     [self.objectsArray addObject:object];
-    
+
     [_uninsertedObjects removeObjectIdenticalTo:object];
-    
+
     return TRUE;
 }
 
 // overrides superclass
-- (BOOL)deleteObject:(NSObject *)object
-{
+- (BOOL)deleteObject:(NSObject *)object {
     NSUInteger index = [self.objectsArray indexOfObjectIdenticalTo:object];
 
     if (index == NSNotFound) {
@@ -141,25 +126,22 @@
 
     //else
     [self.objectsArray removeObjectAtIndex:index];
-    
+
     return TRUE;
 }
 
 // overrides superclass
-- (BOOL)insertObject:(NSObject *)object atOrder:(NSUInteger)order
-{
+- (BOOL)insertObject:(NSObject *)object atOrder:(NSUInteger)order {
     [self.objectsArray insertObject:object atIndex:order];
-    
+
     return TRUE;
 }
 
-- (BOOL)validateOrderChangeForObject:(NSObject *)object
-{
-    return TRUE;  // Always true since objectsArray is an ordered storage class.
+- (BOOL)validateOrderChangeForObject:(NSObject *)object {
+    return TRUE; // Always true since objectsArray is an ordered storage class.
 }
 
-- (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray *)subsetArray
-{
+- (BOOL)changeOrderForObject:(NSObject *)object toOrder:(NSUInteger)toOrder subsetArray:(NSArray *)subsetArray {
     NSUInteger index = [self.objectsArray indexOfObjectIdenticalTo:object];
     if (index == NSNotFound) {
         return FALSE;
@@ -171,19 +153,17 @@
 
     [self.objectsArray removeObjectAtIndex:index];
     [self.objectsArray insertObject:object atIndex:toOrder];
-    
+
     return TRUE;
 }
 
 // overrides superclass
-- (NSArray *)fetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions
-{
+- (NSArray *)fetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions {
     if (_boundObject && _boundPropertyName) {
         id value = [self valueForPropertyName:_boundPropertyName inObject:_boundObject];
         if ([value isKindOfClass:[NSMutableArray class]]) {
             self.objectsArray = value;
         }
-
     }
 
     NSArray *array = [NSMutableArray arrayWithArray:self.objectsArray];
@@ -193,13 +173,13 @@
         [fetchOptions sortMutableArray:(NSMutableArray *)array];
 
         if (fetchOptions.batchSize) {
-            NSRange range = {fetchOptions.batchCurrentOffset*fetchOptions.batchSize, fetchOptions.batchSize};
+            NSRange range = {fetchOptions.batchCurrentOffset * fetchOptions.batchSize, fetchOptions.batchSize};
             if (range.location > array.count) {
-                array = [NSArray array];  // empty array
+                array = [NSArray array]; // empty array
             }
 
             else {
-                NSInteger delta = (range.location+range.length)-array.count;
+                NSInteger delta = (range.location + range.length) - array.count;
                 if (delta > 0) {
                     range.length -= delta;
                 }
@@ -209,62 +189,52 @@
 
             [fetchOptions incrementBatchOffset];
         }
-
     }
 
     return array;
 }
 
 // overrides superclass
-- (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object
-{
+- (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object {
     if ([SCUtilities isBasicDataTypeClass:[object class]]) {
         // replace old data type object with new one
         NSUInteger index = [self.objectsArray indexOfObjectIdenticalTo:object];
         if (index != NSNotFound) {
             [self.objectsArray replaceObjectAtIndex:index withObject:value];
         }
-
     }
 
     else {
         [super setValue:value forPropertyName:propertyName inObject:object];
     }
-
 }
 
-- (BOOL)validateInsertForObject:(NSObject *)object
-{
+- (BOOL)validateInsertForObject:(NSObject *)object {
     return TRUE;
 }
 
-- (BOOL)validateUpdateForObject:(NSObject *)object
-{
+- (BOOL)validateUpdateForObject:(NSObject *)object {
     return TRUE;
 }
 
-- (BOOL)validateDeleteForObject:(NSObject *)object
-{
+- (BOOL)validateDeleteForObject:(NSObject *)object {
     return TRUE;
 }
 
-- (SCDataDefinition *)definitionForObject:(NSObject *)object
-{
+- (SCDataDefinition *)definitionForObject:(NSObject *)object {
     NSString *className = [SCUtilities dataStructureNameForClass:[object class]];
-    
+
     return [_dataDefinitions valueForKey:className];
 }
 
-- (void)bindStoreToPropertyName:(NSString *)propertyName forObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition
-{
+- (void)bindStoreToPropertyName:(NSString *)propertyName forObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition {
     [super bindStoreToPropertyName:propertyName forObject:object withDefinition:definition];
-    
+
     id value = [self valueForPropertyName:propertyName inObject:object];
 
     if ([value isKindOfClass:[NSMutableArray class]]) {
         self.objectsArray = value;
     }
-
 }
 
 @end

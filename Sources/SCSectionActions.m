@@ -16,9 +16,8 @@
 @implementation SCSectionActions
 
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         // initializations here
     }
 
@@ -26,8 +25,7 @@
 }
 
 
-- (void)setActionsTo:(SCSectionActions *)actions overrideExisting:(BOOL)override
-{
+- (void)setActionsTo:(SCSectionActions *)actions overrideExisting:(BOOL)override {
     if ((override || !self.didAddToModel) && actions.didAddToModel) {
         self.didAddToModel = actions.didAddToModel;
     }
@@ -159,7 +157,6 @@
     if ((override || !self.didDeleteItem) && actions.didDeleteItem) {
         self.didDeleteItem = actions.didDeleteItem;
     }
-
 }
 
 

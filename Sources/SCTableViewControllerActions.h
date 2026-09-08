@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class SCTableViewController;
 
 /// A block invoked with an STV table-view controller.
-typedef void(^SCTableViewControllerAction_Block)(SCTableViewController *viewController);
+typedef void (^SCTableViewControllerAction_Block)(SCTableViewController *viewController);
 /// A block that reports whether a table-view controller's button was tapped.
-typedef BOOL(^SCTableViewControllerButtonTappedAction_Block)(SCTableViewController *viewController);
+typedef BOOL (^SCTableViewControllerButtonTappedAction_Block)(SCTableViewController *viewController);
 
 
 #pragma mark - SCTableViewControllerActions

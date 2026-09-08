@@ -12,7 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
 #pragma mark - SCSearchViewController
 /// A controller dedicated to searching data in a table view.
 ///

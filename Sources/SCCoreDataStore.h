@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Saves the managed object context and returns the failure instead of terminating the host application.
 /// - Parameter error: On return, an error describing a failure, or `nil` if the operation succeeds.
 ///   Pass NULL when the error is not needed.
-- (BOOL)commitDataWithError:(NSError * _Nullable * _Nullable)error;
+- (BOOL)commitDataWithError:(NSError *_Nullable *_Nullable)error;
 
 
 @end

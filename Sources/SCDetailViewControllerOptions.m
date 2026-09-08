@@ -11,8 +11,7 @@
 #import "SCDetailViewControllerOptions.h"
 
 
-@interface SCDetailViewControllerOptions ()
-{
+@interface SCDetailViewControllerOptions () {
     SCPresentationMode _presentationMode;
     UIModalPresentationStyle _modalPresentationStyle;
     SCNavigationBarType _navigationBarType;
@@ -24,14 +23,11 @@
 @end
 
 
-
 @implementation SCDetailViewControllerOptions
 
 
-
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _presentationMode = SCPresentationModeAuto;
         _modalPresentationStyle = UIModalPresentationFormSheet;
         _navigationBarType = SCNavigationBarTypeAuto;
@@ -45,5 +41,3 @@
 }
 
 @end
-
-

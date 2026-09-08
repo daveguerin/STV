@@ -17,19 +17,16 @@
 @implementation SCNumberDefinition
 
 
-
-+ (instancetype)definition
-{
++ (instancetype)definition {
     return [[[self class] alloc] init];
 }
 
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _numberPropertyDefinition = [[SCPropertyDefinition alloc] initWithName:@"number"];
         _numberPropertyDefinition.dataType = SCDataTypeNSNumber;
         _numberPropertyDefinition.type = SCPropertyTypeNumericTextField;
-        
+
         [propertyDefinitions addObject:_numberPropertyDefinition];
     }
 
@@ -37,16 +34,13 @@
 }
 
 
-
 // overrides superclass
-- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName
-{
+- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName {
     return SCDataTypeNSNumber;
 }
 
 // overrides superclass
-- (NSString *)titleValueForObject:(NSObject *)object
-{
+- (NSString *)titleValueForObject:(NSObject *)object {
     NSString *numberString;
     NSNumberFormatter *numberFormatter = nil;
     if ([self.numberPropertyDefinition.attributes isKindOfClass:[SCNumericTextFieldAttributes class]]) {
@@ -61,25 +55,22 @@
         numberString = [(NSNumber *)object stringValue];
     }
 
-    return numberString; 
+    return numberString;
 }
 
 // overrides superclass
-- (NSString *)descriptionValueForObject:(NSObject *)object
-{
+- (NSString *)descriptionValueForObject:(NSObject *)object {
     // Not applicable for NSNumber objects
     return nil;
 }
 
 // overrides superclass
-- (NSString *)dataStructureName
-{
-	return [SCUtilities dataStructureNameForClass:[NSNumber class]];
+- (NSString *)dataStructureName {
+    return [SCUtilities dataStructureNameForClass:[NSNumber class]];
 }
 
 // overrides superclass
-- (SCDataStore *)generateCompatibleDataStore
-{
+- (SCDataStore *)generateCompatibleDataStore {
     return [SCArrayStore storeWithObjectsArray:nil defaultDefiniton:self];
 }
 

@@ -16,85 +16,75 @@
 #import "SCCoreDataStore.h"
 
 
-
 @implementation SCEntityDefinition
 
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate
-{
-	return [[[self class] alloc] initWithEntityName:entityName autoGeneratePropertyDefinitions:autoGenerate];
++ (instancetype)definitionWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate {
+    return [[[self class] alloc] initWithEntityName:entityName autoGeneratePropertyDefinitions:autoGenerate];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString
-{
++ (instancetype)definitionWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString {
     return [[[self class] alloc] initWithEntityName:entityName propertyNamesString:propertyNamesString];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate
-{
-	return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context autoGeneratePropertyDefinitions:autoGenerate];
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate {
+    return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context autoGeneratePropertyDefinitions:autoGenerate];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString
-{
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString {
     return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyNamesString:propertyNamesString];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames
-{
-	return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames];
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames {
+    return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles
-{
-	return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames propertyTitles:propertyTitles];
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles {
+    return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames propertyTitles:propertyTitles];
 }
 
-+ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups
-{
++ (instancetype)definitionWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups {
     return [[[self class] alloc] initWithEntityName:entityName managedObjectContext:context propertyGroups:groups];
 }
 
 // overrides superclass
-- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName
-{
-	SCDataType dataType = SCDataTypeUnknown;
-	
+- (SCDataType)propertyDataTypeForPropertyWithName:(NSString *)propertyName {
+    SCDataType dataType = SCDataTypeUnknown;
+
     NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:self.entity];
 
     if (propertyDescription) {
         if ([propertyDescription isKindOfClass:[NSAttributeDescription class]]) {
             NSAttributeDescription *attribute = (NSAttributeDescription *)propertyDescription;
-            switch ([attribute attributeType]) 
-            {
+            switch ([attribute attributeType]) {
                 case NSInteger16AttributeType:
                 case NSInteger32AttributeType:
                 case NSInteger64AttributeType:
                     dataType = SCDataTypeNSNumber;
                     break;
-                    
+
                 case NSDecimalAttributeType:
                 case NSDoubleAttributeType:
                 case NSFloatAttributeType:
                     dataType = SCDataTypeNSNumber;
                     break;
-                    
+
                 case NSStringAttributeType:
                     dataType = SCDataTypeNSString;
                     break;
-                    
+
                 case NSBooleanAttributeType:
                     dataType = SCDataTypeNSNumber;
                     break;
-                    
+
                 case NSDateAttributeType:
                     dataType = SCDataTypeNSDate;
                     break;
-                    
+
                 case NSTransformableAttributeType:
                     dataType = SCDataTypeTransformable;
                     break;
-                    
+
                 default:
                     dataType = SCDataTypeUnknown;
                     break;
@@ -112,38 +102,31 @@
                 else {
                     dataType = SCDataTypeNSMutableSet;
                 }
-
             }
 
             else {
                 dataType = SCDataTypeNSObject;
             }
-
         }
 
         else if ([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]]) {
             dataType = SCDataTypeNSMutableSet;
         }
-
     }
 
     return dataType;
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate
-{
+- (instancetype)initWithEntityName:(NSString *)entityName autoGeneratePropertyDefinitions:(BOOL)autoGenerate {
     return [self initWithEntityName:entityName managedObjectContext:[self defaultManagedObjectContext] autoGeneratePropertyDefinitions:autoGenerate];
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString
-{
+- (instancetype)initWithEntityName:(NSString *)entityName propertyNamesString:(NSString *)propertyNamesString {
     return [self initWithEntityName:entityName managedObjectContext:[self defaultManagedObjectContext] propertyNamesString:propertyNamesString];
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate
-{
-	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:entityName
-														 inManagedObjectContext:context];
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
     if (!entityDescription) {
         SCDebugLog(@"Warning: unable to load entity with name: %@", entityName);
     }
@@ -156,63 +139,55 @@
     }
 
     //else
-	
-	NSMutableArray *propertyNames = [NSMutableArray arrayWithCapacity:entityDescription.properties.count];
-	for(NSPropertyDescription *propertyDescription in entityDescription.properties)
-	{
-		[propertyNames addObject:[propertyDescription name]];
-	}
-	return [self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames];
+
+    NSMutableArray *propertyNames = [NSMutableArray arrayWithCapacity:entityDescription.properties.count];
+    for (NSPropertyDescription *propertyDescription in entityDescription.properties) {
+        [propertyNames addObject:[propertyDescription name]];
+    }
+    return [self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames];
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString
-{
-    if ( (self = [self init]) ) {
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNamesString:(NSString *)propertyNamesString {
+    if ((self = [self init])) {
         _managedObjectContext = context;
         _entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
-		
+
         [self generatePropertiesFromPropertyNamesString:propertyNamesString];
-		
+
         [self setupDefaultConfiguration];
     }
 
     return self;
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames
-{
-	return [self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames propertyTitles:nil];
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames {
+    return [self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames propertyTitles:nil];
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles
-{
-    if ( (self = [self init]) ) {
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyNames:(NSArray *)propertyNames propertyTitles:(NSArray *)propertyTitles {
+    if ((self = [self init])) {
         _managedObjectContext = context;
         _entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
-		
+
         [self generatePropertiesFromPropertyNamesArray:propertyNames propertyTitlesArray:propertyTitles];
-		
+
         [self setupDefaultConfiguration];
     }
 
     return self;
 }
 
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups
-{
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context propertyGroups:(SCPropertyGroupArray *)groups {
     NSMutableArray *propertyNames = [[NSMutableArray alloc] init];
-    for(NSInteger i=0; i<groups.groupCount; i++)
-    {
+    for (NSInteger i = 0; i < groups.groupCount; i++) {
         SCPropertyGroup *propertyGroup = [groups groupAtIndex:i];
-        for(NSInteger j=0; j<propertyGroup.propertyNameCount; j++) {
+        for (NSInteger j = 0; j < propertyGroup.propertyNameCount; j++) {
             [propertyNames addObject:[propertyGroup propertyNameAtIndex:j]];
         }
-
     }
 
-    if ( (self=[self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames]) ) {
-        for(NSInteger i=0; i<groups.groupCount; i++)
-        {
+    if ((self = [self initWithEntityName:entityName managedObjectContext:context propertyNames:propertyNames])) {
+        for (NSInteger i = 0; i < groups.groupCount; i++) {
             [self.propertyGroups addGroup:[groups groupAtIndex:i]];
         }
     }
@@ -221,11 +196,10 @@
 }
 
 // overrides superclass
-- (instancetype)initWithibDictionary:(NSMutableDictionary *)ibDictionary
-{
+- (instancetype)initWithibDictionary:(NSMutableDictionary *)ibDictionary {
     NSString *entityName = [ibDictionary valueForKey:@"entityName"];
     [ibDictionary removeObjectForKey:@"entityName"];
-    
+
     self = [self initWithEntityName:entityName autoGeneratePropertyDefinitions:NO];
 
     if (self) {
@@ -236,8 +210,7 @@
 }
 
 
-- (NSManagedObjectContext *)defaultManagedObjectContext
-{
+- (NSManagedObjectContext *)defaultManagedObjectContext {
     NSManagedObjectContext *context = nil;
 
     if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(managedObjectContext)]) {
@@ -252,25 +225,22 @@
 }
 
 // overrides superclass
-- (void)generatePropertiesFromPropertyNamesArray:(NSArray *)propertyNamesArray propertyTitlesArray:(NSArray *)propertyTitlesArray
-{
-    for(int i=0; i<propertyNamesArray.count; i++)
-    {
+- (void)generatePropertiesFromPropertyNamesArray:(NSArray *)propertyNamesArray propertyTitlesArray:(NSArray *)propertyTitlesArray {
+    for (int i = 0; i < propertyNamesArray.count; i++) {
         // Get entity and propertyName
         NSEntityDescription *_dynamicentity = self.entity;
         NSString *propertyName = nil;
         NSString *keyPath = [propertyNamesArray objectAtIndex:i];
 
-        if ([keyPath characterAtIndex:0] == '~')  // A custom property
+        if ([keyPath characterAtIndex:0] == '~') // A custom property
         {
             [self addPropertyDefinitionWithName:keyPath title:[SCUtilities getUserFriendlyTitleFromName:keyPath] type:SCPropertyTypeCustom];
-            
+
             continue;
         }
 
         NSArray *keyPathArray = [keyPath componentsSeparatedByString:@"."];
-        for(int i=0; i<keyPathArray.count; i++)
-        {
+        for (int i = 0; i < keyPathArray.count; i++) {
             propertyName = [keyPathArray objectAtIndex:i];
             NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:_dynamicentity];
             if (!propertyDescription) {
@@ -279,7 +249,7 @@
                 break;
             }
 
-            if (i<keyPathArray.count-1) // if not last property in keyPath
+            if (i < keyPathArray.count - 1) // if not last property in keyPath
             {
                 if (![propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
                     break;
@@ -295,12 +265,10 @@
                     propertyName = nil;
                     break;
                 }
-
             }
-
         }
-        
-        
+
+
         NSString *propertyTitle;
         if (i < propertyTitlesArray.count) {
             propertyTitle = [propertyTitlesArray objectAtIndex:i];
@@ -313,50 +281,43 @@
         NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:propertyName inEntity:_dynamicentity];
 
         if (propertyDescription) {
-            SCPropertyDefinition *propertyDef = [SCPropertyDefinition 
-                                                 definitionWithName:keyPath
-                                                 title:propertyTitle
-                                                 type:SCPropertyTypeUndefined];
+            SCPropertyDefinition *propertyDef = [SCPropertyDefinition definitionWithName:keyPath title:propertyTitle type:SCPropertyTypeUndefined];
             propertyDef.required = ![propertyDescription isOptional];
 
             if ([propertyDescription isKindOfClass:[NSAttributeDescription class]]) {
                 NSAttributeDescription *attribute = (NSAttributeDescription *)propertyDescription;
-                switch ([attribute attributeType]) 
-                {
+                switch ([attribute attributeType]) {
                     case NSInteger16AttributeType:
                     case NSInteger32AttributeType:
                     case NSInteger64AttributeType:
                         propertyDef.dataType = SCDataTypeNSNumber;
                         propertyDef.type = SCPropertyTypeNumericTextField;
-                        propertyDef.attributes = [SCNumericTextFieldAttributes 
-                                                  attributesWithMinimumValue:nil 
-                                                  maximumValue:nil 
-                                                  allowFloatValue:FALSE];
+                        propertyDef.attributes = [SCNumericTextFieldAttributes attributesWithMinimumValue:nil maximumValue:nil allowFloatValue:FALSE];
                         break;
-                        
+
                     case NSDecimalAttributeType:
                     case NSDoubleAttributeType:
                     case NSFloatAttributeType:
                         propertyDef.dataType = SCDataTypeNSNumber;
                         propertyDef.type = SCPropertyTypeNumericTextField;
                         break;
-                        
+
                     case NSStringAttributeType:
                         propertyDef.dataType = SCDataTypeNSString;
                         propertyDef.type = SCPropertyTypeTextField;
                         break;
-                        
+
                     case NSBooleanAttributeType:
                         propertyDef.dataType = SCDataTypeNSNumber;
                         propertyDef.type = SCPropertyTypeSwitch;
                         break;
-                        
+
                     case NSDateAttributeType:
                         propertyDef.dataType = SCDataTypeNSDate;
                         propertyDef.type = SCPropertyTypeDate;
                         break;
-                        
-                        
+
+
                     default:
                         propertyDef.type = SCPropertyTypeNone;
                         break;
@@ -382,7 +343,6 @@
                     propertyDef.dataType = SCDataTypeNSObject;
                     propertyDef.type = SCPropertyTypeObject;
                 }
-
             }
 
             else if ([propertyDescription isKindOfClass:[NSFetchedPropertyDescription class]]) {
@@ -392,33 +352,30 @@
 
             [self addPropertyDefinition:propertyDef];
         }
-
     }
 }
 
 // overrides superclass
-- (NSString *)dataStructureName
-{
-	return [self.entity name];
+- (NSString *)dataStructureName {
+    return [self.entity name];
 }
 
-- (void)setOrderAttributeName:(NSString *)orderAttributeName
-{
+- (void)setOrderAttributeName:(NSString *)orderAttributeName {
     if (![self isValidPropertyName:orderAttributeName]) {
         SCDebugLog(@"Warning: orderAttributeName '%@' is not valid for entity '%@'.", orderAttributeName, self.entity.name);
-        
+
         return;
     }
 
     SCDataType dataType = [self propertyDataTypeForPropertyWithName:orderAttributeName];
     BOOL dataTypeValid = NO;
-    if (dataType==SCDataTypeNSNumber || dataType==SCDataTypeDouble || dataType==SCDataTypeFloat || dataType==SCDataTypeInt) {
+    if (dataType == SCDataTypeNSNumber || dataType == SCDataTypeDouble || dataType == SCDataTypeFloat || dataType == SCDataTypeInt) {
         dataTypeValid = YES;
     }
 
     if (!dataTypeValid) {
         SCDebugLog(@"Warning: orderAttributeName '%@' must be of Integer type.", orderAttributeName);
-        
+
         return;
     }
 
@@ -426,17 +383,15 @@
 }
 
 // overrides superclass
-- (BOOL)isValidPropertyName:(NSString *)propertyName
-{
-	BOOL valid = TRUE;
-    
+- (BOOL)isValidPropertyName:(NSString *)propertyName {
+    BOOL valid = TRUE;
+
     NSArray *keyPathArray = [propertyName componentsSeparatedByString:@"."];
     NSString *_propertyName = nil;
 
     if (self.entity) {
         NSEntityDescription *_dynamicentity = self.entity;
-        for(int i=0; i<keyPathArray.count; i++)
-        {
+        for (int i = 0; i < keyPathArray.count; i++) {
             _propertyName = [keyPathArray objectAtIndex:i];
             NSPropertyDescription *propertyDescription = [self propertyDescriptionForAttributeWithName:_propertyName inEntity:_dynamicentity];
             if (!propertyDescription) {
@@ -444,7 +399,7 @@
                 break;
             }
 
-            if (i<keyPathArray.count-1) // if not last property in keyPath
+            if (i < keyPathArray.count - 1) // if not last property in keyPath
             {
                 if (![propertyDescription isKindOfClass:[NSRelationshipDescription class]]) {
                     valid = FALSE;
@@ -460,9 +415,7 @@
                     valid = FALSE;
                     break;
                 }
-
             }
-
         }
     }
 
@@ -470,24 +423,21 @@
 }
 
 // overrides superclass
-- (SCDataStore *)generateCompatibleDataStore
-{
+- (SCDataStore *)generateCompatibleDataStore {
     return [SCCoreDataStore storeWithManagedObjectContext:self.managedObjectContext defaultEntityDefinition:self];
 }
 
 // overrides superclass
-- (SCDataFetchOptions *)generateCompatibleDataFetchOptions
-{
+- (SCDataFetchOptions *)generateCompatibleDataFetchOptions {
     SCCoreDataFetchOptions *coreDataFetchOptions = [[SCCoreDataFetchOptions alloc] init];
     coreDataFetchOptions.sortKey = self.keyPropertyName;
     coreDataFetchOptions.orderAttributeName = self.orderAttributeName;
-    
+
     return coreDataFetchOptions;
 }
 
 
-- (NSPropertyDescription *)propertyDescriptionForAttributeWithName:(NSString *)attributeName inEntity:(NSEntityDescription *)attributeEntity
-{
+- (NSPropertyDescription *)propertyDescriptionForAttributeWithName:(NSString *)attributeName inEntity:(NSEntityDescription *)attributeEntity {
     NSPropertyDescription *propertyDescription = [[attributeEntity propertiesByName] valueForKey:attributeName];
 
     if (!propertyDescription) {
@@ -500,8 +450,7 @@
                 // Create attributeDescription based on attributePDef
                 NSAttributeDescription *attributeDescription = [[NSAttributeDescription alloc] init];
                 attributeDescription.name = attributeName;
-                switch (attributePDef.dataType)
-                {
+                switch (attributePDef.dataType) {
                     case SCDataTypeNSNumber:
                     case SCDataTypeInt:
                     case SCDataTypeFloat:
@@ -509,24 +458,22 @@
                     case SCDataTypeBOOL:
                         attributeDescription.attributeType = NSInteger16AttributeType;
                         break;
-                    
+
                     case SCDataTypeNSString:
                         attributeDescription.attributeType = NSStringAttributeType;
                         break;
-                        
+
                     case SCDataTypeNSDate:
                         attributeDescription.attributeType = NSDateAttributeType;
                         break;
-                        
+
                     default:
                         break;
                 }
-                
+
                 propertyDescription = attributeDescription;
             }
-
         }
-
     }
 
     return propertyDescription;

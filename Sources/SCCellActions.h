@@ -17,42 +17,42 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// A block invoked with a table-view cell and its index path.
 /// The index path is nil when the cell is detached from its model.
-typedef void(^SCCellAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef void (^SCCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that returns a Boolean decision for a table-view cell.
-typedef BOOL(^SCBOOLReturnCellAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef BOOL (^SCBOOLReturnCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies a table-view cell's editing style.
-typedef UITableViewCellEditingStyle(^SCCellCustomEditingStyleAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef UITableViewCellEditingStyle (^SCCellCustomEditingStyleAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies legacy row-editing actions, or nil for default actions.
 /// The array is untyped to avoid exposing a deprecated UIKit class in its type.
-typedef NSArray * _Nullable (^SCCellEditActionsAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef NSArray *_Nullable (^SCCellEditActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies the leading swipe actions for a table-view cell.
-typedef NSArray<UIContextualAction *> * _Nullable (^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);    // dgApps
+typedef NSArray<UIContextualAction *> *_Nullable (^SCCellLeadingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath); // dgApps
 /// A block that supplies the trailing swipe actions for a table-view cell.
-typedef NSArray<UIContextualAction *> * _Nullable (^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);   // dgApps
+typedef NSArray<UIContextualAction *> *_Nullable (^SCCellTrailingSwipeActionsAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath); // dgApps
 /// A block that calculates a value for a table-view cell, or nil for no value.
-typedef NSObject * _Nullable (^SCCellCalculatedValueAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef NSObject *_Nullable (^SCCellCalculatedValueAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that transforms a value loaded from a table-view cell's binding.
 /// Both the supplied value and the transformed result may be nil.
-typedef NSObject * _Nullable (^SCCellBoundValueAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, NSObject * _Nullable value);
+typedef NSObject *_Nullable (^SCCellBoundValueAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, NSObject *_Nullable value);
 /// A block invoked when a table-view cell's custom button is tapped.
-typedef void(^SCCellCustomButtonTappedAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, UIButton *button);
+typedef void (^SCCellCustomButtonTappedAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, UIButton *button);
 
 /// A block that determines whether a table-view cell can perform an action.
-typedef BOOL(^SCCellCanPerformAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, SEL action, id _Nullable sender);
+typedef BOOL (^SCCellCanPerformAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SEL action, id _Nullable sender);
 /// A block that performs an action for a table-view cell.
-typedef void(^SCCellPerformAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, SEL action, id _Nullable sender);
+typedef void (^SCCellPerformAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SEL action, id _Nullable sender);
 
 
 /// A block that supplies a detail controller, or nil to use the default.
-typedef UIViewController * _Nullable (^SCCellDetailViewControllerAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef UIViewController *_Nullable (^SCCellDetailViewControllerAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 /// A block that supplies a detail model, or nil to use the controller's model.
-typedef SCTableViewModel * _Nullable (^SCCellDetailTableViewModelAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath);
+typedef SCTableViewModel *_Nullable (^SCCellDetailTableViewModelAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath);
 
 /// A block invoked with a table-view cell and its detail model.
 /// A custom controller without an STV model supplies a nil detail model.
-typedef void(^SCDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, SCTableViewModel * _Nullable detailModel);
+typedef void (^SCDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SCTableViewModel *_Nullable detailModel);
 /// A block that returns a Boolean decision for a table-view cell's detail model.
-typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, SCTableViewModel * _Nullable detailModel);
+typedef BOOL (^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, SCTableViewModel *_Nullable detailModel);
 
 
 #pragma mark - SCCellActions
@@ -297,10 +297,6 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 /// ```
 
 @property (nonatomic, copy, nullable) SCCellTrailingSwipeActionsAction_Block trailingSwipeActions;
-
-
-
-
 
 
 /// Action gets called when the cell (or more typically one of the cell's controls) becomes the first responder.
@@ -697,7 +693,7 @@ typedef BOOL(^SCConditionalDetailModelCellAction_Block)(SCTableViewCell *cell, N
 #pragma mark - Cell Text Field Related Actions
 
 /// A block that determines whether a text-field edit should be accepted.
-typedef BOOL(^SCTextFieldShouldChangeCharactersInRangeAction_Block)(SCTableViewCell *cell, NSIndexPath * _Nullable indexPath, UITextField *textField, NSRange range, NSString *replacementString);
+typedef BOOL (^SCTextFieldShouldChangeCharactersInRangeAction_Block)(SCTableViewCell *cell, NSIndexPath *_Nullable indexPath, UITextField *textField, NSRange range, NSString *replacementString);
 
 /// Implement action to control whether the specified text field's text should change.
 ///
@@ -785,14 +781,13 @@ typedef UIImage*(^SCImagePickerLoadImageAction_Block)(SCImagePickerCell *imagePi
 #endif
 
 
-
 #pragma mark - Miscellaneous
 
 /// Method assigns all the actions of another `SCCellActions` class to the current one.
 ///
 /// - Parameter actions: The source actions, or nil to leave existing hooks alone.
 /// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
-- (void)setActionsTo:(SCCellActions * _Nullable)actions overrideExisting:(BOOL)override;
+- (void)setActionsTo:(SCCellActions *_Nullable)actions overrideExisting:(BOOL)override;
 
 @end
 

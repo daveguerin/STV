@@ -12,37 +12,30 @@
 
 @implementation SCUserDefaultsStore
 
-- (NSUserDefaults *)standardUserDefaultsObject
-{
+- (NSUserDefaults *)standardUserDefaultsObject {
     return [NSUserDefaults standardUserDefaults];
 }
 
 // overrides superclass
-- (SCDataDefinition *)definitionForObject:(NSObject *)object
-{
+- (SCDataDefinition *)definitionForObject:(NSObject *)object {
     return self.defaultDataDefinition;
 }
 
 // overrides superclass
-- (void)setDefaultsDictionary:(NSDictionary *)defaultsDictionary
-{
+- (void)setDefaultsDictionary:(NSDictionary *)defaultsDictionary {
     [super setDefaultsDictionary:defaultsDictionary];
-    
+
     [self.standardUserDefaultsObject registerDefaults:defaultsDictionary];
 }
 
 // overrides superclass
-- (NSArray *)fetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions
-{
+- (NSArray *)fetchObjectsWithOptions:(SCDataFetchOptions *)fetchOptions {
     return [NSArray arrayWithObject:self.standardUserDefaultsObject];
 }
 
 // overrides superclass
-- (void)commitData
-{
+- (void)commitData {
     [self.standardUserDefaultsObject synchronize];
 }
 
 @end
-
-

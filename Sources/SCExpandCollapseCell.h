@@ -12,8 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
-
 /// SCExpandCollapseCell is a special cell class that, once tapped, collapses its owner section's contents into a single cell. When tapped again, it will expand the section's contents to their original state.
 ///
 /// Sample use:

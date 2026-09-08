@@ -13,12 +13,11 @@
 #import "SCDataFetchOptions.h"
 
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 /* Data store notifications (used internally) */
 /// Posted before a data store discards all uninserted objects.
-extern NSString * const SCDataStoreWillDiscardAllUninsertedObjectsNotification;
+extern NSString *const SCDataStoreWillDiscardAllUninsertedObjectsNotification;
 
 
 /// The execution modes available to an STV data store.
@@ -30,23 +29,23 @@ typedef NS_ENUM(NSInteger, SCStoreMode) {
 };
 /// A block invoked after a data-store fetch succeeds.
 /// Results may be nil when forwarded from a post-fetch completion handler.
-typedef void(^SCDataStoreFetchSuccess_Block)(NSArray<id> * _Nullable results);
+typedef void (^SCDataStoreFetchSuccess_Block)(NSArray<id> *_Nullable results);
 /// A block invoked after a data-store insert succeeds.
-typedef void(^SCDataStoreInsertSuccess_Block)(void);
+typedef void (^SCDataStoreInsertSuccess_Block)(void);
 /// A block invoked after a data-store update succeeds.
-typedef void(^SCDataStoreUpdateSuccess_Block)(void);
+typedef void (^SCDataStoreUpdateSuccess_Block)(void);
 /// A block invoked after a data-store delete succeeds.
-typedef void(^SCDataStoreDeleteSuccess_Block)(void);
+typedef void (^SCDataStoreDeleteSuccess_Block)(void);
 /// A block invoked when a data-store operation fails.
 /// The abstract asynchronous methods supply nil when no error is available.
-typedef void(^SCDataStoreFailure_Block)(NSError * _Nullable error);
+typedef void (^SCDataStoreFailure_Block)(NSError *_Nullable error);
 /// A block that determines how to handle an unavailable network connection.
-typedef BOOL(^SCNoConnection_Block)(void);
+typedef BOOL (^SCNoConnection_Block)(void);
 /// A completion block for asynchronous post-fetch processing.
 /// Supply nil for error on success; results may be nil on failure.
-typedef void(^SCPostFetchAsyncronousCompletionHandler_Block)(NSArray<id> * _Nullable results, NSError * _Nullable error);
+typedef void (^SCPostFetchAsyncronousCompletionHandler_Block)(NSArray<id> *_Nullable results, NSError *_Nullable error);
 /// A block that performs asynchronous post-fetch processing.
-typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler);
+typedef void (^SCPostFetchAsyncronousAction_Block)(NSArray<id> *_Nullable results, SCPostFetchAsyncronousCompletionHandler_Block completionHandler);
 
 
 #pragma mark - SCDataStore
@@ -68,14 +67,13 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable result
 ///   A newly initialized store may have no default data definition.
 ///
 /// - Warning: SCDataStore is an abstract base class and should not be directly instantiated.
-@interface SCDataStore : NSObject
-{
-@protected
+@interface SCDataStore : NSObject {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     NSMutableDictionary<NSString *, SCDataDefinition *> *_dataDefinitions;
     NSMutableArray<id> *_uninsertedObjects;
-    NSObject * _Nullable _boundObject;
-    NSString * _Nullable _boundPropertyName;
+    NSObject *_Nullable _boundObject;
+    NSString *_Nullable _boundPropertyName;
 }
 
 #pragma mark - Creation and Initialization
@@ -109,7 +107,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable result
 /// - Returns: The applicable definition, or nil if none is configured or found.
 - (nullable SCDataDefinition *)definitionForObject:(NSObject *)object;
 
- 
+
 #pragma mark - Synchronous Data Access
 
 /// Returns a newly allocated and initialized object based on the store's default data definition.
@@ -178,8 +176,7 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable result
 /// - Parameter object: The object containing propertyName.
 /// - Parameter delimiter: If the property returns more than one value, this delimiter is used to separate the values in the returned string.
 /// - Returns: The value for the given propertyName.
-- (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object
-			separateValuesUsingDelimiter:(nullable NSString *)delimiter;
+- (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(NSObject *)object separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
 /// Sets the value for the given property name in the given object.
 /// - Parameter value: The value of the property.
@@ -376,17 +373,6 @@ typedef void(^SCPostFetchAsyncronousAction_Block)(NSArray<id> * _Nullable result
 - (void)fetchObjectsSuccessful:(nullable NSArray<id> *)objects successBlock:(nullable SCDataStoreFetchSuccess_Block)success_block failure:(nullable SCDataStoreFailure_Block)failure_block;
 
 @end
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* Missing framework classes (internal) */

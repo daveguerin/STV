@@ -12,13 +12,12 @@
 
 @implementation SCBadgeView
 
-- (instancetype)initWithFrame:(CGRect)aRect
-{
-    if ( (self = [super initWithFrame:aRect]) ) {
+- (instancetype)initWithFrame:(CGRect)aRect {
+    if ((self = [super initWithFrame:aRect])) {
         self.font = [UIFont systemFontOfSize:15];
         self.textColor = [UIColor grayColor];
-        
-        self.backgroundColor = [UIColor clearColor];//self.backgroundColor = [UIColor redColor];
+
+        self.backgroundColor = [UIColor clearColor];
     }
 
     return self;

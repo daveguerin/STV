@@ -12,7 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
 @protocol SCInputAccessoryViewDelegate;
 
 #pragma mark - SCInputAccessoryView
@@ -69,8 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)doneTapped;
 
 @end
-
-
 
 
 /// Used internally

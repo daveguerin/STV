@@ -25,15 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - SCTableViewSection
 /// This class functions as a section for SCTableViewModel. Every `SCTableViewSection` can contain
 /// any number of SCTableViewCell(s).
-@interface SCTableViewSection : NSObject
-{
-@protected
+@interface SCTableViewSection : NSObject {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
-    __weak SCTableViewModel * _Nullable _ownerTableViewModel;
-    NSObject * _Nullable _boundObject;
-    SCDataStore * _Nullable _boundObjectStore;
-    NSString * _Nullable _boundPropertyName;
-    NSMutableArray<id> * _Nullable _cells;
+    __weak SCTableViewModel *_Nullable _ownerTableViewModel;
+    NSObject *_Nullable _boundObject;
+    SCDataStore *_Nullable _boundObjectStore;
+    NSString *_Nullable _boundPropertyName;
+    NSMutableArray<id> *_Nullable _cells;
 }
 
 #pragma mark - Creation and Initialization
@@ -206,7 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// The method should be able to set the subclass' specific attributes to its corresponding SCPropertyAttributes subclass.
 /// - Parameter attributes: The property attributes to apply.
-- (void) setAttributesTo:(nullable SCPropertyAttributes *)attributes;
+- (void)setAttributesTo:(nullable SCPropertyAttributes *)attributes;
 
 /// Method called internally.
 /// - Parameter options: The detail-view-controller options.
@@ -228,10 +227,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)rollbackToInitialCellValues;
 
 @end
-
-
-
-
 
 
 #pragma mark - SCObjectSection
@@ -262,9 +257,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter sectionHeaderTitle: A header title for the section.
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter definition: The definition for the object.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-       boundObjectDefinition:(nullable SCDataDefinition *)definition;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
 /// Allocates and returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition along with a property group.
 ///
@@ -272,10 +265,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter definition: The definition for the object.
 /// - Parameter group: Limits the generated properties to the ones in the property group only.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-       boundObjectDefinition:(nullable SCDataDefinition *)definition
-               propertyGroup:(nullable SCPropertyGroup *)group;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition propertyGroup:(nullable SCPropertyGroup *)group;
 
 /// Allocates and returns an initialized `SCObjectSection` given a header title, a bound object and its data store along with a property group.
 ///
@@ -283,27 +273,21 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter store: The data store for the bound object.
 /// - Parameter group: Limits the generated properties to the ones in the property group only.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-            boundObjectStore:(nullable SCDataStore *)store
-               propertyGroup:(nullable SCPropertyGroup *)group;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store propertyGroup:(nullable SCPropertyGroup *)group;
 
 
 /// Returns an initialized `SCObjectSection` given a header title and a bound object.
 ///
 /// - Parameter sectionHeaderTitle: A header title for the section.
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object;
 
 /// Returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition.
 ///
 /// - Parameter sectionHeaderTitle: A header title for the section.
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter definition: The definition for the object.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-    boundObjectDefinition:(nullable SCDataDefinition *)definition;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition;
 
 /// Returns an initialized `SCObjectSection` given a header title, a bound object and its extended class definition along with a property group.
 ///
@@ -311,10 +295,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter definition: The definition for the object.
 /// - Parameter group: Limits the generated properties to the ones in the property group only.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-    boundObjectDefinition:(nullable SCDataDefinition *)definition
-            propertyGroup:(nullable SCPropertyGroup *)group;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectDefinition:(nullable SCDataDefinition *)definition propertyGroup:(nullable SCPropertyGroup *)group;
 
 /// Returns an initialized `SCObjectSection` given a header title, a bound object and its data store along with a property group.
 ///
@@ -322,10 +303,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object that `SCObjectSection` will use to generate its cells.
 /// - Parameter store: The boundObject data store.
 /// - Parameter group: Limits the generated properties to the ones in the property group only.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-         boundObjectStore:(nullable SCDataStore *)store
-            propertyGroup:(nullable SCPropertyGroup *)group;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object boundObjectStore:(nullable SCDataStore *)store propertyGroup:(nullable SCPropertyGroup *)group;
 
 #pragma mark - Cell Management
 
@@ -364,9 +342,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
 #pragma mark - SCArrayOfItemsSection
 /// This class functions as an SCTableViewModel section that is able to represent an array
 /// of any kind of items and automatically generate its cells from these items. The section
@@ -386,11 +361,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Warning: This is an abstract base class,  you should never make any direct instances of it.
 ///
 /// - SeeAlso: ``SCArrayOfStringsSection``, ``SCArrayOfObjectsSection``.
-@interface SCArrayOfItemsSection : SCTableViewSection <SCViewControllerDelegate, SCTableViewControllerDelegate>
-{
-@protected
+@interface SCArrayOfItemsSection : SCTableViewSection <SCViewControllerDelegate, SCTableViewControllerDelegate> {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
-    NSObject * _Nullable tempItem;
+    NSObject *_Nullable tempItem;
     UITableViewCellAccessoryType _itemsAccessoryType;
     BOOL _allowAddingItems;
     BOOL _allowDeletingItems;
@@ -573,8 +547,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Subclasses should override this method to handle when generated cells are deleted
 /// - Parameter editingStyle: The editing operation to perform.
 /// - Parameter indexPath: The row index path.
-- (void)commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-		forCellAtIndexPath:(NSIndexPath *)indexPath;
+- (void)commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forCellAtIndexPath:(NSIndexPath *)indexPath;
 
 /// Subclasses should override this method to handle when generated cells are about to move.
 /// - Parameter sourceIndexPath: The source row index path.
@@ -584,8 +557,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Subclasses should override this method to handle when generated cells are moved
 /// - Parameter fromIndexPath: The source row index path.
 /// - Parameter toIndexPath: The destination row index path.
-- (void)moveCellAtIndexPath:(NSIndexPath *)fromIndexPath 
-			   toIndexPath:(NSIndexPath *)toIndexPath;
+- (void)moveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
 /// Subclasses should override this method to handle when addButtonItem is tapped
 - (void)didTapAddButtonItem;
@@ -638,10 +610,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
 #pragma mark - SCArrayOfObjectsSection
 /// This class functions as an SCTableViewModel section that is able to represent an array
 /// of any kind of objects and automatically generate its cells from these objects. In addition,
@@ -661,18 +629,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter sectionHeaderTitle: A header title for the section.
 /// - Parameter sectionItems: A mutable array of objects that the section will use to generate its cells.
 /// - Parameter definition: The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsDefinitions dictionary after initialization.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                       items:(nullable NSMutableArray<id> *)sectionItems
-             itemsDefinition:(SCDataDefinition *)definition;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems itemsDefinition:(SCDataDefinition *)definition;
 
 /// Returns an initialized `SCArrayOfObjectsSection` given a header title and an array of objects.
 ///
 /// - Parameter sectionHeaderTitle: A header title for the section.
 /// - Parameter sectionItems: A mutable array of objects that the section will use to generate its cells.
 /// - Parameter definition: The definition of the objects in the objects array. If the array contains more than one type of object, then their respective definitions must be added to the itemsDefinitions dictionary after initialization.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                    items:(nullable NSMutableArray<id> *)sectionItems
-          itemsDefinition:(SCDataDefinition *)definition;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems itemsDefinition:(SCDataDefinition *)definition;
 
 /// Allocates and returns an initialized `SCArrayOfObjectsSection` given a header title and
 /// an entity definition.
@@ -713,11 +677,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
 #pragma mark - SCArrayOfStringsSection
 /// This class functions as an SCTableViewModel section that is able to represent an array
 /// of string items and automatically generate its cells from these items. The class inherits
@@ -739,11 +698,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle items:(nullable NSMutableArray<id> *)sectionItems;
 
 @end
-
-
-
-
-
 
 
 #pragma mark - SCSelectionSection
@@ -776,10 +730,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-   selectedIndexPropertyName:(nullable NSString *)propertyName
-                       items:(nullable NSArray<id> *)sectionItems;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 /// Allocates and returns an initialized `SCSelectionSection` given a header title, a bound object,
 /// an NSMutableSet bound property name, an array of selection items, and wether to allow multiple selection.
@@ -793,11 +744,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-                    selectedIndexesPropertyName:(nullable NSString *)propertyName
-                       items:(nullable NSArray<id> *)sectionItems
-	   allowMultipleSelection:(BOOL)multipleSelection;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Allocates and returns an initialized `SCSelectionSection` given a header title, a bound object,
 /// an NSString bound property name, and an array of selection items.
@@ -810,10 +757,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object
-                    selectionStringPropertyName:(nullable NSString *)propertyName
-                       items:(nullable NSArray<id> *)sectionItems;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 
 /// Returns an initialized `SCSelectionSection` given a header title, a bound object,
@@ -827,10 +771,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-                selectedIndexPropertyName:(nullable NSString *)propertyName
-                    items:(nullable NSArray<id> *)sectionItems;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 /// Returns an initialized `SCSelectionSection` given a header title, a bound object,
 /// a bound property name, an array of selection items, and wether to allow multiple selection.
@@ -844,11 +785,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
 /// - Parameter multipleSelection: Determines if multiple selection is allowed.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-                selectedIndexesPropertyName:(nullable NSString *)propertyName
-                    items:(nullable NSArray<id> *)sectionItems
-	allowMultipleSelection:(BOOL)multipleSelection;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedIndexesPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems allowMultipleSelection:(BOOL)multipleSelection;
 
 /// Returns an initialized `SCSelectionSection` given a header title, a bound object,
 /// an NSString bound property name, and an array of selection items.
@@ -861,10 +798,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///   from the value present in this property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of
 ///   an NSString type.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object
-                    selectionStringPropertyName:(nullable NSString *)propertyName
-                    items:(nullable NSArray<id> *)sectionItems;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectionStringPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems;
 
 #pragma mark - Configuration
 
@@ -903,7 +837,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, strong) UIColor *deselectedCellTextColor;
 
 /// The accessoryView of the selected cell(s).
-@property(nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
+@property (nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
 
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)
@@ -914,13 +848,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)configureCellForDisplay:(SCTableViewCell *)cell atIndex:(NSUInteger)index;
 
 @end
-
-
-
-
-
-
-
 
 
 #pragma mark - SCObjectSelectionSection
@@ -944,9 +871,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object the section will bind to.
 /// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-         selectionItemsStore:(nullable SCDataStore *)store;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Allocates and returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and an array of selection items.
 /// - Parameter sectionHeaderTitle: The section's header title.
@@ -954,9 +879,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
 /// - Parameter definition: The definition of the selection items.
-+ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-                 boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-                       items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
++ (instancetype)sectionWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
 /// Returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and a selection items store.
@@ -964,9 +887,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter object: The object the section will bind to.
 /// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter store: The store containing the selection objects.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-      selectionItemsStore:(nullable SCDataStore *)store;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName selectionItemsStore:(nullable SCDataStore *)store;
 
 /// Returns an initialized `SCObjectSelectionSection` given cell text, bound object, a bound property name, and an array of selection items.
 /// - Parameter sectionHeaderTitle: The section's header title.
@@ -974,9 +895,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyName: The section's bound property name corresponding to the object selection. If multiple selection is allowed, then property must be of an NSMutableSet type, otherwise, property must be of type NSObject and cannot be a readonly property.
 /// - Parameter sectionItems: An array of the items that the user will choose from. All items must be of an NSObject type and all items must be instances of the same class.
 /// - Parameter definition: The definition of the selection items.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle
-              boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName
-                    items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)sectionHeaderTitle boundObject:(nullable NSObject *)object selectedObjectPropertyName:(nullable NSString *)propertyName items:(nullable NSArray<id> *)sectionItems itemsDefintion:(SCDataDefinition *)definition;
 
 
 #pragma mark - Configuration
@@ -1011,7 +930,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable, strong) UIColor *deselectedCellTextColor;
 
 /// The accessoryView of the selected cell(s).
-@property(nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
+@property (nonatomic, nullable, strong) UIView *selectedCellAccessoryView;
 
 
 #pragma mark - Internal Properties & Methods (should only be used by the framework or when subclassing)

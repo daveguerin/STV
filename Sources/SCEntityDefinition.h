@@ -169,7 +169,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter entityName: The name of the entity for which the definition will be extended.
 /// - Parameter context: The managed object context of the entity.
 /// - Parameter autoGenerate: If TRUE, SCEntityDefinition will automatically generate all the property definitions for the given entity's attributes.
-- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context  autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
+- (instancetype)initWithEntityName:(NSString *)entityName managedObjectContext:(NSManagedObjectContext *)context autoGeneratePropertyDefinitions:(BOOL)autoGenerate;
 
 /// Returns an initialized SCEntityDefinition given a Core Data entity name and a string of the property names to generate property definitions for.
 ///

@@ -27,8 +27,7 @@
 @end
 
 
-@interface SCTableViewSection ()
-{
+@interface SCTableViewSection () {
     BOOL commitChangesLive;
     SCDetailViewControllerOptions *_detailViewControllerOptions;
     SCDetailViewControllerOptions *_newItemDetailViewControllerOptions;
@@ -1133,8 +1132,7 @@
 @end
 
 
-@interface SCArrayOfItemsSection ()
-{
+@interface SCArrayOfItemsSection () {
     BOOL itemsInSync;
     __weak SCTableViewModel *activeDetailModel;
     NSMutableArray *cellReuseIdentifiers;
@@ -3310,8 +3308,7 @@
 @end
 
 
-@interface SCSelectionSection ()
-{
+@interface SCSelectionSection () {
     BOOL boundToNSNumber;
     BOOL boundToNSString;
     NSIndexPath *lastSelectedRowIndexPath;
@@ -3741,8 +3738,7 @@
 @end
 
 
-@interface SCObjectSelectionSection ()
-{
+@interface SCObjectSelectionSection () {
     NSIndexPath *lastSelectedRowIndexPath;
 }
 @end

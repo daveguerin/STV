@@ -14,7 +14,7 @@
  with the STV 7 package and documentation.
 */
 /// The current STV framework version.
-#define kSTVCurrentVersion      @"7.0.0"
+#define kSTVCurrentVersion @"7.0.0"
 
 // Sensible TableView
 
@@ -34,4 +34,3 @@
 #import "SCUserDefaultsDefinition.h"
 #import "SCUserDefaultsStore.h"
 #import "SCViewController.h"
-

@@ -25,9 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// - SeeAlso: ``SCClassDefinition``, ``SCDictionaryDefinition``, ``SCEntityDefinition``
 ///
 /// - Warning: This is an abstract base class and should never be directly instantiated.
-@interface SCDataDefinition : NSObject <SCibInitialization>
-{
-@protected
+@interface SCDataDefinition : NSObject <SCibInitialization> {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     NSMutableArray<SCPropertyDefinition *> *propertyDefinitions;
 }
@@ -74,9 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyTitle: The optional title of the property. Nil leaves the title unset.
 /// - Parameter propertyType: The property type.
 /// - Returns: Returns TRUE if adding the definition was successful. The main reason for addition failure is if the property name does not match an existing property in the data structure.
-- (BOOL)addPropertyDefinitionWithName:(nullable NSString *)propertyName
-								title:(nullable NSString *)propertyTitle
-								 type:(SCPropertyType)propertyType;
+- (BOOL)addPropertyDefinitionWithName:(nullable NSString *)propertyName title:(nullable NSString *)propertyTitle type:(SCPropertyType)propertyType;
 
 /// Methods adds a new property definition.
 /// - Parameter propertyDefinition: The property definition to be added.
@@ -87,8 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyDefinition: The property definition to be added.
 /// - Parameter index: The index to insert the property definition at. Must be less than propertyDefinitionCount.
 /// - Returns: Returns TRUE if inserting the definition was successful. The main reason for insertion failure is if the property name does not match an existing property in the data structure (not required if property definition is an SCCustomPropertyDefinition).
-- (BOOL)insertPropertyDefinition:(SCPropertyDefinition *)propertyDefinition
-						 atIndex:(NSInteger)index;
+- (BOOL)insertPropertyDefinition:(SCPropertyDefinition *)propertyDefinition atIndex:(NSInteger)index;
 
 /// Removes the property definition at the given index.
 /// - Parameter index: Must be less than the total number of property definitions.

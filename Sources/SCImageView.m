@@ -11,13 +11,12 @@
 #import "SCImageView.h"
 
 
-#define kBoundPropertyNameKey  @"boundPropertyName"
+#define kBoundPropertyNameKey @"boundPropertyName"
 
 
 @implementation SCImageView
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
     if (self) {
@@ -27,10 +26,9 @@
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [super encodeWithCoder:aCoder];
-    
+
     [aCoder encodeObject:self.boundPropertyName forKey:kBoundPropertyNameKey];
 }
 

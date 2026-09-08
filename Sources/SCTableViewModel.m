@@ -28,26 +28,21 @@
 @end
 
 @implementation SCModelGeometryObserver
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     if (self.geometryDidChange) {
         self.geometryDidChange();
     }
-
 }
-- (void)safeAreaInsetsDidChange
-{
+- (void)safeAreaInsetsDidChange {
     [super safeAreaInsetsDidChange];
     if (self.geometryDidChange) {
         self.geometryDidChange();
     }
-
 }
 @end
 
-@interface SCTableViewModel ()
-{
+@interface SCTableViewModel () {
     BOOL _loading;
     __weak UITableView *_keyboardInsetTable;
     CGRect _keyboardEndFrame;
@@ -69,15 +64,12 @@
 - (void)addSectionForObject:(NSObject *)object withDataStore:(SCDataStore *)store usingGroup:(SCPropertyGroup *)group newObject:(BOOL)newObject;
 - (SCTableViewSection *)getSectionForPropertyDefinition:(SCPropertyDefinition *)propertyDef withBoundObject:(NSObject *)object withDataStore:(SCDataStore *)store;
 
-- (void)tableAnimationEnded:(NSString*)animationID finished:(NSNumber *)finished contextInfo:(void *)context;
+- (void)tableAnimationEnded:(NSString *)animationID finished:(NSNumber *)finished contextInfo:(void *)context;
 
 @end
 
 
-
-
-@interface SCTableViewModel ()
-{
+@interface SCTableViewModel () {
     NSIndexPath *lastReturnedCellIndexPath;
     SCTableViewCell *lastReturnedCell;
     NSIndexPath *lastVisibleCellIndexPath;
@@ -93,19 +85,17 @@
 // Fully custom accessors use no storage; retain the runtime V attribute for compatibility.
 @synthesize viewController = _viewController;
 
-+ (instancetype)modelWithTableView:(UITableView *)tableView
-{
-	return [[[self class] alloc] initWithTableView:tableView];
++ (instancetype)modelWithTableView:(UITableView *)tableView {
+    return [[[self class] alloc] initWithTableView:tableView];
 }
 
 
-- (instancetype)init
-{
-    if ( (self=[super init])  ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _loading = FALSE;
-        
+
         _tableView = nil;
-        
+
         lastReturnedCellIndexPath = nil;
         lastReturnedCell = nil;
         lastVisibleCellIndexPath = nil;
@@ -113,7 +103,7 @@
         action = nil;
         _masterModel = nil;
         _activeDetailModel = nil;
-		
+
         _editButtonItem = nil;
         _sectionIndexTitles = nil;
         _autoGenerateSectionIndexTitles = FALSE;
@@ -121,17 +111,17 @@
         _hideSectionHeaderTitles = FALSE;
         _lockCellSelection = FALSE;
         _tag = 0;
-        
+
         _enablePullToRefresh = FALSE;
         [self setRefreshControl:[[UIRefreshControl alloc] init]]; // call setter
-        
+
         sections = [[NSMutableArray alloc] init];
         _activeCell = nil;
         _activeCellIndexPath = nil;
         _activeCellControl = nil;
-		
+
         _commitButton = nil;
-		
+
         keyboardShown = FALSE;
         keyboardOverlap = 0;
         /*
@@ -142,14 +132,14 @@
         _defaultCellSizingMode = SCTableViewCellSizingModeAutomatic;
         _defaultCellHeight = 44.0;
         _swipeToDeleteActive = FALSE;
-        
+
         _detailViewController = nil;
-        
+
         _modelActions = [[SCModelActions alloc] init];
         _modelActions.ownerTableViewModel = self;
         _sectionActions = [[SCSectionActions alloc] init];
         _cellActions = [[SCCellActions alloc] init];
-        
+
         // Register with the shared model center
         [[SCModelCenter sharedModelCenter] registerModel:self];
     }
@@ -157,25 +147,22 @@
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-{
-    if ( (self=[self init]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView {
+    if ((self = [self init])) {
         [self setTableView:tableView];
     }
 
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [self removeKeyboardInset];
-	// Unregister from the shared model center
+    // Unregister from the shared model center
     [[SCModelCenter sharedModelCenter] unregisterModel:self];
 }
 
 
-- (void)setTableView:(UITableView *)tableView
-{
+- (void)setTableView:(UITableView *)tableView {
     if (_tableView != tableView) {
         [self removeKeyboardInset];
         _tableView.refreshControl = nil;
@@ -185,7 +172,7 @@
 
     if (_tableView) {
         // Remove tableView from any previos model
-        if (_tableView.dataSource && _tableView.dataSource!=self && [_tableView.dataSource isKindOfClass:[SCTableViewModel class]]) {
+        if (_tableView.dataSource && _tableView.dataSource != self && [_tableView.dataSource isKindOfClass:[SCTableViewModel class]]) {
             [(SCTableViewModel *)_tableView.dataSource setTableView:nil];
         }
 
@@ -217,29 +204,25 @@
     [self reconcileKeyboardInset];
 }
 
-- (void)setDefaultCellHeight:(CGFloat)height
-{
+- (void)setDefaultCellHeight:(CGFloat)height {
     _defaultCellHeight = height;
     self.defaultCellSizingMode = height > 0 ? SCTableViewCellSizingModeFixed : SCTableViewCellSizingModeAutomatic;
 }
 
-- (void)setDefaultCellSizingMode:(SCTableViewCellSizingMode)mode
-{
+- (void)setDefaultCellSizingMode:(SCTableViewCellSizingMode)mode {
     _defaultCellSizingMode = mode;
-    for(SCTableViewSection *section in sections) {
+    for (SCTableViewSection *section in sections) {
         [section invalidateCellSizingPolicy];
     }
 
-    for(SCTableViewCell *cell in self.tableView.visibleCells)
-    {
+    for (SCTableViewCell *cell in self.tableView.visibleCells) {
         [cell setNeedsUpdateConstraints];
         [cell updateConstraintsIfNeeded];
     }
     [self reloadAfterSizingPolicyChange];
 }
 
-- (void)reloadAfterSizingPolicyChange
-{
+- (void)reloadAfterSizingPolicyChange {
     UITableView *tableView = self.tableView;
     if (!tableView) {
         return;
@@ -247,74 +230,62 @@
 
     if (tableView.hasUncommittedUpdates) {
         __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf reloadAfterSizingPolicyChange];
-        });
+        dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf reloadAfterSizingPolicyChange]; });
         return;
     }
 
     [tableView reloadData];
 }
 
-- (UITableView *)modeledTableView
-{
+- (UITableView *)modeledTableView {
     return [self tableView];
 }
 
-- (void)setModeledTableView:(UITableView *)modeledTableView
-{
+- (void)setModeledTableView:(UITableView *)modeledTableView {
     [self setTableView:modeledTableView];
 }
 
-- (UITableView *)trueTableView
-{
+- (UITableView *)trueTableView {
     return _tableView;
 }
 
-- (UIViewController *)viewController
-{
+- (UIViewController *)viewController {
     if (!self.trueTableView) {
         return nil;
     }
 
 
     id vc = [self.trueTableView nextResponder];
-    while(![vc isKindOfClass:[UIViewController class]] && vc!=nil)
-    {
+    while (![vc isKindOfClass:[UIViewController class]] && vc != nil) {
         vc = [vc nextResponder];
     }
-    
+
     return vc;
 }
 
-- (void)setInputAccessoryView:(SCInputAccessoryView *)accessoryView
-{
+- (void)setInputAccessoryView:(SCInputAccessoryView *)accessoryView {
     _inputAccessoryView = accessoryView;
     _inputAccessoryView.delegate = self;
 }
 
-- (void)setEnablePullToRefresh:(BOOL)enable
-{
+- (void)setEnablePullToRefresh:(BOOL)enable {
     _enablePullToRefresh = enable;
     self.tableView.refreshControl = enable ? self.refreshControl : nil;
 }
 
-- (void)setRefreshControl:(UIRefreshControl *)refreshControl
-{
+- (void)setRefreshControl:(UIRefreshControl *)refreshControl {
     _refreshControl = refreshControl;
-    
+
     [self.refreshControl addTarget:self action:@selector(pullToRefreshDidStartLoading) forControlEvents:UIControlEventValueChanged];
 
     if (self.enablePullToRefresh) {
-        [self setEnablePullToRefresh:TRUE];  // call setter to configure refreshControl
+        [self setEnablePullToRefresh:TRUE]; // call setter to configure refreshControl
     }
-
 }
 
-- (void)setDetailViewController:(UIViewController *)detailViewController
-{
+- (void)setDetailViewController:(UIViewController *)detailViewController {
     _detailViewController = detailViewController;
-    
+
     SCTableViewModel *detailModel = nil;
     if ([detailViewController isKindOfClass:[SCTableViewController class]]) {
         detailModel = [(SCTableViewController *)detailViewController tableViewModel];
@@ -327,11 +298,9 @@
     if (detailModel) {
         [self configureDetailModel:detailModel];
     }
-
 }
 
-- (BOOL)live
-{
+- (BOOL)live {
     BOOL live;
     /*
      The if was previously
@@ -358,77 +327,64 @@
     return live;
 }
 
-- (void)enterLoadingMode
-{
+- (void)enterLoadingMode {
     _loading = TRUE;
 }
 
-- (void)exitLoadingMode
-{
+- (void)exitLoadingMode {
     _loading = FALSE;
     [self clearLastReturnedCellData];
 }
 
-- (void)clearLastReturnedCellData
-{
+- (void)clearLastReturnedCellData {
     if (lastReturnedCellIndexPath) {
         lastReturnedCellIndexPath = nil;
-        
+
         lastReturnedCell.configured = FALSE;
         lastReturnedCell = nil;
     }
-
 }
 
-- (void)configureDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)configureDetailModel:(SCTableViewModel *)detailModel {
     detailModel.masterModel = self;
-    
+
     detailModel.tag = self.tag + 1;
 }
 
-- (NSArray *)sectionIndexTitles
-{
+- (NSArray *)sectionIndexTitles {
     if (!self.autoGenerateSectionIndexTitles) {
         return _sectionIndexTitles;
     }
 
     // Generate sectionIndexTitles
-	NSMutableArray *titles = [NSMutableArray arrayWithCapacity:self.sectionCount];
-	for(SCTableViewSection *section in sections) {
+    NSMutableArray *titles = [NSMutableArray arrayWithCapacity:self.sectionCount];
+    for (SCTableViewSection *section in sections) {
         if ([section.headerTitle length]) {
             // Add first letter of the header title to section titles
             [titles addObject:[section.headerTitle substringToIndex:1]];
         }
-
-	}
+    }
 
 
     return titles;
 }
 
-- (void)setAutoSortSections:(BOOL)autoSort
-{
-	_autoSortSections = autoSort;
+- (void)setAutoSortSections:(BOOL)autoSort {
+    _autoSortSections = autoSort;
     if (autoSort) {
         [sections sortUsingSelector:@selector(compare:)];
     }
-
 }
 
 
-- (void)rollbackToInitialCellValues
-{
-    for(SCTableViewSection *section in sections)
-    {
+- (void)rollbackToInitialCellValues {
+    for (SCTableViewSection *section in sections) {
         [section rollbackToInitialCellValues];
     }
 }
 
-- (void)reloadCellsIfNeeded
-{
-    for(SCTableViewSection *section in sections)
-    {
+- (void)reloadCellsIfNeeded {
+    for (SCTableViewSection *section in sections) {
         if (![section isKindOfClass:[SCObjectSection class]]) {
             continue;
         }
@@ -438,8 +394,7 @@
 }
 
 
-- (void)setActiveCell:(SCTableViewCell *)cell
-{
+- (void)setActiveCell:(SCTableViewCell *)cell {
     if (_activeCell == cell) {
         return;
     }
@@ -471,7 +426,7 @@
         }
 
         [_activeCell willDeselectCell];
-        
+
         [self.tableView deselectRowAtIndexPath:self.activeCellIndexPath animated:NO];
 
         if (_activeCell.cellActions.didDeselect) {
@@ -543,39 +498,31 @@
             else if (_activeCell.ownerTableViewModel.cellActions.didSelect) {
                 self.cellActions.didSelect(cell, self.activeCellIndexPath);
             }
-
         }
 
-        [self.tableView scrollToRowAtIndexPath:_activeCellIndexPath
-                                     atScrollPosition:UITableViewScrollPositionNone
-                                             animated:YES];
+        [self.tableView scrollToRowAtIndexPath:_activeCellIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         [self.tableView selectRowAtIndexPath:_activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-
 }
 
-- (void)setActiveCellControl:(UIResponder *)control
-{
+- (void)setActiveCellControl:(UIResponder *)control {
     _activeCellControl = control;
 }
 
-- (void)setCommitButton:(UIBarButtonItem *)button
-{
-	_commitButton = button;
-	
-	_commitButton.enabled = self.valuesAreValid;
+- (void)setCommitButton:(UIBarButtonItem *)button {
+    _commitButton = button;
+
+    _commitButton.enabled = self.valuesAreValid;
 }
 
-- (void)setEditButtonItem:(UIBarButtonItem *)barButtonItem
-{
-	_editButtonItem = barButtonItem;
-	
-	_editButtonItem.target = self;
-	_editButtonItem.action = @selector(didTapEditButtonItem);
+- (void)setEditButtonItem:(UIBarButtonItem *)barButtonItem {
+    _editButtonItem = barButtonItem;
+
+    _editButtonItem.target = self;
+    _editButtonItem.action = @selector(didTapEditButtonItem);
 }
 
-- (void)valueChangedForSectionAtIndex:(NSUInteger)index
-{
+- (void)valueChangedForSectionAtIndex:(NSUInteger)index {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if (target) {
@@ -583,7 +530,7 @@
     }
 
 #pragma clang diagnostic pop
-    
+
     SCTableViewSection *section = [self sectionAtIndex:index];
     if (section.sectionActions.valueChanged) {
         section.sectionActions.valueChanged(section, index);
@@ -592,11 +539,9 @@
     else if (self.sectionActions.valueChanged) {
         self.sectionActions.valueChanged(section, index);
     }
-
 }
 
-- (void)valueChangedForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)valueChangedForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (!indexPath) {
         return;
     }
@@ -607,7 +552,7 @@
     visible instance, which may be nil during detail dismissal and suppress
     value callbacks.
     */
-	SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
+    SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
     if (cell != self.activeCell) {
         if (self.activeCell.autoResignFirstResponder) {
             [self.activeCell resignFirstResponder];
@@ -639,24 +584,20 @@
     else if (self.cellActions.valueChanged) {
         self.cellActions.valueChanged(cell, indexPath);
     }
-
 }
 
-- (void)setTargetForModelModifiedEvent:(id)_target action:(SEL)_action
-{
-	target = _target;
-	action = _action;
+- (void)setTargetForModelModifiedEvent:(id)_target action:(SEL)_action {
+    target = _target;
+    action = _action;
 }
 
-- (void)didTapEditButtonItem
-{	
-	BOOL editing = !self.tableView.editing;		// toggle editing state
-	
-	[self setTableViewEditing:editing animated:TRUE];
+- (void)didTapEditButtonItem {
+    BOOL editing = !self.tableView.editing; // toggle editing state
+
+    [self setTableViewEditing:editing animated:TRUE];
 }
 
-- (void)pullToRefreshDidStartLoading
-{
+- (void)pullToRefreshDidStartLoading {
     if (self.detailViewController) {
         // Clear detail view
         if ([self.detailViewController isKindOfClass:[SCTableViewController class]]) {
@@ -668,41 +609,35 @@
             SCViewController *detailVC = (SCViewController *)self.detailViewController;
             [detailVC loseFocus];
         }
-
     }
 
 
     [self reloadBoundValues];
     [self.tableView reloadData];
-    
+
     [self.refreshControl endRefreshing];
 
     if (self.modelActions.didRefresh) {
         self.modelActions.didRefresh(self);
     }
-
 }
 
-- (NSUInteger)sectionCount
-{
-	return sections.count;
+- (NSUInteger)sectionCount {
+    return sections.count;
 }
 
-- (void)prepareSectionForOwnership:(SCTableViewSection *)section
-{
+- (void)prepareSectionForOwnership:(SCTableViewSection *)section {
     section.ownerTableViewModel = self;
 
     if (self.tableView.editing && [section isKindOfClass:[SCObjectSection class]]) {
         [(SCObjectSection *)section generateCellsForEditingState:TRUE];
     }
-
 }
 
-- (void)addSection:(SCTableViewSection *)section
-{
-	[self prepareSectionForOwnership:section];
-    
-	[sections addObject:section];
+- (void)addSection:(SCTableViewSection *)section {
+    [self prepareSectionForOwnership:section];
+
+    [sections addObject:section];
 
 
     if (self.modelActions.sortSections) {
@@ -716,17 +651,15 @@
     [self callDidAddSectionActionsForSection:section];
 }
 
-- (void)insertSection:(SCTableViewSection *)section atIndex:(NSUInteger)index
-{
-	[self prepareSectionForOwnership:section];
-    
-	[sections insertObject:section atIndex:index];
-    
+- (void)insertSection:(SCTableViewSection *)section atIndex:(NSUInteger)index {
+    [self prepareSectionForOwnership:section];
+
+    [sections insertObject:section atIndex:index];
+
     [self callDidAddSectionActionsForSection:section];
 }
 
-- (void)callDidAddSectionActionsForSection:(SCTableViewSection *)section
-{
+- (void)callDidAddSectionActionsForSection:(SCTableViewSection *)section {
     NSUInteger sectionIndex = [sections indexOfObjectIdenticalTo:section];
 
     if (self.modelActions.didAddSection) {
@@ -740,120 +673,101 @@
     else if (self.sectionActions.didAddToModel) {
         self.sectionActions.didAddToModel(section, sectionIndex);
     }
-
 }
 
-- (SCTableViewSection *)sectionAtIndex:(NSUInteger)index
-{
+- (SCTableViewSection *)sectionAtIndex:(NSUInteger)index {
     if (index < self.sectionCount) {
         return [sections objectAtIndex:index];
     }
 
     //else
-	return nil;
+    return nil;
 }
 
-- (SCTableViewSection *)sectionWithHeaderTitle:(NSString *)title
-{
-	for(SCTableViewSection *section in sections) {
+- (SCTableViewSection *)sectionWithHeaderTitle:(NSString *)title {
+    for (SCTableViewSection *section in sections) {
         if (title) {
             if ([section.headerTitle isEqualToString:title]) {
                 return section;
             }
-
         }
 
         else {
             if (!section.headerTitle) {
                 return section;
             }
-
         }
-
-	}
-
+    }
 
 
     return nil;
 }
 
-- (NSUInteger)indexForSection:(SCTableViewSection *)section
-{
-	return [sections indexOfObjectIdenticalTo:section];
+- (NSUInteger)indexForSection:(SCTableViewSection *)section {
+    return [sections indexOfObjectIdenticalTo:section];
 }
 
-- (void)removeSectionAtIndex:(NSUInteger)index
-{
-	[sections removeObjectAtIndex:index];
+- (void)removeSectionAtIndex:(NSUInteger)index {
+    [sections removeObjectAtIndex:index];
 
     if (self.modelActions.didRemoveSection) {
         self.modelActions.didRemoveSection(self, index);
     }
-
 }
 
-- (void)removeAllSections
-{
+- (void)removeAllSections {
     _activeCell = nil;
     _activeCellControl = nil;
-    
-	[sections removeAllObjects];
+
+    [sections removeAllObjects];
 }
 
-- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition
-{
+- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition {
     [self generateSectionsForObject:object withDefinition:definition newObject:NO];
 }
 
-- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition newObject:(BOOL)newObject
-{
+- (void)generateSectionsForObject:(NSObject *)object withDefinition:(SCDataDefinition *)definition newObject:(BOOL)newObject {
     SCDataStore *objStore = [definition generateCompatibleDataStore];
     [self generateSectionsForObject:object withDataStore:objStore newObject:newObject];
 }
 
-- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store
-{
+- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store {
     [self generateSectionsForObject:object withDataStore:store newObject:NO];
 }
 
-- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store newObject:(BOOL)newObject
-{
+- (void)generateSectionsForObject:(NSObject *)object withDataStore:(SCDataStore *)store newObject:(BOOL)newObject {
     SCDataDefinition *definition = [store definitionForObject:object];
     [definition generateDefaultPropertyGroupProperties];
-    
+
     [self addSectionForObject:object withDataStore:store usingGroup:definition.defaultPropertyGroup newObject:newObject];
-    
-    for(NSInteger i=0; i<definition.propertyGroups.groupCount; i++)
-    {
+
+    for (NSInteger i = 0; i < definition.propertyGroups.groupCount; i++) {
         SCPropertyGroup *propertyGroup = [definition.propertyGroups groupAtIndex:i];
         [self addSectionForObject:object withDataStore:store usingGroup:propertyGroup newObject:newObject];
     }
 }
 
-- (void)generateSectionsForUserDefaultsDefinition:(SCUserDefaultsDefinition *)userDefaultsDefinition
-{
+- (void)generateSectionsForUserDefaultsDefinition:(SCUserDefaultsDefinition *)userDefaultsDefinition {
     SCUserDefaultsStore *store = (SCUserDefaultsStore *)[userDefaultsDefinition generateCompatibleDataStore];
     NSObject *object = store.standardUserDefaultsObject;
-    
+
     [self generateSectionsForObject:object withDataStore:store newObject:FALSE];
 }
 
-- (void)addSectionForObject:(NSObject *)object withDataStore:(SCDataStore *)store usingGroup:(SCPropertyGroup *)group newObject:(BOOL)newObject
-{
+- (void)addSectionForObject:(NSObject *)object withDataStore:(SCDataStore *)store usingGroup:(SCPropertyGroup *)group newObject:(BOOL)newObject {
     NSInteger propertyNameCount = group.propertyNameCount;
     if (!propertyNameCount) {
         return;
     }
 
     SCDataDefinition *definition = [store definitionForObject:object];
-    
+
     SCPropertyGroup *subGroup = [SCPropertyGroup groupWithHeaderTitle:group.headerTitle footerTitle:group.footerTitle propertyNames:nil];
-    for(NSInteger i=0; i<propertyNameCount; i++)
-    {
+    for (NSInteger i = 0; i < propertyNameCount; i++) {
         NSString *propertyName = [group propertyNameAtIndex:i];
         SCPropertyDefinition *propertyDef = [definition propertyDefinitionWithName:propertyName];
 
-        if ( (newObject && !propertyDef.existsInCreationMode) || (!newObject && !propertyDef.existsInDetailMode) ) {
+        if ((newObject && !propertyDef.existsInCreationMode) || (!newObject && !propertyDef.existsInDetailMode)) {
             continue;
         }
 
@@ -866,7 +780,7 @@
             if (subGroup.propertyNameCount) {
                 SCObjectSection *objectSection = [[SCObjectSection alloc] initWithHeaderTitle:nil boundObject:object boundObjectStore:store propertyGroup:subGroup];
                 [self addSection:objectSection];
-                
+
                 // reset subGroup
                 subGroup = [SCPropertyGroup groupWithHeaderTitle:group.headerTitle footerTitle:group.footerTitle propertyNames:nil];
             }
@@ -876,31 +790,25 @@
                 section.headerTitle = group.headerTitle;
                 section.footerTitle = group.footerTitle;
                 section.detailViewControllerOptions.hidesBottomBarWhenPushed = self.viewController.hidesBottomBarWhenPushed;
-                
+
                 [self addSection:section];
             }
-
         }
-
     }
 
     if (subGroup.propertyNameCount) {
         SCObjectSection *objectSection = [[SCObjectSection alloc] initWithHeaderTitle:nil boundObject:object boundObjectStore:store propertyGroup:subGroup];
         [self addSection:objectSection];
     }
-
 }
 
-- (SCTableViewSection *)getSectionForPropertyDefinition:(SCPropertyDefinition *)propertyDef withBoundObject:(NSObject *)boundObj withDataStore:(SCDataStore *)store
-{
+- (SCTableViewSection *)getSectionForPropertyDefinition:(SCPropertyDefinition *)propertyDef withBoundObject:(NSObject *)boundObj withDataStore:(SCDataStore *)store {
     SCTableViewSection *section = nil;
-    
-    switch (propertyDef.type)
-    {
-        case SCPropertyTypeObject:
-        {
+
+    switch (propertyDef.type) {
+        case SCPropertyTypeObject: {
             NSObject *object = [store valueForPropertyName:propertyDef.name inObject:boundObj];
-            
+
             SCDataDefinition *objDef = nil;
             if ([propertyDef.attributes isKindOfClass:[SCObjectAttributes class]]) {
                 objDef = [(SCObjectAttributes *)propertyDef.attributes objectDefinition];
@@ -915,7 +823,7 @@
                 // create a new object
                 object = [objStore createNewObjectWithDefinition:objDef];
                 [objStore insertObject:object];
-                
+
                 [store setValue:object forPropertyName:propertyDef.name inObject:boundObj];
             }
 
@@ -924,11 +832,9 @@
             }
 
             section = [SCObjectSection sectionWithHeaderTitle:nil boundObject:object boundObjectStore:objStore propertyGroup:nil];
-        }
-            break;
-            
-        case SCPropertyTypeArrayOfObjects:
-        {
+        } break;
+
+        case SCPropertyTypeArrayOfObjects: {
             SCDataDefinition *objectsDefinition = nil;
             if ([propertyDef.attributes isKindOfClass:[SCArrayOfObjectsAttributes class]]) {
                 objectsDefinition = [(SCArrayOfObjectsAttributes *)propertyDef.attributes defaultObjectsDefinition];
@@ -937,14 +843,11 @@
             SCDataStore *objectsStore = [objectsDefinition generateCompatibleDataStore];
             if (objectsStore) {
                 if (![objectsStore valueForPropertyName:propertyDef.name inObject:boundObj]) {
-                    if ( (propertyDef.dataType==SCDataTypeNSMutableArray && !propertyDef.dataReadOnly)
-                       || propertyDef.dataType==SCDataTypeDictionaryItem) {
+                    if ((propertyDef.dataType == SCDataTypeNSMutableArray && !propertyDef.dataReadOnly) || propertyDef.dataType == SCDataTypeDictionaryItem) {
                         if ([objectsStore isKindOfClass:[SCArrayStore class]]) { // if statement required to prevent problems with other stores not supporting this kind of initialization
                             [objectsStore setValue:[NSMutableArray array] forPropertyName:propertyDef.name inObject:boundObj];
                         }
-
                     }
-
                 }
 
                 SCDataDefinition *boundObjDef = [store definitionForObject:boundObj];
@@ -952,11 +855,10 @@
             }
 
             section = [SCArrayOfObjectsSection sectionWithHeaderTitle:nil dataStore:objectsStore];
-        }
-            break;
-            
+        } break;
+
         case SCPropertyTypeSelection:
-            if (propertyDef.dataType==SCDataTypeNSNumber || propertyDef.dataType==SCDataTypeInt) {
+            if (propertyDef.dataType == SCDataTypeNSNumber || propertyDef.dataType == SCDataTypeInt) {
                 section = [SCSelectionSection sectionWithHeaderTitle:nil boundObject:boundObj selectedIndexPropertyName:propertyDef.name items:nil];
             }
 
@@ -972,7 +874,7 @@
         case SCPropertyTypeObjectSelection:
             section = [SCObjectSelectionSection sectionWithHeaderTitle:nil boundObject:boundObj selectedObjectPropertyName:propertyDef.name selectionItemsStore:nil];
             break;
-            
+
         default:
             section = nil;
     }
@@ -982,21 +884,18 @@
         if (propertyDef.attributes) {
             [section.sectionActions setActionsTo:propertyDef.attributes.expandedContentSectionActions overrideExisting:YES];
         }
-
     }
 
-    return  section;
+    return section;
 }
 
-- (void)clear
-{
-	[self removeAllSections];
-	_activeCell = nil;
+- (void)clear {
+    [self removeAllSections];
+    _activeCell = nil;
     _activeCellIndexPath = nil;
 }
 
-- (void)setTableViewEditing:(BOOL)editing animated:(BOOL)animate
-{
+- (void)setTableViewEditing:(BOOL)editing animated:(BOOL)animate {
     if (editing == self.tableView.editing) {
         return;
     }
@@ -1008,20 +907,18 @@
     }
 
     [self clearLastReturnedCellData];
-    
+
     BOOL shouldContinue = TRUE;
     if (editing) {
         if (self.modelActions.shouldBeginEditing) {
             shouldContinue = self.modelActions.shouldBeginEditing(self);
         }
-
     }
 
     else {
         if (self.modelActions.shouldEndEditing) {
             shouldContinue = self.modelActions.shouldEndEditing(self);
         }
-
     }
 
     if (!shouldContinue) {
@@ -1030,70 +927,60 @@
 
 
     [self.tableView beginUpdates];
-    
+
     // Update sections to reflect new state
-    for(SCTableViewSection *section in sections) {
+    for (SCTableViewSection *section in sections) {
         [section editingModeWillChange];
     }
 
-    
+
     // Set editing mode
     [self.viewController setEditing:editing animated:animate];
-	[self.tableView setEditing:editing animated:animate];
-    
+    [self.tableView setEditing:editing animated:animate];
+
     [self.tableView endUpdates];
-    
+
     // Notify section that editing mode has changed
-    for(SCTableViewSection *section in sections) {
+    for (SCTableViewSection *section in sections) {
         [section editingModeDidChange];
     }
-
 
 
     if (editing) {
         if (self.modelActions.didBeginEditing) {
             self.modelActions.didBeginEditing(self);
         }
-
     }
 
     else {
         if (self.modelActions.didEndEditing) {
             self.modelActions.didEndEditing(self);
         }
-
     }
-
 }
 
-- (void)setModeledTableViewEditing:(BOOL)editing animated:(BOOL)animate 
-{
+- (void)setModeledTableViewEditing:(BOOL)editing animated:(BOOL)animate {
     [self setTableViewEditing:editing animated:animate];
 }
 
 
-- (UIViewController *)detailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UIViewController *)detailViewControllerForCellAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    
+
     return [section generatedDetailViewControllerForCellAtIndexPath:indexPath];
 }
 
 
-- (void)setBoundObjectForAllCells:(NSObject *)boundObject dataDefinition:(SCDataDefinition *)dataDefinition
-{
+- (void)setBoundObjectForAllCells:(NSObject *)boundObject dataDefinition:(SCDataDefinition *)dataDefinition {
     SCDataStore *dataStore = [dataDefinition generateCompatibleDataStore];
-    
+
     [self setBoundObjectForAllCells:boundObject boundObjectStore:dataStore];
 }
 
-- (void)setBoundObjectForAllCells:(NSObject *)boundObject boundObjectStore:(SCDataStore *)boundObjectStore
-{
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-    {
+- (void)setBoundObjectForAllCells:(NSObject *)boundObject boundObjectStore:(SCDataStore *)boundObjectStore {
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
         SCTableViewSection *section = [self sectionAtIndex:i];
-        for(NSUInteger j=0; j<section.cellCount; j++)
-        {
+        for (NSUInteger j = 0; j < section.cellCount; j++) {
             SCTableViewCell *cell = [section cellAtIndex:j];
             cell.boundObjectStore = boundObjectStore;
             cell.boundObject = boundObject;
@@ -1101,8 +988,7 @@
     }
 }
 
-- (SCTableViewCell *)cellAtIndexPath:(NSIndexPath *)indexPath
-{
+- (SCTableViewCell *)cellAtIndexPath:(NSIndexPath *)indexPath {
     if (!indexPath || indexPath.row == NSNotFound) {
         return nil;
     }
@@ -1136,29 +1022,26 @@
             needsOptimization = TRUE;
         }
 
-        if (needsOptimization && lastReturnedCellIndexPath && indexPath.section==lastReturnedCellIndexPath.section && indexPath.row==lastReturnedCellIndexPath.row) {
+        if (needsOptimization && lastReturnedCellIndexPath && indexPath.section == lastReturnedCellIndexPath.section && indexPath.row == lastReturnedCellIndexPath.row) {
             cell = lastReturnedCell;
         }
 
         else {
             [self clearLastReturnedCellData];
-            
+
             cell = [section cellAtIndex:indexPath.row];
 
             if (needsOptimization) {
                 lastReturnedCellIndexPath = indexPath;
                 lastReturnedCell = cell;
             }
-
         }
-
     }
 
     return cell;
 }
 
-- (NSIndexPath *)indexPathForCell:(SCTableViewCell *)cell
-{
+- (NSIndexPath *)indexPathForCell:(SCTableViewCell *)cell {
     if (!cell) {
         return nil;
     }
@@ -1167,24 +1050,21 @@
         return lastReturnedCellIndexPath;
     }
 
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-	{
-		NSUInteger index = [[self sectionAtIndex:i] indexForCell:cell];
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        NSUInteger index = [[self sectionAtIndex:i] indexForCell:cell];
         if (index == NSNotFound) {
             continue;
         }
 
         return [NSIndexPath indexPathForRow:index inSection:i];
-	}
-	return nil;
+    }
+    return nil;
 }
 
-- (SCTableViewCell *)cellWithBoundPropertyName:(NSString *)boundPropertyName
-{
+- (SCTableViewCell *)cellWithBoundPropertyName:(NSString *)boundPropertyName {
     SCTableViewCell *cell = nil;
-    
-    for(SCTableViewSection *section in sections)
-    {
+
+    for (SCTableViewSection *section in sections) {
         if (![section isKindOfClass:[SCObjectSection class]]) {
             continue;
         }
@@ -1194,25 +1074,23 @@
         if (cell) {
             break;
         }
-
     }
-    
+
     return cell;
 }
 
-- (NSIndexPath *)indexPathForCellAfterCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind
-{
-    if (self.sectionCount==1 && [self sectionAtIndex:0].cellCount==1) {
-        return nil;		// only one cell in model
+- (NSIndexPath *)indexPathForCellAfterCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind {
+    if (self.sectionCount == 1 && [self sectionAtIndex:0].cellCount == 1) {
+        return nil; // only one cell in model
     }
 
     SCTableViewSection *cellSection = [self sectionAtIndex:indexPath.section];
-    if (indexPath.row+1 < cellSection.cellCount) {
-        return [NSIndexPath indexPathForRow:indexPath.row+1 inSection:indexPath.section];
+    if (indexPath.row + 1 < cellSection.cellCount) {
+        return [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
     }
 
-    if (indexPath.section+1 < self.sectionCount) {
-        return [NSIndexPath indexPathForRow:0 inSection:indexPath.section+1];
+    if (indexPath.section + 1 < self.sectionCount) {
+        return [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
     }
 
     if (!rewind) {
@@ -1222,16 +1100,14 @@
     return [NSIndexPath indexPathForRow:0 inSection:0];
 }
 
-- (NSIndexPath *)indexPathForCellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind
-{
+- (NSIndexPath *)indexPathForCellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
-    
+
     return [self indexPathForCellAfterCellAtIndexPath:indexPath rewind:rewind];
 }
 
-- (SCTableViewCell *)cellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind
-{
-	NSIndexPath *nextCellIndexPath = [self indexPathForCellAfterCell:cell rewind:rewind];
+- (SCTableViewCell *)cellAfterCell:(SCTableViewCell *)cell rewind:(BOOL)rewind {
+    NSIndexPath *nextCellIndexPath = [self indexPathForCellAfterCell:cell rewind:rewind];
 
     if (!nextCellIndexPath) {
         return nil;
@@ -1241,44 +1117,41 @@
     return (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:nextCellIndexPath];
 }
 
-- (NSIndexPath *)indexPathForCellBeforeCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind
-{
-    if (self.sectionCount==1 && [self sectionAtIndex:0].cellCount==1) {
-        return nil;		// only one cell in model
+- (NSIndexPath *)indexPathForCellBeforeCellAtIndexPath:(NSIndexPath *)indexPath rewind:(BOOL)rewind {
+    if (self.sectionCount == 1 && [self sectionAtIndex:0].cellCount == 1) {
+        return nil; // only one cell in model
     }
 
-    if (indexPath.row-1 >= 0) {
-        return [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+    if (indexPath.row - 1 >= 0) {
+        return [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
     }
 
-    if (indexPath.section-1 >= 0) {
-        SCTableViewSection *prevSection = [self sectionAtIndex:indexPath.section-1];
-        return [NSIndexPath indexPathForRow:prevSection.cellCount-1 inSection:indexPath.section-1];
+    if (indexPath.section - 1 >= 0) {
+        SCTableViewSection *prevSection = [self sectionAtIndex:indexPath.section - 1];
+        return [NSIndexPath indexPathForRow:prevSection.cellCount - 1 inSection:indexPath.section - 1];
     }
 
     if (!rewind) {
         return nil;
     }
 
-    NSUInteger lastSectionIndex = self.sectionCount-1;
+    NSUInteger lastSectionIndex = self.sectionCount - 1;
     SCTableViewSection *lastSection = [self sectionAtIndex:lastSectionIndex];
     if (lastSection.cellCount) {
-        return [NSIndexPath indexPathForRow:lastSection.cellCount-1 inSection:lastSectionIndex]; // last cell
+        return [NSIndexPath indexPathForRow:lastSection.cellCount - 1 inSection:lastSectionIndex]; // last cell
     }
 
-    //else 
+    //else
     return nil;
 }
 
-- (NSIndexPath *)indexPathForCellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind
-{
+- (NSIndexPath *)indexPathForCellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind {
     NSIndexPath *indexPath = [self indexPathForCell:cell];
-    
+
     return [self indexPathForCellAfterCellAtIndexPath:indexPath rewind:rewind];
 }
 
-- (SCTableViewCell *)cellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind
-{
+- (SCTableViewCell *)cellBeforeCell:(SCTableViewCell *)cell rewind:(BOOL)rewind {
     NSIndexPath *prevCellIndexPath = [self indexPathForCellBeforeCell:cell rewind:rewind];
 
     if (!prevCellIndexPath) {
@@ -1289,26 +1162,23 @@
     return (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:prevCellIndexPath];
 }
 
-- (void)moveToNextCellControl:(BOOL)rewind
-{
+- (void)moveToNextCellControl:(BOOL)rewind {
     // check that there are no other TextFields/TextViews in the current cell before
     // moving on to the next cell
     if ([self.activeCell isKindOfClass:[SCCustomCell class]]) {
         NSArray *inputControls = [(SCCustomCell *)self.activeCell inputControlsSortedByTag];
         NSUInteger activeControlIndex = [inputControls indexOfObjectIdenticalTo:self.activeCellControl];
-        if (activeControlIndex<inputControls.count-1 && activeControlIndex!=NSNotFound) {
-            [(UIResponder *)[inputControls objectAtIndex:activeControlIndex+1] becomeFirstResponder];
+        if (activeControlIndex < inputControls.count - 1 && activeControlIndex != NSNotFound) {
+            [(UIResponder *)[inputControls objectAtIndex:activeControlIndex + 1] becomeFirstResponder];
             return;
         }
-
     }
 
     // get next cell
     NSIndexPath *currentCellIndexPath = self.activeCellIndexPath;
     SCTableViewCell *nextCell = nil;
     NSIndexPath *nextCellIndexPath = nil;
-    while( (nextCellIndexPath = [self indexPathForCellAfterCellAtIndexPath:currentCellIndexPath rewind:rewind])) 
-    {
+    while ((nextCellIndexPath = [self indexPathForCellAfterCellAtIndexPath:currentCellIndexPath rewind:rewind])) {
         if (!nextCellIndexPath) {
             nextCell = nil;
             break;
@@ -1320,9 +1190,9 @@
         }
 
         //else
-        
+
         // prevent infinite loop
-        if (nextCellIndexPath.row==self.activeCellIndexPath.row && nextCellIndexPath.section==self.activeCellIndexPath.section) {
+        if (nextCellIndexPath.row == self.activeCellIndexPath.row && nextCellIndexPath.section == self.activeCellIndexPath.section) {
             nextCell = nil;
             break;
         }
@@ -1341,29 +1211,25 @@
         [self.activeCell resignFirstResponder];
         self.activeCell = nil;
     }
-
 }
 
-- (void)moveToPreviousCellControl:(BOOL)rewind
-{
+- (void)moveToPreviousCellControl:(BOOL)rewind {
     // check that there are no other TextFields/TextViews in the current cell before
     // moving on to the previous cell
     if ([self.activeCell isKindOfClass:[SCCustomCell class]]) {
         NSArray *inputControls = [(SCCustomCell *)self.activeCell inputControlsSortedByTag];
         NSUInteger activeControlIndex = [inputControls indexOfObjectIdenticalTo:self.activeCellControl];
-        if (activeControlIndex>0 && activeControlIndex!=NSNotFound) {
-            [(UIResponder *)[inputControls objectAtIndex:activeControlIndex-1] becomeFirstResponder];
+        if (activeControlIndex > 0 && activeControlIndex != NSNotFound) {
+            [(UIResponder *)[inputControls objectAtIndex:activeControlIndex - 1] becomeFirstResponder];
             return;
         }
-
     }
 
     // get previous cell
     NSIndexPath *currentCellIndexPath = self.activeCellIndexPath;
     SCTableViewCell *prevCell = nil;
     NSIndexPath *prevCellIndexPath = nil;
-    while( (prevCellIndexPath = [self indexPathForCellBeforeCellAtIndexPath:currentCellIndexPath rewind:rewind])) 
-    {
+    while ((prevCellIndexPath = [self indexPathForCellBeforeCellAtIndexPath:currentCellIndexPath rewind:rewind])) {
         if (!prevCellIndexPath) {
             prevCell = nil;
             break;
@@ -1375,9 +1241,9 @@
         }
 
         //else
-        
+
         // prevent infinite loop
-        if (prevCellIndexPath.row==self.activeCellIndexPath.row && prevCellIndexPath.section==self.activeCellIndexPath.section) {
+        if (prevCellIndexPath.row == self.activeCellIndexPath.row && prevCellIndexPath.section == self.activeCellIndexPath.section) {
             prevCell = nil;
             break;
         }
@@ -1396,72 +1262,63 @@
         [self.activeCell resignFirstResponder];
         self.activeCell = nil;
     }
-
 }
 
-- (void)dismissAllDetailViewsWithCommit:(BOOL)commit
-{
+- (void)dismissAllDetailViewsWithCommit:(BOOL)commit {
     if (!self.activeDetailModel) {
         return;
     }
 
     SCTableViewModel *detailModel = self.activeDetailModel;
     [detailModel dismissAllDetailViewsWithCommit:commit];
-    
+
     BOOL doneValue = commit;
     BOOL cancelValue = !commit;
     if ([detailModel.viewController isKindOfClass:[SCViewController class]]) {
         SCViewController *detailView = (SCViewController *)detailModel.viewController;
-        detailView.delegate = nil;  // disable delegates
+        detailView.delegate = nil; // disable delegates
         [detailView dismissWithCancelValue:cancelValue doneValue:doneValue];
     }
 
     else if ([detailModel.viewController isKindOfClass:[SCTableViewController class]]) {
         SCTableViewController *detailView = (SCTableViewController *)detailModel.viewController;
-        detailView.delegate = nil;  // disable delegates
+        detailView.delegate = nil; // disable delegates
         [detailView dismissWithCancelValue:cancelValue doneValue:doneValue];
     }
 
     self.activeDetailModel = nil;
 }
 
-- (BOOL)valuesAreValid
-{
-	for(SCTableViewSection *section in sections) {
+- (BOOL)valuesAreValid {
+    for (SCTableViewSection *section in sections) {
         if (!section.valuesAreValid) {
             return FALSE;
         }
-
-	}
+    }
 
 
     return TRUE;
 }
 
-- (BOOL)needsCommit
-{
-	for(SCTableViewSection *section in sections) {
+- (BOOL)needsCommit {
+    for (SCTableViewSection *section in sections) {
         if (section.needsCommit) {
             return TRUE;
         }
-
-	}
+    }
 
 
     return FALSE;
 }
 
-- (void)commitChanges
-{
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-	{
-		SCTableViewSection *section = [self sectionAtIndex:i];
+- (void)commitChanges {
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        SCTableViewSection *section = [self sectionAtIndex:i];
         [section commitCellChanges];
-	}
+    }
 }
 
-- (void)reloadBoundValues
-{
+- (void)reloadBoundValues {
     [self clearLastReturnedCellData];
 
     if (self.detailViewController) {
@@ -1472,35 +1329,29 @@
         else if ([self.detailViewController isKindOfClass:[SCTableViewController class]]) {
             [(SCTableViewController *)self.detailViewController loseFocus];
         }
-
     }
 
-    for(SCTableViewSection *section in sections) {
-		[section reloadBoundValues];
+    for (SCTableViewSection *section in sections) {
+        [section reloadBoundValues];
     }
-
 }
 
-- (BOOL)sc_viewContainsActiveInput:(UIView *)view
-{
-    if (view.isFirstResponder ||
-       ([view isKindOfClass:[UIControl class]] && [(UIControl *)view isTracking])) {
+- (BOOL)sc_viewContainsActiveInput:(UIView *)view {
+    if (view.isFirstResponder || ([view isKindOfClass:[UIControl class]] && [(UIControl *)view isTracking])) {
         return YES;
     }
 
-    for(UIView *subview in view.subviews) {
+    for (UIView *subview in view.subviews) {
         if ([self sc_viewContainsActiveInput:subview]) {
             return YES;
         }
-
     }
 
 
     return NO;
 }
 
-- (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated
-{
+- (void)invalidateHeightForCell:(SCTableViewCell *)cell animated:(BOOL)animated {
     if (!cell || ![self indexPathForCell:cell] || !self.tableView) {
         return;
     }
@@ -1514,21 +1365,17 @@
     [self scheduleHeightUpdates];
 }
 
-- (void)scheduleHeightUpdates
-{
+- (void)scheduleHeightUpdates {
     if (_heightUpdateScheduled || !_pendingHeightCells.count) {
         return;
     }
 
     _heightUpdateScheduled = YES;
     __weak typeof(self) weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakSelf applyPendingHeightUpdates];
-    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [weakSelf applyPendingHeightUpdates]; });
 }
 
-- (void)applyPendingHeightUpdates
-{
+- (void)applyPendingHeightUpdates {
     _heightUpdateScheduled = NO;
     UITableView *table = self.tableView;
     if (table.hasUncommittedUpdates) {
@@ -1551,8 +1398,7 @@
     bindings, marked text, selection and control identity throughout the fit.
     */
     void (^update)(void) = ^{
-        for(SCTableViewCell *cell in cells)
-        {
+        for (SCTableViewCell *cell in cells) {
             NSIndexPath *path = [self indexPathForCell:cell];
             if (!path) {
                 continue;
@@ -1578,11 +1424,9 @@
     else {
         [UIView performWithoutAnimation:update];
     }
-
 }
 
-- (void)configureCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
 
     if (cell.cellActions.willConfigure) {
@@ -1603,22 +1447,19 @@
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     [self enterLoadingMode];
-    
-	return self.sectionCount;
+
+    return self.sectionCount;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     [self clearLastReturnedCellData];
-    
+
     return [self sectionAtIndex:section].cellCount;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     /*
     hermes:
     Our constrained supplementary view owns its label. Returning a title here
@@ -1627,18 +1468,15 @@
     return nil;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     return nil;
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-{
-	return self.sectionIndexTitles;
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return self.sectionIndexTitles;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
-{
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
     if (self.modelActions.sectionForSectionIndexTitle) {
         return self.modelActions.sectionForSectionIndexTitle(self, title, index);
     }
@@ -1648,29 +1486,25 @@
     }
 
     //else return the last section index
-	return self.sectionCount-1;
+    return self.sectionCount - 1;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	return [self cellAtIndexPath:indexPath].editable;  
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [self cellAtIndexPath:indexPath].editable;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     BOOL movable = [self cellAtIndexPath:indexPath].movable;
-	return movable;
+    return movable;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
     [self prepareCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)prepareCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)prepareCell:(SCTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
 
     /*
@@ -1686,7 +1520,6 @@
             if ([cell isKindOfClass:[SCCustomCell class]]) {
                 [(SCCustomCell *)cell loadBindingsIntoCustomControls];
             }
-
         }
 
         if ([section.cellsImageViews count] > indexPath.row) {
@@ -1694,7 +1527,6 @@
             if ([imageView isKindOfClass:[UIImageView class]]) {
                 cell.imageView.image = imageView.image;
             }
-
         }
 
         if ([section isKindOfClass:[SCSelectionSection class]]) {
@@ -1718,25 +1550,20 @@
         else if (self.sectionActions.customHeightForRowAtIndexPath) {
             resolvedHeight = self.sectionActions.customHeightForRowAtIndexPath(itemsSection, indexPath);
         }
-
     }
 
     [cell sc_setResolvedHeightConstraint:resolvedHeight];
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     if ([section isKindOfClass:[SCArrayOfItemsSection class]]) {
         [(SCArrayOfItemsSection *)section commitEditingStyle:editingStyle forCellAtIndexPath:indexPath];
     }
-
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath 
-													toIndexPath:(NSIndexPath *)toIndexPath
-{
-	SCTableViewSection *section = [self sectionAtIndex:fromIndexPath.section];
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    SCTableViewSection *section = [self sectionAtIndex:fromIndexPath.section];
     if ([section isKindOfClass:[SCArrayOfItemsSection class]]) {
         [(SCArrayOfItemsSection *)section moveCellAtIndexPath:fromIndexPath toIndexPath:toIndexPath];
     }
@@ -1745,18 +1572,15 @@
         SCTableViewCell *cell = [self cellAtIndexPath:toIndexPath];
         self.modelActions.didMoveCell(self, cell, fromIndexPath, toIndexPath);
     }
-
 }
 
 #pragma mark - UITableViewDelegate methods
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewCell *cell = [[self sectionAtIndex:indexPath.section] cellAtIndex:indexPath.row];
     /*
     Nib/storyboard canvas heights are estimates only, giving UIKit stable
@@ -1773,14 +1597,11 @@
     return 44.0;
 }
 
-- (BOOL)sectionHidesSupplementaryViews:(SCTableViewSection *)section
-{
-    return [section isKindOfClass:[SCArrayOfItemsSection class]] &&
-        [(SCArrayOfItemsSection *)section hideWhenEmpty] && !section.cellCount;
+- (BOOL)sectionHidesSupplementaryViews:(SCTableViewSection *)section {
+    return [section isKindOfClass:[SCArrayOfItemsSection class]] && [(SCArrayOfItemsSection *)section hideWhenEmpty] && !section.cellCount;
 }
 
-- (BOOL)section:(SCTableViewSection *)section hasSupplementaryHeader:(BOOL)isHeader
-{
+- (BOOL)section:(SCTableViewSection *)section hasSupplementaryHeader:(BOOL)isHeader {
     if ([self sectionHidesSupplementaryViews:section]) {
         return NO;
     }
@@ -1792,8 +1613,7 @@
     return section.footerView || section.footerTitle.length || section.footerHeight > 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     /*
     hermes:
     UIKit treats zero as its default spacing, not a hidden supplementary view.
@@ -1803,13 +1623,11 @@
     return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:YES] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return [self section:[self sectionAtIndex:section] hasSupplementaryHeader:NO] ? UITableViewAutomaticDimension : CGFLOAT_MIN;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     [self exitLoadingMode];
     SCTableViewSection *scSection = [self sectionAtIndex:section];
     if (![self section:scSection hasSupplementaryHeader:YES]) {
@@ -1819,8 +1637,7 @@
     return [scSection supplementaryViewForHeader:YES hideTitle:self.hideSectionHeaderTitles];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     [self exitLoadingMode];
     SCTableViewSection *scSection = [self sectionAtIndex:section];
     if (![self section:scSection hasSupplementaryHeader:NO]) {
@@ -1830,8 +1647,7 @@
     return [scSection supplementaryViewForHeader:NO hideTitle:NO];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     SCTableViewSection *scSection = [self sectionAtIndex:section];
 
     if (scSection.sectionActions.willDisplayHeaderView) {
@@ -1841,11 +1657,9 @@
     else if (self.sectionActions.willDisplayHeaderView) {
         self.sectionActions.willDisplayHeaderView(scSection, section, view);
     }
-
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     SCTableViewSection *scSection = [self sectionAtIndex:section];
 
     if (scSection.sectionActions.willDisplayFooterView) {
@@ -1855,14 +1669,12 @@
     else if (self.sectionActions.willDisplayFooterView) {
         self.sectionActions.willDisplayFooterView(scSection, section, view);
     }
-
 }
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCellEditingStyle editingStyle = UITableViewCellEditingStyleNone;
     BOOL customEditingStyle = NO;
-    
+
     SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
 
     if (cell.cellActions.customEditingStyle) {
@@ -1887,19 +1699,17 @@
     return editingStyle;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	SCTableViewCell *scCell = (SCTableViewCell *)cell;
-	[scCell willDisplay];
-	
-	// Check if the cell has an image in its section
-	SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    SCTableViewCell *scCell = (SCTableViewCell *)cell;
+    [scCell willDisplay];
+
+    // Check if the cell has an image in its section
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     if ([section.cellsImageViews count] > indexPath.row) {
         UIImageView *imageView = [section.cellsImageViews objectAtIndex:indexPath.row];
         if ([imageView isKindOfClass:[UIImageView class]]) {
             scCell.imageView.image = imageView.image;
         }
-
     }
 
     if ([section isKindOfClass:[SCSelectionSection class]]) {
@@ -1929,24 +1739,20 @@
             lastVisibleCellIndexPath = [[self.tableView indexPathsForVisibleRows] lastObject];
         }
 
-        if (indexPath.section==lastVisibleCellIndexPath.section && indexPath.row==lastVisibleCellIndexPath.row) {
+        if (indexPath.section == lastVisibleCellIndexPath.section && indexPath.row == lastVisibleCellIndexPath.row) {
             [self exitLoadingMode];
             lastVisibleCellIndexPath = nil;
 
             if (self.modelActions.didFinishLoadingCells) {
                 self.modelActions.didFinishLoadingCells(self);
             }
-
         }
-
     }
-
 }
 
-- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *editActions = nil;
-    
+
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
@@ -1986,9 +1792,7 @@
             if (self.cellActions.leadingSwipeActions) {
                 leadingSwipeActions = self.cellActions.leadingSwipeActions(cell, indexPath);
             }
-
         }
-
     }
 
     if (leadingSwipeActions) {
@@ -2021,9 +1825,7 @@
             if (self.cellActions.leadingSwipeActions) {
                 trailingSwipeActions = self.cellActions.trailingSwipeActions(cell, indexPath);
             }
-
         }
-
     }
 
     if (trailingSwipeActions) {
@@ -2034,18 +1836,12 @@
 
     // else
     return nil;
-
 }
 
 // ...dgApps
 
 
-
-
-
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.lockCellSelection) {
         return nil;
     }
@@ -2055,7 +1851,7 @@
     }
 
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-	SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
     if (!cell.selectable || !cell.enabled) {
         return nil;
@@ -2082,9 +1878,8 @@
     return nil;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
     if (!cell.enabled) {
         return;
@@ -2096,12 +1891,11 @@
         if (![self.activeCell becomeFirstResponder]) {
             [prevCell resignFirstResponder];
         }
-
     }
 
     [self.activeCell didSelectCell];
-	
-	SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
+
+    SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
 
     if (cell.cellActions.didSelect) {
         cell.cellActions.didSelect(cell, indexPath);
@@ -2129,16 +1923,13 @@
         else {
             SCDebugLog(@"Warning: Could not instantiate view controller with id '%@' from Storyboard.", cell.ibDetailViewControllerIdentifier);
         }
-
     }
-
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    
+
     BOOL allowDeselect = YES;
     if (cell.cellActions.willDeselect) {
         allowDeselect = cell.cellActions.willDeselect(cell, indexPath);
@@ -2165,11 +1956,10 @@
     return nil;
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-	SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-	[cell didDeselectCell];
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell didDeselectCell];
 
     if (cell.cellActions.didDeselect) {
         cell.cellActions.didDeselect(cell, indexPath);
@@ -2182,14 +1972,12 @@
     else if (self.cellActions.didDeselect) {
         self.cellActions.didDeselect(cell, indexPath);
     }
-
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    
+
     BOOL shouldShowMenu = NO;
     if (cell.cellActions.shouldShowMenu) {
         shouldShowMenu = cell.cellActions.shouldShowMenu(cell, indexPath);
@@ -2206,11 +1994,10 @@
     return shouldShowMenu;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)operationAction forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)operationAction forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-    
+
     BOOL canPerformAction = NO;
     if (cell.cellActions.canPerformAction) {
         canPerformAction = cell.cellActions.canPerformAction(cell, indexPath, operationAction, sender);
@@ -2227,8 +2014,7 @@
     return canPerformAction;
 }
 
-- (void)tableView:(UITableView *)tableView performAction:(SEL)operationAction forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
+- (void)tableView:(UITableView *)tableView performAction:(SEL)operationAction forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
     SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
@@ -2243,14 +2029,11 @@
     else if (self.cellActions.shouldShowMenu) {
         self.cellActions.performAction(cell, indexPath, operationAction, sender);
     }
-
 }
 
-- (void)tableView:(UITableView *)tableView 
-					accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-	SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
     if (cell.cellActions.accessoryButtonTapped) {
         cell.cellActions.accessoryButtonTapped(cell, indexPath);
@@ -2267,31 +2050,25 @@
     else {
         [self tableView:tableView didSelectRowAtIndexPath:indexPath];
     }
-
 }
 
-- (NSString *)tableView:(UITableView *)tableView 
-	titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	NSString *deleteTitle;
-	
-	deleteTitle = NSLocalizedString(@"Delete", @"Delete Button Title");
-	
-	return deleteTitle;
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *deleteTitle;
+
+    deleteTitle = NSLocalizedString(@"Delete", @"Delete Button Title");
+
+    return deleteTitle;
 }
 
-- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     _swipeToDeleteActive = TRUE;
 }
 
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     _swipeToDeleteActive = FALSE;
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
     /*
      In iOS 13 calling cellForRowAtIndexPath: here was causing an Assert:
 
@@ -2303,14 +2080,13 @@
 
      dgApps
      */
-//    return [tableView cellForRowAtIndexPath:indexPath].shouldIndentWhileEditing;
+    //    return [tableView cellForRowAtIndexPath:indexPath].shouldIndentWhileEditing;
     return YES;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
-{
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
     NSIndexPath *indexPath = proposedDestinationIndexPath;
-    
+
     SCTableViewSection *section = [self sectionAtIndex:sourceIndexPath.section];
     if ([section isKindOfClass:[SCArrayOfItemsSection class]]) {
         indexPath = [(SCArrayOfItemsSection *)section targetIndexPathForMoveFromCellAtIndexPath:sourceIndexPath toProposedIndexPath:proposedDestinationIndexPath];
@@ -2322,8 +2098,7 @@
 #pragma mark -
 #pragma mark Deferred image loading (UIScrollViewDelegate)
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self clearLastReturnedCellData];
 
     if (self.activeCell) {
@@ -2331,23 +2106,18 @@
         [self.tableView deselectRowAtIndexPath:self.activeCellIndexPath animated:YES];
         self.activeCell = nil;
     }
-
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.modelActions.didScroll) {
         self.modelActions.didScroll(self);
     }
-
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
         NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
-        for(NSIndexPath *indexPath in visiblePaths)
-        {
+        for (NSIndexPath *indexPath in visiblePaths) {
             SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
             SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
@@ -2362,23 +2132,19 @@
             else if (self.cellActions.lazyLoad) {
                 self.cellActions.lazyLoad(cell, indexPath);
             }
-
         }
     }
 
     if (self.modelActions.didEndDragging) {
         self.modelActions.didEndDragging(self);
     }
-
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self clearLastReturnedCellData];
-    
+
     NSArray *visiblePaths = [self.tableView indexPathsForVisibleRows];
-    for(NSIndexPath *indexPath in visiblePaths)
-    {
+    for (NSIndexPath *indexPath in visiblePaths) {
         SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
         SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 
@@ -2393,30 +2159,25 @@
         else if (self.cellActions.lazyLoad) {
             self.cellActions.lazyLoad(cell, indexPath);
         }
-
     }
 
     if (self.modelActions.didEndDecelerating) {
         self.modelActions.didEndDecelerating(self);
     }
-
 }
 
 #pragma mark -
 #pragma SCInputAccessoryViewDelegate methods
 
-- (void)inputAccessoryViewPreviousTapped:(SCInputAccessoryView *)inputAccessoryView
-{
+- (void)inputAccessoryViewPreviousTapped:(SCInputAccessoryView *)inputAccessoryView {
     [self moveToPreviousCellControl:inputAccessoryView.rewind];
 }
 
-- (void)inputAccessoryViewNextTapped:(SCInputAccessoryView *)inputAccessoryView
-{
+- (void)inputAccessoryViewNextTapped:(SCInputAccessoryView *)inputAccessoryView {
     [self moveToNextCellControl:inputAccessoryView.rewind];
 }
 
-- (void)inputAccessoryViewClearTapped:(SCInputAccessoryView *)inputAccessoryView
-{
+- (void)inputAccessoryViewClearTapped:(SCInputAccessoryView *)inputAccessoryView {
     if ([self.activeCell isKindOfClass:[SCControlCell class]]) {
         [(SCControlCell *)self.activeCell clearControl];
     }
@@ -2425,13 +2186,10 @@
         if ([self.activeCellControl respondsToSelector:@selector(setText:)]) {
             [self.activeCellControl performSelector:@selector(setText:) withObject:nil];
         }
-
     }
-
 }
 
-- (void)inputAccessoryViewDoneTapped:(SCInputAccessoryView *)inputAccessoryView
-{
+- (void)inputAccessoryViewDoneTapped:(SCInputAccessoryView *)inputAccessoryView {
     if (self.activeCellControl) {
         [self.activeCellControl resignFirstResponder];
     }
@@ -2447,8 +2205,7 @@
 #pragma mark -
 #pragma mark Keyboard methods
 
-- (void)removeKeyboardInset
-{
+- (void)removeKeyboardInset {
     [_keyboardGeometryObserver removeFromSuperview];
     _keyboardGeometryObserver = nil;
     UITableView *table = _keyboardInsetTable;
@@ -2462,8 +2219,7 @@
     table.verticalScrollIndicatorInsets = indicators;
 }
 
-- (void)reconcileKeyboardInset
-{
+- (void)reconcileKeyboardInset {
     if (_reconcilingKeyboardInset) {
         return;
     }
@@ -2475,12 +2231,11 @@
     }
 
     UIResponder *owner = table.nextResponder;
-    while(owner && ![owner isKindOfClass:[UIViewController class]]) {
+    while (owner && ![owner isKindOfClass:[UIViewController class]]) {
         owner = owner.nextResponder;
     }
 
-    BOOL nativeAvoidance = [owner isKindOfClass:[UITableViewController class]] &&
-        [(UITableViewController *)owner tableView] == table;
+    BOOL nativeAvoidance = [owner isKindOfClass:[UITableViewController class]] && [(UITableViewController *)owner tableView] == table;
     if (!keyboardShown || !self.autoResizeForKeyboard || !table || nativeAvoidance) {
         [self removeKeyboardInset];
         _reconcilingKeyboardInset = NO;
@@ -2499,12 +2254,7 @@
         _keyboardGeometryObserver.translatesAutoresizingMaskIntoConstraints = NO;
         [table addSubview:_keyboardGeometryObserver];
         UILayoutGuide *viewport = table.frameLayoutGuide;
-        [NSLayoutConstraint activateConstraints:@[
-            [_keyboardGeometryObserver.leadingAnchor constraintEqualToAnchor:viewport.leadingAnchor],
-            [_keyboardGeometryObserver.trailingAnchor constraintEqualToAnchor:viewport.trailingAnchor],
-            [_keyboardGeometryObserver.topAnchor constraintEqualToAnchor:viewport.topAnchor],
-            [_keyboardGeometryObserver.bottomAnchor constraintEqualToAnchor:viewport.bottomAnchor]
-        ]];
+        [NSLayoutConstraint activateConstraints:@[[_keyboardGeometryObserver.leadingAnchor constraintEqualToAnchor:viewport.leadingAnchor], [_keyboardGeometryObserver.trailingAnchor constraintEqualToAnchor:viewport.trailingAnchor], [_keyboardGeometryObserver.topAnchor constraintEqualToAnchor:viewport.topAnchor], [_keyboardGeometryObserver.bottomAnchor constraintEqualToAnchor:viewport.bottomAnchor]]];
         __weak typeof(self) weakSelf = self;
         _keyboardGeometryObserver.geometryDidChange = ^{ [weakSelf reconcileKeyboardInset]; };
     }
@@ -2529,21 +2279,17 @@
     _reconcilingKeyboardInset = NO;
 }
 
-- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidChangeAdjustedContentInset:(UIScrollView *)scrollView {
     if (scrollView == _keyboardInsetTable) {
         [self reconcileKeyboardInset];
     }
-
 }
 
-- (void)keyboardWillChangeFrame:(NSNotification *)notification
-{
+- (void)keyboardWillChangeFrame:(NSNotification *)notification {
     [self keyboardWillShow:notification];
 }
 
-- (void)keyboardWillShow:(NSNotification *)aNotification
-{
+- (void)keyboardWillShow:(NSNotification *)aNotification {
     NSValue *frame = aNotification.userInfo[UIKeyboardFrameEndUserInfoKey];
     if (!frame) {
         return;
@@ -2552,49 +2298,30 @@
     _keyboardEndFrame = frame.CGRectValue;
     keyboardShown = YES;
     NSDictionary *info = aNotification.userInfo;
-    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState |
-        ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
-    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0 options:options animations:^{
-        [self reconcileKeyboardInset];
-    } completion:^(BOOL finished) {
-        [self tableAnimationEnded:nil finished:nil contextInfo:nil];
-    }];
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState | ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
+    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] delay:0 options:options animations:^{ [self reconcileKeyboardInset]; } completion:^(BOOL finished) { [self tableAnimationEnded:nil finished:nil contextInfo:nil]; }];
 }
 
-- (void)keyboardWillHide:(NSNotification *)aNotification
-{
+- (void)keyboardWillHide:(NSNotification *)aNotification {
     keyboardShown = NO;
     NSDictionary *info = aNotification.userInfo;
-    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState |
-        ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
-    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0 options:options animations:^{
-        [self removeKeyboardInset];
-    } completion:nil];
+    UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState | ([info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue] << 16);
+    [UIView animateWithDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] delay:0 options:options animations:^{ [self removeKeyboardInset]; } completion:nil];
 }
 
-- (void) tableAnimationEnded:(NSString*)animationID finished:(NSNumber *)finished contextInfo:(void *)context
-{
-	// Scroll to the active cell
+- (void)tableAnimationEnded:(NSString *)animationID finished:(NSNumber *)finished contextInfo:(void *)context {
+    // Scroll to the active cell
     if (self.activeCell) {
         [self.tableView scrollToRowAtIndexPath:self.activeCellIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         [self.tableView selectRowAtIndexPath:self.activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-
 }
 
 
 @end
 
 
-
-
-
-
-
-@interface SCArrayOfItemsModel () <UISearchControllerDelegate>
-{
+@interface SCArrayOfItemsModel () <UISearchControllerDelegate> {
     NSMutableDictionary *_sectionsCellIdentifiers;
     __weak UITableView *_searchAttachedTable;
     __weak UIViewController *_searchAttachedController;
@@ -2618,9 +2345,7 @@
 @end
 
 
-
-@interface SCArrayOfItemsModel ()
-{
+@interface SCArrayOfItemsModel () {
     SCArrayOfItemsSection *tempSection;
     BOOL _loadingContents;
     NSMutableArray *_items;
@@ -2632,14 +2357,13 @@
 
 @implementation SCArrayOfItemsModel
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         tempSection = nil;
-        
+
         _dataStore = nil;
-        _dataFetchOptions = nil;  // will be re-initialized when dataStore is set
-        
+        _dataFetchOptions = nil; // will be re-initialized when dataStore is set
+
         _loadingContents = FALSE;
         sectionsInSync = FALSE;
         _items = nil;
@@ -2653,23 +2377,22 @@
         _allowRowSelection = TRUE;
         _autoSelectNewItemCell = FALSE;
         _addButtonItem = nil;
-		
+
         filteredArray = nil;
         _searchBar = nil;
         _enableSearchController = FALSE;
-        
+
         _detailViewControllerOptions = nil;
         _newItemDetailViewControllerOptions = nil;
-        
+
         _sectionsCellIdentifiers = [NSMutableDictionary dictionary];
     }
 
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView dataStore:(SCDataStore *)store
-{
-    if ( (self=[self initWithTableView:tableView]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView dataStore:(SCDataStore *)store {
+    if ((self = [self initWithTableView:tableView])) {
         self.dataStore = store;
     }
 
@@ -2678,8 +2401,7 @@
 
 
 // overrides superclass
-- (UITableView *)tableView
-{
+- (UITableView *)tableView {
     if (self.searchController && self.searchController.active && [self.searchController.searchResultsController isKindOfClass:[UITableViewController class]]) {
         return [(UITableViewController *)self.searchController.searchResultsController tableView];
     }
@@ -2689,9 +2411,8 @@
 }
 
 
-- (void)setDataStore:(SCDataStore *)__dataStore
-{
-    _dataStore =  __dataStore;
+- (void)setDataStore:(SCDataStore *)__dataStore {
+    _dataStore = __dataStore;
 
     if (!_dataFetchOptions) {
         _dataFetchOptions = [__dataStore.defaultDataDefinition generateCompatibleDataFetchOptions];
@@ -2701,8 +2422,7 @@
     sectionsInSync = FALSE;
 }
 
-- (void)setDataFetchOptions:(SCDataFetchOptions *)options
-{
+- (void)setDataFetchOptions:(SCDataFetchOptions *)options {
     _dataFetchOptions = options;
 
     if (!options.sortKey && self.dataStore) {
@@ -2713,8 +2433,7 @@
     sectionsInSync = FALSE;
 }
 
-- (SCDetailViewControllerOptions *)detailViewControllerOptions
-{
+- (SCDetailViewControllerOptions *)detailViewControllerOptions {
     // Conserve resources by lazy loading for only models that need it
     if (!_detailViewControllerOptions) {
         _detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
@@ -2723,13 +2442,11 @@
     return _detailViewControllerOptions;
 }
 
-- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
-{
+- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options {
     _detailViewControllerOptions = options;
 }
 
-- (SCDetailViewControllerOptions *)newItemDetailViewControllerOptions
-{
+- (SCDetailViewControllerOptions *)newItemDetailViewControllerOptions {
     // Conserve resources by lazy loading for only models that need it
     if (!_newItemDetailViewControllerOptions) {
         _newItemDetailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
@@ -2738,17 +2455,14 @@
     return _newItemDetailViewControllerOptions;
 }
 
-- (void)setNewItemDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
-{
+- (void)setNewItemDetailViewControllerOptions:(SCDetailViewControllerOptions *)options {
     _newItemDetailViewControllerOptions = options;
 }
 
 
-- (NSArray *)items
-{
+- (NSArray *)items {
     if (!itemsInSync && self.autoFetchItems) {
-        switch (self.dataStore.storeMode)
-        {
+        switch (self.dataStore.storeMode) {
             case SCStoreModeSynchronous:
                 _items = [[NSMutableArray alloc] initWithArray:[self.dataStore fetchObjectsWithOptions:self.dataFetchOptions]];
                 itemsInSync = TRUE;
@@ -2759,33 +2473,24 @@
                 }
 
                 break;
-                
+
             case SCStoreModeAsynchronous:
                 itemsInSync = TRUE;
                 SCFetchItemsCell *fetchItemsCell = [SCFetchItemsCell cell];
                 [fetchItemsCell startActivityIndicator];
                 _items = [NSMutableArray arrayWithObject:fetchItemsCell];
-                
+
                 _loadingContents = TRUE;
 
-                [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions
-                success:^(NSArray *results)
-                     {
+                [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions success:^(NSArray *results) {
                     self->_loadingContents = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
 
-                    self->_items = [NSMutableArray arrayWithArray:results];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    self->sectionsInSync = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_items = [NSMutableArray arrayWithArray:results]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->sectionsInSync = FALSE;                           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     [self.tableView reloadData];
-                }
-                failure:^(NSError *error)
-                     {
-                    self->_loadingContents = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                }
-                 noConnection:^BOOL()
-                    {
-                        return NO;
-                    }
-                 ];
+                } failure:^(NSError *error) {
+                    self->_loadingContents = FALSE; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                } noConnection:^BOOL() { return NO; }];
                 break;
         }
     }
@@ -2793,19 +2498,16 @@
     return _items;
 }
 
-- (NSMutableArray *)mutableItems
-{
+- (NSMutableArray *)mutableItems {
     return _items;
 }
 
-- (void)setMutableItems:(NSMutableArray *)mutableItems
-{
+- (void)setMutableItems:(NSMutableArray *)mutableItems {
     _items = mutableItems;
 }
 
 //override superclass
-- (void)reloadBoundValues
-{
+- (void)reloadBoundValues {
     [self clearLastReturnedCellData];
     itemsInSync = FALSE;
     sectionsInSync = FALSE;
@@ -2817,14 +2519,12 @@
     else {
         [self generateSections];
     }
-
 }
 
-- (void)generateSections
-{
-	[self removeAllSections];
-	
-	NSArray *itemsArray;
+- (void)generateSections {
+    [self removeAllSections];
+
+    NSArray *itemsArray;
     if (filteredArray) {
         itemsArray = filteredArray;
     }
@@ -2834,17 +2534,15 @@
     }
 
     NSArray *sectionHeaderTitles = [self getSectionHeaderTitles];
-    for(NSString *sectionHeaderTitle in sectionHeaderTitles)
-    {
+    for (NSString *sectionHeaderTitle in sectionHeaderTitles) {
         SCArrayOfItemsSection *section = [self createSectionWithHeaderTitle:sectionHeaderTitle];
         [self setPropertiesForSection:section];
         [self addSection:section];
     }
-    
-    for(NSUInteger i=0; i<itemsArray.count; i++)
-	{
-		NSString *headerTitle = [self getHeaderTitleForItemAtIndex:i];
-		SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionWithHeaderTitle:headerTitle];
+
+    for (NSUInteger i = 0; i < itemsArray.count; i++) {
+        NSString *headerTitle = [self getHeaderTitleForItemAtIndex:i];
+        SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionWithHeaderTitle:headerTitle];
         if (!section) {
             section = [self createSectionWithHeaderTitle:headerTitle];
             if (!section) {
@@ -2860,18 +2558,17 @@
             }
 
             section.cellIdentifier = sectionCellId;
-            
+
             [self setPropertiesForSection:section];
             [self addSection:section];
         }
 
         [[section mutableItems] addObject:[itemsArray objectAtIndex:i]];
-	}
-    
-    for(SCArrayOfItemsSection *section in sections)
-    {
+    }
+
+    for (SCArrayOfItemsSection *section in sections) {
         NSMutableArray *mutableItems = [section mutableItems];
-        
+
         [section.dataFetchOptions sortMutableArray:mutableItems];
 
         if (section.sectionActions.didFetchItemsFromStore) {
@@ -2881,14 +2578,12 @@
         else if (self.sectionActions.didFetchItemsFromStore) {
             self.sectionActions.didFetchItemsFromStore(section, mutableItems);
         }
-
     }
-    
+
     sectionsInSync = TRUE;
 }
 
-- (NSArray *)getSectionHeaderTitles
-{
+- (NSArray *)getSectionHeaderTitles {
     NSArray *sectionHeaderTitles = nil;
     if (self.modelActions.sectionHeaderTitles) {
         sectionHeaderTitles = self.modelActions.sectionHeaderTitles(self);
@@ -2897,9 +2592,8 @@
     return sectionHeaderTitles;
 }
 
-- (NSString *)getHeaderTitleForItemAtIndex:(NSUInteger)index
-{
-	NSArray *itemsArray;
+- (NSString *)getHeaderTitleForItemAtIndex:(NSUInteger)index {
+    NSArray *itemsArray;
     if (filteredArray) {
         itemsArray = filteredArray;
     }
@@ -2922,8 +2616,7 @@
     return headerTitleName;
 }
 
-- (NSUInteger)getSectionIndexForItem:(NSObject *)item
-{
+- (NSUInteger)getSectionIndexForItem:(NSObject *)item {
     NSArray *itemsArray;
     if (filteredArray) {
         itemsArray = filteredArray;
@@ -2934,52 +2627,46 @@
     }
 
     NSUInteger itemIndex = [itemsArray indexOfObjectIdenticalTo:item];
-	NSString *sectionHeader = [self getHeaderTitleForItemAtIndex:itemIndex];
+    NSString *sectionHeader = [self getHeaderTitleForItemAtIndex:itemIndex];
 
     if (!sectionHeader) {
         return 0;
     }
 
     NSUInteger sectionIndex = NSNotFound;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
         if ([[self sectionAtIndex:i].headerTitle isEqualToString:sectionHeader]) {
             sectionIndex = i;
             break;
         }
-
-	}
+    }
 
 
     return sectionIndex;
 }
 
-- (SCArrayOfItemsSection *)createSectionWithHeaderTitle:(NSString *)title
-{
-	SCArrayOfObjectsSection *section = [SCArrayOfObjectsSection sectionWithHeaderTitle:title dataStore:self.dataStore];
+- (SCArrayOfItemsSection *)createSectionWithHeaderTitle:(NSString *)title {
+    SCArrayOfObjectsSection *section = [SCArrayOfObjectsSection sectionWithHeaderTitle:title dataStore:self.dataStore];
     section.autoFetchItems = FALSE;
     [section setMutableItems:[NSMutableArray array]];
-    
+
     return section;
 }
 
-- (void)setSearchBar:(UISearchBar *)sbar
-{
-	_searchBar = sbar;
+- (void)setSearchBar:(UISearchBar *)sbar {
+    _searchBar = sbar;
     if (sbar != self.searchController.searchBar) {
         _searchBar.delegate = self;
     }
-
 }
 
-- (void)setTableView:(UITableView *)tableView
-{
+- (void)setTableView:(UITableView *)tableView {
     [self detachSearchController];
     [super setTableView:tableView];
     [self attachSearchController];
 }
 
-- (void)setEnableSearchController:(BOOL)enable
-{
+- (void)setEnableSearchController:(BOOL)enable {
     _enableSearchController = enable;
     if (enable) {
         if (!_searchController) {
@@ -2998,11 +2685,9 @@
 
         _searchController = nil;
     }
-
 }
 
-- (void)initDisplayController
-{
+- (void)initDisplayController {
     SCTableViewController *resultsViewController = [[SCTableViewController alloc] initWithStyle:self.trueTableView.style];
     resultsViewController.tableView.dataSource = self;
     resultsViewController.tableView.delegate = self;
@@ -3012,17 +2697,14 @@
     if (!self.searchBar) {
         self.searchBar = _searchController.searchBar;
     }
-
 }
 
-- (void)detachSearchController
-{
+- (void)detachSearchController {
     [NSLayoutConstraint deactivateConstraints:_searchAttachmentConstraints];
     _searchAttachmentConstraints = nil;
     if (_searchAttachedController.navigationItem.searchController == _searchController) {
         _searchAttachedController.navigationItem.searchController = nil;
-        _searchAttachedController.navigationItem.preferredSearchBarPlacement =
-            _searchHostPreferredSearchBarPlacement;
+        _searchAttachedController.navigationItem.preferredSearchBarPlacement = _searchHostPreferredSearchBarPlacement;
     }
 
     if (_searchAttachedTable.tableHeaderView == _searchController.searchBar) {
@@ -3042,8 +2724,7 @@
     _searchAttachedToNavigationItem = NO;
 }
 
-- (void)attachSearchController
-{
+- (void)attachSearchController {
     UITableView *table = self.trueTableView;
     if (!_enableSearchController || !_searchController || !table) {
         return;
@@ -3061,12 +2742,8 @@
      A hidden navigation bar cannot host visible search. Reevaluate the mode
      on attachment without changing the application's navigation-bar policy.
      */
-    BOOL useNavigationItem = !navigation.navigationBarHidden
-        && [navigation.viewControllers containsObject:controller];
-    if (_searchAttachedTable == table && _searchAttachedController == controller
-       && _searchAttachedToNavigationItem == useNavigationItem
-       && (useNavigationItem || _searchController.active
-           || (table.tableHeaderView == _searchController.searchBar && _searchAttachmentConstraints.count))) {
+    BOOL useNavigationItem = !navigation.navigationBarHidden && [navigation.viewControllers containsObject:controller];
+    if (_searchAttachedTable == table && _searchAttachedController == controller && _searchAttachedToNavigationItem == useNavigationItem && (useNavigationItem || _searchController.active || (table.tableHeaderView == _searchController.searchBar && _searchAttachmentConstraints.count))) {
         return;
     }
 
@@ -3085,51 +2762,43 @@
          Stacked placement keeps the complete bar available for table-header
          reattachment. Restore the host's preference when releasing the item.
          */
-        _searchHostPreferredSearchBarPlacement =
-            _searchAttachedController.navigationItem.preferredSearchBarPlacement;
-        _searchAttachedController.navigationItem.preferredSearchBarPlacement =
-            UINavigationItemSearchBarPlacementStacked;
+        _searchHostPreferredSearchBarPlacement = _searchAttachedController.navigationItem.preferredSearchBarPlacement;
+        _searchAttachedController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
         _searchAttachedController.navigationItem.searchController = _searchController;
     }
 
     else {
         bar.translatesAutoresizingMaskIntoConstraints = NO;
         table.tableHeaderView = bar;
-        _searchAttachmentConstraints = @[
-            [bar.widthAnchor constraintEqualToAnchor:table.widthAnchor],
-            [bar.heightAnchor constraintEqualToConstant:bar.intrinsicContentSize.height]
-        ];
+        _searchAttachmentConstraints = @[[bar.widthAnchor constraintEqualToAnchor:table.widthAnchor], [bar.heightAnchor constraintEqualToConstant:bar.intrinsicContentSize.height]];
         [NSLayoutConstraint activateConstraints:_searchAttachmentConstraints];
     }
-
 }
 
-- (void)setPropertiesForSection:(SCArrayOfItemsSection *)section
-{
+- (void)setPropertiesForSection:(SCArrayOfItemsSection *)section {
     section.dataFetchOptions = self.dataFetchOptions;
-    
+
     section.itemsAccessoryType = self.itemsAccessoryType;
-	section.allowAddingItems = self.allowAddingItems;
-	section.allowDeletingItems = self.allowDeletingItems;
-	section.allowMovingItems = self.allowMovingItems;
-	section.allowEditDetailView = self.allowEditDetailView;
-	section.allowRowSelection = self.allowRowSelection;
-	section.autoSelectNewItemCell = self.autoSelectNewItemCell;
+    section.allowAddingItems = self.allowAddingItems;
+    section.allowDeletingItems = self.allowDeletingItems;
+    section.allowMovingItems = self.allowMovingItems;
+    section.allowEditDetailView = self.allowEditDetailView;
+    section.allowRowSelection = self.allowRowSelection;
+    section.autoSelectNewItemCell = self.autoSelectNewItemCell;
     section.addButtonItem = self.addButtonItem;
-	
+
     section.ibNewItemViewControllerIdentifier = self.ibNewItemViewControllerIdentifier;
     [section setDetailViewControllerOptions:self.detailViewControllerOptions];
     [section setNewItemDetailViewControllerOptions:self.newItemDetailViewControllerOptions];
 }
 
-- (void)configureUsingSection:(SCArrayOfItemsSection *)section
-{
+- (void)configureUsingSection:(SCArrayOfItemsSection *)section {
     if (section.dataStore) {
         self.dataStore = section.dataStore;
     }
 
     self.dataFetchOptions = section.dataFetchOptions;
-    
+
     self.itemsAccessoryType = section.itemsAccessoryType;
     self.allowAddingItems = section.allowAddingItems;
     self.allowDeletingItems = section.allowDeletingItems;
@@ -3138,109 +2807,91 @@
     self.allowRowSelection = section.allowRowSelection;
     self.autoSelectNewItemCell = section.autoSelectNewItemCell;
     self.addButtonItem = section.addButtonItem;
-    
+
     self.ibNewItemViewControllerIdentifier = section.ibNewItemViewControllerIdentifier;
     [self setDetailViewControllerOptions:section.detailViewControllerOptions];
     [self setNewItemDetailViewControllerOptions:section.newItemDetailViewControllerOptions];
-    
+
     self.sectionActions.cellForRowAtIndexPath = section.sectionActions.cellForRowAtIndexPath;
 }
 
 // override superclass
-- (void)setItemsAccessoryType:(UITableViewCellAccessoryType)type
-{
-	_itemsAccessoryType = type;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).itemsAccessoryType = type;
-	}
-
+- (void)setItemsAccessoryType:(UITableViewCellAccessoryType)type {
+    _itemsAccessoryType = type;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).itemsAccessoryType = type;
+    }
 }
 
 // override superclass
-- (void)setAllowAddingItems:(BOOL)allow
-{
-	_allowAddingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowAddingItems = allow;
-	}
-
+- (void)setAllowAddingItems:(BOOL)allow {
+    _allowAddingItems = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowAddingItems = allow;
+    }
 }
 
 // override superclass
-- (void)setAllowDeletingItems:(BOOL)allow
-{
-	_allowDeletingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowDeletingItems = allow;
-	}
-
+- (void)setAllowDeletingItems:(BOOL)allow {
+    _allowDeletingItems = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowDeletingItems = allow;
+    }
 }
 
 // override superclass
-- (void)setAllowMovingItems:(BOOL)allow
-{
-	_allowMovingItems = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowMovingItems = allow;
-	}
-
+- (void)setAllowMovingItems:(BOOL)allow {
+    _allowMovingItems = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowMovingItems = allow;
+    }
 }
 
 // override superclass
-- (void)setAllowEditDetailView:(BOOL)allow
-{
-	_allowEditDetailView = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowEditDetailView = allow;
-	}
-
+- (void)setAllowEditDetailView:(BOOL)allow {
+    _allowEditDetailView = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowEditDetailView = allow;
+    }
 }
 
 // override superclass
-- (void)setAllowRowSelection:(BOOL)allow
-{
-	_allowRowSelection = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowRowSelection = allow;
-	}
-
+- (void)setAllowRowSelection:(BOOL)allow {
+    _allowRowSelection = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).allowRowSelection = allow;
+    }
 }
 
 // override superclass
-- (void)setAutoSelectNewItemCell:(BOOL)allow
-{
-	_autoSelectNewItemCell = allow;
-	for(NSUInteger i=0; i<self.sectionCount; i++) {
-		((SCArrayOfItemsSection *)[self sectionAtIndex:i]).autoSelectNewItemCell = allow;
-	}
-
+- (void)setAutoSelectNewItemCell:(BOOL)allow {
+    _autoSelectNewItemCell = allow;
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
+        ((SCArrayOfItemsSection *)[self sectionAtIndex:i]).autoSelectNewItemCell = allow;
+    }
 }
 
-- (void)setAddButtonItem:(UIBarButtonItem *)barButtonItem
-{
-	_addButtonItem = barButtonItem;
-	
-	_addButtonItem.target = self;
-	_addButtonItem.action = @selector(didTapAddButtonItem);
+- (void)setAddButtonItem:(UIBarButtonItem *)barButtonItem {
+    _addButtonItem = barButtonItem;
+
+    _addButtonItem.target = self;
+    _addButtonItem.action = @selector(didTapAddButtonItem);
 }
 
-- (void)didTapAddButtonItem
-{
+- (void)didTapAddButtonItem {
     if (self.allowAddingItems) {
         [self dispatchEventAddNewItem];
     }
-
 }
 
-- (void)dispatchEventAddNewItem
-{
+- (void)dispatchEventAddNewItem {
     if (_loadingContents) {
         return;
     }
 
     // Game plan: delegate presenting the add detail view to SCArrayOfItemsSection
-	
-	//cancel any search in progress
+
+    //cancel any search in progress
     if ([self.searchBar.text length]) {
         self.searchBar.text = nil;
     }
@@ -3263,65 +2914,48 @@
     [section dispatchEventAddNewItem];
 }
 
-- (void)dispatchEventSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)dispatchEventSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [(SCArrayOfItemsSection *)[self sectionAtIndex:indexPath.section] dispatchEventSelectRowAtIndexPath:indexPath];
 }
 
-- (void)dispatchEventRemoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)dispatchEventRemoveRowAtIndexPath:(NSIndexPath *)indexPath {
     [(SCArrayOfItemsSection *)[self sectionAtIndex:indexPath.section] dispatchEventRemoveRowAtIndexPath:indexPath];
 }
 
-- (void)addNewItem:(NSObject *)newItem
-{
-    switch (self.dataStore.storeMode)
-    {
+- (void)addNewItem:(NSObject *)newItem {
+    switch (self.dataStore.storeMode) {
         case SCStoreModeSynchronous:
             [self.dataStore insertObject:newItem];
-            
+
             [_items addObject:newItem];
             [self addNewItemToRespectiveSection:newItem];
             break;
-            
+
         case SCStoreModeAsynchronous:
-            [self.dataStore asynchronousInsertObject:newItem
-                    success:^()
-                    {
-                        [self->_items addObject:newItem];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                        [self addNewItemToRespectiveSection:newItem];
-                    }
-                    failure:^(NSError *error)
-                    {
-                    }
-                    noConnection:^BOOL()
-                    {
-                        return NO;
-                    }
-             ];
+            [self.dataStore asynchronousInsertObject:newItem success:^() {
+                [self->_items addObject:newItem]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                [self addNewItemToRespectiveSection:newItem];
+            } failure:^(NSError *error) {} noConnection:^BOOL() { return NO; }];
             break;
     }
 }
 
-- (void)addNewItemToRespectiveSection:(NSObject *)newItem
-{
+- (void)addNewItemToRespectiveSection:(NSObject *)newItem {
     NSUInteger itemIndex = [self.items indexOfObjectIdenticalTo:newItem];
-	
-	NSString *headerTitle = [self getHeaderTitleForItemAtIndex:itemIndex];
-	SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionWithHeaderTitle:headerTitle];
+
+    NSString *headerTitle = [self getHeaderTitleForItemAtIndex:itemIndex];
+    SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionWithHeaderTitle:headerTitle];
     if (!section) {
         // Add new section
         section = [self createSectionWithHeaderTitle:headerTitle];
         [self setPropertiesForSection:section];
         [self addSection:section];
         NSUInteger sectionIndex = [self indexForSection:section];
-		
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-							 withRowAnimation:UITableViewRowAnimationLeft];
+
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationLeft];
         if (self.autoGenerateSectionIndexTitles) {
             [self.tableView reloadData]; // reloadSectionIndexTitles not working!
         }
-
     }
 
     [[section mutableItems] addObject:newItem];
@@ -3332,12 +2966,11 @@
     [section addCellForNewItem:newItem];
 }
 
-- (void)itemModified:(NSObject *)item inSection:(SCArrayOfItemsSection *)section
-{
+- (void)itemModified:(NSObject *)item inSection:(SCArrayOfItemsSection *)section {
     [self clearLastReturnedCellData];
-    
-	NSUInteger oldSectionIndex = [self indexForSection:section];
-	NSUInteger newSectionIndex = [self getSectionIndexForItem:item];
+
+    NSUInteger oldSectionIndex = [self indexForSection:section];
+    NSUInteger newSectionIndex = [self getSectionIndexForItem:item];
 
     if (oldSectionIndex == newSectionIndex) {
         [section itemModified:item];
@@ -3351,59 +2984,51 @@
 
         else {
             // remove item from old section
-            NSIndexPath *oldIndexPath =
-            [NSIndexPath indexPathForRow:[[section mutableItems] indexOfObjectIdenticalTo:item]
-                               inSection:oldSectionIndex];
+            NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:[[section mutableItems] indexOfObjectIdenticalTo:item] inSection:oldSectionIndex];
             [[section mutableItems] removeObjectAtIndex:oldIndexPath.row];
             section.selectedCellIndexPath = nil;
             NSArray *sectionHeaderTitles = [self getSectionHeaderTitles];
-            if ( [section mutableItems].count || (sectionHeaderTitles && [sectionHeaderTitles indexOfObject:section.headerTitle]!=NSNotFound) ) {
+            if ([section mutableItems].count || (sectionHeaderTitles && [sectionHeaderTitles indexOfObject:section.headerTitle] != NSNotFound)) {
                 self.activeCell = nil;
                 [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:oldIndexPath] withRowAnimation:UITableViewRowAnimationRight];
             }
 
             else {
                 // Remove the empty section
-                
+
                 // Connect the addButton back to the model's target & action
                 if (section.addButtonItem) {
                     self.addButtonItem = section.addButtonItem;
                 }
 
                 section.addButtonItem = nil;
-                
+
                 self.activeCell.ownerSection = nil;
                 self.activeCell = nil;
                 [self removeSectionAtIndex:oldSectionIndex];
                 section.ownerTableViewModel = nil;
-                
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:oldSectionIndex]
-                              withRowAnimation:UITableViewRowAnimationRight];
+
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:oldSectionIndex] withRowAnimation:UITableViewRowAnimationRight];
             }
 
             // add to respective section
             [self addNewItemToRespectiveSection:item];
         }
-
     }
-
 }
 
-- (void)itemRemoved:(NSObject *)item inSection:(SCArrayOfItemsSection *)section
-{
+- (void)itemRemoved:(NSObject *)item inSection:(SCArrayOfItemsSection *)section {
     [(NSMutableArray *)self.items removeObjectIdenticalTo:item];
 }
 
-- (void)invalidateItems
-{
+- (void)invalidateItems {
     itemsInSync = FALSE;
     sectionsInSync = FALSE;
 }
 
 
 // Overrides superclass
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (!sectionsInSync) {
         [self generateSections];
     }
@@ -3412,36 +3037,30 @@
 }
 
 // Overrides superclass
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle 
-	forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self clearLastReturnedCellData];
-    
-	SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionAtIndex:indexPath.section];
-    
+
+    SCArrayOfItemsSection *section = (SCArrayOfItemsSection *)[self sectionAtIndex:indexPath.section];
+
     // Have the respective section remove the item
-	[super tableView:tableView commitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
-	
-	// Remove the section if empty
-	NSArray *sectionHeaderTitles = [self getSectionHeaderTitles];
-    if (![section mutableItems].count && (!sectionHeaderTitles || [sectionHeaderTitles indexOfObject:section.headerTitle]==NSNotFound) ) {
+    [super tableView:tableView commitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
+
+    // Remove the section if empty
+    NSArray *sectionHeaderTitles = [self getSectionHeaderTitles];
+    if (![section mutableItems].count && (!sectionHeaderTitles || [sectionHeaderTitles indexOfObject:section.headerTitle] == NSNotFound)) {
         [self removeSectionAtIndex:indexPath.section];
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-							 withRowAnimation:UITableViewRowAnimationRight];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
         if (self.autoGenerateSectionIndexTitles) {
             [self.tableView reloadData]; // reloadSectionIndexTitles not working!
         }
-
     }
-
 }
 
 
-- (NSString *)safeSearchStringFromString:(NSString *)searchString
-{
+- (NSString *)safeSearchStringFromString:(NSString *)searchString {
     NSString *safeSearchString = [searchString stringByReplacingOccurrencesOfString:@"'" withString:@""];
     safeSearchString = [safeSearchString stringByReplacingOccurrencesOfString:@"\\" withString:@""]; // don't allow escape characters
-    
+
     return safeSearchString;
 }
 
@@ -3449,8 +3068,7 @@
 #pragma mark -
 #pragma mark UISearchBarDelegate methods
 
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
-{
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     if (self.lockCellSelection) {
         return FALSE;
     }
@@ -3468,50 +3086,39 @@
     return shouldBegin;
 }
 
-- (void)searchBar:(UISearchBar *)sBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
-{
-	
+- (void)searchBar:(UISearchBar *)sBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
 }
 
-- (void)searchBarBookmarkButtonClicked:(UISearchBar *)sBar
-{
-	
+- (void)searchBarBookmarkButtonClicked:(UISearchBar *)sBar {
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)sBar
-{
-	[self.searchBar resignFirstResponder];
-	self.searchBar.text = nil;
-	
-	filteredArray = nil;
+- (void)searchBarCancelButtonClicked:(UISearchBar *)sBar {
+    [self.searchBar resignFirstResponder];
+    self.searchBar.text = nil;
+
+    filteredArray = nil;
     self.addButtonItem.enabled = TRUE;
-	
+
     sectionsInSync = FALSE;
-	[self.tableView reloadData];
+    [self.tableView reloadData];
 }
 
-- (void)searchBarResultsListButtonClicked:(UISearchBar *)sBar
-{
-	
+- (void)searchBarResultsListButtonClicked:(UISearchBar *)sBar {
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)sBar
-{
-	
+- (void)searchBarSearchButtonClicked:(UISearchBar *)sBar {
 }
 
 
 #pragma mark - UISearchResultsUpdating Methods
 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     [self reconcileKeyboardInset];
     // Call the correspoding searchBar delegate
     [self searchBar:searchController.searchBar textDidChange:searchController.searchBar.text];
 }
 
-- (void)willPresentSearchController:(UISearchController *)searchController
-{
+- (void)willPresentSearchController:(UISearchController *)searchController {
     [self removeKeyboardInset];
     if (searchController == _searchController && !_searchAttachedToNavigationItem) {
         /*
@@ -3529,13 +3136,11 @@
     }
 }
 
-- (void)didPresentSearchController:(UISearchController *)searchController
-{
+- (void)didPresentSearchController:(UISearchController *)searchController {
     [self reconcileKeyboardInset];
 }
 
-- (void)didDismissSearchController:(UISearchController *)searchController
-{
+- (void)didDismissSearchController:(UISearchController *)searchController {
     if (searchController == _searchController && _enableSearchController) {
         [self attachSearchController];
     }
@@ -3545,61 +3150,42 @@
 @end
 
 
-
-
-
-
-
-
-
-
 @implementation SCArrayOfObjectsModel
 
-+ (instancetype)modelWithTableView:(UITableView *)tableView
-                            items:(NSMutableArray *)items
-                  itemsDefinition:(SCDataDefinition *)definition
-{
-	return [[[self class] alloc] initWithTableView:tableView items:items itemsDefinition:definition];
++ (instancetype)modelWithTableView:(UITableView *)tableView items:(NSMutableArray *)items itemsDefinition:(SCDataDefinition *)definition {
+    return [[[self class] alloc] initWithTableView:tableView items:items itemsDefinition:definition];
 }
 
-+ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition
-{
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition {
     return [[[self class] alloc] initWithTableView:tableView entityDefinition:definition];
 }
 
-+ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
-{
++ (instancetype)modelWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate {
     return [[[self class] alloc] initWithTableView:tableView entityDefinition:definition filterPredicate:predicate];
 }
 
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _searchPropertyName = nil;
     }
 
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-                  items:(NSMutableArray *)__items
-        itemsDefinition:(SCDataDefinition *)definition
-{
+- (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)__items itemsDefinition:(SCDataDefinition *)definition {
     SCArrayStore *store = [SCArrayStore storeWithObjectsArray:__items defaultDefiniton:definition];
-    
-	self = [self initWithTableView:tableView dataStore:store];
-    
-	return self;
+
+    self = [self initWithTableView:tableView dataStore:store];
+
+    return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition
-{
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition {
     return [self initWithTableView:tableView entityDefinition:definition filterPredicate:nil];
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate
-{
+- (instancetype)initWithTableView:(UITableView *)tableView entityDefinition:(SCEntityDefinition *)definition filterPredicate:(NSPredicate *)predicate {
     SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
 
     self = [self initWithTableView:tableView dataStore:store];
@@ -3608,25 +3194,21 @@
             self.dataFetchOptions.filter = TRUE;
             self.dataFetchOptions.filterPredicate = predicate;
         }
-
     }
 
     return self;
 }
 
 
-
-
 #pragma mark -
 #pragma mark UISearchBarDelegate methods
 
-- (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText
-{
-	NSArray *resultsArray = nil;
+- (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText {
+    NSArray *resultsArray = nil;
 
     if ([sbar.text length] && self.items.count) {
         NSString *safeSearchString = [self safeSearchStringFromString:sbar.text];
-        
+
         SCDataDefinition *objDef = [self.dataStore definitionForObject:[self.items objectAtIndex:0]]; // any object
         if (!self.searchPropertyName) {
             self.searchPropertyName = objDef.titlePropertyName;
@@ -3635,10 +3217,9 @@
         NSArray *searchProperties;
         if ([self.searchPropertyName isEqualToString:@"*"]) {
             searchProperties = [NSMutableArray arrayWithCapacity:objDef.propertyDefinitionCount];
-            for(NSUInteger i=0; i<objDef.propertyDefinitionCount; i++) {
+            for (NSUInteger i = 0; i < objDef.propertyDefinitionCount; i++) {
                 [(NSMutableArray *)searchProperties addObject:[objDef propertyDefinitionAtIndex:i].name];
             }
-
         }
 
         else {
@@ -3646,32 +3227,28 @@
         }
 
         NSMutableString *predicateFormat = [NSMutableString string];
-        for(NSUInteger i=0; i<searchProperties.count; i++)
-		{
+        for (NSUInteger i = 0; i < searchProperties.count; i++) {
             NSString *property = [searchProperties objectAtIndex:i];
-            if (i==0) {
+            if (i == 0) {
                 [predicateFormat appendFormat:@"%@ contains[cd] '%@'", property, safeSearchString];
             }
 
             else {
                 [predicateFormat appendFormat:@" OR %@ contains[cd] '%@'", property, safeSearchString];
             }
-
         }
         NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
-		
-        @try
-		{
+
+        @try {
             resultsArray = [self.items filteredArrayUsingPredicate:predicate];
         }
-        @catch (NSException * e)
-		{
+        @catch (NSException *e) {
             // handle any unexpected property-name behavior gracefully
             resultsArray = [NSArray array]; //empty array
-            
+
             SCDebugLog(@"Warning: Invalid search predicate: %@.", predicate);
         }
-		
+
         // Check for custom results
         NSArray *customResultsArray = nil;
         if (self.modelActions.didComputeSearchResults) {
@@ -3681,55 +3258,46 @@
         if (customResultsArray) {
             resultsArray = customResultsArray;
         }
-
     }
 
     filteredArray = resultsArray;
     self.addButtonItem.enabled = !filteredArray;
-	
+
     sectionsInSync = FALSE;
-    
-    [self.tableView reloadData];  // self.tableView automatically returns the correct tableView in case a UISearchController is action
+
+    [self.tableView reloadData]; // self.tableView automatically returns the correct tableView in case a UISearchController is action
 }
 
 @end
 
 
-
-
-
-
-
 @implementation SCArrayOfStringsModel
 
-+ (instancetype)modelWithTableView:(UITableView *)tableView items:(NSMutableArray *)items
-{
++ (instancetype)modelWithTableView:(UITableView *)tableView items:(NSMutableArray *)items {
     return [[[self class] alloc] initWithTableView:tableView items:items];
 }
 
 
-- (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)__items
-{
+- (instancetype)initWithTableView:(UITableView *)tableView items:(NSMutableArray *)__items {
     SCArrayStore *stringsArrayStore = [SCArrayStore storeWithObjectsArray:__items defaultDefiniton:[SCStringDefinition definition]];
-    
+
     self = [self initWithTableView:tableView dataStore:stringsArrayStore];
-    
+
     return self;
 }
 
 #pragma mark -
 #pragma mark UISearchBarDelegate methods
 
-- (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText
-{
-	NSArray *resultsArray = nil;
+- (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText {
+    NSArray *resultsArray = nil;
 
     if ([sbar.text length]) {
         NSString *safeSearchString = [self safeSearchStringFromString:sbar.text];
-        
+
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", safeSearchString];
         resultsArray = [self.items filteredArrayUsingPredicate:predicate];
-		
+
         // Check for custom results
         NSArray *customResultsArray = nil;
         if (self.modelActions.didComputeSearchResults) {
@@ -3739,30 +3307,20 @@
         if (customResultsArray) {
             resultsArray = customResultsArray;
         }
-
     }
 
     filteredArray = resultsArray;
     self.addButtonItem.enabled = !filteredArray;
-	
+
     sectionsInSync = FALSE;
-	
-    [self.tableView reloadData];  // self.tableView automatically returns the correct tableView in case a UISearchController is action
+
+    [self.tableView reloadData]; // self.tableView automatically returns the correct tableView in case a UISearchController is action
 }
 
 @end
 
 
-
-
-
-
-
-
 #pragma mark - SCSelectionModel
-
-
-
 
 
 @interface SCSelectionModel ()
@@ -3779,9 +3337,7 @@
 @end
 
 
-
-@interface SCSelectionModel ()
-{
+@interface SCSelectionModel () {
     BOOL boundToNSNumber;
     BOOL boundToNSString;
     NSIndexPath *lastSelectedRowIndexPath;
@@ -3791,13 +3347,12 @@
 
 @implementation SCSelectionModel
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _boundObject = nil;
         _boundObjectStore = nil;
         _boundPropertyName = nil;
-        
+
         boundToNSNumber = FALSE;
         boundToNSString = FALSE;
         lastSelectedRowIndexPath = nil;
@@ -3805,7 +3360,7 @@
         _allowDeletingItems = FALSE;
         _allowMovingItems = FALSE;
         _allowEditDetailView = FALSE;
-		
+
         _allowMultipleSelection = FALSE;
         _allowNoSelection = FALSE;
         _maximumSelections = 0;
@@ -3816,14 +3371,10 @@
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectedIndexPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems
-{
-    if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems {
+    if ((self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]])) {
         _boundObject = object;
-		
+
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
             _boundPropertyName = [propertyName copy];
@@ -3831,50 +3382,41 @@
 
         boundToNSNumber = TRUE;
         _allowMultipleSelection = FALSE;
-		
+
         [self reloadBoundValues];
     }
 
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectedIndexesPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems 
- allowMultipleSelection:(BOOL)multipleSelection
-{
-    if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems allowMultipleSelection:(BOOL)multipleSelection {
+    if ((self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]])) {
         _boundObject = object;
-		
+
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
             _boundPropertyName = [propertyName copy];
         }
 
         _allowMultipleSelection = multipleSelection;
-		
+
         [self reloadBoundValues];
     }
 
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object 
-    selectionStringPropertyName:(NSString *)propertyName 
-                  items:(NSArray *)sectionItems
-{
-    if ( (self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)sectionItems {
+    if ((self = [self initWithTableView:tableView items:[NSMutableArray arrayWithArray:sectionItems]])) {
         _boundObject = object;
-		
+
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
             _boundPropertyName = [propertyName copy];
         }
 
         boundToNSString = TRUE;
-		
+
         [self reloadBoundValues];
     }
 
@@ -3882,8 +3424,7 @@
 }
 
 
-- (void)setBoundValue:(id)value
-{
+- (void)setBoundValue:(id)value {
     if (self.boundObject && self.boundPropertyName) {
         if (self.boundObjectStore) {
             [self.boundObjectStore setValue:value forPropertyName:self.boundPropertyName inObject:self.boundObject];
@@ -3892,13 +3433,10 @@
         else {
             [SCUtilities setValue:value forPropertyName:self.boundPropertyName inObject:self.boundObject];
         }
-
     }
-
 }
 
-- (NSObject *)boundValue
-{
+- (NSObject *)boundValue {
     if (self.boundObject && self.boundPropertyName) {
         if (self.boundObjectStore) {
             return [self.boundObjectStore valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
@@ -3907,70 +3445,57 @@
         else {
             return [SCUtilities valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
         }
-
     }
 
     //else
-	return nil;
+    return nil;
 }
 
-- (NSUInteger)itemIndexForCell:(SCTableViewCell *)cell
-{
+- (NSUInteger)itemIndexForCell:(SCTableViewCell *)cell {
     return [self.items indexOfObject:cell.textLabel.text];
 }
 
-- (NSUInteger)itemIndexForCellAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSUInteger)itemIndexForCellAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
     return [self itemIndexForCell:cell];
 }
 
-- (NSIndexPath *)indexPathForItemIndex:(NSInteger)itemIndex
-{
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-    {
+- (NSIndexPath *)indexPathForItemIndex:(NSInteger)itemIndex {
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
         SCTableViewSection *section = [self sectionAtIndex:i];
-        for(NSUInteger j=0; j<section.cellCount; j++)
-        {
+        for (NSUInteger j = 0; j < section.cellCount; j++) {
             SCTableViewCell *cell = [section cellAtIndex:j];
             if ([self.items indexOfObject:cell.textLabel.text] == itemIndex) {
                 return [NSIndexPath indexPathForRow:j inSection:i];
             }
-
         }
     }
     return nil;
 }
 
-- (void)buildSelectedItemsIndexesFromString:(NSString *)string
-{
-	NSArray *selectionStrings = [string componentsSeparatedByString:@";"];
-	
-	[self.selectedItemsIndexes removeAllObjects];
-	for(NSString *selectionString in selectionStrings)
-	{
-		NSUInteger index = [self.items indexOfObject:selectionString];
+- (void)buildSelectedItemsIndexesFromString:(NSString *)string {
+    NSArray *selectionStrings = [string componentsSeparatedByString:@";"];
+
+    [self.selectedItemsIndexes removeAllObjects];
+    for (NSString *selectionString in selectionStrings) {
+        NSUInteger index = [self.items indexOfObject:selectionString];
         if (index != NSNotFound) {
             [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
         }
-
     }
 }
 
-- (NSString *)buildStringFromSelectedItemsIndexes
-{
-	NSMutableArray *selectionStrings = [NSMutableArray arrayWithCapacity:[self.selectedItemsIndexes count]];
-	for(NSNumber *index in self.selectedItemsIndexes)
-	{
-		[selectionStrings addObject:[self.items objectAtIndex:[index intValue]]];
-	}
-	
-	return [selectionStrings componentsJoinedByString:@";"];
+- (NSString *)buildStringFromSelectedItemsIndexes {
+    NSMutableArray *selectionStrings = [NSMutableArray arrayWithCapacity:[self.selectedItemsIndexes count]];
+    for (NSNumber *index in self.selectedItemsIndexes) {
+        [selectionStrings addObject:[self.items objectAtIndex:[index intValue]]];
+    }
+
+    return [selectionStrings componentsJoinedByString:@";"];
 }
 
 // override superclass
-- (void)reloadBoundValues
-{
+- (void)reloadBoundValues {
     [super reloadBoundValues];
 
     if (boundToNSNumber) {
@@ -3981,28 +3506,23 @@
         if (self.boundObject && !self.boundValue) {
             self.boundValue = [NSNumber numberWithInt:-1];
         }
-
     }
 
     else if (boundToNSString) {
         if ([SCUtilities isStringClass:[self.boundValue class]] && self.items) {
             [self buildSelectedItemsIndexesFromString:(NSString *)self.boundValue];
         }
-
     }
 
     else {
         if (self.boundObject && !self.boundValue) {
-            self.boundValue = [NSMutableSet set];   //Empty set
+            self.boundValue = [NSMutableSet set]; //Empty set
         }
-
     }
-
 }
 
 // override superclass method
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.textLabel.textColor = [UIColor linkColor]; // dgApps
@@ -4014,27 +3534,25 @@
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    
+
     [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 }
 
-- (void)deselectLastSelectedRow
-{
-	[self.tableView deselectRowAtIndexPath:lastSelectedRowIndexPath animated:YES];
+- (void)deselectLastSelectedRow {
+    [self.tableView deselectRowAtIndexPath:lastSelectedRowIndexPath animated:YES];
 }
 
 // override superclass method
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-    
+
     NSNumber *itemIndex = [NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]];
-	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-	
-	lastSelectedRowIndexPath = indexPath;
+    UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+
+    lastSelectedRowIndexPath = indexPath;
 
     if ([self.selectedItemsIndexes containsObject:itemIndex]) {
-        if (!self.allowNoSelection && self.selectedItemsIndexes.count==1) {
+        if (!self.allowNoSelection && self.selectedItemsIndexes.count == 1) {
             [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 
             if (self.autoDismissViewController) {
@@ -4062,7 +3580,7 @@
     }
 
     // Make sure not to exceed maximumSelections
-    if (self.allowMultipleSelection && self.maximumSelections!=0 && self.selectedItemsIndexes.count==self.maximumSelections) {
+    if (self.allowMultipleSelection && self.maximumSelections != 0 && self.selectedItemsIndexes.count == self.maximumSelections) {
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 
         if (self.autoDismissViewController) {
@@ -4081,7 +3599,7 @@
     }
 
     //check selected cell
-	[self.selectedItemsIndexes addObject:itemIndex];
+    [self.selectedItemsIndexes addObject:itemIndex];
     if (boundToNSNumber) {
         self.boundValue = self.selectedItemIndex;
     }
@@ -4094,47 +3612,38 @@
 
     selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
 
-	[self valueChangedForSectionAtIndex:indexPath.section];
-	
-	[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
+    [self valueChangedForSectionAtIndex:indexPath.section];
+
+    [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
 
     if (self.autoDismissViewController) {
-        if (!self.allowMultipleSelection || self.maximumSelections==0
-		   || self.maximumSelections==self.selectedItemsIndexes.count || self.items.count==self.selectedItemsIndexes.count) {
+        if (!self.allowMultipleSelection || self.maximumSelections == 0 || self.maximumSelections == self.selectedItemsIndexes.count || self.items.count == self.selectedItemsIndexes.count) {
             [self performSelector:@selector(dismissViewController) withObject:nil afterDelay:0.4];
         }
-
     }
-
 }
 
-- (void)dismissViewController
-{
+- (void)dismissViewController {
     if ([self.viewController isKindOfClass:[SCTableViewController class]]) {
-        [(SCTableViewController *)self.viewController
-		 dismissWithCancelValue:FALSE doneValue:TRUE];
+        [(SCTableViewController *)self.viewController dismissWithCancelValue:FALSE doneValue:TRUE];
     }
 
     else if ([self.viewController isKindOfClass:[SCViewController class]]) {
-        [(SCViewController *)self.viewController
-		 dismissWithCancelValue:FALSE doneValue:TRUE];
+        [(SCViewController *)self.viewController dismissWithCancelValue:FALSE doneValue:TRUE];
     }
-
 }
 
-- (NSMutableSet *)selectedItemsIndexes
-{
+- (NSMutableSet *)selectedItemsIndexes {
     if (self.boundObject && !(boundToNSNumber || boundToNSString)) {
         return (NSMutableSet *)self.boundValue;
     }
 
     //else
-	return _selectedItemsIndexes;
+    return _selectedItemsIndexes;
 }
 
-- (void)setSelectedItemIndex:(NSNumber *)number
-{
-	NSNumber *num = [number copy];
+- (void)setSelectedItemIndex:(NSNumber *)number {
+    NSNumber *num = [number copy];
 
     if (boundToNSNumber) {
         self.boundValue = num;
@@ -4144,37 +3653,23 @@
     if ([number intValue] >= 0) {
         [self.selectedItemsIndexes addObject:num];
     }
-
 }
 
-- (NSNumber *)selectedItemIndex
-{
-	NSNumber *index = [self.selectedItemsIndexes anyObject];
+- (NSNumber *)selectedItemIndex {
+    NSNumber *index = [self.selectedItemsIndexes anyObject];
 
     if (index) {
         return index;
     }
 
     //else
-	return [NSNumber numberWithInt:-1];
+    return [NSNumber numberWithInt:-1];
 }
 
 @end
 
 
-
-
-
-
-
-
 #pragma mark - SCObjectSelectionModel
-
-
-
-
-
-
 
 
 @interface SCObjectSelectionModel ()
@@ -4193,29 +3688,26 @@
 @end
 
 
-
-@interface SCObjectSelectionModel ()
-{
+@interface SCObjectSelectionModel () {
     NSIndexPath *lastSelectedRowIndexPath;
 }
 @end
 
 @implementation SCObjectSelectionModel
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _boundObject = nil;
         _boundObjectStore = nil;
         _boundPropertyName = nil;
-        
+
         lastSelectedRowIndexPath = nil;
         _itemsAccessoryType = UITableViewCellAccessoryCheckmark;
         _allowAddingItems = FALSE;
         _allowDeletingItems = FALSE;
         _allowMovingItems = FALSE;
         _allowEditDetailView = FALSE;
-		
+
         _allowMultipleSelection = FALSE;
         _allowNoSelection = FALSE;
         _maximumSelections = 0;
@@ -4226,14 +3718,11 @@
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-              boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName
-      selectionItemsStore:(SCDataStore *)store
-{
-    if ( (self = [self initWithTableView:tableView]) ) {
+- (instancetype)initWithTableView:(UITableView *)tableView boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store {
+    if ((self = [self initWithTableView:tableView])) {
         _boundObject = object;
         _dataStore = store;
-        
+
         // Only bind property name if property exists
         if ([SCUtilities propertyName:propertyName existsInObject:self.boundObject]) {
             _boundPropertyName = [propertyName copy];
@@ -4254,20 +3743,16 @@
     return self;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
-            boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName
-                  items:(NSArray *)selectionItems itemsDefintion:(SCDataDefinition *)definition
-{
-	SCArrayStore *store = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:selectionItems] defaultDefiniton:definition];
-    
+- (instancetype)initWithTableView:(UITableView *)tableView boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName items:(NSArray *)selectionItems itemsDefintion:(SCDataDefinition *)definition {
+    SCArrayStore *store = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:selectionItems] defaultDefiniton:definition];
+
     self = [self initWithTableView:tableView boundObject:object selectedObjectPropertyName:propertyName selectionItemsStore:store];
-    
+
     return self;
 }
 
 
-- (void)setBoundValue:(id)value
-{
+- (void)setBoundValue:(id)value {
     if (self.boundObject && self.boundPropertyName) {
         if (self.boundObjectStore) {
             [self.boundObjectStore setValue:value forPropertyName:self.boundPropertyName inObject:self.boundObject];
@@ -4276,13 +3761,10 @@
         else {
             [SCUtilities setValue:value forPropertyName:self.boundPropertyName inObject:self.boundObject];
         }
-
     }
-
 }
 
-- (NSObject *)boundValue
-{
+- (NSObject *)boundValue {
     if (self.boundObject && self.boundPropertyName) {
         if (self.boundObjectStore) {
             return [self.boundObjectStore valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
@@ -4291,35 +3773,30 @@
         else {
             return [SCUtilities valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
         }
-
     }
 
     //else
-	return nil;
+    return nil;
 }
 
-- (NSMutableSet *)boundMutableSet
-{
+- (NSMutableSet *)boundMutableSet {
     return (NSMutableSet *)self.boundValue;
 }
 
 
 // override superclass method
-- (void)reloadBoundValues
-{
+- (void)reloadBoundValues {
     [super reloadBoundValues];
-    
+
     // Synchronize selectedItemsIndexes
     [self.selectedItemsIndexes removeAllObjects];
     if (self.allowMultipleSelection) {
-        NSMutableSet *boundSet = [self boundMutableSet];  //optimize
-        for(NSObject *obj in boundSet)
-        {
+        NSMutableSet *boundSet = [self boundMutableSet]; //optimize
+        for (NSObject *obj in boundSet) {
             NSUInteger index = [self.items indexOfObjectIdenticalTo:obj];
             if (index != NSNotFound) {
                 [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
             }
-
         }
     }
 
@@ -4329,18 +3806,14 @@
         if (index != NSNotFound) {
             [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
         }
-
     }
-
 }
 
-- (void)selectedItemsIndexesModified
-{
+- (void)selectedItemsIndexesModified {
     if (self.allowMultipleSelection) {
         NSMutableSet *boundValueSet = [self boundMutableSet];
         [boundValueSet removeAllObjects];
-        for(NSNumber *index in self.selectedItemsIndexes)
-        {
+        for (NSNumber *index in self.selectedItemsIndexes) {
             [boundValueSet addObject:[self.items objectAtIndex:[index intValue]]];
         }
     }
@@ -4354,33 +3827,26 @@
 
         self.boundValue = selectedObject;
     }
-
 }
 
 
-- (NSInteger)itemIndexForCell:(SCTableViewCell *)cell
-{
+- (NSInteger)itemIndexForCell:(SCTableViewCell *)cell {
     return [self.items indexOfObjectIdenticalTo:cell.boundObject];
 }
 
-- (NSInteger)itemIndexForCellAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSInteger)itemIndexForCellAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewCell *cell = [self cellAtIndexPath:indexPath];
     return [self itemIndexForCell:cell];
 }
 
-- (NSIndexPath *)indexPathForItemIndex:(NSInteger)itemIndex
-{
-    for(NSUInteger i=0; i<self.sectionCount; i++)
-    {
+- (NSIndexPath *)indexPathForItemIndex:(NSInteger)itemIndex {
+    for (NSUInteger i = 0; i < self.sectionCount; i++) {
         SCTableViewSection *section = [self sectionAtIndex:i];
-        for(NSUInteger j=0; j<section.cellCount; j++)
-        {
+        for (NSUInteger j = 0; j < section.cellCount; j++) {
             SCTableViewCell *cell = [section cellAtIndex:j];
             if ([self.items indexOfObjectIdenticalTo:cell.boundObject] == itemIndex) {
                 return [NSIndexPath indexPathForRow:j inSection:i];
             }
-
         }
     }
     return nil;
@@ -4388,8 +3854,7 @@
 
 
 // override superclass method
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.selectedItemsIndexes containsObject:[NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
@@ -4402,20 +3867,18 @@
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    
+
     [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 }
 
-- (void)deselectLastSelectedRow
-{
-	[self.tableView deselectRowAtIndexPath:lastSelectedRowIndexPath animated:YES];
+- (void)deselectLastSelectedRow {
+    [self.tableView deselectRowAtIndexPath:lastSelectedRowIndexPath animated:YES];
 }
 
 // override superclass method
-- (void)dispatchEventRemoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)dispatchEventRemoveRowAtIndexPath:(NSIndexPath *)indexPath {
     [super dispatchEventRemoveRowAtIndexPath:indexPath];
-    
+
     //deselect removed row
     NSNumber *itemIndex = [NSNumber numberWithInteger:indexPath.row];
     [self.selectedItemsIndexes removeObject:itemIndex];
@@ -4423,15 +3886,14 @@
 }
 
 // override superclass method
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSNumber *itemIndex = [NSNumber numberWithUnsignedInteger:[self itemIndexForCellAtIndexPath:indexPath]];
-	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-	
-	lastSelectedRowIndexPath = indexPath;
+    UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+
+    lastSelectedRowIndexPath = indexPath;
 
     if ([self.selectedItemsIndexes containsObject:itemIndex]) {
-        if (!self.allowNoSelection && self.selectedItemsIndexes.count==1) {
+        if (!self.allowNoSelection && self.selectedItemsIndexes.count == 1) {
             [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 
             if (self.autoDismissViewController) {
@@ -4444,17 +3906,17 @@
         //uncheck cell and exit method
         [self.selectedItemsIndexes removeObject:itemIndex];
         [self selectedItemsIndexesModified];
-        
+
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
         selectedCell.textLabel.textColor = [UIColor labelColor]; // dgApps
         [self valueChangedForSectionAtIndex:indexPath.section];
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
-        
+
         return;
     }
 
     // Make sure not to exceed maximumSelections
-    if (self.allowMultipleSelection && self.maximumSelections!=0 && self.selectedItemsIndexes.count==self.maximumSelections) {
+    if (self.allowMultipleSelection && self.maximumSelections != 0 && self.selectedItemsIndexes.count == self.maximumSelections) {
         [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.05];
 
         if (self.autoDismissViewController) {
@@ -4473,68 +3935,52 @@
     }
 
     //check selected cell
-	[self.selectedItemsIndexes addObject:itemIndex];
-	[self selectedItemsIndexesModified];
-    
-	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    [self.selectedItemsIndexes addObject:itemIndex];
+    [self selectedItemsIndexesModified];
+
+    selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
 
     selectedCell.textLabel.textColor = [UIColor linkColor]; // dgApps
-	
-	[self valueChangedForSectionAtIndex:indexPath.section];
-	
-	[self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
+
+    [self valueChangedForSectionAtIndex:indexPath.section];
+
+    [self performSelector:@selector(deselectLastSelectedRow) withObject:nil afterDelay:0.1];
 
     if (self.autoDismissViewController) {
-        if (!self.allowMultipleSelection || self.maximumSelections==0
-		   || self.maximumSelections==self.selectedItemsIndexes.count || self.items.count==self.selectedItemsIndexes.count) {
+        if (!self.allowMultipleSelection || self.maximumSelections == 0 || self.maximumSelections == self.selectedItemsIndexes.count || self.items.count == self.selectedItemsIndexes.count) {
             [self performSelector:@selector(dismissViewController) withObject:nil afterDelay:0.4];
         }
-
     }
-
 }
 
-- (void)dismissViewController
-{
+- (void)dismissViewController {
     if ([self.viewController isKindOfClass:[SCTableViewController class]]) {
-        [(SCTableViewController *)self.viewController
-		 dismissWithCancelValue:FALSE doneValue:TRUE];
+        [(SCTableViewController *)self.viewController dismissWithCancelValue:FALSE doneValue:TRUE];
     }
 
     else if ([self.viewController isKindOfClass:[SCViewController class]]) {
-        [(SCViewController *)self.viewController
-             dismissWithCancelValue:FALSE doneValue:TRUE];
+        [(SCViewController *)self.viewController dismissWithCancelValue:FALSE doneValue:TRUE];
     }
-
 }
 
-- (void)setSelectedItemIndex:(NSNumber *)number
-{
-	NSNumber *num = [number copy];
-	
-	[self.selectedItemsIndexes removeAllObjects];
+- (void)setSelectedItemIndex:(NSNumber *)number {
+    NSNumber *num = [number copy];
+
+    [self.selectedItemsIndexes removeAllObjects];
     if ([number intValue] >= 0) {
         [self.selectedItemsIndexes addObject:num];
     }
-
 }
 
-- (NSNumber *)selectedItemIndex
-{
-	NSNumber *index = [self.selectedItemsIndexes anyObject];
+- (NSNumber *)selectedItemIndex {
+    NSNumber *index = [self.selectedItemsIndexes anyObject];
 
     if (index) {
         return index;
     }
 
     //else
-	return [NSNumber numberWithInt:-1];
+    return [NSNumber numberWithInt:-1];
 }
 
 @end
-
-
-
-
-
-

@@ -18,28 +18,28 @@ NS_ASSUME_NONNULL_BEGIN
 @class SCTableViewSection;
 
 /// A block invoked with a table-view model.
-typedef void(^SCModelAction_Block)(SCTableViewModel *tableModel);
+typedef void (^SCModelAction_Block)(SCTableViewModel *tableModel);
 /// A block that returns a Boolean decision for a table-view model.
-typedef BOOL(^SCConditionalModelAction_Block)(SCTableViewModel *tableModel);
+typedef BOOL (^SCConditionalModelAction_Block)(SCTableViewModel *tableModel);
 /// A block invoked after a section is added to a table-view model.
-typedef void(^SCDidAddSectionAction_Block)(SCTableViewModel *tableModel, SCTableViewSection *section, NSUInteger sectionIndex);
+typedef void (^SCDidAddSectionAction_Block)(SCTableViewModel *tableModel, SCTableViewSection *section, NSUInteger sectionIndex);
 /// A block invoked after a section is removed from a table-view model.
-typedef void(^SCDidRemoveSectionAction_Block)(SCTableViewModel *tableModel, NSUInteger sectionIndex);
+typedef void (^SCDidRemoveSectionAction_Block)(SCTableViewModel *tableModel, NSUInteger sectionIndex);
 /// A block that sorts a table-view model's mutable section array.
-typedef void(^SCSortSectionsAction_Block)(SCTableViewModel *tableModel, NSMutableArray<SCTableViewSection *> *sections);
+typedef void (^SCSortSectionsAction_Block)(SCTableViewModel *tableModel, NSMutableArray<SCTableViewSection *> *sections);
 /// A block that maps a section-index title to a section index.
-typedef NSInteger(^SCSectionForSectionIndexTitleAction_Block)(SCTableViewModel *tableModel, NSString *title, NSInteger index);
+typedef NSInteger (^SCSectionForSectionIndexTitleAction_Block)(SCTableViewModel *tableModel, NSString *title, NSInteger index);
 
 /// A block invoked after a model fetches its items.
-typedef void(^SCDidFetchModelItemsAction_Block)(SCArrayOfItemsModel *itemsModel, NSMutableArray<id> *items);
+typedef void (^SCDidFetchModelItemsAction_Block)(SCArrayOfItemsModel *itemsModel, NSMutableArray<id> *items);
 /// A block that supplies the section-header title for an item.
-typedef NSString * _Nullable (^SCSectionHeaderTitleForItemAction_Block)(SCArrayOfItemsModel *itemsModel, NSObject *item, NSUInteger itemIndex);
+typedef NSString *_Nullable (^SCSectionHeaderTitleForItemAction_Block)(SCArrayOfItemsModel *itemsModel, NSObject *item, NSUInteger itemIndex);
 /// A block that supplies all section-header titles for an items model.
-typedef NSArray<NSString *> * _Nullable (^SCSectionHeaderTitlesAction_Block)(SCArrayOfItemsModel *itemsModel);
+typedef NSArray<NSString *> *_Nullable (^SCSectionHeaderTitlesAction_Block)(SCArrayOfItemsModel *itemsModel);
 /// A block that post-processes search results computed by an items model.
-typedef NSArray<id> * _Nullable (^SCDidComputeSearchResultsAction_Block)(SCArrayOfItemsModel *itemsModel, NSString *searchText, NSArray<id> * _Nullable searchResults);
+typedef NSArray<id> *_Nullable (^SCDidComputeSearchResultsAction_Block)(SCArrayOfItemsModel *itemsModel, NSString *searchText, NSArray<id> *_Nullable searchResults);
 /// A block invoked after a table-view cell moves between index paths.
-typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableViewCell *cell, NSIndexPath *fromIndexPath, NSIndexPath *toIndexPath);
+typedef void (^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableViewCell *cell, NSIndexPath *fromIndexPath, NSIndexPath *toIndexPath);
 
 
 #pragma mark - SCModelActions
@@ -48,7 +48,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 /// - SeeAlso: ``SCSectionActions``, ``SCCellActions``.
 
 @interface SCModelActions : NSObject
-
 
 
 #pragma mark - Actions
@@ -256,8 +255,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 @property (nonatomic, copy, nullable) SCDidMoveCellAction_Block didMoveCell;
 
 
-
-
 #pragma mark - SCArrayOfItemsModel Actions
 
 
@@ -301,7 +298,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///     return [[objectName substringToIndex:1] uppercaseString];
 /// };
 /// ```
- @property (nonatomic, copy, nullable) SCSectionHeaderTitleForItemAction_Block sectionHeaderTitleForItem;
+@property (nonatomic, copy, nullable) SCSectionHeaderTitleForItemAction_Block sectionHeaderTitleForItem;
 
 /// Implement this action to provide custom sections for SCArrayOfItemsModel.
 ///
@@ -333,7 +330,6 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 @property (nonatomic, copy, nullable) SCDidComputeSearchResultsAction_Block didComputeSearchResults;
 
 
-
 #pragma mark - Miscellaneous
 
 /// The owner table view model of the actions object.
@@ -345,7 +341,7 @@ typedef void(^SCDidMoveCellAction_Block)(SCTableViewModel *tableModel, SCTableVi
 ///
 /// - Parameter actions: The source actions, or nil to leave existing hooks alone.
 /// - Parameter override: Set to TRUE to override any existing actions, otherwise set to FALSE.
-- (void)setActionsTo:(SCModelActions * _Nullable)actions overrideExisting:(BOOL)override;
+- (void)setActionsTo:(SCModelActions *_Nullable)actions overrideExisting:(BOOL)override;
 
 @end
 

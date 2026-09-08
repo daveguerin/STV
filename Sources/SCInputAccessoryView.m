@@ -12,8 +12,7 @@
 #import "SCGlobals.h"
 
 
-@interface SCInputAccessoryView ()
-{
+@interface SCInputAccessoryView () {
     __weak id<SCInputAccessoryViewDelegate> _delegate;
     UIToolbar *_toolbar;
     UISegmentedControl *_previousNextSegmentedControl;
@@ -33,19 +32,15 @@
 @implementation SCInputAccessoryView
 
 
-
-- (instancetype)init
-{
+- (instancetype)init {
     return [self initWithFrame:CGRectZero];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
+- (instancetype)initWithFrame:(CGRect)frame {
     return [self initWithFrame:frame inputViewStyle:UIInputViewStyleKeyboard];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle
-{
+- (instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle {
     self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
     if (self) {
         [self performInitialization];
@@ -54,8 +49,7 @@
     return self;
 }
 
-- (void)performInitialization
-{
+- (void)performInitialization {
     self.allowsSelfSizing = YES;
     /*
     hermes:
@@ -68,18 +62,18 @@
     _rewind = YES;
     _showPrevNextButtons = TRUE;
     _showClearButton = FALSE;
-    
+
     NSString *previousTitle = NSLocalizedString(@"Previous", @"Previous Button Title");
     NSString *nextTitle = NSLocalizedString(@"Next", @"Next Button Title");
     _previousNextSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:previousTitle, nextTitle, nil]];
     _previousNextSegmentedControl.momentary = YES;
     [_previousNextSegmentedControl addTarget:self action:@selector(previousNextSegmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     UIBarButtonItem *segmentedItem = [[UIBarButtonItem alloc] initWithCustomView:_previousNextSegmentedControl];
-    
+
     UIBarButtonItem *spacerItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
+
     _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneTapped)];
-    
+
     _toolbar = [[UIToolbar alloc] init];
     _toolbar.translucent = TRUE;
     _toolbar.translatesAutoresizingMaskIntoConstraints = NO;
@@ -90,32 +84,23 @@
     The keyboard owns the accessory width. Constraints fit its toolbar in
     local coordinates, including when the accessory has a nonzero origin.
     */
-    [NSLayoutConstraint activateConstraints:@[
-        [_toolbar.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-        [_toolbar.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_toolbar.topAnchor constraintEqualToAnchor:self.topAnchor],
-        [_toolbar.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-        [_toolbar.heightAnchor constraintGreaterThanOrEqualToConstant:44.0]
-    ]];
-    
+    [NSLayoutConstraint activateConstraints:@[[_toolbar.leadingAnchor constraintEqualToAnchor:self.leadingAnchor], [_toolbar.trailingAnchor constraintEqualToAnchor:self.trailingAnchor], [_toolbar.topAnchor constraintEqualToAnchor:self.topAnchor], [_toolbar.bottomAnchor constraintEqualToAnchor:self.bottomAnchor], [_toolbar.heightAnchor constraintGreaterThanOrEqualToConstant:44.0]]];
+
     NSString *clearTitle = NSLocalizedString(@"Clear", @"Clear Button Title");
     _clearButton = [[UIBarButtonItem alloc] initWithTitle:clearTitle style:UIBarButtonItemStylePlain target:self action:@selector(clearTapped)];
 }
 
-- (CGSize)intrinsicContentSize
-{
-    return CGSizeMake(UIViewNoIntrinsicMetric,
-                      MAX(44.0, self.toolbar.intrinsicContentSize.height));
+- (CGSize)intrinsicContentSize {
+    return CGSizeMake(UIViewNoIntrinsicMetric, MAX(44.0, self.toolbar.intrinsicContentSize.height));
 }
 
-- (void)setShowPrevNextButtons:(BOOL)show
-{
+- (void)setShowPrevNextButtons:(BOOL)show {
     if (_showPrevNextButtons == show) {
         return;
     }
 
     _showPrevNextButtons = show;
-    
+
     NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self.toolbar.items];
     if (_showPrevNextButtons) {
         [toolbarItems insertObject:self.previousNextSegmentedControl atIndex:0];
@@ -128,14 +113,13 @@
     self.toolbar.items = toolbarItems;
 }
 
-- (void)setShowClearButton:(BOOL)show
-{
+- (void)setShowClearButton:(BOOL)show {
     if (_showClearButton == show) {
         return;
     }
 
     _showClearButton = show;
-    
+
     NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self.toolbar.items];
     NSUInteger clearIndex;
     if (self.showPrevNextButtons) {
@@ -157,52 +141,42 @@
     self.toolbar.items = toolbarItems;
 }
 
-- (void)previousNextSegmentedControlValueChanged:(id)sender
-{
+- (void)previousNextSegmentedControlValueChanged:(id)sender {
     UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-    
-    switch(segmentedControl.selectedSegmentIndex)
-    {
+
+    switch (segmentedControl.selectedSegmentIndex) {
         case 0:
             [self previousTapped];
             break;
-        
+
         case 1:
             [self nextTapped];
             break;
     }
 }
 
-- (void)previousTapped
-{
+- (void)previousTapped {
     if ([self.delegate respondsToSelector:@selector(inputAccessoryViewPreviousTapped:)]) {
         [self.delegate inputAccessoryViewPreviousTapped:self];
     }
-
 }
 
-- (void)nextTapped
-{
+- (void)nextTapped {
     if ([self.delegate respondsToSelector:@selector(inputAccessoryViewNextTapped:)]) {
         [self.delegate inputAccessoryViewNextTapped:self];
     }
-
 }
 
-- (void)clearTapped
-{
+- (void)clearTapped {
     if ([self.delegate respondsToSelector:@selector(inputAccessoryViewClearTapped:)]) {
         [self.delegate inputAccessoryViewClearTapped:self];
     }
-
 }
 
-- (void)doneTapped
-{
+- (void)doneTapped {
     if ([self.delegate respondsToSelector:@selector(inputAccessoryViewDoneTapped:)]) {
         [self.delegate inputAccessoryViewDoneTapped:self];
     }
-
 }
 
 @end

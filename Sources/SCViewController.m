@@ -13,17 +13,16 @@
 #import "SCGlobals.h"
 
 
-@interface SCViewController () <UIPopoverPresentationControllerDelegate>
-{
+@interface SCViewController () <UIPopoverPresentationControllerDelegate> {
     __weak id _delegate;
     SCTableViewModel *_tableViewModel;
     SCTableViewModel *_noFocusModel;
-	SCNavigationBarType _navigationBarType;
-	UIBarButtonItem *_addButton;
-	UIBarButtonItem *_cancelButton;
-	UIBarButtonItem *_doneButton;
-	BOOL _cancelButtonTapped;
-	BOOL _doneButtonTapped;
+    SCNavigationBarType _navigationBarType;
+    UIBarButtonItem *_addButton;
+    UIBarButtonItem *_cancelButton;
+    UIBarButtonItem *_doneButton;
+    BOOL _cancelButtonTapped;
+    BOOL _doneButtonTapped;
 
     __weak UIPopoverPresentationController *_popoverController;
     BOOL _popoverWillDismissNotified;
@@ -32,12 +31,11 @@
     SCViewControllerActions *_actions;
     SCViewControllerState _state;
     BOOL _hasFocus;
-    
+
     UIBarButtonItem *_nonEditModeLeftBarButtonItem;
 }
 
 @end
-
 
 
 @implementation SCViewController
@@ -47,43 +45,37 @@
 // Custom accessors: retain the runtime V attribute for existing backing storage.
 @synthesize tableViewModel = _tableViewModel;
 
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         [self performInitialization];
     }
 
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    if ( (self = [super initWithCoder:aDecoder]) ) {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
         [self performInitialization];
     }
 
     return self;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if ( (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) ) {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         [self performInitialization];
     }
 
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     if ([SCModelCenter sharedModelCenter].keyboardIssuer == self) {
         [SCModelCenter sharedModelCenter].keyboardIssuer = nil;
     }
-
 }
 
-- (void)performInitialization
-{
+- (void)performInitialization {
     _delegate = nil;
     _tableView = nil;
     _tableViewModel = [[SCTableViewModel alloc] init];
@@ -93,21 +85,20 @@
     _cancelButton = nil;
     _allowEditingModeCancelButton = TRUE;
     _doneButton = nil;
-    
+
     _popoverController = nil;
-    
+
     _cancelButtonTapped = FALSE;
     _doneButtonTapped = FALSE;
     _state = SCViewControllerStateNew;
     _hasFocus = FALSE;
-    
+
     _actions = [[SCViewControllerActions alloc] init];
     self.edgesForExtendedLayout = UIRectEdgeNone;
 }
 
 
-- (UITableView *)tableView
-{
+- (UITableView *)tableView {
     if (self.containedViewController) {
         return self.containedViewController.tableView;
     }
@@ -116,8 +107,7 @@
     return _tableView;
 }
 
-- (void)setTableView:(UITableView *)tableView
-{
+- (void)setTableView:(UITableView *)tableView {
     _tableView = tableView;
     if (!_tableView.superview) {
         [self.view addSubview:_tableView];
@@ -126,8 +116,7 @@
     _tableViewModel.tableView = tableView;
 }
 
-- (SCTableViewModel *)tableViewModel
-{
+- (SCTableViewModel *)tableViewModel {
     if (self.containedViewController) {
         return self.containedViewController.tableViewModel;
     }
@@ -136,26 +125,23 @@
     return _tableViewModel;
 }
 
-- (void)setTableViewModel:(SCTableViewModel *)model
-{
+- (void)setTableViewModel:(SCTableViewModel *)model {
     // Preserve the detailViewController when applicable
     if (_tableViewModel.detailViewController && !model.detailViewController) {
         model.detailViewController = _tableViewModel.detailViewController;
     }
 
     _tableViewModel = model;
-    
+
     _tableViewModel.tableView = _tableView;
     _tableViewModel.editButtonItem = self.editButton;
     if ([_tableViewModel isKindOfClass:[SCArrayOfItemsModel class]] && self.addButton) {
         [(SCArrayOfItemsModel *)_tableViewModel setAddButtonItem:self.addButton];
     }
-
 }
 
 
-- (void)setPopoverController:(UIPopoverPresentationController *)popover
-{
+- (void)setPopoverController:(UIPopoverPresentationController *)popover {
     if (_popoverController.delegate == self) {
         _popoverController.delegate = nil;
     }
@@ -168,34 +154,28 @@
 }
 
 
-- (void)loadView
-{
+- (void)loadView {
     [super loadView];
-    
+
     self.tableViewModel.tableView = self.tableView;
-    
+
     // Call viewDidLoad delegate method
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerViewDidLoad:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerViewDidLoad:)]) {
         [self.delegate viewControllerViewDidLoad:self];
     }
-
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     if (self.actions.viewDidLoad) {
         self.actions.viewDidLoad(self);
     }
-
 }
 
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
     if (_state == SCViewControllerStateNew || _state == SCViewControllerStateDismissed) {
         _popoverWillDismissNotified = NO;
@@ -209,23 +189,20 @@
     if (_state == SCViewControllerStateNew) {
         if (self.tableViewModel.masterModel) {
             // Inherit owner's background
-            if (self.tableView.style!=UITableViewStylePlain && self.tableViewModel.masterModel.tableView.style!=UITableViewStylePlain) {
+            if (self.tableView.style != UITableViewStylePlain && self.tableViewModel.masterModel.tableView.style != UITableViewStylePlain) {
                 self.tableView.backgroundColor = self.tableViewModel.masterModel.tableView.backgroundColor;
             }
-
         }
-
     }
 
     _cancelButtonTapped = FALSE;
-	_doneButtonTapped = FALSE;
+    _doneButtonTapped = FALSE;
 
     if (self.actions.willAppear) {
         self.actions.willAppear(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(viewControllerWillAppear:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillAppear:)]) {
         [self.delegate viewControllerWillAppear:self];
     }
 
@@ -234,18 +211,14 @@
             self.actions.willPresent(self);
         }
 
-        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(viewControllerWillPresent:)]) {
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillPresent:)]) {
             [self.delegate viewControllerWillPresent:self];
         }
-
     }
-
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 
     if (self.tableViewModel) {
         self.tableViewModel.commitButton = self.doneButton;
@@ -255,8 +228,7 @@
         self.actions.didAppear(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(viewControllerDidAppear:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidAppear:)]) {
         [self.delegate viewControllerDidAppear:self];
     }
 
@@ -265,21 +237,18 @@
             self.actions.didPresent(self);
         }
 
-        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)]
-           && [self.delegate respondsToSelector:@selector(viewControllerDidPresent:)]) {
+        if ([self.delegate conformsToProtocol:@protocol(SCTableViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidPresent:)]) {
             [self.delegate viewControllerDidPresent:self];
         }
-
     }
 
     _state = SCViewControllerStateActive;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
 
-    if (_state != SCViewControllerStateDismissed)  // could be set by the controller's buttons
+    if (_state != SCViewControllerStateDismissed) // could be set by the controller's buttons
     {
         if (self.navigationController) {
             if ([self.parentViewController isKindOfClass:[UINavigationController class]] && [self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
@@ -290,51 +259,43 @@
             else {
                 _state = SCViewControllerStateInactive;
             }
-
         }
 
         else {
             _state = SCViewControllerStateInactive;
         }
-
     }
 
     if (self.actions.willDisappear) {
         self.actions.willDisappear(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(viewControllerWillDisappear:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillDisappear:)]) {
         [self.delegate viewControllerWillDisappear:self];
     }
 
     if (self.state == SCViewControllerStateDismissed) {
         [self notifyPopoverWillDismiss];
     }
-
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 
     if (self.actions.didDisappear) {
         self.actions.didDisappear(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:@selector(viewControllerDidDisappear:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidDisappear:)]) {
         [self.delegate viewControllerDidDisappear:self];
     }
 
     if (self.state == SCViewControllerStateDismissed) {
         [self notifyPopoverDidDismiss];
     }
-
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     UIInterfaceOrientationMask interfaceOrientations;
 
     if (self.tableViewModel.masterModel) {
@@ -349,53 +310,40 @@
         else {
             interfaceOrientations = [super supportedInterfaceOrientations];
         }
-
     }
 
     return interfaceOrientations;
 }
 
 
-
-- (void)setNavigationBarType:(SCNavigationBarType)barType
-{
+- (void)setNavigationBarType:(SCNavigationBarType)barType {
     _navigationBarType = barType;
-    
+
     UINavigationItem *navItem = self.navigationItem;
-    
+
     // Reset buttons
-    if ( (navItem.leftBarButtonItem==self.addButton || navItem.leftBarButtonItem==self.editButton || navItem.leftBarButtonItem==self.doneButton || navItem.leftBarButtonItem==self.cancelButton) && !navItem.backBarButtonItem) {
+    if ((navItem.leftBarButtonItem == self.addButton || navItem.leftBarButtonItem == self.editButton || navItem.leftBarButtonItem == self.doneButton || navItem.leftBarButtonItem == self.cancelButton) && !navItem.backBarButtonItem) {
         navItem.leftBarButtonItem = nil;
     }
 
-    if (navItem.rightBarButtonItem==self.addButton || navItem.rightBarButtonItem==self.editButton || navItem.rightBarButtonItem==self.doneButton || navItem.rightBarButtonItem==self.cancelButton) {
+    if (navItem.rightBarButtonItem == self.addButton || navItem.rightBarButtonItem == self.editButton || navItem.rightBarButtonItem == self.doneButton || navItem.rightBarButtonItem == self.cancelButton) {
         navItem.rightBarButtonItem = nil;
     }
 
     _addButton = nil;
     _cancelButton = nil;
     _doneButton = nil;
-    
+
     // Setup self.editButton
     self.editButton.target = self;
     self.editButton.action = @selector(editButtonAction);
 
-    if (navItem && _navigationBarType!=SCNavigationBarTypeNone) {
-        UIBarButtonItem *tempAddButton = [[UIBarButtonItem alloc]
-                                          initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                          target:nil
-                                          action:nil];
-        UIBarButtonItem *tempCancelButton = [[UIBarButtonItem alloc]
-                                             initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                             target:self
-                                             action:@selector(cancelButtonAction)];
-        UIBarButtonItem *tempDoneButton = [[UIBarButtonItem alloc]
-                                           initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                           target:self
-                                           action:@selector(doneButtonAction)];
-        
-        switch (_navigationBarType)
-        {
+    if (navItem && _navigationBarType != SCNavigationBarTypeNone) {
+        UIBarButtonItem *tempAddButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
+        UIBarButtonItem *tempCancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonAction)];
+        UIBarButtonItem *tempDoneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonAction)];
+
+        switch (_navigationBarType) {
             case SCNavigationBarTypeAddLeft:
                 if (!navItem.leftBarButtonItem) {
                     navItem.leftBarButtonItem = tempAddButton;
@@ -491,13 +439,12 @@
 
                 _cancelButton = tempCancelButton;
                 break;
-            case SCNavigationBarTypeAddEditRight:
-            {
+            case SCNavigationBarTypeAddEditRight: {
                 _addButton = tempAddButton;
                 _addButton.style = UIBarButtonItemStylePlain;
-                
+
                 // create an array of the buttons
-                NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:2];
+                NSMutableArray *buttons = [[NSMutableArray alloc] initWithCapacity:2];
                 [buttons addObject:self.editButton];
                 [buttons addObject:_addButton];
 
@@ -505,23 +452,19 @@
                     navItem.rightBarButtonItems = buttons;
                 }
 
-            }
-                break;
-                
+            } break;
+
             default:
                 break;
         }
     }
-
 }
 
-- (UIBarButtonItem *)editButton
-{
-	return [self editButtonItem];
+- (UIBarButtonItem *)editButton {
+    return [self editButtonItem];
 }
 
-- (void)cancelButtonAction
-{
+- (void)cancelButtonAction {
     BOOL acceptTap = TRUE;
     if (self.actions.cancelButtonTapped) {
         acceptTap = self.actions.cancelButtonTapped(self);
@@ -534,8 +477,7 @@
     [self dismissWithCancelValue:TRUE doneValue:FALSE];
 }
 
-- (void)doneButtonAction
-{
+- (void)doneButtonAction {
     BOOL acceptTap = TRUE;
     if (self.actions.doneButtonTapped) {
         acceptTap = self.actions.doneButtonTapped(self);
@@ -548,8 +490,7 @@
     [self dismissWithCancelValue:FALSE doneValue:TRUE];
 }
 
-- (void)editButtonAction
-{
+- (void)editButtonAction {
     if (self.tableViewModel.swipeToDeleteActive) {
         [self.tableViewModel setTableViewEditing:NO animated:TRUE];
         return;
@@ -561,14 +502,12 @@
         if (self.actions.editButtonTapped) {
             acceptTap = self.actions.editButtonTapped(self);
         }
-
     }
 
     else {
         if (self.actions.doneButtonTapped) {
             acceptTap = self.actions.doneButtonTapped(self);
         }
-
     }
 
     if (!acceptTap) {
@@ -579,7 +518,7 @@
         if (editing) {
             _nonEditModeLeftBarButtonItem = self.navigationItem.leftBarButtonItem;
             [self.navigationItem setHidesBackButton:TRUE animated:FALSE];
-            
+
             SCTableViewSection *section = nil;
             if (self.tableViewModel.sectionCount) {
                 section = [self.tableViewModel sectionAtIndex:0];
@@ -594,25 +533,21 @@
 
         else {
             self.tableViewModel.commitButton = nil;
-            self.editButton.enabled = TRUE;  // in case user taps 'Cancel' while button disabled
-            
+            self.editButton.enabled = TRUE; // in case user taps 'Cancel' while button disabled
+
             self.navigationItem.leftBarButtonItem = _nonEditModeLeftBarButtonItem;
             [self.navigationItem setHidesBackButton:FALSE animated:FALSE];
 
-            if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-               && [self.delegate respondsToSelector:@selector(viewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
+            if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
                 [self.delegate viewControllerDidExitEditingMode:self cancelButtonTapped:NO doneButtonTapped:YES];
             }
-
         }
-
     }
 
     [self.tableViewModel setTableViewEditing:editing animated:TRUE];
 }
 
-- (void)editingModeCancelButtonAction
-{
+- (void)editingModeCancelButtonAction {
     BOOL acceptTap = TRUE;
     if (self.actions.cancelButtonTapped) {
         acceptTap = self.actions.cancelButtonTapped(self);
@@ -624,39 +559,31 @@
 
     self.navigationItem.leftBarButtonItem = _nonEditModeLeftBarButtonItem;
     [self.navigationItem setHidesBackButton:FALSE animated:FALSE];
-    
-    for(NSInteger i=0; i<self.tableViewModel.sectionCount; i++)
-    {
+
+    for (NSInteger i = 0; i < self.tableViewModel.sectionCount; i++) {
         SCTableViewSection *section = [self.tableViewModel sectionAtIndex:i];
         [section reloadBoundValues];
     }
     [self.tableViewModel setTableViewEditing:FALSE animated:TRUE];
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidExitEditingMode:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate viewControllerDidExitEditingMode:self cancelButtonTapped:YES doneButtonTapped:NO];
     }
-
 }
 
-- (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue
-{
+- (void)dismissWithCancelValue:(BOOL)cancelValue doneValue:(BOOL)doneValue {
     _cancelButtonTapped = cancelValue;
     _doneButtonTapped = doneValue;
-    
+
     BOOL shouldDismiss = TRUE;
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-	   && [self.delegate respondsToSelector:
-		   @selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
-        shouldDismiss = [self.delegate viewControllerShouldDismiss:self
-                                                     cancelButtonTapped:cancelValue
-                                                       doneButtonTapped:doneValue];
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+        shouldDismiss = [self.delegate viewControllerShouldDismiss:self cancelButtonTapped:cancelValue doneButtonTapped:doneValue];
     }
 
     if (!shouldDismiss) {
         _cancelButtonTapped = NO;
         _doneButtonTapped = NO;
-        
+
         return;
     }
 
@@ -687,25 +614,20 @@
         else {
             [self.navigationController popViewControllerAnimated:YES];
         }
-
     }
 
     else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-
 }
 
-- (void)gainFocus
-{
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:
-           @selector(viewControllerWillGainFocus:)]) {
+- (void)gainFocus {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillGainFocus:)]) {
         [self.delegate viewControllerWillGainFocus:self];
     }
 
     _hasFocus = TRUE;
-    
+
     // Connect self.tableViewModel and refresh table view
     self.tableView.dataSource = self.tableViewModel;
     self.tableView.delegate = self.tableViewModel;
@@ -713,18 +635,13 @@
     [self.tableViewModel.tableView reloadData];
 
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:
-           @selector(viewControllerDidGainFocus:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidGainFocus:)]) {
         [self.delegate viewControllerDidGainFocus:self];
     }
-
 }
 
-- (void)loseFocus
-{
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerWillLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
+- (void)loseFocus {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate viewControllerWillLoseFocus:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
 
@@ -734,14 +651,13 @@
     }
 
     self.title = nil;
-    
+
     // Connect _noFocusModel and refresh table view
     self.tableView.dataSource = _noFocusModel;
     self.tableView.delegate = _noFocusModel;
     [self.tableView reloadData];
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerDidLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidLoseFocus:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate viewControllerDidLoseFocus:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
 
@@ -750,8 +666,7 @@
 
 
 // overrides superclass
-- (BOOL)disablesAutomaticKeyboardDismissal
-{
+- (BOOL)disablesAutomaticKeyboardDismissal {
     return NO;
 }
 
@@ -759,10 +674,9 @@
 #pragma mark -
 #pragma mark Segue handling methods
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-{
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([sender isKindOfClass:[SCCustomCell class]]) {
-        return NO;  // framework will handle these
+        return NO; // framework will handle these
     }
 
     return YES;
@@ -772,8 +686,7 @@
 #pragma mark -
 #pragma mark Popover presentation and adaptive dismissal
 
-- (void)notifyPopoverWillDismiss
-{
+- (void)notifyPopoverWillDismiss {
     if (_popoverWillDismissNotified) {
         return;
     }
@@ -792,15 +705,12 @@
         self.actions.willDismiss(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerWillDismiss:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate viewControllerWillDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
-
 }
 
-- (void)notifyPopoverDidDismiss
-{
+- (void)notifyPopoverDidDismiss {
     if (_popoverDidDismissNotified) {
         return;
     }
@@ -810,24 +720,19 @@
         self.actions.didDismiss(self);
     }
 
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-       && [self.delegate respondsToSelector:@selector(viewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerDidDismiss:cancelButtonTapped:doneButtonTapped:)]) {
         [self.delegate viewControllerDidDismiss:self cancelButtonTapped:self.cancelButtonTapped doneButtonTapped:self.doneButtonTapped];
     }
-
 }
 
-- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController
-{
-    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)]
-        && [self.delegate respondsToSelector:@selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
+    if ([self.delegate conformsToProtocol:@protocol(SCViewControllerDelegate)] && [self.delegate respondsToSelector:@selector(viewControllerShouldDismiss:cancelButtonTapped:doneButtonTapped:)]) {
         return [self.delegate viewControllerShouldDismiss:self cancelButtonTapped:NO doneButtonTapped:YES];
     }
     return YES;
 }
 
-- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
-{
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
     if (!self.popoverController || presentationController.presentedViewController != self.popoverController.presentedViewController) {
         return;
     }
@@ -842,4 +747,3 @@
 }
 
 @end
-

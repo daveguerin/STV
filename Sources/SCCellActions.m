@@ -14,9 +14,8 @@
 @implementation SCCellActions
 
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         // initialzations here
     }
 
@@ -24,9 +23,7 @@
 }
 
 
-
-- (void)setActionsTo:(SCCellActions *)actions overrideExisting:(BOOL)override
-{
+- (void)setActionsTo:(SCCellActions *)actions overrideExisting:(BOOL)override {
     if ((override || !self.willConfigure) && actions.willConfigure) {
         self.willConfigure = actions.willConfigure;
     }
@@ -171,11 +168,6 @@
     if ((override || !self.performAction) && actions.performAction) {
         self.performAction = actions.performAction;
     }
-
 }
 
 @end
-
-
-
-

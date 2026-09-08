@@ -8,8 +8,6 @@
  */
 
 
-
-
 /*
  *	The following defines global Sesible TableView defaults. You are very much discouraged from
  *	modifying the content of these values, mainly for your product to remain forward compatable
@@ -19,30 +17,26 @@
  */
 // -----------------------------------------------------------------------------
 /// The default cell style.
-#define     SC_DefaultCellStyle                 UITableViewCellStyleSubtitle
+#define SC_DefaultCellStyle UITableViewCellStyleSubtitle
 /// Default maximum width of SCTableViewCell textLabel.
-#define		SC_DefaultMaxTextLabelWidth			200		// Default maximum width of SCTableViewCell textLabel
+#define SC_DefaultMaxTextLabelWidth 200 // Default maximum width of SCTableViewCell textLabel
 /// Default margin between different controls.
-#define		SC_DefaultControlMargin				10		// Default margin between different controls
+#define SC_DefaultControlMargin 10 // Default margin between different controls
 /// Default control height.
-#define		SC_DefaultControlHeight				22		// Default control height
+#define SC_DefaultControlHeight 22 // Default control height
 /// Default control indentation from table left border.
-#define		SC_DefaultControlIndentation		120		// Default control indentation from table left border
+#define SC_DefaultControlIndentation 120 // Default control indentation from table left border
 /// Default font size of UILabel.
-#define		SC_DefaultLabelFontSize             15		// Default font size of UILabel
+#define SC_DefaultLabelFontSize 15 // Default font size of UILabel
 /// Default font size of UITextView.
-#define		SC_DefaultTextViewFontSize			15		// Default font size of UITextView
+#define SC_DefaultTextViewFontSize 15 // Default font size of UITextView
 /// Default font size of UITextField.
-#define		SC_DefaultTextFieldFontSize			15		// Default font size of UITextField
+#define SC_DefaultTextFieldFontSize 15 // Default font size of UITextField
 /// Default height of UITextField.
-#define		SC_DefaultTextFieldHeight			31		// Default height of UITextField
+#define SC_DefaultTextFieldHeight 31 // Default height of UITextField
 /// Default height of UISegmentedControl.
-#define		SC_DefaultSegmentedControlHeight	29		// Default height of UISegmentedControl
+#define SC_DefaultSegmentedControlHeight 29 // Default height of UISegmentedControl
 // -----------------------------------------------------------------------------
-
-
-
-
 
 
 // -----------------------------------------------------------------------------
@@ -56,12 +50,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
 // -----------------------------------------------------------------------------
 /* ARC supporting functions and macros */
 // -----------------------------------------------------------------------------
 
-#ifndef __has_feature      
+#ifndef __has_feature
 #define __has_feature(x) 0 // For compatibility with non-clang compilers.
 #endif
 
@@ -73,14 +66,12 @@ NS_ASSUME_NONNULL_BEGIN
 // -----------------------------------------------------------------------------
 
 
-
-
 // -----------------------------------------------------------------------------
 /* SCDebugLog definition               */
 // -----------------------------------------------------------------------------
 
 /// Logs a formatted STV debug message with source context.
-#define SCDebugLog( s, ... ) NSLog(@"**STV** %p (%@:%d) %s %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __FUNCTION__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#define SCDebugLog(s, ...) NSLog(@"**STV** %p (%@:%d) %s %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __FUNCTION__, [NSString stringWithFormat:(s), ##__VA_ARGS__])
 
 // -----------------------------------------------------------------------------
 
@@ -90,17 +81,12 @@ NS_ASSUME_NONNULL_BEGIN
 // -----------------------------------------------------------------------------
 
 
-
 // -----------------------------------------------------------------------------
-
-
-
 
 
 /* Data type definitions. */
 /// The data types supported by STV property definitions.
-typedef NS_ENUM(NSInteger, SCDataType)
-{
+typedef NS_ENUM(NSInteger, SCDataType) {
     /// A Boolean scalar value.
     SCDataTypeBOOL,
     /// An integer scalar value.
@@ -109,30 +95,27 @@ typedef NS_ENUM(NSInteger, SCDataType)
     SCDataTypeFloat,
     /// A double-precision floating-point scalar value.
     SCDataTypeDouble,
-	/// An `NSString` value.
-	SCDataTypeNSString,
-	/// An `NSNumber` value.
-	SCDataTypeNSNumber,
-	/// An `NSDate` value.
-	SCDataTypeNSDate,
-	/// An `NSMutableSet` value.
-	SCDataTypeNSMutableSet,
+    /// An `NSString` value.
+    SCDataTypeNSString,
+    /// An `NSNumber` value.
+    SCDataTypeNSNumber,
+    /// An `NSDate` value.
+    SCDataTypeNSDate,
+    /// An `NSMutableSet` value.
+    SCDataTypeNSMutableSet,
     /// An `NSMutableOrderedSet` value.
     SCDataTypeNSMutableOrderedSet,
-	/// An `NSMutableArray` value.
-	SCDataTypeNSMutableArray,
-	/// A general `NSObject` value.
-	SCDataTypeNSObject,
-	/// A dictionary-backed item value.
-	SCDataTypeDictionaryItem,
-	/// A Core Data transformable value.
-	SCDataTypeTransformable,
-	/// An unknown or unsupported value type.
-	SCDataTypeUnknown
+    /// An `NSMutableArray` value.
+    SCDataTypeNSMutableArray,
+    /// A general `NSObject` value.
+    SCDataTypeNSObject,
+    /// A dictionary-backed item value.
+    SCDataTypeDictionaryItem,
+    /// A Core Data transformable value.
+    SCDataTypeTransformable,
+    /// An unknown or unsupported value type.
+    SCDataTypeUnknown
 };
-
-
-
 
 
 /// Adds STV's extended key-path accessors to all objects.
@@ -169,7 +152,6 @@ typedef NS_ENUM(NSInteger, SCDataType)
 @end
 
 
-
 /// Adds STV's keyboard-dismissal behavior to navigation controllers.
 @interface UINavigationController (SensibleCocoa)
 
@@ -179,17 +161,11 @@ typedef NS_ENUM(NSInteger, SCDataType)
 @end
 
 
-
-
-
-
-
 /// The standard message used when no Internet connection is available.
-#define  kNoInternetConnectionString @"No Internet Connection"
+#define kNoInternetConnectionString @"No Internet Connection"
 
 /// This class defines a set of internal helper methods
-@interface SCUtilities : NSObject
-{
+@interface SCUtilities : NSObject {
 }
 
 /// Method determines if code is being run on an iPad
@@ -261,8 +237,7 @@ typedef NS_ENUM(NSInteger, SCDataType)
 /// - Parameter propertyName: The property name.
 /// - Parameter object: The object involved in the operation.
 /// - Parameter delimiter: The delimiter used to separate multiple values.
-+ (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object
-            separateValuesUsingDelimiter:(nullable NSString *)delimiter;
++ (nullable NSString *)stringValueForPropertyName:(nullable NSString *)propertyName inObject:(nullable NSObject *)object separateValuesUsingDelimiter:(nullable NSString *)delimiter;
 
 /// Sets an object's property to the supplied value.
 /// - Parameter value: The value to assign or convert.
@@ -300,8 +275,6 @@ typedef NS_ENUM(NSInteger, SCDataType)
 @end
 
 
-
-
 @class SCTableViewModel;
 
 /// This class defines a tabel view model center.
@@ -329,5 +302,3 @@ typedef NS_ENUM(NSInteger, SCDataType)
 @end
 
 NS_ASSUME_NONNULL_END
-
-

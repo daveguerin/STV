@@ -13,8 +13,6 @@
 #import "SCCellActions.h"
 
 
-
-
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCPropertyDefinition
@@ -25,9 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// can be further customized using the property's attributes.
 ///
 /// - SeeAlso: ``SCPropertyType``, ``SCPropertyAttributes``, ``SCClassDefinition``, ``SCEntityDefinition``, ``SCDictionaryDefinition``.
-@interface SCPropertyDefinition : NSObject
-{
-@protected
+@interface SCPropertyDefinition : NSObject {
+  @protected
     // Backing storage used by subclasses; use properties for ordinary access.
     SCPropertyType _type;
 }
@@ -44,9 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyName: The name of the property.
 /// - Parameter propertyTitle: The title of the property. Property titles are used by user interface elements to generate labels associated with the generated controls.
 /// - Parameter propertyType: The property type determines which user interface element will be generated for the property.
-+ (instancetype)definitionWithName:(NSString *)propertyName 
-				   title:(nullable NSString *)propertyTitle
-					type:(SCPropertyType)propertyType;
++ (instancetype)definitionWithName:(NSString *)propertyName title:(nullable NSString *)propertyTitle type:(SCPropertyType)propertyType;
 
 /// Returns an initialized `SCPropertyDefinition` given a property name.
 ///
@@ -58,9 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter propertyName: The name of the property.
 /// - Parameter propertyTitle: The title of the property. Property titles are used by user interface elements to generate labels associated with the generated controls.
 /// - Parameter propertyType: The property type determines which user interface element will be generated for the property.
-- (instancetype)initWithName:(NSString *)propertyName 
-			 title:(nullable NSString *)propertyTitle
-			  type:(SCPropertyType)propertyType;
+- (instancetype)initWithName:(NSString *)propertyName title:(nullable NSString *)propertyTitle type:(SCPropertyType)propertyType;
 
 #pragma mark - Configuration
 
@@ -161,9 +154,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
 #pragma mark - SCCustomPropertyDefinition
 /// This class functions as a property definition for SCDataDefinition that will generate
 /// a custom user inteface element (e.g.: custom cell).
@@ -171,7 +161,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// `SCCustomPropertyDefinition` does not have to represent a property that actually exists in its class (unlike an SCPropertyDefiniton), and is often used in a structure definition as a placeholder for custom user interface element generation.
 ///
 /// - SeeAlso: ``SCPropertyDefinition``.
-@interface  SCCustomPropertyDefinition : SCPropertyDefinition
+@interface SCCustomPropertyDefinition : SCPropertyDefinition
 
 #pragma mark - Creation and Initialization
 
@@ -259,11 +249,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
-
-
-
-
 #pragma mark - SCPropertyGroup
 /// This class functions as a way to define a property definition group that is used to generate
 /// a corresponding user interface element that groups these properties (e.g.: a table view section).
@@ -291,8 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter groupHeaderTitle: A header title for the group.
 /// - Parameter groupFooterTitle: A footer title for the group.
 /// - Parameter propertyNames: The property names to include in the group.
-- (instancetype)initWithHeaderTitle:(nullable NSString *)groupHeaderTitle footerTitle:(nullable NSString *)groupFooterTitle
-        propertyNames:(nullable NSArray<NSString *> *)propertyNames;
+- (instancetype)initWithHeaderTitle:(nullable NSString *)groupHeaderTitle footerTitle:(nullable NSString *)groupFooterTitle propertyNames:(nullable NSArray<NSString *> *)propertyNames;
 
 
 #pragma mark - Configuration
@@ -334,7 +318,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsPropertyName:(NSString *)propertyName;
 
 @end
-
 
 
 #pragma mark - SCPropertyGroupArray

@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class SCViewController;
 
 /// A block invoked with an STV view controller.
-typedef void(^SCViewControllerAction_Block)(SCViewController *viewController);
+typedef void (^SCViewControllerAction_Block)(SCViewController *viewController);
 /// A block that reports whether a view controller's button was tapped.
-typedef BOOL(^SCViewControllerButtonTappedAction_Block)(SCViewController *viewController);
+typedef BOOL (^SCViewControllerButtonTappedAction_Block)(SCViewController *viewController);
 
 #pragma mark - SCViewControllerActions
 /// 	This class hosts a set of view controller action blocks. Once an action is set to a desired code block, it will execute the block as soon as the action occurs.

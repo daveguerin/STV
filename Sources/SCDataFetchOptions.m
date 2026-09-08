@@ -13,20 +13,17 @@
 @implementation SCDataFetchOptions
 
 
-+ (instancetype)options
-{
++ (instancetype)options {
     return [[[self class] alloc] init];
 }
 
-+ (instancetype)optionsWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate
-{
++ (instancetype)optionsWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate {
     return [[[self class] alloc] initWithSortKey:key sortAscending:ascending filterPredicate:predicate];
 }
 
 
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _sort = FALSE;
         _sortKey = nil;
         _sortAscending = TRUE;
@@ -40,9 +37,8 @@
     return self;
 }
 
-- (instancetype)initWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate
-{
-    if ( (self = [self init]) ) {
+- (instancetype)initWithSortKey:(NSString *)key sortAscending:(BOOL)ascending filterPredicate:(NSPredicate *)predicate {
+    if ((self = [self init])) {
         if (key) {
             _sort = TRUE;
             _sortKey = key;
@@ -53,37 +49,31 @@
             _filter = TRUE;
             _filterPredicate = predicate;
         }
-
     }
 
     return self;
 }
 
 
-- (void)setSortAscending:(BOOL)sortAscending
-{
+- (void)setSortAscending:(BOOL)sortAscending {
     _sortAscending = sortAscending;
     _sort = TRUE;
 }
 
-- (void)setBatchStartingOffset:(NSUInteger)offset
-{
+- (void)setBatchStartingOffset:(NSUInteger)offset {
     _batchStartingOffset = offset;
 
     if (_batchStartingOffset > _batchCurrentOffset) {
         _batchCurrentOffset = _batchStartingOffset;
     }
-
 }
 
-- (NSArray *)sortDescriptors
-{
+- (NSArray *)sortDescriptors {
     NSMutableArray *descriptors = [NSMutableArray array];
 
     if (self.sortKey) {
         NSArray *sortKeys = [self.sortKey componentsSeparatedByString:@";"];
-        for(NSString *key in sortKeys)
-        {
+        for (NSString *key in sortKeys) {
             NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:key ascending:self.sortAscending];
             [descriptors addObject:descriptor];
         }
@@ -92,56 +82,42 @@
     return descriptors;
 }
 
-- (void)sortMutableArray:(NSMutableArray *)array
-{
+- (void)sortMutableArray:(NSMutableArray *)array {
     if (self.sort && self.sortKey) {
-        @try 
-        {
+        @try {
             [array sortUsingDescriptors:[self sortDescriptors]];
         }
-        @catch (NSException * e) 
-        {
+        @catch (NSException *e) {
             SCDebugLog(@"Warning: Invalid sort key: %@.", self.sortKey);
         }
     }
-
 }
 
-- (void)filterMutableArray:(NSMutableArray *)array
-{
+- (void)filterMutableArray:(NSMutableArray *)array {
     if (self.filterPredicate) {
-        @try 
-        {
+        @try {
             [array filterUsingPredicate:self.filterPredicate];
         }
-        @catch (NSException * e) 
-        {
+        @catch (NSException *e) {
             SCDebugLog(@"Warning: Invalid filter predicate: %@.", self.filterPredicate);
         }
     }
-
 }
 
-- (void)setBatchOffset:(NSUInteger)offset
-{
+- (void)setBatchOffset:(NSUInteger)offset {
     _batchCurrentOffset = offset;
 }
 
-- (void)incrementBatchOffset
-{
+- (void)incrementBatchOffset {
     _batchCurrentOffset += 1;
 }
 
-- (void)resetBatchOffset
-{
+- (void)resetBatchOffset {
     _batchCurrentOffset = _batchStartingOffset;
 }
 
-- (NSUInteger)nextBatchStartIndex
-{
-    return self.batchSize*self.batchCurrentOffset + self.batchStartingOffset;
+- (NSUInteger)nextBatchStartIndex {
+    return self.batchSize * self.batchCurrentOffset + self.batchStartingOffset;
 }
 
 @end
-
-

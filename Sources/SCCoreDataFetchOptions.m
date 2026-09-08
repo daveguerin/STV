@@ -12,10 +12,8 @@
 @implementation SCCoreDataFetchOptions
 
 
-
-- (instancetype)init
-{
-    if ( (self = [super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         _orderAttributeName = nil;
     }
 
@@ -23,9 +21,7 @@
 }
 
 
-
-- (NSArray *)sortDescriptors
-{
+- (NSArray *)sortDescriptors {
     NSArray *descriptors = nil;
     if (self.orderAttributeName) {
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:self.orderAttributeName ascending:self.sortAscending];

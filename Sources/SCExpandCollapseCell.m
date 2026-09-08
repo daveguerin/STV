@@ -13,7 +13,6 @@
 #import "SCTableViewSection.h"
 
 
-
 /// Intrinsically sized disclosure artwork placed by UITableView itself.
 @interface SCExpandCollapseAccessoryView : UIImageView
 @property (nonatomic, weak) SCExpandCollapseCell *ownerExpandCollapseCell;
@@ -22,12 +21,9 @@
 
 @implementation SCExpandCollapseAccessoryView
 
-- (instancetype)init
-{
-    UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration
-        configurationWithPointSize:12 weight:UIImageSymbolWeightBold];
-    self = [super initWithImage:[UIImage systemImageNamed:@"chevron.down"
-                                      withConfiguration:configuration]];
+- (instancetype)init {
+    UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration configurationWithPointSize:12 weight:UIImageSymbolWeightBold];
+    self = [super initWithImage:[UIImage systemImageNamed:@"chevron.down" withConfiguration:configuration]];
     if (self) {
         self.tintColor = UIColor.secondaryLabelColor;
         self.contentMode = UIViewContentModeCenter;
@@ -42,13 +38,9 @@
     return self;
 }
 
-- (void)updateDirection
-{
-    NSString *name = self.ownerExpandCollapseCell.ownerSectionExpanded
-        ? @"chevron.up" : @"chevron.down";
-    self.image = [UIImage systemImageNamed:name withConfiguration:
-        [UIImageSymbolConfiguration configurationWithPointSize:12
-                                        weight:UIImageSymbolWeightBold]];
+- (void)updateDirection {
+    NSString *name = self.ownerExpandCollapseCell.ownerSectionExpanded ? @"chevron.up" : @"chevron.down";
+    self.image = [UIImage systemImageNamed:name withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:12 weight:UIImageSymbolWeightBold]];
 }
 
 @end
@@ -56,32 +48,28 @@
 @implementation SCExpandCollapseCell
 
 
-
-+ (instancetype)cellWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded
-{
++ (instancetype)cellWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded {
     return [[[self class] alloc] initWithExpandText:expandText collapseText:collapseText ownerSectionExpanded:expanded];
 }
 
 
 // overrides superclass
-- (void)performInitialization
-{
+- (void)performInitialization {
     [super performInitialization];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self markCellAsSpecial];
-    
+
     _expandText = nil;
     _collapseText = nil;
     _ownerSectionExpanded = FALSE;
-    
+
     SCExpandCollapseAccessoryView *accessoryView = [[SCExpandCollapseAccessoryView alloc] init];
     accessoryView.ownerExpandCollapseCell = self;
     self.accessoryView = accessoryView;
 }
 
-- (instancetype)initWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithExpandText:(NSString *)expandText collapseText:(NSString *)collapseText ownerSectionExpanded:(BOOL)expanded {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.expandText = expandText;
         self.collapseText = collapseText;
         self.ownerSectionExpanded = expanded;
@@ -91,8 +79,7 @@
 }
 
 
-- (void)setOwnerSectionExpanded:(BOOL)expanded
-{
+- (void)setOwnerSectionExpanded:(BOOL)expanded {
     _ownerSectionExpanded = expanded;
 
     if (expanded) {
@@ -115,10 +102,9 @@
 }
 
 // overrides superclass
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     [super didSelectCell];
-    
+
     self.ownerSectionExpanded = !self.ownerSectionExpanded;
 }
 

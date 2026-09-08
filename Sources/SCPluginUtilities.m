@@ -16,15 +16,14 @@
 
 @implementation SCPluginUtilities
 
-+ (id)objectForPluginDictionary:(NSDictionary *)pluginDictionary
-{
++ (id)objectForPluginDictionary:(NSDictionary *)pluginDictionary {
     NSString *customClassName = [pluginDictionary valueForKey:kCustomClassName];
     Class CustomClass = NSClassFromString(customClassName);
     if (!CustomClass) {
         if (customClassName) {
             if ([customClassName isEqualToString:@"SCEntityDefinition"]) {
                 SCDebugLog(@"Warning: Your Storyboard configuration requires the 'STVCoreData' framework to be added to your project. Either add the aforementioned framework or remove the '%@' component from your Storyboard.", customClassName);
-                
+
                 SCMissingFrameworkDataDefinition *missingFrameworkDefinition = [[SCMissingFrameworkDataDefinition alloc] init];
                 [missingFrameworkDefinition setValue:[pluginDictionary valueForKey:kibUniqueID] forKey:kibUniqueID];
                 missingFrameworkDefinition.missingFrameworkMessage = @"Project missing STVCoreData framework";
@@ -33,7 +32,7 @@
 
             if ([customClassName isEqualToString:@"SCWebServiceDefinition"]) {
                 SCDebugLog(@"Warning: Your Storyboard configuration requires the 'STVWebServices' framework to be added to your project. Either add the aforementioned framework or remove the '%@' component from your Storyboard.", customClassName);
-                
+
                 SCMissingFrameworkDataDefinition *missingFrameworkDefinition = [[SCMissingFrameworkDataDefinition alloc] init];
                 [missingFrameworkDefinition setValue:[pluginDictionary valueForKey:kibUniqueID] forKey:kibUniqueID];
                 missingFrameworkDefinition.missingFrameworkMessage = @"Project missing STVWebServices framework";
@@ -42,7 +41,7 @@
 
             if ([customClassName isEqualToString:@"SCParseDefinition"]) {
                 SCDebugLog(@"Warning: Your Storyboard configuration requires the 'STVParse' framework to be added to your project. Either add the aforementioned framework or remove the '%@' component from your Storyboard.", customClassName);
-                
+
                 SCMissingFrameworkDataDefinition *missingFrameworkDefinition = [[SCMissingFrameworkDataDefinition alloc] init];
                 [missingFrameworkDefinition setValue:[pluginDictionary valueForKey:kibUniqueID] forKey:kibUniqueID];
                 missingFrameworkDefinition.missingFrameworkMessage = @"Project missing STVParse framework";
@@ -51,7 +50,7 @@
 
             if ([customClassName isEqualToString:@"SCiCloudKeyValueDefinition"]) {
                 SCDebugLog(@"Warning: Your Storyboard configuration requires the 'STViCloud' framework to be added to your project. Either add the aforementioned framework or remove the '%@' component from your Storyboard.", customClassName);
-                
+
                 SCMissingFrameworkDataDefinition *missingFrameworkDefinition = [[SCMissingFrameworkDataDefinition alloc] init];
                 [missingFrameworkDefinition setValue:[pluginDictionary valueForKey:kibUniqueID] forKey:kibUniqueID];
                 missingFrameworkDefinition.missingFrameworkMessage = @"Project missing STViCloud framework";
@@ -67,7 +66,7 @@
 
     NSMutableDictionary *ibDictionary = [NSMutableDictionary dictionaryWithDictionary:pluginDictionary];
     [ibDictionary removeObjectForKey:kCustomClassName];
-    
+
     id object;
     if ([CustomClass conformsToProtocol:@protocol(SCibInitialization)]) {
         object = [[CustomClass alloc] initWithibDictionary:ibDictionary];
@@ -75,8 +74,7 @@
 
     else {
         object = [[CustomClass alloc] init];
-        for(NSString *key in pluginDictionary.allKeys)
-        {
+        for (NSString *key in pluginDictionary.allKeys) {
             [object setValue:[pluginDictionary valueForKey:key] forKey:key];
         }
     }
@@ -85,7 +83,3 @@
 }
 
 @end
-
-
-
-

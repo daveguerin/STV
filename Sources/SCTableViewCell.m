@@ -20,14 +20,13 @@
 #import "SCImageView.h"
 
 
-
 // Encoding constants
 
 #define kBoundPropertyNameKey @"boundPropertyName"
-#define KibDetailViewControllerIdentifier    @"ibDetailViewControllerIdentifier"
+#define KibDetailViewControllerIdentifier @"ibDetailViewControllerIdentifier"
 
 
-@interface SCTableViewCell()
+@interface SCTableViewCell ()
 
 @property (nonatomic, strong) NSObject *initialBoundValue;
 
@@ -70,8 +69,7 @@
 
 #pragma mark - SCTableViewCell
 
-@interface SCTableViewCell ()
-{
+@interface SCTableViewCell () {
     __weak SCTableViewModel *activeDetailModel;
     __weak id ownerViewControllerDelegate;
     BOOL _isCustomBoundProperty;
@@ -84,36 +82,29 @@
 // Custom accessors disable autosynthesis; create backing storage and its V attribute.
 @synthesize height = _height;
 
-+ (instancetype)cell
-{
-	return [[[self class] alloc] initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]; 
++ (instancetype)cell {
+    return [[[self class] alloc] initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil];
 }
 
-+ (instancetype)cellWithStyle:(UITableViewCellStyle)style
-{
-    return [[[self class] alloc] initWithStyle:style reuseIdentifier:nil]; 
++ (instancetype)cellWithStyle:(UITableViewCellStyle)style {
+    return [[[self class] alloc] initWithStyle:style reuseIdentifier:nil];
 }
 
-+ (instancetype)cellWithText:(NSString *)cellText
-{
-	return [[[self class] alloc] initWithText:cellText];
++ (instancetype)cellWithText:(NSString *)cellText {
+    return [[[self class] alloc] initWithText:cellText];
 }
 
-+ (instancetype)cellWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment
-{
++ (instancetype)cellWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment {
     return [[[self class] alloc] initWithText:cellText textAlignment:textAlignment];
 }
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName;
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object boundPropertyName:propertyName];
-}
+{ return [[[self class] alloc] initWithText:cellText boundObject:object boundPropertyName:propertyName]; }
 
 + (instancetype)cellWithCell:(UITableViewCell *)cell {
-	// Game plan: since UITableViewCell doesn't support NSCopying, simply archive it then unarchive it back into our object
+    // Game plan: since UITableViewCell doesn't support NSCopying, simply archive it then unarchive it back into our object
     id STVCell = nil;
-    @try
-    {
+    @try {
         NSString *sourceClassName = NSStringFromClass(cell.class);
         NSError *error = nil;
         NSData *cellData = [NSKeyedArchiver archivedDataWithRootObject:cell requiringSecureCoding:NO error:&error];
@@ -145,10 +136,8 @@
             // Required to fix a suspected iOS bug where the cell's image is not correctly archived/unarchived.
             [(UITableViewCell *)STVCell imageView].image = cell.imageView.image;
         }
-
     }
-    @catch(NSException *exception)
-    {
+    @catch (NSException *exception) {
         SCDebugLog(@"Unable to clone table cell: %@", exception);
         STVCell = nil;
     }
@@ -157,12 +146,11 @@
 }
 
 
-- (void)performInitialization
-{
-	self.shouldIndentWhileEditing = TRUE;
-	
-	_cellActions = [[SCCellActions alloc] init];
-	_boundPropertyDataType = SCDataTypeUnknown;
+- (void)performInitialization {
+    self.shouldIndentWhileEditing = TRUE;
+
+    _cellActions = [[SCCellActions alloc] init];
+    _boundPropertyDataType = SCDataTypeUnknown;
     _isCustomBoundProperty = FALSE;
     if (!_height) {
         _height = UITableViewAutomaticDimension;
@@ -174,36 +162,35 @@
     */
     _sizingMode = SCTableViewCellSizingModeInherit;
     _estimatedHeight = 44.0;
-	_selectable = TRUE;
+    _selectable = TRUE;
     _enabled = TRUE;
     _disabledTextColor = [UIColor labelColor];
     _autoResignFirstResponder = TRUE;
-	_cellEditingStyle = UITableViewCellEditingStyleDelete;
-	_autoValidateValue = TRUE;
-	_commitChangesLive = TRUE;
-	_needsCommit = FALSE;
-	_beingReused = FALSE;
-	_customCell = FALSE;
+    _cellEditingStyle = UITableViewCellEditingStyleDelete;
+    _autoValidateValue = TRUE;
+    _commitChangesLive = TRUE;
+    _needsCommit = FALSE;
+    _beingReused = FALSE;
+    _customCell = FALSE;
     _isSpecialCell = FALSE;
     _configured = FALSE;
-    
+
     // Setup the badgeView
-	_badgeView = [[SCBadgeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-	[self.contentView addSubview:_badgeView];
+    _badgeView = [[SCBadgeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    [self.contentView addSubview:_badgeView];
 
     _leadingSwipePerformsFirstActionWithFullSwipe = YES;
     _trailingSwipePerformsFirstActionWithFullSwipe = YES;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
     if (self) {
         [self performInitialization];
-        
+
         // The following decodings are required to be able to utilize the method [self cellWithCell:] with cells created in IB (only properties used in IB need to be here)
-        
+
         self.cellCreatedInIB = YES;
         self.boundPropertyName = [aDecoder decodeObjectForKey:kBoundPropertyNameKey];
         self.ibDetailViewControllerIdentifier = [aDecoder decodeObjectForKey:KibDetailViewControllerIdentifier];
@@ -212,19 +199,17 @@
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [super encodeWithCoder:aCoder];
-    
+
     // The following encodings are required to be able to utilize the method [self cellWithCell:] with cells created in IB (only properties used in IB need to be here)
-    
+
     [aCoder encodeObject:self.boundPropertyName forKey:kBoundPropertyNameKey];
     [aCoder encodeObject:self.ibDetailViewControllerIdentifier forKey:KibDetailViewControllerIdentifier];
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if ( (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) ) {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         [self performInitialization];
         self.sc_nativeStyle = style;
         /*
@@ -244,35 +229,31 @@
         if (reuseIdentifier) {
             _reuseId = [reuseIdentifier copy];
         }
-
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithText:(NSString *)cellText {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.textLabel.text = cellText;
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment
-{
-    if ( (self=[self initWithText:cellText]) ) {
+- (instancetype)initWithText:(NSString *)cellText textAlignment:(NSTextAlignment)textAlignment {
+    if ((self = [self initWithText:cellText])) {
         self.textLabel.textAlignment = textAlignment;
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.textLabel.text = cellText;
-		
+
         self.boundObject = object;
         self.boundPropertyName = propertyName;
     }
@@ -281,27 +262,23 @@
 }
 
 
-- (void)setBoundObject:(NSObject *)boundObject
-{
+- (void)setBoundObject:(NSObject *)boundObject {
     _boundObject = boundObject;
-    
+
     [self resetInitialBoundValue];
 }
 
-- (void)setBoundPropertyName:(NSString *)boundPropertyName
-{
+- (void)setBoundPropertyName:(NSString *)boundPropertyName {
     _boundPropertyName = boundPropertyName;
-    
+
     [self resetInitialBoundValue];
 }
 
-- (void)resetInitialBoundValue
-{
+- (void)resetInitialBoundValue {
     self.initialBoundValue = nil;
 }
 
-- (void)rollbackToInitialBoundValue
-{
+- (void)rollbackToInitialBoundValue {
     if (!self.initialBoundValue) {
         return;
     }
@@ -315,33 +292,28 @@
 }
 
 
-- (CGFloat)height
-{
+- (CGFloat)height {
     return UITableViewAutomaticDimension;
 }
 
-- (void)setHeight:(CGFloat)value
-{
+- (void)setHeight:(CGFloat)value {
     _height = value;
     [self setNeedsUpdateConstraints];
     [self sc_updateHeightConstraint];
 }
 
-- (void)setSizingMode:(SCTableViewCellSizingMode)value
-{
+- (void)setSizingMode:(SCTableViewCellSizingMode)value {
     _sizingMode = value;
     [self setNeedsUpdateConstraints];
     [self sc_updateHeightConstraint];
 }
 
-- (void)sc_setResolvedHeightConstraint:(CGFloat)value
-{
+- (void)sc_setResolvedHeightConstraint:(CGFloat)value {
     self.sc_resolvedHeight = value;
     [self sc_updateHeightConstraint];
 }
 
-- (void)sc_updateHeightConstraint
-{
+- (void)sc_updateHeightConstraint {
     CGFloat value = self.sc_resolvedHeight;
     if (value <= 0) {
         value = _height;
@@ -366,38 +338,31 @@
     if (value > 0) {
         self.sc_heightConstraint.constant = value;
     }
-
 }
 
-- (void)setDisabledTextColor:(UIColor *)disabledTextColor
-{
+- (void)setDisabledTextColor:(UIColor *)disabledTextColor {
     _disabledTextColor = disabledTextColor;
 
     if (!self.enabled) {
         // Make sure to apply new color
         self.enabled = FALSE;
     }
-
 }
 
-- (void)setIsCustomBoundProperty:(BOOL)custom
-{
+- (void)setIsCustomBoundProperty:(BOOL)custom {
     _isCustomBoundProperty = custom;
 }
 
-- (void)setNeedsCommit:(BOOL)needs
-{
+- (void)setNeedsCommit:(BOOL)needs {
     _needsCommit = needs;
 }
 
-- (void)setActiveDetailModel:(SCTableViewModel *)model
-{
+- (void)setActiveDetailModel:(SCTableViewModel *)model {
     activeDetailModel = model;
     self.ownerTableViewModel.activeDetailModel = model;
 }
 
-- (SCDetailViewControllerOptions *)detailViewControllerOptions
-{
+- (SCDetailViewControllerOptions *)detailViewControllerOptions {
     // Conserve resources by lazy loading for only cells that need it
     if (!_detailViewControllerOptions) {
         _detailViewControllerOptions = [[SCDetailViewControllerOptions alloc] init];
@@ -406,13 +371,11 @@
     return _detailViewControllerOptions;
 }
 
-- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options
-{
+- (void)setDetailViewControllerOptions:(SCDetailViewControllerOptions *)options {
     _detailViewControllerOptions = options;
 }
 
-- (void)didLayoutSubviews
-{
+- (void)didLayoutSubviews {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
 
     if (self.cellActions.didLayoutSubviews) {
@@ -426,18 +389,15 @@
     else if (self.ownerTableViewModel.cellActions.didLayoutSubviews) {
         self.ownerTableViewModel.cellActions.didLayoutSubviews(self, indexPath);
     }
-
 }
 
 //overrides superclass
-- (NSString *)reuseIdentifier
-{
-	return self.reuseId;
+- (NSString *)reuseIdentifier {
+    return self.reuseId;
 }
 
 // overrides superclass
-- (UITableViewCellSelectionStyle)selectionStyle
-{
+- (UITableViewCellSelectionStyle)selectionStyle {
     if (self.enabled) {
         return [super selectionStyle];
     }
@@ -445,30 +405,27 @@
     //else
     return UITableViewCellSelectionStyleNone;
 }
- 
+
 //overrides superclass
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
-	[super setHighlighted:highlighted animated:animated];
-	[self.badgeView setNeedsDisplay];
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    [self.badgeView setNeedsDisplay];
 }
 
 //overrides superclass
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-	[super setSelected:selected animated:animated];
-	[self.badgeView setNeedsDisplay];
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    [self.badgeView setNeedsDisplay];
 }
 
-- (UITableViewCellStyle)cellStyle
-{
+- (UITableViewCellStyle)cellStyle {
     // The only available way to determine the cell style is the availability and font sizes of textLabel & detailTextLabel (can't use label locations as they're not guaranteed to be set when this method gets called)
-    
-    BOOL textLabelPresent = (self.textLabel.text!=nil);
-    BOOL detailTextLabelPresent = (self.detailTextLabel!=nil);
+
+    BOOL textLabelPresent = (self.textLabel.text != nil);
+    BOOL detailTextLabelPresent = (self.detailTextLabel != nil);
 
     if (!textLabelPresent && !detailTextLabelPresent) {
-        return -1;  //  -1 is 'Custom' cell style
+        return -1; //  -1 is 'Custom' cell style
     }
 
     if (!detailTextLabelPresent) {
@@ -483,22 +440,19 @@
         return UITableViewCellStyleValue2;
     }
 
-    return UITableViewCellStyleValue1;  // the only remaining option
+    return UITableViewCellStyleValue1; // the only remaining option
 }
 
 //overrides superclass
-- (void)updateConstraints
-{
+- (void)updateConstraints {
     [self sc_updateHeightConstraint];
     [self sc_installBadgeConstraintsForAuthoredContent];
     [self sc_installContentConstraints];
     [super updateConstraints];
 }
 
-- (void)sc_installBadgeConstraintsForAuthoredContent
-{
-    BOOL authoredContent = self.cellCreatedInIB ||
-        ([self isKindOfClass:[SCControlCell class]] && [(SCControlCell *)self controlCreatedInIB]);
+- (void)sc_installBadgeConstraintsForAuthoredContent {
+    BOOL authoredContent = self.cellCreatedInIB || ([self isKindOfClass:[SCControlCell class]] && [(SCControlCell *)self controlCreatedInIB]);
     if (!authoredContent) {
         return;
     }
@@ -518,10 +472,7 @@
     SCBadgeView *badge = self.badgeView;
     badge.translatesAutoresizingMaskIntoConstraints = NO;
     UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
-    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[
-        [badge.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
-        [badge.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
-    ]];
+    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[[badge.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor], [badge.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
     if (visible) {
         [constraints addObject:[badge.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor]];
         NSLayoutConstraint *top = [badge.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
@@ -531,18 +482,14 @@
     }
 
     else {
-        [constraints addObjectsFromArray:@[
-            [badge.widthAnchor constraintEqualToConstant:0],
-            [badge.heightAnchor constraintEqualToConstant:0]
-        ]];
+        [constraints addObjectsFromArray:@[[badge.widthAnchor constraintEqualToConstant:0], [badge.heightAnchor constraintEqualToConstant:0]]];
     }
 
     self.sc_authoredContentBadgeConstraints = constraints;
     [NSLayoutConstraint activateConstraints:constraints];
 }
 
-- (void)sc_installContentConstraints
-{
+- (void)sc_installContentConstraints {
     if (self.cellCreatedInIB || [self isKindOfClass:[SCControlCell class]]) {
         return;
     }
@@ -551,9 +498,7 @@
     BOOL detailVisible = self.detailTextLabel.text.length && !self.detailTextLabel.hidden;
     BOOL imageVisible = self.imageView.image && !self.imageView.hidden;
     BOOL badgeVisible = self.badgeView.text.length && !self.badgeView.hidden;
-    NSString *key = [NSString stringWithFormat:@"%d-%d-%p-%d-%ld",
-        titleVisible, detailVisible, imageVisible ? self.imageView.image : nil,
-        badgeVisible, (long)self.sc_nativeStyle];
+    NSString *key = [NSString stringWithFormat:@"%d-%d-%p-%d-%ld", titleVisible, detailVisible, imageVisible ? self.imageView.image : nil, badgeVisible, (long)self.sc_nativeStyle];
     if ([self.sc_layoutKey isEqualToString:key]) {
         return;
     }
@@ -573,8 +518,7 @@
     [constraints addObject:minimum];
     NSArray *views = @[self.textLabel ?: [NSNull null], self.detailTextLabel ?: [NSNull null], self.imageView, self.badgeView];
     NSArray *visibility = @[@(titleVisible), @(detailVisible), @(imageVisible), @(badgeVisible)];
-    for(NSUInteger index = 0; index < views.count; index++)
-    {
+    for (NSUInteger index = 0; index < views.count; index++) {
         if (views[index] == [NSNull null]) {
             continue;
         }
@@ -590,14 +534,8 @@
 
         view.translatesAutoresizingMaskIntoConstraints = NO;
         if (![visibility[index] boolValue]) {
-            [constraints addObjectsFromArray:@[
-                [view.widthAnchor constraintEqualToConstant:0],
-                [view.heightAnchor constraintEqualToConstant:0],
-                [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-                [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]
-            ]];
+            [constraints addObjectsFromArray:@[[view.widthAnchor constraintEqualToConstant:0], [view.heightAnchor constraintEqualToConstant:0], [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]]];
         }
-
     }
     [constraints addObject:[group.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]];
     NSLayoutConstraint *top = [group.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
@@ -608,10 +546,7 @@
     if (imageVisible) {
         UIImageView *image = self.imageView;
         image.contentMode = UIViewContentModeScaleAspectFit;
-        [constraints addObjectsFromArray:@[
-            [image.leadingAnchor constraintEqualToAnchor:leading],
-            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
-        ]];
+        [constraints addObjectsFromArray:@[[image.leadingAnchor constraintEqualToAnchor:leading], [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
         NSLayoutConstraint *imageTop = [image.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
         NSLayoutConstraint *imageBottom = [image.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
         imageTop.priority = imageBottom.priority = 750;
@@ -623,11 +558,7 @@
     if (badgeVisible) {
         [self.badgeView setContentHuggingPriority:252 forAxis:UILayoutConstraintAxisHorizontal];
         [self.badgeView setContentCompressionResistancePriority:999 forAxis:UILayoutConstraintAxisHorizontal];
-        [constraints addObjectsFromArray:@[
-            [group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8],
-            [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
-            [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
-        ]];
+        [constraints addObjectsFromArray:@[[group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8], [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor], [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
         NSLayoutConstraint *badgeTop = [self.badgeView.topAnchor constraintGreaterThanOrEqualToAnchor:self.contentView.topAnchor constant:8];
         NSLayoutConstraint *badgeBottom = [self.badgeView.bottomAnchor constraintLessThanOrEqualToAnchor:self.contentView.bottomAnchor constant:-8];
         badgeTop.priority = badgeBottom.priority = 750;
@@ -642,40 +573,19 @@
         UILabel *title = self.textLabel;
         UILabel *detail = self.detailTextLabel;
         [title setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal];
-        [constraints addObjectsFromArray:@[
-            [title.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
-            [detail.trailingAnchor constraintEqualToAnchor:group.trailingAnchor]
-        ]];
+        [constraints addObjectsFromArray:@[[title.leadingAnchor constraintEqualToAnchor:group.leadingAnchor], [detail.trailingAnchor constraintEqualToAnchor:group.trailingAnchor]]];
         if (self.sc_nativeStyle == UITableViewCellStyleSubtitle) {
-            [constraints addObjectsFromArray:@[
-                [title.trailingAnchor constraintEqualToAnchor:group.trailingAnchor],
-                [detail.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
-                [title.topAnchor constraintEqualToAnchor:group.topAnchor],
-                [detail.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:2],
-                [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
-            ]];
+            [constraints addObjectsFromArray:@[[title.trailingAnchor constraintEqualToAnchor:group.trailingAnchor], [detail.leadingAnchor constraintEqualToAnchor:group.leadingAnchor], [title.topAnchor constraintEqualToAnchor:group.topAnchor], [detail.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:2], [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]]];
         }
 
         else {
-            [constraints addObjectsFromArray:@[
-                [detail.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:8],
-                [title.topAnchor constraintEqualToAnchor:group.topAnchor],
-                [title.bottomAnchor constraintEqualToAnchor:group.bottomAnchor],
-                [detail.topAnchor constraintEqualToAnchor:group.topAnchor],
-                [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
-            ]];
+            [constraints addObjectsFromArray:@[[detail.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:8], [title.topAnchor constraintEqualToAnchor:group.topAnchor], [title.bottomAnchor constraintEqualToAnchor:group.bottomAnchor], [detail.topAnchor constraintEqualToAnchor:group.topAnchor], [detail.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]]];
         }
-
     }
 
     else if (titleVisible || detailVisible) {
         UILabel *label = titleVisible ? self.textLabel : self.detailTextLabel;
-        [constraints addObjectsFromArray:@[
-            [label.leadingAnchor constraintEqualToAnchor:group.leadingAnchor],
-            [label.trailingAnchor constraintEqualToAnchor:group.trailingAnchor],
-            [label.topAnchor constraintEqualToAnchor:group.topAnchor],
-            [label.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]
-        ]];
+        [constraints addObjectsFromArray:@[[label.leadingAnchor constraintEqualToAnchor:group.leadingAnchor], [label.trailingAnchor constraintEqualToAnchor:group.trailingAnchor], [label.topAnchor constraintEqualToAnchor:group.topAnchor], [label.bottomAnchor constraintEqualToAnchor:group.bottomAnchor]]];
     }
 
     else {
@@ -686,8 +596,7 @@
     [NSLayoutConstraint activateConstraints:constraints];
 }
 
-- (UILayoutGuide *)sc_controlGuideAddingConstraints:(NSMutableArray *)constraints
-{
+- (UILayoutGuide *)sc_controlGuideAddingConstraints:(NSMutableArray *)constraints {
     if (!self.sc_controlGroup) {
         self.sc_controlGroup = [[UILayoutGuide alloc] init];
         [self.contentView addLayoutGuide:self.sc_controlGroup];
@@ -695,17 +604,12 @@
 
     UILayoutGuide *group = self.sc_controlGroup;
     UILayoutGuide *margins = self.contentView.layoutMarginsGuide;
-    [constraints addObjectsFromArray:@[
-        [group.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
-        [group.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor]
-    ]];
+    [constraints addObjectsFromArray:@[[group.topAnchor constraintEqualToAnchor:self.contentView.topAnchor], [group.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor]]];
     BOOL imageVisible = self.imageView.image && !self.imageView.hidden;
     BOOL badgeVisible = self.badgeView.text.length && !self.badgeView.hidden;
     NSArray *views = @[self.imageView, self.badgeView, self.textLabel];
-    NSArray *visibility = @[@(imageVisible), @(badgeVisible),
-        @(self.textLabel.text.length && !self.textLabel.hidden)];
-    for(NSUInteger index = 0; index < views.count; index++)
-    {
+    NSArray *visibility = @[@(imageVisible), @(badgeVisible), @(self.textLabel.text.length && !self.textLabel.hidden)];
+    for (NSUInteger index = 0; index < views.count; index++) {
         UIView *view = views[index];
         if (!view.superview) {
             if (![visibility[index] boolValue]) {
@@ -717,23 +621,13 @@
 
         view.translatesAutoresizingMaskIntoConstraints = NO;
         if (![visibility[index] boolValue]) {
-            [constraints addObjectsFromArray:@[
-                [view.widthAnchor constraintEqualToConstant:0],
-                [view.heightAnchor constraintEqualToConstant:0],
-                [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-                [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]
-            ]];
+            [constraints addObjectsFromArray:@[[view.widthAnchor constraintEqualToConstant:0], [view.heightAnchor constraintEqualToConstant:0], [view.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [view.topAnchor constraintEqualToAnchor:self.contentView.topAnchor]]];
         }
-
     }
     if (imageVisible) {
         UIImageView *image = self.imageView;
         image.contentMode = UIViewContentModeScaleAspectFit;
-        [constraints addObjectsFromArray:@[
-            [image.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-            [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-            [group.leadingAnchor constraintEqualToAnchor:image.trailingAnchor constant:8]
-        ]];
+        [constraints addObjectsFromArray:@[[image.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [image.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor], [group.leadingAnchor constraintEqualToAnchor:image.trailingAnchor constant:8]]];
     }
 
     else {
@@ -743,19 +637,14 @@
     if (badgeVisible) {
         [self.badgeView setContentHuggingPriority:252 forAxis:UILayoutConstraintAxisHorizontal];
         [self.badgeView setContentCompressionResistancePriority:999 forAxis:UILayoutConstraintAxisHorizontal];
-        [constraints addObjectsFromArray:@[
-            [group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8],
-            [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
-            [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
-        ]];
+        [constraints addObjectsFromArray:@[[group.trailingAnchor constraintEqualToAnchor:self.badgeView.leadingAnchor constant:-8], [self.badgeView.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor], [self.badgeView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
     }
 
     else {
         [constraints addObject:[group.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]];
     }
 
-    for(UIView *view in @[self.imageView, self.badgeView])
-    {
+    for (UIView *view in @[self.imageView, self.badgeView]) {
         if ((view == self.imageView && !imageVisible) || (view == self.badgeView && !badgeVisible)) {
             continue;
         }
@@ -768,8 +657,7 @@
     return group;
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [self sc_installBadgeConstraintsForAuthoredContent];
     [self sc_installContentConstraints];
     [super layoutSubviews];
@@ -806,8 +694,7 @@
 }
 
 //overrides superclass
-- (void)setBackgroundView:(UIView *)backgroundView
-{
+- (void)setBackgroundView:(UIView *)backgroundView {
     [super setBackgroundView:backgroundView];
 
     if (self.cellCreatedInIB) {
@@ -818,14 +705,12 @@
         self.textLabel.backgroundColor = [UIColor clearColor];
         self.detailTextLabel.backgroundColor = [UIColor clearColor];
     }
-
 }
 
-- (void)setBoundValue:(NSObject *)value
-{
+- (void)setBoundValue:(NSObject *)value {
     if (self.boundObject && [self.boundPropertyName length]) {
         if ([self.boundPropertyName characterAtIndex:0] == '~') {
-            return;  // boundPropertyName not an actual property but rather a placeholder for a custom cell
+            return; // boundPropertyName not an actual property but rather a placeholder for a custom cell
         }
 
         if (self.cellActions.willCommitBoundValue) {
@@ -852,7 +737,6 @@
             else {
                 self.initialBoundValue = [NSNull null];
             }
-
         }
 
         if (self.boundObjectStore) {
@@ -866,13 +750,10 @@
         if ([SCUtilities isBasicDataTypeClass:[self.boundObject class]]) {
             self.boundObject = value;
         }
-
     }
-
 }
 
-- (NSObject *)boundValue
-{
+- (NSObject *)boundValue {
     NSObject *value = nil;
 
     if (self.cellActions.calculatedValue) {
@@ -891,12 +772,12 @@
     }
 
     if (value) {
-        return value;  // return the calculated value if present
+        return value; // return the calculated value if present
     }
 
 
     if ([self.boundPropertyName length] && [self.boundPropertyName characterAtIndex:0] == '~') {
-        return nil;  // boundPropertyName not an actual property but rather a placeholder for a custom cell
+        return nil; // boundPropertyName not an actual property but rather a placeholder for a custom cell
     }
 
     if ([SCUtilities isBasicDataTypeClass:[self.boundObject class]]) {
@@ -911,7 +792,6 @@
         else {
             value = [SCUtilities valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
         }
-
     }
 
     if (self.cellActions.didLoadBoundValue) {
@@ -932,8 +812,7 @@
     return value;
 }
 
-- (BOOL)valueIsValid
-{
+- (BOOL)valueIsValid {
     if (!self.enabled) {
         return YES;
     }
@@ -960,32 +839,29 @@
     }
 
     BOOL valid = TRUE;
-	
-	return valid;
+
+    return valid;
 }
 
-- (BOOL)getValueIsValid
-{
-	// Should be overridden by subclasses
-	return TRUE;
+- (BOOL)getValueIsValid {
+    // Should be overridden by subclasses
+    return TRUE;
 }
 
-- (BOOL)generatesDetailView
-{
+- (BOOL)generatesDetailView {
     // Should be overridden by subclasses
     return NO;
 }
 
-- (void)cellValueChanged
-{
-	_needsCommit = TRUE;
+- (void)cellValueChanged {
+    _needsCommit = TRUE;
 
     if (self.commitChangesLive) {
         [self commitChanges];
     }
 
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-	[self.ownerTableViewModel valueChangedForRowAtIndexPath:indexPath];
+    [self.ownerTableViewModel valueChangedForRowAtIndexPath:indexPath];
     /*
     Run app callbacks first so any bound summary text is current, then
     invalidate automatic height even though the detail model has already been
@@ -994,24 +870,19 @@
     if (self.height == UITableViewAutomaticDimension) {
         [self.ownerTableViewModel invalidateHeightForCell:self animated:NO];
     }
-
 }
 
-- (void)willDisplay
-{
+- (void)willDisplay {
 }
 
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     if (self.autoDeselect) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         [self.ownerTableViewModel.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
-
 }
 
-- (void)willDeselectCell
-{
+- (void)willDeselectCell {
     if (activeDetailModel) {
         UITableView *detailTableView = activeDetailModel.tableView;
         [self setActiveDetailModel:nil];
@@ -1019,38 +890,31 @@
         detailTableView.delegate = nil;
         [detailTableView reloadData];
     }
-
 }
 
-- (void)didDeselectCell
-{
+- (void)didDeselectCell {
     // Does nothing
 }
 
-- (void)markCellAsSpecial
-{
+- (void)markCellAsSpecial {
     _isSpecialCell = TRUE;
 }
 
-- (void)commitChanges
-{
-	_needsCommit = FALSE;
+- (void)commitChanges {
+    _needsCommit = FALSE;
 }
 
-- (void)reloadBoundValue
-{
-	// Does nothing, should be overridden by subclasses
+- (void)reloadBoundValue {
+    // Does nothing, should be overridden by subclasses
 }
 
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	self.imageView.image = attributes.imageView.image;
-	self.detailCellsImageViews = attributes.imageViewArray;
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    self.imageView.image = attributes.imageView.image;
+    self.detailCellsImageViews = attributes.imageViewArray;
 }
 
-- (void)prepareCellForDetailViewAppearing
-{
-	// disable ownerViewControllerDelegate
+- (void)prepareCellForDetailViewAppearing {
+    // disable ownerViewControllerDelegate
     if ([self.ownerTableViewModel.viewController isKindOfClass:[SCTableViewController class]]) {
         SCTableViewController *tViewController = (SCTableViewController *)self.ownerTableViewModel.viewController;
         ownerViewControllerDelegate = tViewController.delegate;
@@ -1067,12 +931,10 @@
     if (self.ownerTableViewModel.masterModel) {
         self.ownerTableViewModel.masterModel.lockCellSelection = TRUE;
     }
-
 }
 
-- (void)prepareCellForDetailViewDisappearing
-{
-	// enable ownerViewControllerDelegate
+- (void)prepareCellForDetailViewDisappearing {
+    // enable ownerViewControllerDelegate
     if ([self.ownerTableViewModel.viewController isKindOfClass:[SCTableViewController class]]) {
         SCTableViewController *tViewController = (SCTableViewController *)self.ownerTableViewModel.viewController;
         tViewController.delegate = ownerViewControllerDelegate;
@@ -1087,12 +949,10 @@
     if (self.ownerTableViewModel.masterModel) {
         self.ownerTableViewModel.masterModel.lockCellSelection = FALSE;
     }
-
 }
 
 
-- (SCTableViewModel *)modelForViewController:(UIViewController *)viewController
-{
+- (SCTableViewModel *)modelForViewController:(UIViewController *)viewController {
     SCTableViewModel *detailModel = nil;
 
     if ([viewController isKindOfClass:[SCTableViewController class]]) {
@@ -1106,8 +966,7 @@
     return detailModel;
 }
 
-- (BOOL)isViewControllerActive:(UIViewController *)viewController
-{
+- (BOOL)isViewControllerActive:(UIViewController *)viewController {
     BOOL active = FALSE;
 
     if ([viewController isKindOfClass:[SCTableViewController class]]) {
@@ -1121,8 +980,7 @@
     return active;
 }
 
-- (BOOL)isViewControllerFocused:(UIViewController *)viewController
-{
+- (BOOL)isViewControllerFocused:(UIViewController *)viewController {
     BOOL focused = FALSE;
 
     if ([viewController isKindOfClass:[SCTableViewController class]]) {
@@ -1136,29 +994,24 @@
     return focused;
 }
 
-- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType
-{
+- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType {
     return self.detailViewControllerOptions.navigationBarType;
 }
 
-- (void)buildDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)buildDetailModel:(SCTableViewModel *)detailModel {
     // should be overridden by subclasses
 }
 
-- (void)configureDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)configureDetailModel:(SCTableViewModel *)detailModel {
     detailModel.masterBoundObject = self.boundObject;
     detailModel.masterBoundObjectStore = self.boundObjectStore;
 }
 
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
     // should be overridden by subclasses
 }
 
-- (UIViewController *)getDetailViewControllerForCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath allowUITableViewControllerSubclass:(BOOL)allowUITableViewController
-{
+- (UIViewController *)getDetailViewControllerForCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath allowUITableViewControllerSubclass:(BOOL)allowUITableViewController {
     UIViewController *detailViewController = nil;
 
     if (self.cellActions.detailViewController) {
@@ -1185,7 +1038,6 @@
         else {
             detailViewController = [[SCViewController alloc] init];
         }
-
     }
 
     detailViewController.modalPresentationStyle = self.detailViewControllerOptions.modalPresentationStyle;
@@ -1216,7 +1068,6 @@
         else {
             detailModel = viewController.tableViewModel;
         }
-
     }
 
     else if ([detailViewController isKindOfClass:[SCViewController class]]) {
@@ -1229,7 +1080,6 @@
         else {
             detailModel = viewController.tableViewModel;
         }
-
     }
 
     if (self.cellActions.detailModelCreated) {
@@ -1246,7 +1096,7 @@
 
     [self configureDetailViewController:detailViewController];
     [self.ownerTableViewModel configureDetailModel:detailModel];
-	[self buildDetailModel:detailModel];
+    [self buildDetailModel:detailModel];
     [self configureDetailModel:detailModel];
 
     if (self.cellActions.detailModelConfigured) {
@@ -1265,18 +1115,17 @@
     return detailViewController;
 }
 
-- (void)configureDetailViewController:(UIViewController *)detailViewController
-{
+- (void)configureDetailViewController:(UIViewController *)detailViewController {
     if ([detailViewController isKindOfClass:[SCTableViewController class]]) {
         SCTableViewController *viewController = (SCTableViewController *)detailViewController;
-        
+
         viewController.delegate = self;
         SCNavigationBarType navBarType = [self defaultDetailViewControllerNavigationBarType];
-        if (navBarType==SCNavigationBarTypeAuto && viewController.navigationBarType==SCNavigationBarTypeAuto) {
+        if (navBarType == SCNavigationBarTypeAuto && viewController.navigationBarType == SCNavigationBarTypeAuto) {
             viewController.navigationBarType = SCNavigationBarTypeDoneRightCancelLeft;
         }
 
-        else if (viewController.navigationBarType==SCNavigationBarTypeAuto) {
+        else if (viewController.navigationBarType == SCNavigationBarTypeAuto) {
             viewController.navigationBarType = navBarType;
         }
 
@@ -1285,25 +1134,23 @@
 
     else if ([detailViewController isKindOfClass:[SCViewController class]]) {
         SCViewController *viewController = (SCViewController *)detailViewController;
-            
+
         viewController.delegate = self;
         SCNavigationBarType navBarType = [self defaultDetailViewControllerNavigationBarType];
-        if (navBarType==SCNavigationBarTypeAuto && viewController.navigationBarType==SCNavigationBarTypeAuto) {
+        if (navBarType == SCNavigationBarTypeAuto && viewController.navigationBarType == SCNavigationBarTypeAuto) {
             viewController.navigationBarType = SCNavigationBarTypeDoneRightCancelLeft;
         }
 
-        else if (viewController.navigationBarType==SCNavigationBarTypeAuto) {
+        else if (viewController.navigationBarType == SCNavigationBarTypeAuto) {
             viewController.navigationBarType = navBarType;
         }
 
         viewController.allowEditingModeCancelButton = self.detailViewControllerOptions.allowEditingModeCancelButton;
     }
-
 }
 
-- (SCTableViewModel *)getCustomDetailModelForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	SCTableViewModel *detailModel = nil;
+- (SCTableViewModel *)getCustomDetailModelForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SCTableViewModel *detailModel = nil;
 
     if (self.cellActions.detailTableViewModel) {
         detailModel = self.cellActions.detailTableViewModel(self, indexPath);
@@ -1320,24 +1167,22 @@
     return detailModel;
 }
 
-- (void)presentDetailViewController:(UIViewController *)detailViewController forCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath withPresentationMode:(SCPresentationMode)mode
-{
+- (void)presentDetailViewController:(UIViewController *)detailViewController forCell:(SCTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath withPresentationMode:(SCPresentationMode)mode {
     if (!detailViewController) {
         return;
     }
 
     [self prepareCellForDetailViewAppearing];
-    
+
     [self setActiveDetailModel:[self modelForViewController:detailViewController]];
-    
+
     BOOL customPresentation = FALSE;
-    if ([self isViewControllerActive:detailViewController] && mode==SCPresentationModeAuto) {
+    if ([self isViewControllerActive:detailViewController] && mode == SCPresentationModeAuto) {
         customPresentation = TRUE;
 
         if ([detailViewController respondsToSelector:@selector(gainFocus)]) {
             [(id)detailViewController gainFocus];
         }
-
     }
 
     if (!customPresentation) {
@@ -1350,15 +1195,14 @@
             else {
                 mode = SCPresentationModeModal;
             }
-
         }
 
-        if (mode==SCPresentationModePush && !navController) {
+        if (mode == SCPresentationModePush && !navController) {
             mode = SCPresentationModeModal;
         }
 
         UINavigationController *detailNavController = nil;
-        if (mode==SCPresentationModeModal || mode==SCPresentationModePopover) {
+        if (mode == SCPresentationModeModal || mode == SCPresentationModePopover) {
             detailNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
             if (navController) {
                 detailNavController.view.backgroundColor = navController.view.backgroundColor;
@@ -1382,14 +1226,11 @@
             case SCPresentationModePush:
                 [navController pushViewController:detailViewController animated:YES];
                 break;
-            case SCPresentationModeModal:
-            {
+            case SCPresentationModeModal: {
                 [self.ownerTableViewModel.viewController presentViewController:detailNavController animated:YES completion:nil];
-            }
-                break;
-            case SCPresentationModePopover:
-            {
-                
+            } break;
+            case SCPresentationModePopover: {
+
                 detailNavController.modalPresentationStyle = UIModalPresentationPopover;
                 UIPopoverPresentationController *popoverController = detailNavController.popoverPresentationController;
                 if ([detailViewController isKindOfClass:[SCTableViewController class]]) {
@@ -1401,24 +1242,21 @@
                 }
 
                 detailNavController.modalInPresentation = YES;
-                
+
                 popoverController.sourceView = cell ?: self.ownerTableViewModel.tableView;
                 popoverController.sourceRect = popoverController.sourceView.bounds;
                 popoverController.permittedArrowDirections = UIPopoverArrowDirectionAny;
                 [self.ownerTableViewModel.viewController presentViewController:detailNavController animated:YES completion:nil];
-            }
-                break;
-                
+            } break;
+
             default:
                 // Do nothing
                 break;
         }
     }
-
 }
 
-- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController
-{
+- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     SCTableViewModel *detailModel = [self modelForViewController:detailViewController];
 
@@ -1433,11 +1271,9 @@
     else if (self.ownerTableViewModel.cellActions.detailModelWillPresent) {
         self.ownerTableViewModel.cellActions.detailModelWillPresent(self, indexPath, detailModel);
     }
-
 }
 
-- (void)handleDetailViewControllerDidPresent:(UIViewController *)detailViewController
-{
+- (void)handleDetailViewControllerDidPresent:(UIViewController *)detailViewController {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     SCTableViewModel *detailModel = [self modelForViewController:detailViewController];
 
@@ -1452,13 +1288,11 @@
     else if (self.ownerTableViewModel.cellActions.detailModelDidPresent) {
         self.ownerTableViewModel.cellActions.detailModelDidPresent(self, indexPath, detailModel);
     }
-
 }
 
-- (BOOL)handleDetailViewControllerShouldDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (BOOL)handleDetailViewControllerShouldDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    
+
     BOOL shouldDismiss = TRUE;
     if (self.cellActions.detailModelShouldDismiss) {
         shouldDismiss = self.cellActions.detailModelShouldDismiss(self, indexPath, [self modelForViewController:detailViewController]);
@@ -1475,10 +1309,9 @@
     return shouldDismiss;
 }
 
-- (void)handleDetailViewControllerWillDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)handleDetailViewControllerWillDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self prepareCellForDetailViewDisappearing];
-    
+
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     SCTableViewModel *detailModel = [self modelForViewController:detailViewController];
 
@@ -1493,13 +1326,11 @@
     else if (self.ownerTableViewModel.cellActions.detailModelWillDismiss) {
         self.ownerTableViewModel.cellActions.detailModelWillDismiss(self, indexPath, detailModel);
     }
-
 }
 
-- (void)handleDetailViewControllerDidDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)handleDetailViewControllerDidDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self setActiveDetailModel:nil];
-	
+
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     SCTableViewModel *detailModel = [self modelForViewController:detailViewController];
 
@@ -1518,156 +1349,120 @@
     else if (self.ownerTableViewModel.cellActions.detailModelDidDismiss) {
         self.ownerTableViewModel.cellActions.detailModelDidDismiss(self, indexPath, detailModel);
     }
-
 }
 
 
-- (void)handleDetailViewControllerWillGainFocus:(UIViewController *)detailViewController
-{
+- (void)handleDetailViewControllerWillGainFocus:(UIViewController *)detailViewController {
     [self handleDetailViewControllerWillPresent:detailViewController];
 }
 
-- (void)handleDetailViewControllerDidGainFocus:(UIViewController *)detailViewController
-{
+- (void)handleDetailViewControllerDidGainFocus:(UIViewController *)detailViewController {
     [self handleDetailViewControllerDidPresent:detailViewController];
 }
 
-- (void)handleDetailViewControllerWillLoseFocus:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)handleDetailViewControllerWillLoseFocus:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerWillDismiss:detailViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)handleDetailViewControllerDidLoseFocus:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)handleDetailViewControllerDidLoseFocus:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
     [self.ownerTableViewModel.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     [self handleDetailViewControllerDidDismiss:detailViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath
-{
-    return nil;  // should be implemented by subclasses
+- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
+    return nil; // should be implemented by subclasses
 }
-
 
 
 #pragma mark - SCTableViewControllerDelegate
 
-- (void)tableViewControllerWillPresent:(SCTableViewController *)tableViewController
-{
+- (void)tableViewControllerWillPresent:(SCTableViewController *)tableViewController {
     [self handleDetailViewControllerWillPresent:tableViewController];
 }
 
-- (void)tableViewControllerDidPresent:(SCTableViewController *)tableViewController
-{
+- (void)tableViewControllerDidPresent:(SCTableViewController *)tableViewController {
     [self handleDetailViewControllerDidPresent:tableViewController];
 }
 
-- (BOOL)tableViewControllerShouldDismiss:(SCTableViewController *)tableViewController
-					  cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (BOOL)tableViewControllerShouldDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     return [self handleDetailViewControllerShouldDismiss:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)tableViewControllerWillDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)tableViewControllerWillDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerWillDismiss:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)tableViewControllerDidDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
-	[self handleDetailViewControllerDidDismiss:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
+- (void)tableViewControllerDidDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
+    [self handleDetailViewControllerDidDismiss:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 
-- (void)tableViewControllerWillGainFocus:(SCTableViewController *)tableViewController
-{
+- (void)tableViewControllerWillGainFocus:(SCTableViewController *)tableViewController {
     [self handleDetailViewControllerWillGainFocus:tableViewController];
 }
 
-- (void)tableViewControllerDidGainFocus:(SCTableViewController *)tableViewController
-{
+- (void)tableViewControllerDidGainFocus:(SCTableViewController *)tableViewController {
     [self handleDetailViewControllerDidGainFocus:tableViewController];
 }
 
-- (void)tableViewControllerWillLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)tableViewControllerWillLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerWillLoseFocus:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)tableViewControllerDidLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)tableViewControllerDidLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerDidLoseFocus:tableViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 #pragma mark - SCViewControllerDelegate
 
-- (void)viewControllerWillPresent:(SCViewController *)viewController
-{
+- (void)viewControllerWillPresent:(SCViewController *)viewController {
     [self handleDetailViewControllerWillPresent:viewController];
 }
 
-- (void)viewControllerDidPresent:(SCViewController *)viewController
-{
+- (void)viewControllerDidPresent:(SCViewController *)viewController {
     [self handleDetailViewControllerDidPresent:viewController];
 }
 
-- (BOOL)viewControllerShouldDismiss:(SCViewController *)viewController
-                 cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (BOOL)viewControllerShouldDismiss:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     return [self handleDetailViewControllerShouldDismiss:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)viewControllerWillDismiss:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)viewControllerWillDismiss:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerWillDismiss:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)viewControllerDidDismiss:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
-	[self handleDetailViewControllerDidDismiss:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
+- (void)viewControllerDidDismiss:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
+    [self handleDetailViewControllerDidDismiss:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 
-- (void)viewControllerWillGainFocus:(SCViewController *)viewController
-{
+- (void)viewControllerWillGainFocus:(SCViewController *)viewController {
     [self handleDetailViewControllerWillGainFocus:viewController];
 }
 
-- (void)viewControllerDidGainFocus:(SCViewController *)viewController
-{
+- (void)viewControllerDidGainFocus:(SCViewController *)viewController {
     [self handleDetailViewControllerDidGainFocus:viewController];
 }
 
-- (void)viewControllerWillLoseFocus:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)viewControllerWillLoseFocus:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerWillLoseFocus:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
-- (void)viewControllerDidLoseFocus:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
+- (void)viewControllerDidLoseFocus:(SCViewController *)viewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
     [self handleDetailViewControllerDidLoseFocus:viewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 @end
 
 
-
-
 #pragma mark - SCCustomCell
 
 
-
-
-
-
-@interface SCCustomCell ()
-{
-    NSMutableDictionary *_initialControlValues;  // used during rollback operations
-    
-
+@interface SCCustomCell () {
+    NSMutableDictionary *_initialControlValues; // used during rollback operations
 }
 
 // determines if the custom control is bound to either an object or a key
@@ -1676,27 +1471,23 @@
 @end
 
 
-#define kAutoResizeKey  @"autoResize"
+#define kAutoResizeKey @"autoResize"
 
 
 @implementation SCCustomCell
 
-+ (instancetype)cellWithText:(NSString *)cellText objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName
-{
++ (instancetype)cellWithText:(NSString *)cellText objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName {
     return [self cellWithText:cellText boundObject:nil objectBindings:bindings nibName:nibName];
 }
 
-+ (instancetype)cellWithText:(NSString *)cellText objectBindingsString:(NSString *)bindingsString nibName:(NSString *)nibName
-{
++ (instancetype)cellWithText:(NSString *)cellText objectBindingsString:(NSString *)bindingsString nibName:(NSString *)nibName {
     NSDictionary *bindings = [SCUtilities bindingsDictionaryForBindingsString:bindingsString];
-    
+
     return [self cellWithText:cellText boundObject:nil objectBindings:bindings nibName:nibName];
 }
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object objectBindings:(NSDictionary *)bindings
-	   nibName:(NSString *)nibName
-{
-	SCCustomCell *cell;
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object objectBindings:(NSDictionary *)bindings nibName:(NSString *)nibName {
+    SCCustomCell *cell;
     if (nibName) {
         cell = (SCCustomCell *)[SCUtilities getFirstNodeInNibWithName:nibName];
         if (![cell isKindOfClass:[SCCustomCell class]] && [cell isKindOfClass:[UITableViewCell class]]) {
@@ -1715,10 +1506,9 @@
 
         else {
             SCDebugLog(@"Warning: Unexpected cell type! Expecting 'SCCustomCell' but got '%@' instead.", NSStringFromClass([cell class]));
-            
+
             cell = nil;
         }
-
     }
 
     else {
@@ -1726,29 +1516,27 @@
     }
 
     cell.textLabel.text = cellText;
-	[cell setBoundObject:object];
-	[cell.objectBindings addEntriesFromDictionary:bindings];
-	[cell configureCustomControls];
-	
-	return cell;
+    [cell setBoundObject:object];
+    [cell.objectBindings addEntriesFromDictionary:bindings];
+    [cell configureCustomControls];
+
+    return cell;
 }
 
 //overrides superclass
-- (void)performInitialization
-{
+- (void)performInitialization {
     [super performInitialization];
-    
+
     _pauseControlEvents = FALSE;
     _objectBindings = [[NSMutableDictionary alloc] init];
     _autoResize = TRUE;
     _showClearButtonInInputAccessoryView = FALSE;
-    
+
     _initialControlValues = [NSMutableDictionary dictionary];
 }
 
 // overrides superclass
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
     if (self) {
@@ -1763,85 +1551,74 @@
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [super encodeWithCoder:aCoder];
-    
+
     // The following encodings are required to be able to utilize the method [self cellWithCell:] with cells created in IB (only IB published properties need to be here)
     [aCoder encodeBool:self.autoResize forKey:kAutoResizeKey];
 }
 
 
 // overrides superclass
-- (void)setBoundObject:(NSObject *)boundObject
-{
+- (void)setBoundObject:(NSObject *)boundObject {
     [super setBoundObject:boundObject];
-    
+
     [_initialControlValues removeAllObjects];
 }
 
 // overrides superclass
-- (void)setBoundPropertyName:(NSString *)boundPropertyName
-{
+- (void)setBoundPropertyName:(NSString *)boundPropertyName {
     [super setBoundPropertyName:boundPropertyName];
-    
+
     [_initialControlValues removeAllObjects];
 }
 
 
-
-- (NSString *)objectBindingsString
-{
+- (NSString *)objectBindingsString {
     return [SCUtilities bindingsStringForBindingsDictionary:self.objectBindings];
 }
 
-- (void)setObjectBindingsString:(NSString *)objectBindingsString
-{
+- (void)setObjectBindingsString:(NSString *)objectBindingsString {
     [self.objectBindings addEntriesFromDictionary:[SCUtilities bindingsDictionaryForBindingsString:objectBindingsString]];
 }
 
-- (void)setObjectBindingsPropertyName:(NSString *)propertyName forControlWithTag:(NSInteger)controlTag
-{
+- (void)setObjectBindingsPropertyName:(NSString *)propertyName forControlWithTag:(NSInteger)controlTag {
     [self.objectBindings setValue:propertyName forKey:[NSString stringWithFormat:@"%i", (int)controlTag]];
 }
 
 //overrides superclass
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return (self.inputControlsSortedByTag.count > 0);
 }
 
 //overrides superclass
-- (BOOL)becomeFirstResponder
-{
+- (BOOL)becomeFirstResponder {
     NSArray *inputControls = self.inputControlsSortedByTag; // optimization
     if (inputControls.count) {
         [[inputControls objectAtIndex:0] becomeFirstResponder];
-        
+
         return TRUE;
     }
 
-    //else 
+    //else
     return FALSE;
 }
 
 //overrides superclass
-- (BOOL)resignFirstResponder
-{
+- (BOOL)resignFirstResponder {
     [super resignFirstResponder];
-    
+
     BOOL resign = FALSE;
     if (self == self.ownerTableViewModel.activeCell) {
         [self.ownerTableViewModel.activeCellControl resignFirstResponder];
-        
+
         resign = TRUE;
     }
 
     return resign;
 }
 
-- (void)callDidBecomeFirstResponderActions
-{
+- (void)callDidBecomeFirstResponderActions {
     if (self.cellActions.didBecomeFirstResponder) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.cellActions.didBecomeFirstResponder(self, indexPath);
@@ -1856,11 +1633,9 @@
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.ownerTableViewModel.cellActions.didBecomeFirstResponder(self, indexPath);
     }
-
 }
 
-- (void)callDidResignFirstResponderActions
-{
+- (void)callDidResignFirstResponderActions {
     if (self.cellActions.didResignFirstResponder) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.cellActions.didResignFirstResponder(self, indexPath);
@@ -1875,26 +1650,20 @@
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.ownerTableViewModel.cellActions.didResignFirstResponder(self, indexPath);
     }
-
 }
 
 
-- (NSArray *)inputControlsSortedByTag
-{
+- (NSArray *)inputControlsSortedByTag {
     NSMutableArray *inputControls = [NSMutableArray array];
-    
-    for(UIView *customControl in self.contentView.subviews)
-    {
-        if ([customControl isKindOfClass:[UITextField class]]
-           || [customControl isKindOfClass:[UITextView class]]) {
+
+    for (UIView *customControl in self.contentView.subviews) {
+        if ([customControl isKindOfClass:[UITextField class]] || [customControl isKindOfClass:[UITextView class]]) {
             [inputControls addObject:customControl];
         }
-
     }
-    
+
     // sort based on the controls' tag
-    [inputControls sortedArrayUsingComparator:(NSComparator)^(id obj1, id obj2)
-     {
+    [inputControls sortedArrayUsingComparator:(NSComparator) ^ (id obj1, id obj2) {
         if ([(UIView *)obj1 tag] > [(UIView *)obj2 tag]) {
             return (NSComparisonResult)NSOrderedDescending;
         }
@@ -1904,22 +1673,20 @@
         }
 
         return (NSComparisonResult)NSOrderedSame;
-     }];
-    
+    }];
+
     return inputControls;
 }
 
-- (UIView *)controlWithTag:(NSInteger)controlTag
-{
+- (UIView *)controlWithTag:(NSInteger)controlTag {
     if (controlTag < 1) {
         return nil;
     }
 
-    for(UIView *customControl in self.contentView.subviews) {
+    for (UIView *customControl in self.contentView.subviews) {
         if (customControl.tag == controlTag) {
             return customControl;
         }
-
     }
 
 
@@ -1927,12 +1694,10 @@
 }
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
-    
-    for(UIControl *customControl in self.contentView.subviews)
-    {
+
+    for (UIControl *customControl in self.contentView.subviews) {
         if ([customControl isKindOfClass:[UITextView class]]) {
             [(UITextView *)customControl setEditable:_enabled];
         }
@@ -1940,7 +1705,6 @@
         else if (![customControl isKindOfClass:[UILabel class]]) {
             customControl.enabled = _enabled;
         }
-
     }
 }
 
@@ -1951,33 +1715,28 @@
 
 
 //override superclass
-- (void)willDisplay
-{
-	[super willDisplay];
+- (void)willDisplay {
+    [super willDisplay];
 
     if (!self.needsCommit) {
         [self loadBindingsIntoCustomControls];
     }
-
 }
 
 //override superclass
-- (void)reloadBoundValue
-{
-	[super reloadBoundValue];
-    
+- (void)reloadBoundValue {
+    [super reloadBoundValue];
+
     [self loadBindingsIntoCustomControls];
 }
 
 //override superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
-    for(UIView *customControl in self.contentView.subviews)
-	{
+    for (UIView *customControl in self.contentView.subviews) {
         if (customControl.tag < 1) {
             continue;
         }
@@ -1994,42 +1753,35 @@
 
         else if ([customControl isKindOfClass:[UISlider class]]) {
             UISlider *slider = (UISlider *)customControl;
-            [self commitValueForControlWithTag:slider.tag
-												 value:[NSNumber numberWithFloat:slider.value]];
+            [self commitValueForControlWithTag:slider.tag value:[NSNumber numberWithFloat:slider.value]];
         }
 
         else if ([customControl isKindOfClass:[UISegmentedControl class]]) {
             UISegmentedControl *segmented = (UISegmentedControl *)customControl;
-            [self commitValueForControlWithTag:segmented.tag
-													 value:[NSNumber numberWithInteger:segmented.selectedSegmentIndex]];
+            [self commitValueForControlWithTag:segmented.tag value:[NSNumber numberWithInteger:segmented.selectedSegmentIndex]];
         }
 
         else if ([customControl isKindOfClass:[UISwitch class]]) {
             UISwitch *switchControl = (UISwitch *)customControl;
-            [self commitValueForControlWithTag:switchControl.tag
-														 value:[NSNumber numberWithBool:switchControl.on]];
+            [self commitValueForControlWithTag:switchControl.tag value:[NSNumber numberWithBool:switchControl.on]];
         }
-
     }
-	
-	[super commitChanges];
-    
-    
-    [self.ownerTableViewModel reloadCellsIfNeeded];  // needed to make sure calculated cells are in sync
+
+    [super commitChanges];
+
+
+    [self.ownerTableViewModel reloadCellsIfNeeded]; // needed to make sure calculated cells are in sync
 }
 
-- (void)reloadControlValuesIfNeeded
-{
+- (void)reloadControlValuesIfNeeded {
     [self loadBindingsIntoCustomControls];
 }
 
 // overrides superclass
-- (void)rollbackToInitialBoundValue
-{
+- (void)rollbackToInitialBoundValue {
     [super rollbackToInitialBoundValue];
-    
-    for(NSString *propertyName in _initialControlValues)
-    {
+
+    for (NSString *propertyName in _initialControlValues) {
         NSObject *initialValue = [_initialControlValues valueForKey:propertyName];
 
         if (!initialValue) {
@@ -2048,27 +1800,23 @@
         else {
             [SCUtilities setValue:initialValue forPropertyName:propertyName inObject:self.boundObject];
         }
-
     }
 }
 
-- (BOOL)controlWithTagIsBound:(NSUInteger)controlTag
-{
+- (BOOL)controlWithTagIsBound:(NSUInteger)controlTag {
     BOOL isBound = FALSE;
 
     if (self.boundObject) {
         if ([self.objectBindings valueForKey:[NSString stringWithFormat:@"%i", (int)controlTag]]) {
             isBound = TRUE;
         }
-
     }
 
     return isBound;
 }
 
-- (NSObject *)boundValueForControlWithTag:(NSInteger)controlTag
-{
-	NSObject *controlValue = nil;
+- (NSObject *)boundValueForControlWithTag:(NSInteger)controlTag {
+    NSObject *controlValue = nil;
 
     if (self.boundObject) {
         NSString *propertyName = [self.objectBindings valueForKey:[NSString stringWithFormat:@"%i", (int)controlTag]];
@@ -2084,34 +1832,30 @@
             else {
                 controlValue = [SCUtilities valueForPropertyName:propertyName inObject:self.boundObject];
             }
-
         }
-
     }
 
     return controlValue;
 }
 
-- (void)commitValueForControlWithTag:(NSInteger)controlTag value:(NSObject *)controlValue
-{
+- (void)commitValueForControlWithTag:(NSInteger)controlTag value:(NSObject *)controlValue {
     if (self.boundObject) {
         NSString *stringControlTag = [NSString stringWithFormat:@"%i", (int)controlTag];
-        
-        NSString *propertyName = [self.objectBindings valueForKey: stringControlTag];
+
+        NSString *propertyName = [self.objectBindings valueForKey:stringControlTag];
         if (!propertyName) {
             return;
         }
 
         // set the initial value (if not exists) to provide rollback
         [self setInitialControlValueIfNeeded:[self boundValueForControlWithTag:controlTag] propertyName:propertyName];
-        
+
         SCDataType propertyDataType = SCDataTypeUnknown;
         if (self.boundObjectStore) {
             SCDataDefinition *boundObjectDef = [self.boundObjectStore definitionForObject:self.boundObject];
             if (boundObjectDef) {
                 propertyDataType = [boundObjectDef propertyDataTypeForPropertyWithName:propertyName];
             }
-
         }
 
         controlValue = [SCUtilities getValueCompatibleWithDataType:propertyDataType fromValue:controlValue];
@@ -2123,20 +1867,17 @@
         else {
             [SCUtilities setValue:controlValue forPropertyName:propertyName inObject:self.boundObject];
         }
-
     }
-
 }
 
-- (NSString *)curlyBraceBoundPropertyNameForControl:(UIView *)customControl
-{
+- (NSString *)curlyBraceBoundPropertyNameForControl:(UIView *)customControl {
     if ([customControl isKindOfClass:[SCImageView class]]) {
         return [(SCImageView *)customControl boundPropertyName];
     }
 
 
     NSString *propertyName = nil;
-    
+
     NSString *curlyBraceText = nil;
     if ([customControl isKindOfClass:[UITextView class]]) {
         UITextView *textView = (UITextView *)customControl;
@@ -2167,22 +1908,21 @@
         return nil;
     }
 
-    NSRange propertyNameRange = (NSRange){.location = leftBraceRange.location+1, .length = rightBraceRange.location-leftBraceRange.location-1};
+    NSRange propertyNameRange = (NSRange){.location = leftBraceRange.location + 1, .length = rightBraceRange.location - leftBraceRange.location - 1};
     propertyName = [curlyBraceText substringWithRange:propertyNameRange];
     propertyName = [propertyName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
     if ([customControl isKindOfClass:[UILabel class]]) {
         // Configure label's prefix and suffix
-        
+
         UILabel *label = (UILabel *)customControl;
         if (leftBraceRange.location > 0) {
             label.prefix = [curlyBraceText substringToIndex:leftBraceRange.location];
         }
 
-        if (rightBraceRange.location < [curlyBraceText length]-1) {
-            label.suffix = [curlyBraceText substringFromIndex:rightBraceRange.location+1];
+        if (rightBraceRange.location < [curlyBraceText length] - 1) {
+            label.suffix = [curlyBraceText substringFromIndex:rightBraceRange.location + 1];
         }
-
     }
 
     if (![propertyName length]) {
@@ -2193,11 +1933,10 @@
     return propertyName;
 }
 
-- (void)configureCustomControls
-{
+- (void)configureCustomControls {
     // Parse controls for bindings with curly braces and auto generate bindings
     NSInteger maxTag = 0;
-    for(UIView *customControl in self.contentView.subviews) {
+    for (UIView *customControl in self.contentView.subviews) {
         maxTag = MAX(customControl.tag, maxTag);
     }
 
@@ -2205,25 +1944,22 @@
         maxTag = kSTVTagStartRange;
     }
 
-    for(UIView *customControl in self.contentView.subviews)
-    {
+    for (UIView *customControl in self.contentView.subviews) {
         maxTag++;
-        
+
         NSString *propertyName = [self curlyBraceBoundPropertyNameForControl:customControl];
         if (propertyName) {
             if (!customControl.tag) {
                 customControl.tag = maxTag;
             }
 
-            [self.objectBindings setValue:propertyName forKey:[NSString stringWithFormat: @"%li", (long)customControl.tag]];
+            [self.objectBindings setValue:propertyName forKey:[NSString stringWithFormat:@"%li", (long)customControl.tag]];
         }
-
     }
-    
-    
+
+
     // Connect controls' targets and actions
-	for(UIView *customControl in self.contentView.subviews)
-	{
+    for (UIView *customControl in self.contentView.subviews) {
         if (customControl.tag < 1) {
             continue;
         }
@@ -2236,44 +1972,36 @@
         else if ([customControl isKindOfClass:[UITextField class]]) {
             UITextField *textField = (UITextField *)customControl;
             textField.delegate = self;
-            [textField addTarget:self action:@selector(textFieldEditingChanged:)
-					forControlEvents:UIControlEventEditingChanged];
+            [textField addTarget:self action:@selector(textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
         }
 
         else if ([customControl isKindOfClass:[UISlider class]]) {
             UISlider *slider = (UISlider *)customControl;
-            [slider addTarget:self action:@selector(sliderValueChanged:)
-                     forControlEvents:UIControlEventValueChanged];
+            [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
 
         else if ([customControl isKindOfClass:[UISegmentedControl class]]) {
             UISegmentedControl *segmented = (UISegmentedControl *)customControl;
-            [segmented addTarget:self action:@selector(segmentedControlValueChanged:)
-                            forControlEvents:UIControlEventValueChanged];
+            [segmented addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
 
         else if ([customControl isKindOfClass:[UISwitch class]]) {
             UISwitch *switchControl = (UISwitch *)customControl;
-            [switchControl addTarget:self action:@selector(switchControlChanged:)
-                                    forControlEvents:UIControlEventValueChanged];
+            [switchControl addTarget:self action:@selector(switchControlChanged:) forControlEvents:UIControlEventValueChanged];
         }
 
         else if ([customControl isKindOfClass:[UIButton class]]) {
             UIButton *customButton = (UIButton *)customControl;
-            [customButton addTarget:self action:@selector(customButtonTapped:)
-                                       forControlEvents:UIControlEventTouchUpInside];
+            [customButton addTarget:self action:@selector(customButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         }
-
     }
 }
 
-- (void)loadBindingsIntoCustomControls
-{
-	_pauseControlEvents = TRUE;
-	
-	for(UIView *customControl in self.contentView.subviews)
-	{
-        if (customControl.tag<1 || ![self controlWithTagIsBound:customControl.tag]) {
+- (void)loadBindingsIntoCustomControls {
+    _pauseControlEvents = TRUE;
+
+    for (UIView *customControl in self.contentView.subviews) {
+        if (customControl.tag < 1 || ![self controlWithTagIsBound:customControl.tag]) {
             continue;
         }
 
@@ -2292,11 +2020,10 @@
                     SCDateAttributes *dateAttributes = (SCDateAttributes *)propertyDefinition.attributes;
                     controlValue = [dateAttributes.dateFormatter stringFromDate:(NSDate *)controlValue];
                 }
-
             }
 
             UILabel *label = (UILabel *)customControl;
-            
+
             NSString *prefixString = label.prefix;
             NSString *suffixString = label.suffix;
             NSString *labelString = [NSString stringWithFormat:@"%@%@%@", prefixString, controlValue, suffixString];
@@ -2304,29 +2031,27 @@
                 // determine if suffix has any float formatters (float formatting syntax is ".00", where the number of zeros is the number of decimal places)
                 NSUInteger numberOfDecimalPlaces = 0;
                 NSRange zeroMarkRange = [suffixString rangeOfString:@"."];
-                if (zeroMarkRange.location==0) // has to be the very first character in suffix
+                if (zeroMarkRange.location == 0) // has to be the very first character in suffix
                 {
                     numberOfDecimalPlaces = 0;
-                    for(NSInteger i=1; i<[suffixString length]; i++) {
+                    for (NSInteger i = 1; i < [suffixString length]; i++) {
                         if ([suffixString characterAtIndex:i] == '0') {
                             numberOfDecimalPlaces++;
                         }
-
                     }
 
 
                     // Create formatString
                     NSString *floatSpecifier = [NSString stringWithFormat:@"%@%luf", @"%.", (unsigned long)numberOfDecimalPlaces];
                     NSString *formatString = [NSString stringWithFormat:@"%@%@%@", @"%@", floatSpecifier, @"%@"];
-                    
+
                     // Remove floatFormatter from suffixString
-                    suffixString = [suffixString substringFromIndex:numberOfDecimalPlaces+1];
-                    
+                    suffixString = [suffixString substringFromIndex:numberOfDecimalPlaces + 1];
+
                     // Update labelString
                     float floatValue = [(NSNumber *)controlValue floatValue];
                     labelString = [NSString stringWithFormat:formatString, prefixString, floatValue, suffixString];
                 }
-
             }
 
             label.text = labelString;
@@ -2395,7 +2120,6 @@
                 NSString *buttonTitle = (NSString *)controlValue;
                 [customButton setTitle:buttonTitle forState:UIControlStateNormal];
             }
-
         }
 
         else if ([customControl isKindOfClass:[UIImageView class]]) {
@@ -2408,11 +2132,11 @@
             else if ([controlValue isKindOfClass:[NSString class]]) {
                 if ([SCUtilities isURLValid:(NSString *)controlValue]) {
                     NSURL *imageURL = [NSURL URLWithString:(NSString *)controlValue];
-                                                
+
                     // Load image asynchronously
                     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
                     dispatch_async(queue, ^{
-                        NSData * imageData = [NSData dataWithContentsOfURL:imageURL];
+                        NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             UIImage *image = [UIImage imageWithData:imageData];
                             [imageView setImage:image];
@@ -2424,18 +2148,14 @@
                     // assume string contains simple image name
                     imageView.image = [UIImage imageNamed:(NSString *)controlValue];
                 }
-
             }
-
         }
-
     }
-	
-	_pauseControlEvents = FALSE;
+
+    _pauseControlEvents = FALSE;
 }
 
-- (void)setInitialControlValueIfNeeded:(id)value propertyName:(NSString *)propertyName
-{
+- (void)setInitialControlValueIfNeeded:(id)value propertyName:(NSString *)propertyName {
     if (![_initialControlValues valueForKey:propertyName]) {
         if (!value) {
             value = [NSNull null];
@@ -2443,13 +2163,11 @@
 
         [_initialControlValues setValue:value forKey:propertyName];
     }
-
 }
 
 #pragma mark - UITextView methods
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)_textView
-{
+- (BOOL)textViewShouldBeginEditing:(UITextView *)_textView {
     if (!_textView.inputAccessoryView) {
         _textView.inputAccessoryView = self.ownerTableViewModel.inputAccessoryView;
     }
@@ -2462,7 +2180,7 @@
 
     if (shouldBegin) {
         [SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
-        
+
         self.ownerTableViewModel.activeCell = self;
         self.ownerTableViewModel.activeCellControl = _textView;
     }
@@ -2470,26 +2188,22 @@
     return shouldBegin;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     [self callDidBecomeFirstResponderActions];
-    
+
     [self scrollToFocusCaretForTextView:textView];
 }
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)_textView
-{
-	[SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
-	return TRUE;
+- (BOOL)textViewShouldEndEditing:(UITextView *)_textView {
+    [SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
+    return TRUE;
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
+- (void)textViewDidEndEditing:(UITextView *)textView {
     [self callDidResignFirstResponderActions];
 }
 
-- (void)textViewDidChange:(UITextView *)_textView
-{
+- (void)textViewDidChange:(UITextView *)_textView {
     if (_pauseControlEvents) {
         return;
     }
@@ -2497,12 +2211,11 @@
     [self cellValueChanged];
 }
 
-- (void)scrollToFocusCaretForTextView:(UITextView *)textView
-{
+- (void)scrollToFocusCaretForTextView:(UITextView *)textView {
     CGRect caretRect = [textView caretRectForPosition:textView.selectedTextRange.start];
-    
+
     CGRect convertedCaretRect = [self.ownerTableViewModel.tableView convertRect:caretRect fromView:textView];
-    
+
     // Determine if convertedCaretRect is visible
     CGRect visibleRect;
     visibleRect.origin = self.ownerTableViewModel.tableView.contentOffset;
@@ -2514,13 +2227,11 @@
         convertedCaretRect.size.height += 8; // add some space underneath the caret
         [self.ownerTableViewModel.tableView scrollRectToVisible:convertedCaretRect animated:YES];
     }
-
 }
 
 #pragma mark - UITextField methods
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)_textField
-{
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)_textField {
     if (!_textField.inputAccessoryView) {
         _textField.inputAccessoryView = self.ownerTableViewModel.inputAccessoryView;
     }
@@ -2533,7 +2244,7 @@
 
     if (shouldBegin) {
         [SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
-        
+
         self.ownerTableViewModel.activeCell = self;
         self.ownerTableViewModel.activeCellControl = _textField;
     }
@@ -2541,13 +2252,11 @@
     return shouldBegin;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
     [self callDidBecomeFirstResponderActions];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     BOOL shouldChange = YES;
 
     if (self.cellActions.shouldChangeCharactersInRange) {
@@ -2568,19 +2277,16 @@
     return shouldChange;
 }
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)_textField
-{
-	[SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
-	return TRUE;
+- (BOOL)textFieldShouldEndEditing:(UITextField *)_textField {
+    [SCModelCenter sharedModelCenter].keyboardIssuer = self.ownerTableViewModel.viewController;
+    return TRUE;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     [self callDidResignFirstResponderActions];
 }
 
-- (void)textFieldEditingChanged:(id)sender
-{
+- (void)textFieldEditingChanged:(id)sender {
     if (_pauseControlEvents) {
         return;
     }
@@ -2588,12 +2294,11 @@
     [self cellValueChanged];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)_textField
-{
+- (BOOL)textFieldShouldReturn:(UITextField *)_textField {
     if (self.cellActions.returnButtonTapped) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.cellActions.returnButtonTapped(self, indexPath);
-        
+
         return TRUE;
     }
 
@@ -2601,7 +2306,7 @@
     if (self.ownerSection.cellActions.returnButtonTapped) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.ownerSection.cellActions.returnButtonTapped(self, indexPath);
-        
+
         return TRUE;
     }
 
@@ -2609,75 +2314,70 @@
     if (self.ownerTableViewModel.cellActions.returnButtonTapped) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.ownerTableViewModel.cellActions.returnButtonTapped(self, indexPath);
-        
+
         return TRUE;
     }
 
     BOOL handeledReturn;
-	switch (_textField.returnKeyType)
-	{
-		case UIReturnKeyDefault:
-		case UIReturnKeyNext:
-			[self.ownerTableViewModel moveToNextCellControl:TRUE];
-			handeledReturn = TRUE;
-			break;
-			
-		case UIReturnKeyDone: 
-			[_textField resignFirstResponder];
-			handeledReturn = TRUE;
-			break;
-			
-		default:
-			handeledReturn = FALSE;
-			break;
-	}
-	
-	return handeledReturn;
+    switch (_textField.returnKeyType) {
+        case UIReturnKeyDefault:
+        case UIReturnKeyNext:
+            [self.ownerTableViewModel moveToNextCellControl:TRUE];
+            handeledReturn = TRUE;
+            break;
+
+        case UIReturnKeyDone:
+            [_textField resignFirstResponder];
+            handeledReturn = TRUE;
+            break;
+
+        default:
+            handeledReturn = FALSE;
+            break;
+    }
+
+    return handeledReturn;
 }
 
 #pragma mark - UISlider methods
 
-- (void)sliderValueChanged:(id)sender
-{
+- (void)sliderValueChanged:(id)sender {
     if (_pauseControlEvents) {
         return;
     }
 
     self.ownerTableViewModel.activeCellControl = sender;
-	
-	[self cellValueChanged];
+
+    [self cellValueChanged];
 }
 
 #pragma mark - UISegmentedControl methods
 
-- (void)segmentedControlValueChanged:(id)sender
-{
+- (void)segmentedControlValueChanged:(id)sender {
     if (_pauseControlEvents) {
         return;
     }
 
     self.ownerTableViewModel.activeCellControl = sender;
-	
-	[self cellValueChanged];
+
+    [self cellValueChanged];
 }
 
 #pragma mark - UISwitch methods
 
-- (void)switchControlChanged:(id)sender
-{
+- (void)switchControlChanged:(id)sender {
     if (_pauseControlEvents) {
         return;
     }
 
     self.ownerTableViewModel.activeCellControl = sender;
-	
-	[self cellValueChanged];
+
+    [self cellValueChanged];
 }
 
 #pragma mark - UIButton methods
 
-- (void)customButtonTapped:(id)sender
-{
+- (void)customButtonTapped:(id)sender {
     if (self.cellActions.customButtonTapped) {
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.cellActions.customButtonTapped(self, indexPath, sender);
@@ -2692,22 +2392,14 @@
         NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
         self.ownerTableViewModel.cellActions.customButtonTapped(self, indexPath, sender);
     }
-
 }
 
 
 @end
 
 
-
-
-
-
-
-
-
-#define kControlIndexInContentViewKey     @"controlIndexInContentView"
-#define kControlCreatedInIBKey  @"controlCreatedInIB"
+#define kControlIndexInContentViewKey @"controlIndexInContentView"
+#define kControlCreatedInIBKey @"controlCreatedInIB"
 
 #pragma mark - SCControlCell
 
@@ -2719,17 +2411,14 @@
 @end
 
 
-
-@interface SCControlCell ()
-{
+@interface SCControlCell () {
     BOOL showClearButtonInInputAccessoryView;
 }
 @end
 
 @implementation SCControlCell
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
     if (self) {
@@ -2741,25 +2430,22 @@
 
         if ([aDecoder containsValueForKey:kControlIndexInContentViewKey]) {
             NSInteger controlIndexInContentView = [aDecoder decodeIntegerForKey:kControlIndexInContentViewKey];
-            if (controlIndexInContentView!=-1 && controlIndexInContentView<self.contentView.subviews.count) {
+            if (controlIndexInContentView != -1 && controlIndexInContentView < self.contentView.subviews.count) {
                 self.control = [self.contentView.subviews objectAtIndex:controlIndexInContentView];
             }
-
         }
-
     }
 
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
+- (void)encodeWithCoder:(NSCoder *)aCoder {
     [super encodeWithCoder:aCoder];
-    
+
     // The following encodings are required to be able to utilize the method [self cellWithCell:] with cells created in IB (only IB published properties need to be here)
-    
+
     [aCoder encodeBool:self.controlCreatedInIB forKey:kControlCreatedInIBKey];
-    
+
     NSInteger controlIndexInContentView = -1;
     if (self.control) {
         controlIndexInContentView = [self.contentView.subviews indexOfObject:self.control];
@@ -2769,25 +2455,21 @@
 }
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-    
+- (void)performInitialization {
+    [super performInitialization];
+
     _maxTextLabelWidth = SC_DefaultMaxTextLabelWidth;
-	_controlIndentation = SC_DefaultControlIndentation;
-	_controlMargin = kDefaultControlMargin;
+    _controlIndentation = SC_DefaultControlIndentation;
+    _controlMargin = kDefaultControlMargin;
 
     if (!self.controlCreatedInIB) {
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; //dgApps [UIFont fontWithName:self.textLabel.font.fontName size:kDefaultTitleLabelFontSize];
     }
-
 }
 
 
-
 //overrides superclass
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [super awakeFromNib];
     /*
     Interface Builder control cells in STV 7 use their contentView constraints
@@ -2798,33 +2480,28 @@
     if (self.control) {
         _controlCreatedInIB = YES;
     }
-
 }
 
 
 //overrides superclass
-- (void)commitChanges
-{
-    self.lastLoadedControlValue = self.boundValue;   // make sure self doesn't get reloaded when reloading calculated cells
-    
+- (void)commitChanges {
+    self.lastLoadedControlValue = self.boundValue; // make sure self doesn't get reloaded when reloading calculated cells
+
     [super commitChanges];
 }
 
 //overrides superclass
-- (void)reloadControlValuesIfNeeded
-{
+- (void)reloadControlValuesIfNeeded {
     [super reloadControlValuesIfNeeded];
 
     if (self.lastLoadedControlValue != self.boundValue) {
         _boundValueLoaded = NO;
         [self loadBoundValueIntoControl];
     }
-
 }
 
 
-- (UILabel *)ibControlLabel
-{
+- (UILabel *)ibControlLabel {
     UILabel *controlLabel = nil;
     UIView *view = [self.contentView viewWithTag:kSTVTagStartRange];
     if ([view isKindOfClass:[UILabel class]]) {
@@ -2848,15 +2525,12 @@
             if (!self.backgroundView && backgroundColor) {
                 [(UIControl *)subview setBackgroundColor:backgroundColor];
             }
-
         }
-
     }
 }
 
 //overrides superclass
-- (void)setBackgroundView:(UIView *)backgroundView
-{
+- (void)setBackgroundView:(UIView *)backgroundView {
     [super setBackgroundView:backgroundView];
 
     if (self.cellCreatedInIB) {
@@ -2864,15 +2538,12 @@
     }
 
     if (backgroundView) {
-        for(UIView *subview in self.contentView.subviews)
-        {
+        for (UIView *subview in self.contentView.subviews) {
             if ([subview isKindOfClass:[UIControl class]] || [subview isKindOfClass:[UITextView class]] || [subview isKindOfClass:[UILabel class]]) {
                 [(UIControl *)subview setBackgroundColor:[UIColor clearColor]];
             }
-
         }
     }
-
 }
 
 
@@ -2880,18 +2551,13 @@
 
 
 //overrides superclass
-- (void)sc_installContentConstraints
-{
+- (void)sc_installContentConstraints {
     if (self.controlCreatedInIB || self.cellCreatedInIB || !self.control) {
         return;
     }
 
-    NSString *key = [NSString stringWithFormat:@"%p-%d-%g-%g-%g",
-        self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0, self.maxTextLabelWidth,
-        self.controlMargin, self.controlIndentation];
-    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d",
-        self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0,
-        self.badgeView.hidden];
+    NSString *key = [NSString stringWithFormat:@"%p-%d-%g-%g-%g", self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0, self.maxTextLabelWidth, self.controlMargin, self.controlIndentation];
+    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d", self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0, self.badgeView.hidden];
     if ([self.sc_layoutKey isEqualToString:key]) {
         return;
     }
@@ -2924,13 +2590,7 @@
         title.translatesAutoresizingMaskIntoConstraints = NO;
         title.adjustsFontForContentSizeCategory = YES;
         [title setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal];
-        [constraints addObjectsFromArray:@[
-            [title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-            [title.centerYAnchor constraintEqualToAnchor:control.centerYAnchor],
-            [title.widthAnchor constraintLessThanOrEqualToConstant:self.maxTextLabelWidth],
-            [title.widthAnchor constraintLessThanOrEqualToAnchor:margins.widthAnchor multiplier:0.45],
-            [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:title.trailingAnchor constant:self.controlMargin]
-        ]];
+        [constraints addObjectsFromArray:@[[title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [title.centerYAnchor constraintEqualToAnchor:control.centerYAnchor], [title.widthAnchor constraintLessThanOrEqualToConstant:self.maxTextLabelWidth], [title.widthAnchor constraintLessThanOrEqualToAnchor:margins.widthAnchor multiplier:0.45], [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:title.trailingAnchor constant:self.controlMargin]]];
         NSLayoutConstraint *spacing = [control.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:self.controlMargin];
         spacing.priority = 749;
         NSLayoutConstraint *indent = [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor constant:self.controlIndentation];
@@ -2959,29 +2619,25 @@
 }
 
 //override superclass
-- (void)willDisplay
-{
-	[super willDisplay];
+- (void)willDisplay {
+    [super willDisplay];
 
     if (!self.needsCommit) {
         [self loadBoundValueIntoControl];
     }
-
 }
 
 //override superclass
-- (void)reloadBoundValue
-{
+- (void)reloadBoundValue {
     [super reloadBoundValue];
-    
+
     _boundValueLoaded = NO;
-    
-	[self loadBoundValueIntoControl];
+
+    [self loadBoundValueIntoControl];
 }
 
 
-- (void)setControl:(UIView *)control
-{
+- (void)setControl:(UIView *)control {
     if (control && ![control isKindOfClass:self.expectedControlClass]) {
         SCDebugLog(@"Warning: Control not assigned in control cell:%@. Expecting a control of class '%@' but got '%@' instead.", self, self.expectedControlClass, [control class]);
         return;
@@ -3003,60 +2659,50 @@
     [self setNeedsUpdateConstraints];
 }
 
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     // should be overridden by subclasses
     return [UIView class];
 }
 
-- (void)configureControl
-{
+- (void)configureControl {
     // does nothig, must be overridden by subclasses
 }
 
-- (NSObject *)controlValue
-{
-	// must be overridden by subclasses
+- (NSObject *)controlValue {
+    // must be overridden by subclasses
     return nil;
 }
 
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     // does nothing, should be overridden by subclasses
 }
 
-- (void)clearControl
-{
+- (void)clearControl {
     // does nothing, should be overridden by subclasses
 }
 
 @end
 
 
-
-
 #pragma mark - SCLabelCell
-
 
 
 @implementation SCLabelCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object labelTextPropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText boundObject:object labelTextPropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
+- (void)performInitialization {
+    [super performInitialization];
 
-	self.selectionStyle = UITableViewCellSelectionStyleNone;
-	
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentRight;
-    label.textColor = [UIColor secondaryLabelColor];  //dgApps
+    label.textColor = [UIColor secondaryLabelColor];                        //dgApps
     label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout]; // dgApps [UIFont fontWithName:label.font.fontName size:kDefaultControlFontSize];
     /*
      If self.backgroundColor was null then iOS 14 was causing
@@ -3068,29 +2714,25 @@
     self.control = label;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName
-{
-	return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object labelTextPropertyName:(NSString *)propertyName {
+    return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
 }
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UILabel class];
 }
 
 // overrides superclass
-- (void)setControl:(UIView *)control
-{
+- (void)setControl:(UIView *)control {
     [super setControl:control];
-    
+
     _initialControlColor = self.label.textColor;
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
@@ -3099,8 +2741,7 @@
 }
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
 
     if (_enabled) {
@@ -3110,32 +2751,28 @@
     else {
         self.label.textColor = self.disabledTextColor;
     }
-
 }
 
 //overrides superclass
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
-	return self.label.text;
+- (NSObject *)controlValue {
+    return self.label.text;
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
 
     [self loadBoundValueIntoLabel];
-    
+
     self.lastLoadedControlValue = self.boundValue;
 }
 
-- (void)loadBoundValueIntoLabel
-{
+- (void)loadBoundValueIntoLabel {
     if (self.boundPropertyName) {
         NSObject *val = self.boundValue;
         if (!val) {
@@ -3143,26 +2780,19 @@
         }
 
         self.label.text = [NSString stringWithFormat:@"%@", val];
-        
+
         _boundValueLoaded = YES;
     }
-
 }
 
-- (UILabel *)label
-{
-	return (UILabel *)self.control;
+- (UILabel *)label {
+    return (UILabel *)self.control;
 }
 
 @end
 
 
-
-
 #pragma mark - SCTextViewCell
-
-
-
 
 
 /*
@@ -3176,87 +2806,75 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @end
 
 @implementation SCIntrinsicTextView
-- (void)setText:(NSString *)text
-{
+- (void)setText:(NSString *)text {
     [super setText:text];
     [self invalidateIntrinsicContentSize];
 }
 
-- (void)setAttributedText:(NSAttributedString *)text
-{
+- (void)setAttributedText:(NSAttributedString *)text {
     [super setAttributedText:text];
     [self invalidateIntrinsicContentSize];
 }
 
-- (CGSize)intrinsicContentSize
-{
+- (CGSize)intrinsicContentSize {
     return CGSizeMake(UIViewNoIntrinsicMetric, self.contentSize.height);
 }
 
-- (void)setContentSize:(CGSize)size
-{
+- (void)setContentSize:(CGSize)size {
     BOOL changed = !CGSizeEqualToSize(size, self.contentSize);
     [super setContentSize:size];
     if (changed) {
         [self invalidateIntrinsicContentSize];
     }
-
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     if (self.sc_previousWidth != CGRectGetWidth(self.bounds)) {
         self.sc_previousWidth = CGRectGetWidth(self.bounds);
         [self invalidateIntrinsicContentSize];
     }
-
 }
 @end
 
 @implementation SCTextViewCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object textViewTextPropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText boundObject:object textViewTextPropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
+- (void)performInitialization {
     [super performInitialization];
-	
+
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+
     _minimumHeight = kMinTextViewHeight;
     _maximumHeight = kMaxTextViewHeight;
-	
+
     UITextView *textView = [[SCIntrinsicTextView alloc] init];
     textView.adjustsFontForContentSizeCategory = YES;
     textView.scrollEnabled = YES;
     [textView setContentCompressionResistancePriority:249 forAxis:UILayoutConstraintAxisVertical];
     [textView setContentHuggingPriority:249 forAxis:UILayoutConstraintAxisVertical];
     textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textView.font.fontName size:kDefaultControlFontSize];
-    textView.textColor = [UIColor secondaryLabelColor]; // dgApps
+    textView.textColor = [UIColor secondaryLabelColor];                     // dgApps
     self.control = textView;
-}	
+}
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName
-{
-	return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object textViewTextPropertyName:(NSString *)propertyName {
+    return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
 }
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UITextView class];
 }
 
 // overrides superclass
-- (void)setControl:(UIView *)control
-{
+- (void)setControl:(UIView *)control {
     [super setControl:control];
 
     if ([self.textView isKindOfClass:[SCIntrinsicTextView class]]) {
@@ -3267,8 +2885,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
@@ -3276,8 +2893,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     self.textView.delegate = self;
 }
 
-- (void)setAutoResize:(BOOL)autoResize
-{
+- (void)setAutoResize:(BOOL)autoResize {
     _autoResize = autoResize;
     if ([self.textView isKindOfClass:[SCIntrinsicTextView class]]) {
         self.textView.scrollEnabled = YES;
@@ -3287,23 +2903,20 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     [self setNeedsUpdateConstraints];
 }
 
-- (void)setMinimumHeight:(CGFloat)value
-{
+- (void)setMinimumHeight:(CGFloat)value {
     _minimumHeight = MAX(0, value);
     self.sc_layoutKey = nil;
     [self setNeedsUpdateConstraints];
 }
 
-- (void)setMaximumHeight:(CGFloat)value
-{
+- (void)setMaximumHeight:(CGFloat)value {
     _maximumHeight = value;
     self.sc_layoutKey = nil;
     [self setNeedsUpdateConstraints];
 }
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
 
     if (_enabled) {
@@ -3313,46 +2926,37 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     else {
         self.textView.textColor = self.disabledTextColor;
     }
-
 }
 
 //overrides superclass
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return TRUE;
 }
 
 //overrides superclass
-- (BOOL)becomeFirstResponder
-{
-	[self.textView becomeFirstResponder];
-    
+- (BOOL)becomeFirstResponder {
+    [self.textView becomeFirstResponder];
+
     return TRUE;
 }
 
 //overrides superclass
-- (BOOL)resignFirstResponder
-{
+- (BOOL)resignFirstResponder {
     [super resignFirstResponder];
-    
-	[self.textView resignFirstResponder];
-    
+
+    [self.textView resignFirstResponder];
+
     return TRUE;
 }
 
 //overrides superclass
-- (void)sc_installContentConstraints
-{
+- (void)sc_installContentConstraints {
     if (self.controlCreatedInIB || self.cellCreatedInIB || !self.control) {
         return;
     }
 
-    NSString *key = [NSString stringWithFormat:@"text-%p-%d-%g-%g-%d",
-        self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0,
-        self.minimumHeight, self.maximumHeight, self.autoResize];
-    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d",
-        self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0,
-        self.badgeView.hidden];
+    NSString *key = [NSString stringWithFormat:@"text-%p-%d-%g-%g-%d", self.control, (self.textLabel.text.length && !self.textLabel.hidden) > 0, self.minimumHeight, self.maximumHeight, self.autoResize];
+    key = [key stringByAppendingFormat:@"-%p-%d-%d-%d", self.imageView.image, self.imageView.hidden, self.badgeView.text.length > 0, self.badgeView.hidden];
     if ([self.sc_layoutKey isEqualToString:key]) {
         return;
     }
@@ -3363,10 +2967,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     UILayoutGuide *margins = [self sc_controlGuideAddingConstraints:constraints];
     UITextView *editor = self.textView;
     editor.translatesAutoresizingMaskIntoConstraints = NO;
-    [constraints addObjectsFromArray:@[
-        [editor.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-        [editor.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]
-    ]];
+    [constraints addObjectsFromArray:@[[editor.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [editor.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]]];
     NSLayoutConstraint *bottom = [editor.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8];
     bottom.priority = 750;
     [constraints addObject:bottom];
@@ -3374,12 +2975,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         UILabel *title = self.textLabel;
         title.translatesAutoresizingMaskIntoConstraints = NO;
         title.adjustsFontForContentSizeCategory = YES;
-        [constraints addObjectsFromArray:@[
-            [title.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8],
-            [title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-            [title.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
-            [editor.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:4]
-        ]];
+        [constraints addObjectsFromArray:@[[title.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8], [title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [title.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor], [editor.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:4]]];
     }
 
     else {
@@ -3402,53 +2998,48 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
-	return self.textView.text;
+- (NSObject *)controlValue {
+    return self.textView.text;
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
 
-    if (self.boundPropertyName && (!self.boundValue || [SCUtilities isStringClass:[self.boundValue class]]) ) {
+    if (self.boundPropertyName && (!self.boundValue || [SCUtilities isStringClass:[self.boundValue class]])) {
         _pauseControlEvents = TRUE;
         self.textView.text = (NSString *)self.boundValue;
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     self.boundValue = self.textView.text;
-	
+
     [super commitChanges];
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCTextViewAttributes class]]) {
         return;
     }
 
     SCTextViewAttributes *textViewAttributes = (SCTextViewAttributes *)attributes;
-	self.autoResize = textViewAttributes.autoResize;
+    self.autoResize = textViewAttributes.autoResize;
     if (textViewAttributes.minimumHeight > 0) {
         self.minimumHeight = textViewAttributes.minimumHeight;
     }
@@ -3460,39 +3051,33 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     if (!self.controlCreatedInIB) {
         self.textView.editable = textViewAttributes.editable;
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
+- (BOOL)getValueIsValid {
     if (![self.textView.text length] && self.valueRequired) {
         return FALSE;
     }
 
     //else
-	return TRUE;
+    return TRUE;
 }
 
-- (UITextView *)textView
-{
-	return (UITextView *)self.control;
+- (UITextView *)textView {
+    return (UITextView *)self.control;
 }
 
-- (void)clearControl
-{
+- (void)clearControl {
     self.textView.text = nil;
 }
 
 #pragma mark - UITextViewDelegate methods
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     return YES;
 }
 
-- (void)textViewDidChange:(UITextView *)_textView
-{
+- (void)textViewDidChange:(UITextView *)_textView {
     if (_pauseControlEvents) {
         return;
     }
@@ -3503,15 +3088,14 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     [self cellValueChanged];
-    
-    
+
+
     // Resize cell if needed
     if (self.autoResize) {
         [self.textView invalidateIntrinsicContentSize];
         [self setNeedsUpdateConstraints];
         [self scrollToFocusCaretForTextView:self.textView];
     }
-
 }
 
 @end
@@ -3520,35 +3104,30 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 #pragma mark - SCTextFieldCell
 
 
-
-
 @implementation SCTextFieldCell
 
-+ (instancetype)cellWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText placeholder:placeholder boundObject:object textFieldTextPropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText placeholder:placeholder boundObject:object textFieldTextPropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
+- (void)performInitialization {
+    [super performInitialization];
 
-	self.selectionStyle = UITableViewCellSelectionStyleNone;
-	
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     UITextField *textField = [[UITextField alloc] init];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.textColor =  [UIColor secondaryLabelColor];  //dgApps
+    textField.textColor = [UIColor secondaryLabelColor];                     //dgApps
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody]; // dgApps [UIFont fontWithName:self.textField.font.fontName size:kDefaultControlFontSize];
     textField.adjustsFontForContentSizeCategory = YES;
     self.control = textField;
 }
 
-- (instancetype)initWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText placeholder:(NSString *)placeholder boundObject:(NSObject *)object textFieldTextPropertyName:(NSString *)propertyName {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         self.textField.placeholder = placeholder;
     }
 
@@ -3557,35 +3136,30 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UITextField class];
 }
 
 // overrides superclass
-- (void)setControl:(UIView *)control
-{
+- (void)setControl:(UIView *)control {
     [super setControl:control];
-    
+
     _initialControlColor = self.textField.textColor;
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
 
     self.textField.delegate = self;
-    [self.textField addTarget:self action:@selector(textFieldEditingChanged:)
-             forControlEvents:UIControlEventEditingChanged];
+    [self.textField addTarget:self action:@selector(textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
 }
 
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
 
     if (_enabled) {
@@ -3595,30 +3169,26 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     else {
         self.textField.textColor = self.disabledTextColor;
     }
-
 }
 
 //overrides superclass
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     return TRUE;
 }
 
 //overrides superclass
-- (BOOL)becomeFirstResponder
-{
-	[self.textField becomeFirstResponder];
-    
+- (BOOL)becomeFirstResponder {
+    [self.textField becomeFirstResponder];
+
     return TRUE;
 }
 
 //overrides superclass
-- (BOOL)resignFirstResponder
-{
+- (BOOL)resignFirstResponder {
     [super resignFirstResponder];
-    
-	[self.textField resignFirstResponder];
-    
+
+    [self.textField resignFirstResponder];
+
     return TRUE;
 }
 
@@ -3626,46 +3196,41 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
-	return self.textField.text;
+- (NSObject *)controlValue {
+    return self.textField.text;
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
 
-    if (self.boundPropertyName && (!self.boundValue || [SCUtilities isStringClass:[self.boundValue class]]) ) {
+    if (self.boundPropertyName && (!self.boundValue || [SCUtilities isStringClass:[self.boundValue class]])) {
         _pauseControlEvents = TRUE;
         self.textField.text = (NSString *)self.boundValue;
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     self.boundValue = self.controlValue;
-	
-	[super commitChanges];
+
+    [super commitChanges];
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCTextFieldAttributes class]]) {
         return;
@@ -3682,27 +3247,23 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         self.textField.autocorrectionType = textFieldAttributes.autocorrectionType;
         self.textField.autocapitalizationType = textFieldAttributes.autocapitalizationType;
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
+- (BOOL)getValueIsValid {
     if (![self.textField.text length] && self.valueRequired) {
         return FALSE;
     }
 
     //else
-	return TRUE;
+    return TRUE;
 }
 
-- (UITextField *)textField
-{
-	return (UITextField *)self.control;
+- (UITextField *)textField {
+    return (UITextField *)self.control;
 }
 
-- (void)clearControl
-{
+- (void)clearControl {
     self.textField.text = nil;
 }
 
@@ -3712,35 +3273,32 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 #pragma mark - SCNumericTextFieldCell
 
 
-
 @implementation SCNumericTextFieldCell
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-	
-	_minimumValue = nil;
-	_maximumValue = nil;
-	_allowFloatValue = TRUE;
-	_displayZeroAsBlank = FALSE;
-    
+- (void)performInitialization {
+    [super performInitialization];
+
+    self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+
+    _minimumValue = nil;
+    _maximumValue = nil;
+    _allowFloatValue = TRUE;
+    _displayZeroAsBlank = FALSE;
+
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
 }
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
+- (NSObject *)controlValue {
     NSObject *value = nil;
     if ([self.textField.text length]) {
         [_numberFormatter setMinimum:self.minimumValue];
         [_numberFormatter setMaximum:self.maximumValue];
         [_numberFormatter setAllowsFloats:self.allowFloatValue];
-        
+
         value = [_numberFormatter numberFromString:self.textField.text];
     }
 
@@ -3748,18 +3306,17 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
 
-    if ( self.boundPropertyName && (!self.boundValue || [self.boundValue isKindOfClass:[NSNumber class]])) {
+    if (self.boundPropertyName && (!self.boundValue || [self.boundValue isKindOfClass:[NSNumber class]])) {
         _pauseControlEvents = TRUE;
-		
+
         NSNumber *numericValue = (NSNumber *)self.boundValue;
         if (numericValue) {
-            if ([numericValue floatValue]==0.0f && self.displayZeroAsBlank) {
+            if ([numericValue floatValue] == 0.0f && self.displayZeroAsBlank) {
                 self.textField.text = nil;
             }
 
@@ -3767,10 +3324,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
                 [_numberFormatter setMinimum:self.minimumValue];
                 [_numberFormatter setMaximum:self.maximumValue];
                 [_numberFormatter setAllowsFloats:self.allowFloatValue];
-                
+
                 self.textField.text = [_numberFormatter stringFromNumber:numericValue];
             }
-
         }
 
         else {
@@ -3778,25 +3334,22 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         }
 
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCNumericTextFieldAttributes class]]) {
         return;
     }
 
-    SCNumericTextFieldAttributes *numericTextFieldAttributes =
-											(SCNumericTextFieldAttributes *)attributes;
+    SCNumericTextFieldAttributes *numericTextFieldAttributes = (SCNumericTextFieldAttributes *)attributes;
     if (numericTextFieldAttributes.minimumValue) {
         self.minimumValue = numericTextFieldAttributes.minimumValue;
     }
@@ -3809,12 +3362,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     if (numericTextFieldAttributes.numberFormatter) {
         _numberFormatter = numericTextFieldAttributes.numberFormatter;
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
+- (BOOL)getValueIsValid {
     if (![self.textField.text length]) {
         if (self.valueRequired) {
             return FALSE;
@@ -3825,9 +3376,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     [_numberFormatter setMinimum:self.minimumValue];
-	[_numberFormatter setMaximum:self.maximumValue];
-	[_numberFormatter setAllowsFloats:self.allowFloatValue];
-	BOOL valid;
+    [_numberFormatter setMaximum:self.maximumValue];
+    [_numberFormatter setAllowsFloats:self.allowFloatValue];
+    BOOL valid;
     if ([_numberFormatter numberFromString:self.textField.text]) {
         valid = TRUE;
     }
@@ -3843,42 +3394,35 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @end
 
 
-
-
 #pragma mark - SCSliderCell
-
 
 
 @implementation SCSliderCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object sliderValuePropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText boundObject:object sliderValuePropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+- (void)performInitialization {
+    [super performInitialization];
+
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     UISlider *slider = [[UISlider alloc] init];
     slider.continuous = FALSE;
     self.control = slider;
 }
 
 //overrides superclass
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName
-{
-	return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object sliderValuePropertyName:(NSString *)propertyName {
+    return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
 }
 
 //overrides superclass
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName
-{
-	self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName {
+    self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
 
     if (self.boundObject && !self.boundValue && self.commitChangesLive) {
         self.boundValue = [NSNumber numberWithFloat:self.slider.value];
@@ -3889,32 +3433,27 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UISlider class];
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
 
-    [self.slider addTarget:self action:@selector(sliderValueChanged:)
-          forControlEvents:UIControlEventValueChanged];
+    [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
+- (NSObject *)controlValue {
     return [NSNumber numberWithFloat:self.slider.value];
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
@@ -3923,30 +3462,27 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         _pauseControlEvents = TRUE;
         self.slider.value = [(NSNumber *)self.boundValue floatValue];
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     self.boundValue = self.controlValue;
-	
+
     [super commitChanges];
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCSliderAttributes class]]) {
         return;
@@ -3962,47 +3498,38 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         if (sliderAttributes.maximumValue >= 0) {
             self.slider.maximumValue = sliderAttributes.maximumValue;
         }
-
     }
-
 }
 
-- (UISlider *)slider
-{
-	return (UISlider *)self.control;
+- (UISlider *)slider {
+    return (UISlider *)self.control;
 }
 
 @end
 
 
-
 #pragma mark - SCSegmentedCell
-
 
 
 @implementation SCSegmentedCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object selectedSegmentIndexPropertyName:propertyName
-						segmentTitlesArray:cellSegmentTitlesArray];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray {
+    return [[[self class] alloc] initWithText:cellText boundObject:object selectedSegmentIndexPropertyName:propertyName segmentTitlesArray:cellSegmentTitlesArray];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	self.selectionStyle = UITableViewCellSelectionStyleNone;
-	
+- (void)performInitialization {
+    [super performInitialization];
+
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] init];
     self.control = segmentedControl;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedSegmentIndexPropertyName:(NSString *)propertyName segmentTitlesArray:(NSArray *)cellSegmentTitlesArray {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         [self createSegmentsUsingArray:cellSegmentTitlesArray];
     }
 
@@ -4011,9 +3538,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName
-{
-	self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName {
+    self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
 
     if (self.boundObject && !self.boundValue) {
         self.boundValue = [NSNumber numberWithInt:-1];
@@ -4024,14 +3550,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UISegmentedControl class];
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
@@ -4044,8 +3568,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
+- (NSObject *)controlValue {
     if (self.boundPropertyDataType == SCDataTypeNSString) {
         return [self.segmentedControl titleForSegmentAtIndex:self.segmentedControl.selectedSegmentIndex];
     }
@@ -4055,8 +3578,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override's superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
@@ -4070,7 +3592,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
         else if ([self.boundValue isKindOfClass:[NSString class]]) {
             NSMutableArray *segmentTitles = [NSMutableArray array];
-            for(NSInteger i=0; i<self.segmentedControl.numberOfSegments; i++) {
+            for (NSInteger i = 0; i < self.segmentedControl.numberOfSegments; i++) {
                 [segmentTitles addObject:[self.segmentedControl titleForSegmentAtIndex:i]];
             }
 
@@ -4078,34 +3600,30 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             if (selectedIndex != NSNotFound) {
                 self.segmentedControl.selectedSegmentIndex = selectedIndex;
             }
-
         }
 
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //override's superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     self.boundValue = self.controlValue;
-    
-	[super commitChanges];
+
+    [super commitChanges];
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCSegmentedAttributes class]]) {
         return;
@@ -4113,43 +3631,35 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     SCSegmentedAttributes *segmentedAttributes = (SCSegmentedAttributes *)attributes;
 
-    if (!self.controlCreatedInIB || self.segmentedControl.numberOfSegments<2) {
+    if (!self.controlCreatedInIB || self.segmentedControl.numberOfSegments < 2) {
         if (segmentedAttributes.segmentTitlesArray) {
             [self createSegmentsUsingArray:segmentedAttributes.segmentTitlesArray];
         }
-
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
-    if ( (self.segmentedControl.selectedSegmentIndex==-1) && self.valueRequired ) {
+- (BOOL)getValueIsValid {
+    if ((self.segmentedControl.selectedSegmentIndex == -1) && self.valueRequired) {
         return FALSE;
     }
 
     //else
-	return TRUE;
+    return TRUE;
 }
 
-- (UISegmentedControl *)segmentedControl
-{
-	return (UISegmentedControl *)self.control;
+- (UISegmentedControl *)segmentedControl {
+    return (UISegmentedControl *)self.control;
 }
 
-- (void)createSegmentsUsingArray:(NSArray *)segmentTitlesArray
-{
-	[self.segmentedControl removeAllSegments];
+- (void)createSegmentsUsingArray:(NSArray *)segmentTitlesArray {
+    [self.segmentedControl removeAllSegments];
     if (segmentTitlesArray) {
-        for(NSUInteger i=0; i<segmentTitlesArray.count; i++)
-		{
+        for (NSUInteger i = 0; i < segmentTitlesArray.count; i++) {
             NSString *segmentTitle = (NSString *)[segmentTitlesArray objectAtIndex:i];
-            [self.segmentedControl insertSegmentWithTitle:segmentTitle atIndex:i
-												 animated:FALSE];
+            [self.segmentedControl insertSegmentWithTitle:segmentTitle atIndex:i animated:FALSE];
         }
     }
-
 }
 
 
@@ -4159,36 +3669,30 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 #pragma mark - SCSwitchCell
 
 
-
-
 @implementation SCSwitchCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object switchOnPropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText boundObject:object switchOnPropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+- (void)performInitialization {
+    [super performInitialization];
+
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     UISwitch *switchControl = [[UISwitch alloc] init];
     self.control = switchControl;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName
-{
-	return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object switchOnPropertyName:(NSString *)propertyName {
+    return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
 }
 
 //overrides superclass
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName
-{
-	self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object boundPropertyName:(NSString *)propertyName {
+    self = [super initWithText:cellText boundObject:object boundPropertyName:propertyName];
 
     if (self.boundObject && !self.boundValue && self.commitChangesLive) {
         self.boundValue = [NSNumber numberWithBool:self.switchControl.on];
@@ -4199,14 +3703,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (Class)expectedControlClass
-{
+- (Class)expectedControlClass {
     return [UISwitch class];
 }
 
 // overrides superclass
-- (void)configureControl
-{
+- (void)configureControl {
     if (!self.control) {
         return;
     }
@@ -4219,14 +3721,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (NSObject *)controlValue
-{
+- (NSObject *)controlValue {
     return [NSNumber numberWithBool:self.switchControl.on];
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoControl
-{
+- (void)loadBoundValueIntoControl {
     if (_boundValueLoaded) {
         return;
     }
@@ -4235,44 +3735,35 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         _pauseControlEvents = TRUE;
         self.switchControl.on = [(NSNumber *)self.boundValue boolValue];
         _pauseControlEvents = FALSE;
-        
+
         _boundValueLoaded = YES;
-        
+
         self.lastLoadedControlValue = self.boundValue;
     }
-
 }
 
 //overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     self.boundValue = self.controlValue;
-	
+
     [super commitChanges];
 }
 
-- (UISwitch *)switchControl
-{
-	return (UISwitch *)self.control;
+- (UISwitch *)switchControl {
+    return (UISwitch *)self.control;
 }
 
 @end
 
 
-
-
-
-
 #pragma mark - SCDateCell
 
 
-
-@interface SCDateCell ()
-{
+@interface SCDateCell () {
     BOOL _embeddedPickerVisible;
     BOOL _dateCleared;
 }
@@ -4285,9 +3776,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @end
 
 
-
-@interface SCDateCell ()
-{
+@interface SCDateCell () {
     UITextField *_pickerField;
     UIViewController *_activePickerDetailViewController;
 }
@@ -4295,62 +3784,51 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCDateCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object datePropertyName:propertyName];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName {
+    return [[[self class] alloc] initWithText:cellText boundObject:object datePropertyName:propertyName];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-    
+- (void)performInitialization {
+    [super performInitialization];
+
     _dateCleared = FALSE;
     _activePickerDetailViewController = nil;
-	
-	_datePicker = [[UIDatePicker alloc] init];
-	[_datePicker addTarget:self action:@selector(pickerValueChanged)
-		 forControlEvents:UIControlEventValueChanged];
-	
-	_pickerField = [[UITextField alloc] initWithFrame:CGRectZero];
-	_pickerField.delegate = self;
-	_pickerField.inputView = _datePicker;
+
+    _datePicker = [[UIDatePicker alloc] init];
+    [_datePicker addTarget:self action:@selector(pickerValueChanged) forControlEvents:UIControlEventValueChanged];
+
+    _pickerField = [[UITextField alloc] initWithFrame:CGRectZero];
+    _pickerField.delegate = self;
+    _pickerField.inputView = _datePicker;
     [self.contentView addSubview:_pickerField];
     _pickerField.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-        [_pickerField.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
-        [_pickerField.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
-        [_pickerField.widthAnchor constraintEqualToConstant:0],
-        [_pickerField.heightAnchor constraintEqualToConstant:0]
-    ]];
-	
-	_dateFormatter = [[NSDateFormatter alloc] init];
-	[_dateFormatter setDateFormat:@"MMM d  hh:mm a"];
-	_displaySelectedDate = TRUE;
-	_displayDatePickerAsInputAccessoryView = FALSE;
+    [NSLayoutConstraint activateConstraints:@[[_pickerField.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor], [_pickerField.topAnchor constraintEqualToAnchor:self.contentView.topAnchor], [_pickerField.widthAnchor constraintEqualToConstant:0], [_pickerField.heightAnchor constraintEqualToConstant:0]]];
+
+    _dateFormatter = [[NSDateFormatter alloc] init];
+    [_dateFormatter setDateFormat:@"MMM d  hh:mm a"];
+    _displaySelectedDate = TRUE;
+    _displayDatePickerAsInputAccessoryView = FALSE;
     self.showClearButtonInInputAccessoryView = TRUE;
-    
+
     // Track device orientation changes to correctly show/hide the date picker
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName
-{
-	return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object datePropertyName:(NSString *)propertyName {
+    return [self initWithText:cellText boundObject:object boundPropertyName:propertyName];
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 
 
 //overrides superclass
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL)canBecomeFirstResponder {
     if (self.displayDatePickerAsInputAccessoryView) {
         return TRUE;
     }
@@ -4360,12 +3838,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (BOOL)becomeFirstResponder
-{
+- (BOOL)becomeFirstResponder {
     if (self.displayDatePickerAsInputAccessoryView) {
         [_pickerField becomeFirstResponder];
         [self callDidBecomeFirstResponderActions];
-        
+
         return TRUE;
     }
 
@@ -4373,10 +3850,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (BOOL)resignFirstResponder
-{
+- (BOOL)resignFirstResponder {
     [super resignFirstResponder];
-    
+
     BOOL response = YES;
 
     if (self.displayDatePickerAsInputAccessoryView) {
@@ -4388,12 +3864,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     [self callDidResignFirstResponderActions];
-    
-	return response;
+
+    return response;
 }
 
-- (void)showEmbeddedDatePicker
-{
+- (void)showEmbeddedDatePicker {
     if (_embeddedPickerVisible) {
         return;
     }
@@ -4408,8 +3883,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     [self.ownerTableViewModel invalidateHeightForCell:self animated:YES];
 }
 
-- (void)hideEmbeddedDatePicker
-{
+- (void)hideEmbeddedDatePicker {
     if (!_embeddedPickerVisible) {
         return;
     }
@@ -4428,8 +3902,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (NSObject *)controlValue
-{
+- (NSObject *)controlValue {
     NSDate *value = nil;
     if (self.label.text && ![self.label.text isEqualToString:self.placeholder]) { // a date has been selected
         value = self.datePicker.date;
@@ -4443,9 +3916,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (void)loadBoundValueIntoLabel
-{
-	NSDate *date = nil;
+- (void)loadBoundValueIntoLabel {
+    NSDate *date = nil;
     if (self.boundPropertyName && [self.boundValue isKindOfClass:[NSDate class]]) {
         date = (NSDate *)self.boundValue;
         self.datePicker.date = date;
@@ -4460,7 +3932,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     self.label.hidden = !self.displaySelectedDate;
-    
+
     _boundValueLoaded = YES;
 }
 
@@ -4468,8 +3940,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //override superclass
-- (void)sc_installContentConstraints
-{
+- (void)sc_installContentConstraints {
     NSArray<NSLayoutConstraint *> *previousRowConstraints = self.sc_labelConstraints;
     [super sc_installContentConstraints];
     if (!_embeddedPickerVisible) {
@@ -4490,11 +3961,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         return;
     }
 
-    for(NSLayoutConstraint *constraint in self.sc_labelConstraints) {
+    for (NSLayoutConstraint *constraint in self.sc_labelConstraints) {
         if (constraint.firstItem == self.control && constraint.firstAttribute == NSLayoutAttributeCenterY) {
             constraint.active = NO;
         }
-
     }
 
 
@@ -4507,12 +3977,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     pickerTop.priority = 749;
     NSLayoutConstraint *bottom = [picker.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8];
     bottom.priority = 750;
-    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[
-        rowTop, pickerTop, bottom,
-        [picker.topAnchor constraintGreaterThanOrEqualToAnchor:self.control.bottomAnchor constant:8],
-        [picker.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor],
-        [picker.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]
-    ]];
+    NSMutableArray *constraints = [NSMutableArray arrayWithArray:@[rowTop, pickerTop, bottom, [picker.topAnchor constraintGreaterThanOrEqualToAnchor:self.control.bottomAnchor constant:8], [picker.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [picker.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor]]];
     if (self.textLabel.text.length && !self.controlCreatedInIB) {
         [constraints addObject:[picker.topAnchor constraintGreaterThanOrEqualToAnchor:self.textLabel.bottomAnchor constant:8]];
     }
@@ -4522,8 +3987,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override superclass
-- (void)cellValueChanged
-{
+- (void)cellValueChanged {
     if (!_dateCleared) {
         self.label.text = [_dateFormatter stringFromDate:self.datePicker.date];
     }
@@ -4536,14 +4000,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
-	[self cellValueChanged];
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
+    [self cellValueChanged];
 }
 
 //overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
@@ -4560,9 +4022,8 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCDateAttributes class]]) {
         return;
@@ -4577,23 +4038,20 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     if (!self.displayDatePickerAsInputAccessoryView) {
         self.displayDatePickerAsInputAccessoryView = dateAttributes.displayDatePickerAsInputAccessoryView;
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
+- (BOOL)getValueIsValid {
     if (!self.label.text && self.valueRequired) {
         return FALSE;
     }
 
     //else
-	return TRUE;
+    return TRUE;
 }
 
 // overrides superclass
-- (void)setEnabled:(BOOL)isEnabled
-{
+- (void)setEnabled:(BOOL)isEnabled {
     if (!isEnabled && !self.displayDatePickerAsInputAccessoryView) {
         [self hideEmbeddedDatePicker];
     }
@@ -4602,14 +4060,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override parent's
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     if (self.displayDatePickerAsInputAccessoryView) {
         if (![_pickerField isFirstResponder]) {
             [_pickerField becomeFirstResponder];
             [self callDidBecomeFirstResponderActions];
         }
-
     }
 
     else {
@@ -4620,16 +4076,14 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else {
             [self showEmbeddedDatePicker];
         }
-
     }
 
     self.ownerTableViewModel.activeCell = self;
-    
+
     [super didSelectCell];
 }
 
-- (void)willDeselectCell
-{
+- (void)willDeselectCell {
     if (_embeddedPickerVisible) {
         [self hideEmbeddedDatePicker];
     }
@@ -4637,35 +4091,29 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     [super willDeselectCell];
 }
 
-- (void)pickerValueChanged
-{
-	[self cellValueChanged];
-}
-
-- (void)clearControl
-{
-    self.label.text = nil;
-    _dateCleared = TRUE;
-    
+- (void)pickerValueChanged {
     [self cellValueChanged];
 }
 
-- (void)deviceOrientationDidChange:(NSNotification *)notification
-{
+- (void)clearControl {
+    self.label.text = nil;
+    _dateCleared = TRUE;
+
+    [self cellValueChanged];
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification {
     [self resignFirstResponder];
 }
 
 @end
 
 
-
 #pragma mark - SCSelectionCell
 
 
-
-@interface SCSelectionCell ()
-{
-    @protected
+@interface SCSelectionCell () {
+  @protected
     NSArray *_items;
     BOOL itemsInSync;
     BOOL _loadingContents;
@@ -4683,103 +4131,93 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCSelectionCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object selectedIndexPropertyName:propertyName items:cellItems];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems {
+    return [[[self class] alloc] initWithText:cellText boundObject:object selectedIndexPropertyName:propertyName items:cellItems];
 }
 
 + (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)cellItems allowMultipleSelection:(BOOL)multipleSelection;
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object selectedIndexesPropertyName:propertyName items:cellItems allowMultipleSelection:multipleSelection];
-}
+{ return [[[self class] alloc] initWithText:cellText boundObject:object selectedIndexesPropertyName:propertyName items:cellItems allowMultipleSelection:multipleSelection]; }
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object selectionStringPropertyName:propertyName items:cellItems];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems {
+    return [[[self class] alloc] initWithText:cellText boundObject:object selectionStringPropertyName:propertyName items:cellItems];
 }
 
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	_selectionItemsStore = nil;
-    _selectionItemsFetchOptions = nil;  // will be re-initialized when selectionItemsStore is set
+- (void)performInitialization {
+    [super performInitialization];
+
+    _selectionItemsStore = nil;
+    _selectionItemsFetchOptions = nil; // will be re-initialized when selectionItemsStore is set
     _items = nil;
     itemsInSync = FALSE;
     _loadingContents = FALSE;
     _activityIndicator = nil;
     _commitingDetailModel = FALSE;
-    
-	_allowMultipleSelection = FALSE;
-	_allowNoSelection = FALSE;
-	_maximumSelections = 0;
-	_autoDismissDetailView = FALSE;
-	_hideDetailViewNavigationBar = FALSE;
+
+    _allowMultipleSelection = FALSE;
+    _allowNoSelection = FALSE;
+    _maximumSelections = 0;
+    _autoDismissDetailView = FALSE;
+    _hideDetailViewNavigationBar = FALSE;
     _allowAddingItems = FALSE;
-	_allowDeletingItems = FALSE;
-	_allowMovingItems = FALSE;
-	_allowEditDetailView = FALSE;
-	_displaySelection = TRUE;
-	_delimeter = @", ";
-	_selectedItemsIndexes = [[NSMutableSet alloc] init];
+    _allowDeletingItems = FALSE;
+    _allowMovingItems = FALSE;
+    _allowEditDetailView = FALSE;
+    _displaySelection = TRUE;
+    _delimeter = @", ";
+    _selectedItemsIndexes = [[NSMutableSet alloc] init];
     _placeholderCell = nil;
-    
+
     _addNewItemCell = nil;
     _addNewItemCellExistsInNormalMode = FALSE;
     _addNewItemCellExistsInEditingMode = TRUE;
-	
-	self.detailViewControllerOptions.tableViewStyle = UITableViewStyleGrouped;
-	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	self.selectionStyle = UITableViewCellSelectionStyleBlue;
+
+    self.detailViewControllerOptions.tableViewStyle = UITableViewStyleGrouped;
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexPropertyName:(NSString *)propertyName items:(NSArray *)cellItems {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         self.boundPropertyDataType = SCDataTypeNSNumber;
         self.allowMultipleSelection = FALSE;
-        
+
         self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:cellItems] defaultDefiniton:[SCStringDefinition definition]];
-		
+
         [self buildSelectedItemsIndexesFromBoundValue];
 
         if (self.boundObject && !self.boundValue && self.commitChangesLive) {
             self.boundValue = [NSNumber numberWithInt:-1];
         }
-
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)cellItems allowMultipleSelection:(BOOL)multipleSelection
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedIndexesPropertyName:(NSString *)propertyName items:(NSArray *)cellItems allowMultipleSelection:(BOOL)multipleSelection {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:cellItems] defaultDefiniton:[SCStringDefinition definition]];
-        
+
         self.allowMultipleSelection = multipleSelection;
-		
+
         [self buildSelectedItemsIndexesFromBoundValue];
 
         if (self.boundObject && !self.boundValue && self.commitChangesLive) {
-            self.boundValue = [NSMutableSet set];   //Empty set
+            self.boundValue = [NSMutableSet set]; //Empty set
         }
-
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectionStringPropertyName:(NSString *)propertyName items:(NSArray *)cellItems {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         self.boundPropertyDataType = SCDataTypeNSString;
         self.allowMultipleSelection = FALSE;
-        
+
         self.selectionItemsStore = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:cellItems] defaultDefiniton:[SCStringDefinition definition]];
-		
+
         [self buildSelectedItemsIndexesFromBoundValue];
     }
 
@@ -4787,22 +4225,19 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 
-- (NSArray *)items
-{
+- (NSArray *)items {
     if (!itemsInSync) {
         if (!_items) {
             _items = [NSArray array];
         }
 
-        switch (self.selectionItemsStore.storeMode)
-        {
+        switch (self.selectionItemsStore.storeMode) {
             case SCStoreModeSynchronous:
                 _items = [self.selectionItemsStore fetchObjectsWithOptions:self.selectionItemsFetchOptions];
                 itemsInSync = TRUE;
                 break;
-                
-            case SCStoreModeAsynchronous:
-            {
+
+            case SCStoreModeAsynchronous: {
                 BOOL skipBuildingFromBoundValue = _commitingDetailModel;
                 _loadingContents = TRUE;
                 self.selectable = FALSE;
@@ -4810,51 +4245,38 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
                     _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]; // dgApps
                     _activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
                     [self.contentView addSubview:_activityIndicator];
-                    [NSLayoutConstraint activateConstraints:@[
-                        [_activityIndicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
-                        [_activityIndicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]
-                    ]];
+                    [NSLayoutConstraint activateConstraints:@[[_activityIndicator.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor], [_activityIndicator.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor]]];
                 }
 
                 [_activityIndicator startAnimating];
-                [self.selectionItemsStore asynchronousFetchObjectsWithOptions:self.selectionItemsFetchOptions
-                success:^(NSArray *results)
-                 {
-                    self->_items = results;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                [self.selectionItemsStore asynchronousFetchObjectsWithOptions:self.selectionItemsFetchOptions success:^(NSArray *results) {
+                    self->_items = results; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
 
                     if (!skipBuildingFromBoundValue) {
                         [self buildSelectedItemsIndexesFromBoundValue];
                     }
 
-                    self->_boundValueLoaded = NO;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->_boundValueLoaded = NO; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     [self loadBoundValueIntoControl];
-                     
-                    self->_loadingContents = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    [self->_activityIndicator stopAnimating];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+
+                    self->_loadingContents = FALSE;           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    [self->_activityIndicator stopAnimating]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     self.selectable = TRUE;
-                }
-                failure:^(NSError *error)
-                 {
-                    self->_loadingContents = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    [self->_activityIndicator stopAnimating];  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
-                    self->itemsInSync = FALSE;  // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                } failure:^(NSError *error) {
+                    self->_loadingContents = FALSE;           // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    [self->_activityIndicator stopAnimating]; // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
+                    self->itemsInSync = FALSE;                // dgApps added the self-> to avoid a warning: "Block implicitly retains 'self'; explicitly mention 'self' to indicate this is intended behavior"
                     self.selectable = TRUE;
-                }
-                 noConnection:^BOOL()
-                 {
-                     return NO;
-                 }];
+                } noConnection:^BOOL() { return NO; }];
                 itemsInSync = TRUE;
-            }
-                break;
+            } break;
         }
     }
 
     return _items;
 }
 
-- (void)setItems:(NSArray *)customItems
-{
+- (void)setItems:(NSArray *)customItems {
     if ([self.selectionItemsStore isKindOfClass:[SCArrayStore class]]) {
         [(SCArrayStore *)self.selectionItemsStore setObjectsArray:[NSMutableArray arrayWithArray:customItems]];
     }
@@ -4863,29 +4285,27 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     itemsInSync = TRUE;
 }
 
-- (void)setSelectionItemsStore:(SCDataStore *)store
-{
+- (void)setSelectionItemsStore:(SCDataStore *)store {
     _selectionItemsStore = store;
-    
+
     _selectionItemsFetchOptions = [store.defaultDataDefinition generateCompatibleDataFetchOptions];
-    
-    
+
+
     itemsInSync = FALSE;
-    
+
     [self buildSelectedItemsIndexesFromBoundValue];
-    
+
     _boundValueLoaded = NO;
     [self loadBoundValueIntoControl];
 }
 
-- (void)setSelectionItemsFetchOptions:(SCDataFetchOptions *)fetchOptions
-{
+- (void)setSelectionItemsFetchOptions:(SCDataFetchOptions *)fetchOptions {
     _selectionItemsFetchOptions = fetchOptions;
-    
+
     itemsInSync = FALSE;
-    
+
     [self buildSelectedItemsIndexesFromBoundValue];
-    
+
     _boundValueLoaded = NO;
     [self loadBoundValueIntoControl];
 }
@@ -4894,8 +4314,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
 
     if (_enabled) {
@@ -4905,12 +4324,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     else {
         self.accessoryType = UITableViewCellAccessoryNone;
     }
-
 }
 
-- (void)buildSelectedItemsIndexesFromBoundValue
-{
-	[self.selectedItemsIndexes removeAllObjects];
+- (void)buildSelectedItemsIndexesFromBoundValue {
+    [self.selectedItemsIndexes removeAllObjects];
 
     if ([self.boundValue isKindOfClass:[NSNumber class]]) {
         [self.selectedItemsIndexes addObject:(NSNumber *)self.boundValue];
@@ -4918,69 +4335,57 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     else if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
         NSMutableSet *boundSet = (NSMutableSet *)self.boundValue;
-        for(NSNumber *index in boundSet) {
+        for (NSNumber *index in boundSet) {
             [self.selectedItemsIndexes addObject:index];
         }
-
     }
 
     else if ([SCUtilities isStringClass:[self.boundValue class]] && self.items) {
         [self buildSelectedItemsIndexesFromString:(NSString *)self.boundValue];
     }
-
 }
 
-- (void)buildSelectedItemsIndexesFromString:(NSString *)string
-{
-	NSArray *selectionStrings = [string componentsSeparatedByString:@";"];
-	
-	[self.selectedItemsIndexes removeAllObjects];
-	for(NSString *selectionString in selectionStrings)
-	{
-		NSUInteger index = [self.items indexOfObject:selectionString];
+- (void)buildSelectedItemsIndexesFromString:(NSString *)string {
+    NSArray *selectionStrings = [string componentsSeparatedByString:@";"];
+
+    [self.selectedItemsIndexes removeAllObjects];
+    for (NSString *selectionString in selectionStrings) {
+        NSUInteger index = [self.items indexOfObject:selectionString];
         if (index != NSNotFound) {
             [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
         }
-
     }
 }
 
-- (NSString *)buildStringFromSelectedItemsIndexes
-{
-	NSMutableArray *selectionStrings = [NSMutableArray arrayWithCapacity:[self.selectedItemsIndexes count]];
-	for(NSNumber *index in self.selectedItemsIndexes)
-	{
-		[selectionStrings addObject:[self.items objectAtIndex:[index intValue]]];
-	}
-	
-	return [selectionStrings componentsJoinedByString:@";"];
+- (NSString *)buildStringFromSelectedItemsIndexes {
+    NSMutableArray *selectionStrings = [NSMutableArray arrayWithCapacity:[self.selectedItemsIndexes count]];
+    for (NSNumber *index in self.selectedItemsIndexes) {
+        [selectionStrings addObject:[self.items objectAtIndex:[index intValue]]];
+    }
+
+    return [selectionStrings componentsJoinedByString:@";"];
 }
 
 //override superclass
-- (void)cellValueChanged
-{
+- (void)cellValueChanged {
     _boundValueLoaded = NO;
-	[self loadBoundValueIntoControl];
-	
-	[super cellValueChanged];
+    [self loadBoundValueIntoControl];
+
+    [super cellValueChanged];
 }
 
-- (NSString *)getTitleForItemAtIndex:(NSUInteger)index
-{
+- (NSString *)getTitleForItemAtIndex:(NSUInteger)index {
     return [self.items objectAtIndex:index];
 }
 
 //override superclass
-- (void)loadBoundValueIntoLabel
-{
-    NSArray *indexesArray = [[self.selectedItemsIndexes allObjects]
-                             sortedArrayUsingSelector:@selector(compare:)];
+- (void)loadBoundValueIntoLabel {
+    NSArray *indexesArray = [[self.selectedItemsIndexes allObjects] sortedArrayUsingSelector:@selector(compare:)];
     if (self.items.count && self.displaySelection && indexesArray.count) {
         NSMutableString *selectionString = [[NSMutableString alloc] init];
-        for(NSUInteger i=0; i<indexesArray.count; i++)
-        {
+        for (NSUInteger i = 0; i < indexesArray.count; i++) {
             NSUInteger index = [(NSNumber *)[indexesArray objectAtIndex:i] intValue];
-            if (index > (self.items.count-1)) {
+            if (index > (self.items.count - 1)) {
                 continue;
             }
 
@@ -4989,14 +4394,13 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
                 continue;
             }
 
-            if (i==0) {
+            if (i == 0) {
                 [selectionString appendString:itemTitle];
             }
 
             else {
                 [selectionString appendFormat:@"%@%@", self.delimeter, itemTitle];
             }
-
         }
         self.label.text = selectionString;
     }
@@ -5008,42 +4412,40 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     _boundValueLoaded = YES;
 }
 
-- (void)reloadBoundValue
-{
+- (void)reloadBoundValue {
     itemsInSync = FALSE;
     _boundValueLoaded = NO;
-    
-	[self buildSelectedItemsIndexesFromBoundValue];
-	[self loadBoundValueIntoControl];
+
+    [self buildSelectedItemsIndexesFromBoundValue];
+    [self loadBoundValueIntoControl];
 }
-			 
-- (void)buildDetailModel:(SCTableViewModel *)detailModel
-{
+
+- (void)buildDetailModel:(SCTableViewModel *)detailModel {
     [detailModel clear];
 
     if ([detailModel isKindOfClass:[SCSelectionModel class]]) {
         SCSelectionModel *selectionModel = (SCSelectionModel *)detailModel;
-        
+
         selectionModel.dataStore = self.selectionItemsStore;
         selectionModel.dataFetchOptions = self.selectionItemsFetchOptions;
-        
+
         selectionModel.boundObjectStore = self.boundObjectStore;
         selectionModel.allowNoSelection = self.allowNoSelection;
         selectionModel.maximumSelections = self.maximumSelections;
         selectionModel.allowMultipleSelection = self.allowMultipleSelection;
         selectionModel.autoDismissViewController = self.autoDismissDetailView;
-        
+
         selectionModel.allowAddingItems = self.allowAddingItems;
         selectionModel.allowDeletingItems = self.allowDeletingItems;
         selectionModel.allowMovingItems = self.allowMovingItems;
         selectionModel.allowEditDetailView = self.allowEditDetailView;
-        
+
         [selectionModel setDetailViewControllerOptions:self.detailViewControllerOptions];
     }
 
     else {
         SCSelectionSection *selectionSection = [SCSelectionSection sectionWithHeaderTitle:nil dataStore:self.selectionItemsStore];
-        
+
         selectionSection.dataFetchOptions = self.selectionItemsFetchOptions;
 
         if (self.boundPropertyDataType == SCDataTypeNSNumber) {
@@ -5051,10 +4453,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         }
 
         else {
-            for(NSNumber *index in self.selectedItemsIndexes) {
+            for (NSNumber *index in self.selectedItemsIndexes) {
                 [selectionSection.selectedItemsIndexes addObject:index];
             }
-
         }
 
         selectionSection.boundObjectStore = self.boundObjectStore;
@@ -5063,55 +4464,51 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         selectionSection.allowMultipleSelection = self.allowMultipleSelection;
         selectionSection.autoDismissViewController = self.autoDismissDetailView;
         selectionSection.cellsImageViews = self.detailCellsImageViews;
-        
+
         selectionSection.allowAddingItems = self.allowAddingItems;
         selectionSection.allowDeletingItems = self.allowDeletingItems;
         selectionSection.allowMovingItems = self.allowMovingItems;
         selectionSection.allowEditDetailView = self.allowEditDetailView;
-        
+
         selectionSection.placeholderCell = self.placeholderCell;
         selectionSection.addNewItemCell = self.addNewItemCell;
         selectionSection.addNewItemCellExistsInNormalMode = self.addNewItemCellExistsInNormalMode;
         selectionSection.addNewItemCellExistsInEditingMode = self.addNewItemCellExistsInEditingMode;
-        
+
         [selectionSection setDetailViewControllerOptions:self.detailViewControllerOptions];
-        
+
         [detailModel addSection:selectionSection];
     }
-
 }
 
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
     _commitingDetailModel = TRUE;
-    
+
     // The detail model my have added/modified/removed items
     itemsInSync = FALSE;
-    
+
     NSSet *selectedIndexes = nil;
     if ([detailModel isKindOfClass:[SCSelectionModel class]]) {
         selectedIndexes = [(SCSelectionModel *)detailModel selectedItemsIndexes];
     }
 
     else {
-        for(NSUInteger i=0; i<detailModel.sectionCount; i++)
-        {
+        for (NSUInteger i = 0; i < detailModel.sectionCount; i++) {
             SCTableViewSection *section = [detailModel sectionAtIndex:i];
             if ([section isKindOfClass:[SCSelectionSection class]]) {
                 selectedIndexes = [(SCSelectionSection *)section selectedItemsIndexes];
                 break;
             }
-
         }
     }
 
     if (selectedIndexes) {
         [self.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in selectedIndexes) {
+        for (NSNumber *index in selectedIndexes) {
             [self.selectedItemsIndexes addObject:index];
         }
 
-        
+
         [self cellValueChanged];
     }
 
@@ -5119,8 +4516,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override superclass
-- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType
-{
+- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType {
     if (self.detailViewControllerOptions.navigationBarType != SCNavigationBarTypeAuto) {
         return self.detailViewControllerOptions.navigationBarType;
     }
@@ -5139,11 +4535,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override superclass
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     [super didSelectCell];
-    
-	self.ownerTableViewModel.activeCell = self;
+
+    self.ownerTableViewModel.activeCell = self;
 
     if (!self.items) {
         return;
@@ -5154,16 +4549,15 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    
+
     UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
-    
-    
+
+
     [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
 }
 
 // overrides superclass
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath
-{
+- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
     UIViewController *detailViewController = nil;
     if ([self.ibDetailViewControllerIdentifier length]) {
         detailViewController = [SCUtilities instantiateViewControllerWithIdentifier:self.ibDetailViewControllerIdentifier usingStoryboard:self.ownerTableViewModel.viewController.storyboard];
@@ -5178,7 +4572,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else {
             SCDebugLog(@"Warning: Could not instantiate view controller with id '%@' from Storyboard.", self.ibDetailViewControllerIdentifier);
         }
-
     }
 
     else {
@@ -5189,14 +4582,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 // overrides superclass
-- (BOOL)generatesDetailView
-{
+- (BOOL)generatesDetailView {
     return YES;
 }
 
 // overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
@@ -5205,7 +4596,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         self.boundValue = self.selectedItemIndex;
     }
 
-    else if (self.boundPropertyDataType==SCDataTypeNSString || self.boundPropertyDataType==SCDataTypeDictionaryItem) {
+    else if (self.boundPropertyDataType == SCDataTypeNSString || self.boundPropertyDataType == SCDataTypeDictionaryItem) {
         self.boundValue = [self buildStringFromSelectedItemsIndexes];
     }
 
@@ -5213,21 +4604,18 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         if ([self.boundValue isKindOfClass:[NSMutableSet class]]) {
             NSMutableSet *boundValueSet = (NSMutableSet *)self.boundValue;
             [boundValueSet removeAllObjects];
-            for(NSNumber *index in self.selectedItemsIndexes) {
+            for (NSNumber *index in self.selectedItemsIndexes) {
                 [boundValueSet addObject:index];
             }
-
         }
-
     }
 
     [super commitChanges];
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCSelectionAttributes class]]) {
         return;
@@ -5236,15 +4624,15 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     SCSelectionAttributes *selectionAttributes = (SCSelectionAttributes *)attributes;
 
     if (selectionAttributes.selectionItemsStore) {
-        self.selectionItemsStore = selectionAttributes.selectionItemsStore;	
+        self.selectionItemsStore = selectionAttributes.selectionItemsStore;
         self.selectionItemsFetchOptions = selectionAttributes.selectionItemsFetchOptions;
     }
 
     self.allowMultipleSelection = selectionAttributes.allowMultipleSelection;
-	self.allowNoSelection = selectionAttributes.allowNoSelection;
-	self.maximumSelections = selectionAttributes.maximumSelections;
-	self.autoDismissDetailView = selectionAttributes.autoDismissDetailView;
-	self.hideDetailViewNavigationBar = selectionAttributes.hideDetailViewNavigationBar;
+    self.allowNoSelection = selectionAttributes.allowNoSelection;
+    self.maximumSelections = selectionAttributes.maximumSelections;
+    self.autoDismissDetailView = selectionAttributes.autoDismissDetailView;
+    self.hideDetailViewNavigationBar = selectionAttributes.hideDetailViewNavigationBar;
     self.allowAddingItems = selectionAttributes.allowAddingItems;
     self.allowDeletingItems = selectionAttributes.allowDeletingItems;
     self.allowMovingItems = selectionAttributes.allowMovingItems;
@@ -5256,45 +4644,39 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     if ([selectionAttributes.addNewObjectuiElement isKindOfClass:[SCTableViewCell class]]) {
         self.addNewItemCell = (SCTableViewCell *)selectionAttributes.addNewObjectuiElement;
     }
-
 }
 
 //overrides superclass
-- (BOOL)getValueIsValid
-{
+- (BOOL)getValueIsValid {
     if (![self.selectedItemsIndexes count] && !self.allowNoSelection && self.valueRequired) {
         return FALSE;
     }
 
     //else
-	return TRUE;
+    return TRUE;
 }
 
-- (void)setSelectedItemIndex:(NSNumber *)number
-{
-	[self.selectedItemsIndexes removeAllObjects];
+- (void)setSelectedItemIndex:(NSNumber *)number {
+    [self.selectedItemsIndexes removeAllObjects];
     if ([number intValue] >= 0) {
         NSNumber *num = [number copy];
         [self.selectedItemsIndexes addObject:num];
     }
-
 }
 
-- (NSNumber *)selectedItemIndex
-{
-	NSNumber *index = [self.selectedItemsIndexes anyObject];
+- (NSNumber *)selectedItemIndex {
+    NSNumber *index = [self.selectedItemsIndexes anyObject];
 
     if (index) {
         return index;
     }
 
     //else
-	return [NSNumber numberWithInt:-1];
+    return [NSNumber numberWithInt:-1];
 }
 
 
-- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController
-{
+- (void)handleDetailViewControllerWillPresent:(UIViewController *)detailViewController {
     if (self.autoDismissDetailView && self.hideDetailViewNavigationBar) {
         [self.ownerTableViewModel.viewController.navigationController setNavigationBarHidden:YES animated:YES];
     }
@@ -5302,21 +4684,16 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     [super handleDetailViewControllerWillPresent:detailViewController];
 }
 
-- (void)handleDetailViewControllerWillDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped
-{
-	[self.ownerTableViewModel.viewController.navigationController setNavigationBarHidden:FALSE animated:YES];
-	
-	[super handleDetailViewControllerWillDismiss:detailViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];	
+- (void)handleDetailViewControllerWillDismiss:(UIViewController *)detailViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped {
+    [self.ownerTableViewModel.viewController.navigationController setNavigationBarHidden:FALSE animated:YES];
+
+    [super handleDetailViewControllerWillDismiss:detailViewController cancelButtonTapped:cancelTapped doneButtonTapped:doneTapped];
 }
 
 @end
 
 
-
-
 #pragma mark - SCObjectSelectionCell
-
-
 
 
 @interface SCObjectSelectionCell ()
@@ -5328,47 +4705,41 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 @implementation SCObjectSelectionCell
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store
-{
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store {
     return [[[self class] alloc] initWithText:cellText boundObject:object selectedObjectPropertyName:propertyName selectionItemsStore:store];
 }
 
-+ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)items itemsDefintion:(SCDataDefinition *)definition
-{
-	return [[[self class] alloc] initWithText:cellText boundObject:object selectedObjectPropertyName:propertyName selectionItems:items itemsDefintion:definition];
++ (instancetype)cellWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)items itemsDefintion:(SCDataDefinition *)definition {
+    return [[[self class] alloc] initWithText:cellText boundObject:object selectedObjectPropertyName:propertyName selectionItems:items itemsDefintion:definition];
 }
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-    
+- (void)performInitialization {
+    [super performInitialization];
+
     _intermediateEntityDefinition = nil;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store
-{
-    if ( (self=[self initWithText:cellText boundObject:object boundPropertyName:propertyName]) ) {
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItemsStore:(SCDataStore *)store {
+    if ((self = [self initWithText:cellText boundObject:object boundPropertyName:propertyName])) {
         self.selectionItemsStore = store;
-        
+
         [self buildSelectedItemsIndexesFromBoundValue];
     }
 
     return self;
 }
 
-- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)selitems itemsDefintion:(SCDataDefinition *)definition
-{
-	SCArrayStore *store = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:selitems] defaultDefiniton:definition];
-    
+- (instancetype)initWithText:(NSString *)cellText boundObject:(NSObject *)object selectedObjectPropertyName:(NSString *)propertyName selectionItems:(NSArray *)selitems itemsDefintion:(SCDataDefinition *)definition {
+    SCArrayStore *store = [SCArrayStore storeWithObjectsArray:[NSMutableArray arrayWithArray:selitems] defaultDefiniton:definition];
+
     self = [self initWithText:cellText boundObject:object selectedObjectPropertyName:propertyName selectionItemsStore:store];
-    
+
     return self;
 }
 
 
-- (NSMutableSet *)boundMutableSet
-{
+- (NSMutableSet *)boundMutableSet {
     if (self.boundPropertyDataType == SCDataTypeNSString) {
         return nil;
     }
@@ -5384,7 +4755,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else if (boundPropertyDef.dataType == SCDataTypeNSMutableOrderedSet) {
             set = (NSMutableSet *)[self.boundObject mutableOrderedSetValueForKey:self.boundPropertyName];
         }
-
     }
 
     else {
@@ -5395,38 +4765,33 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //overrides superclass
-- (void)buildSelectedItemsIndexesFromBoundValue
-{
+- (void)buildSelectedItemsIndexesFromBoundValue {
     [self.selectedItemsIndexes removeAllObjects];
 
     if (self.boundPropertyDataType == SCDataTypeNSString) {
         NSString *stringBoundValue = (NSString *)self.boundValue;
         NSArray *objectTitles = [stringBoundValue componentsSeparatedByString:@";"];
         SCDataDefinition *definition = [self.selectionItemsStore defaultDataDefinition];
-        for(NSString *title in objectTitles)
-        {
+        for (NSString *title in objectTitles) {
             NSObject *obj = [definition objectWithTitle:title inObjectsArray:self.items];
             NSUInteger index = [self.items indexOfObjectIdenticalTo:obj];
             if (index != NSNotFound) {
                 [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
             }
-
         }
-        
+
         return;
     }
 
 
     if (self.allowMultipleSelection) {
         if (!self.intermediateEntityDefinition) {
-            NSMutableSet *boundSet = [self boundMutableSet];  //optimize
-            for(NSObject *obj in boundSet)
-            {
+            NSMutableSet *boundSet = [self boundMutableSet]; //optimize
+            for (NSObject *obj in boundSet) {
                 NSUInteger index = [self.items indexOfObjectIdenticalTo:obj];
                 if (index != NSNotFound) {
                     [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
                 }
-
             }
         }
 
@@ -5463,24 +4828,20 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             }
              */
         }
-
     }
 
     else {
-        NSObject *selectedObject = [SCUtilities valueForPropertyName:self.boundPropertyName inObject:self.boundObject]; 
+        NSObject *selectedObject = [SCUtilities valueForPropertyName:self.boundPropertyName inObject:self.boundObject];
         NSUInteger index = [self.items indexOfObjectIdenticalTo:selectedObject];
         if (index != NSNotFound) {
             [self.selectedItemsIndexes addObject:[NSNumber numberWithUnsignedInteger:index]];
         }
-
     }
-
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCObjectSelectionAttributes class]]) {
         return;
@@ -5497,13 +4858,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     self.intermediateEntityDefinition = objectSelectionAttributes.intermediateEntityDefinition;
-    
+
     [self buildSelectedItemsIndexesFromBoundValue];
 }
 
 // override superclass
-- (NSString *)getTitleForItemAtIndex:(NSUInteger)index
-{
+- (NSString *)getTitleForItemAtIndex:(NSUInteger)index {
     NSObject *item = [self.items objectAtIndex:index];
     SCDataDefinition *itemDefinition = [self.selectionItemsStore definitionForObject:item];
     if (itemDefinition.titlePropertyName) {
@@ -5511,42 +4871,41 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     //else
-	return nil;
+    return nil;
 }
 
 // override superclass
-- (void)buildDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)buildDetailModel:(SCTableViewModel *)detailModel {
     [detailModel clear];
 
     if ([detailModel isKindOfClass:[SCObjectSelectionModel class]]) {
         SCObjectSelectionModel *selectionModel = (SCObjectSelectionModel *)detailModel;
         selectionModel.autoFetchItems = FALSE;
         [selectionModel setMutableItems:[NSMutableArray arrayWithArray:self.items]];
-        
+
         // Override object's bound value since it might not yet be committed
         [selectionModel.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in self.selectedItemsIndexes) {
+        for (NSNumber *index in self.selectedItemsIndexes) {
             [selectionModel.selectedItemsIndexes addObject:index];
         }
 
-        
+
         selectionModel.boundObject = self.boundObject;
         selectionModel.boundObjectStore = self.boundObjectStore;
         selectionModel.boundPropertyName = self.boundPropertyName;
         selectionModel.dataStore = self.selectionItemsStore;
         selectionModel.dataFetchOptions = self.selectionItemsFetchOptions;
-        
+
         selectionModel.allowNoSelection = self.allowNoSelection;
         selectionModel.maximumSelections = self.maximumSelections;
         selectionModel.allowMultipleSelection = self.allowMultipleSelection;
         selectionModel.autoDismissViewController = self.autoDismissDetailView;
-        
+
         selectionModel.allowAddingItems = self.allowAddingItems;
         selectionModel.allowDeletingItems = self.allowDeletingItems;
         selectionModel.allowMovingItems = self.allowMovingItems;
         selectionModel.allowEditDetailView = self.allowEditDetailView;
-        
+
         [selectionModel setDetailViewControllerOptions:self.detailViewControllerOptions];
     }
 
@@ -5555,16 +4914,16 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         selectionSection.dataFetchOptions = self.selectionItemsFetchOptions;
         selectionSection.autoFetchItems = FALSE;
         [selectionSection setMutableItems:[NSMutableArray arrayWithArray:self.items]];
-        
+
         selectionSection.intermediateEntityDefinition = self.intermediateEntityDefinition;
-        
+
         // Override object's bound value since it might not yet be committed
         [selectionSection.selectedItemsIndexes removeAllObjects];
-        for(NSNumber *index in self.selectedItemsIndexes) {
+        for (NSNumber *index in self.selectedItemsIndexes) {
             [selectionSection.selectedItemsIndexes addObject:index];
         }
 
-        
+
         selectionSection.boundObjectStore = self.boundObjectStore;
         selectionSection.commitCellChangesLive = FALSE;
         selectionSection.allowNoSelection = self.allowNoSelection;
@@ -5572,32 +4931,30 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         selectionSection.allowMultipleSelection = self.allowMultipleSelection;
         selectionSection.autoDismissViewController = self.autoDismissDetailView;
         selectionSection.cellsImageViews = self.detailCellsImageViews;
-        
+
         selectionSection.allowAddingItems = self.allowAddingItems;
         selectionSection.allowDeletingItems = self.allowDeletingItems;
         selectionSection.allowMovingItems = self.allowMovingItems;
         selectionSection.allowEditDetailView = self.allowEditDetailView;
-        
+
         selectionSection.placeholderCell = self.placeholderCell;
         selectionSection.addNewItemCell = self.addNewItemCell;
         selectionSection.addNewItemCellExistsInNormalMode = self.addNewItemCellExistsInNormalMode;
         selectionSection.addNewItemCellExistsInEditingMode = self.addNewItemCellExistsInEditingMode;
-        
+
         [selectionSection setDetailViewControllerOptions:self.detailViewControllerOptions];
-        
+
         [detailModel addSection:selectionSection];
     }
-
 }
 
 // overrides superclass
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
     _commitingDetailModel = TRUE;
-    
+
     // The detail model my have added/modified/removed items
     itemsInSync = FALSE;
-    
+
     NSSet *detailIndexes;
     if ([detailModel isKindOfClass:[SCObjectSelectionModel class]]) {
         detailIndexes = [(SCObjectSelectionModel *)detailModel selectedItemsIndexes];
@@ -5609,30 +4966,28 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     [self.selectedItemsIndexes removeAllObjects];
-	for(NSNumber *index in detailIndexes) {
-		[self.selectedItemsIndexes addObject:index];
-	}
+    for (NSNumber *index in detailIndexes) {
+        [self.selectedItemsIndexes addObject:index];
+    }
 
-    
+
     [self cellValueChanged];
-    
+
     _commitingDetailModel = FALSE;
 }
 
 // overrides superclass
-- (void)commitChanges
-{
+- (void)commitChanges {
     if (!self.needsCommit || !self.valueIsValid) {
         return;
     }
 
     if (self.boundPropertyDataType == SCDataTypeNSString) {
         SCDataDefinition *definition = [self.selectionItemsStore defaultDataDefinition];
-        
+
         NSMutableString *objectTitles = [NSMutableString string];
         BOOL addSeparator = FALSE;
-        for(NSNumber *index in self.selectedItemsIndexes)
-        {
+        for (NSNumber *index in self.selectedItemsIndexes) {
             NSObject *obj = [self.items objectAtIndex:(NSUInteger)[index intValue]];
             NSString *objTitle = [definition titleValueForObject:obj];
             if (!addSeparator) {
@@ -5643,11 +4998,10 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
             else {
                 [objectTitles appendFormat:@";%@", objTitle];
             }
-
         }
-        
+
         self.boundValue = objectTitles;
-        
+
         return;
     }
 
@@ -5655,8 +5009,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         if (!self.intermediateEntityDefinition) {
             NSMutableSet *boundValueSet = [self boundMutableSet];
             [boundValueSet removeAllObjects];
-            for(NSNumber *index in self.selectedItemsIndexes)
-            {
+            for (NSNumber *index in self.selectedItemsIndexes) {
                 NSObject *obj = [self.items objectAtIndex:(NSUInteger)[index intValue]];
                 [boundValueSet addObject:obj];
             }
@@ -5664,7 +5017,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
         else {
             // TODO - Future implementation
-#ifdef _COREDATADEFINES_H 
+#ifdef _COREDATADEFINES_H
             /*
             NSEntityDescription *boundObjEntity = [(NSManagedObject *)self.boundObject entity];
             NSEntityDescription *intermediateEntity = self.intermediateEntityDefinition.entity;
@@ -5710,7 +5063,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
              */
 #endif
         }
-
     }
 
     else {
@@ -5722,19 +5074,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
         self.boundValue = selectedObject;
     }
-
 }
 
 @end
 
 
-
-
-
 #pragma mark - SCObjectCell
-
-
-
 
 
 @interface SCObjectCell ()
@@ -5744,52 +5089,44 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 @end
 
 
-
 @implementation SCObjectCell
 
-+ (instancetype)cellWithBoundObject:(NSObject *)object
-{
-	return [[[self class] alloc] initWithBoundObject:object];
++ (instancetype)cellWithBoundObject:(NSObject *)object {
+    return [[[self class] alloc] initWithBoundObject:object];
 }
 
-+ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition
-{
-	return [[[self class] alloc] initWithBoundObject:object boundObjectDefinition:definition];
++ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition {
+    return [[[self class] alloc] initWithBoundObject:object boundObjectDefinition:definition];
 }
 
-+ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store
-{
++ (instancetype)cellWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store {
     return [[[self class] alloc] initWithBoundObject:object boundObjectStore:store];
 }
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
-	_boundObjectTitleText = nil;
-	self.detailViewControllerOptions.tableViewStyle = UITableViewStyleGrouped;
-	
-	self.selectionStyle = UITableViewCellSelectionStyleBlue;
+- (void)performInitialization {
+    [super performInitialization];
+
+    _boundObjectTitleText = nil;
+    self.detailViewControllerOptions.tableViewStyle = UITableViewStyleGrouped;
+
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
-- (instancetype)initWithBoundObject:(NSObject *)object
-{
-	return [self initWithBoundObject:object boundObjectDefinition:nil];
+- (instancetype)initWithBoundObject:(NSObject *)object {
+    return [self initWithBoundObject:object boundObjectDefinition:nil];
 }
 
-- (instancetype)initWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition
-{
-	SCDataStore *store = [definition generateCompatibleDataStore];
-    
+- (instancetype)initWithBoundObject:(NSObject *)object boundObjectDefinition:(SCDataDefinition *)definition {
+    SCDataStore *store = [definition generateCompatibleDataStore];
+
     return [self initWithBoundObject:object boundObjectStore:store];
 }
 
-- (instancetype)initWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithBoundObject:(NSObject *)object boundObjectStore:(SCDataStore *)store {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.boundObject = object;
-		
+
         self.boundObjectStore = store;
     }
 
@@ -5797,26 +5134,22 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 
-- (SCDataDefinition *)objectDefinition
-{
+- (SCDataDefinition *)objectDefinition {
     return [self.boundObjectStore definitionForObject:self.boundObject];
 }
 
-- (void)setObjectDefinition:(SCDataDefinition *)objectDefinition
-{
+- (void)setObjectDefinition:(SCDataDefinition *)objectDefinition {
     [self.boundObjectStore setDefaultDataDefinition:objectDefinition];
 }
 
-- (void)setBoundObjectTitleText: (NSString*)input 
-{ 
+- (void)setBoundObjectTitleText:(NSString *)input {
     _boundObjectTitleText = [input copy];
-    
+
     [self setCellTextAndDetailText];
 }
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
 
     if (_enabled && self.boundObject) {
@@ -5826,13 +5159,11 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     else {
         self.accessoryType = UITableViewCellAccessoryNone;
     }
-
 }
 
 //override superclass
-- (void)willDisplay
-{
-	[super willDisplay];
+- (void)willDisplay {
+    [super willDisplay];
 
     if (self.boundObject && self.enabled) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -5846,57 +5177,48 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override superclass
-- (void)cellValueChanged
-{
-	[self setCellTextAndDetailText];
-	
-	[super cellValueChanged];
+- (void)cellValueChanged {
+    [self setCellTextAndDetailText];
+
+    [super cellValueChanged];
 }
 
-- (void)buildDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)buildDetailModel:(SCTableViewModel *)detailModel {
     [detailModel clear];
 
     if (self.boundObjectStore) {
         [detailModel generateSectionsForObject:self.boundObject withDataStore:self.boundObjectStore newObject:NO];
     }
-
 }
 
-- (void)configureDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)configureDetailModel:(SCTableViewModel *)detailModel {
     [super configureDetailModel:detailModel];
-    
-    for(NSUInteger i=0; i<detailModel.sectionCount; i++)
-    {
+
+    for (NSUInteger i = 0; i < detailModel.sectionCount; i++) {
         SCTableViewSection *section = [detailModel sectionAtIndex:i];
-        
+
         [section setDetailViewControllerOptions:self.detailViewControllerOptions];
         section.commitCellChangesLive = FALSE;
         section.cellsImageViews = self.detailCellsImageViews;
-        for(NSUInteger j=0; j<section.cellCount; j++)
-        {
+        for (NSUInteger j = 0; j < section.cellCount; j++) {
             [[section cellAtIndex:j] setDetailViewControllerOptions:self.detailViewControllerOptions];
         }
     }
 }
 
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
-	// commitChanges & ignore self.commitChangesLive setting as it's not applicable here
-	//looping to include any custom user added sections too
-	for(NSUInteger i=0; i<detailModel.sectionCount; i++)
-	{
-		SCTableViewSection *section = [detailModel sectionAtIndex:i];
-		[section commitCellChanges];
-	}
-	
-	[self cellValueChanged];
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
+    // commitChanges & ignore self.commitChangesLive setting as it's not applicable here
+    //looping to include any custom user added sections too
+    for (NSUInteger i = 0; i < detailModel.sectionCount; i++) {
+        SCTableViewSection *section = [detailModel sectionAtIndex:i];
+        [section commitCellChanges];
+    }
+
+    [self cellValueChanged];
 }
 
 //override superclass
-- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType
-{
+- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType {
     SCNavigationBarType navBarType;
     if (self.objectDefinition.requireEditingModeToEditPropertyValues) {
         navBarType = SCNavigationBarTypeEditRight;
@@ -5910,26 +5232,24 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 }
 
 //override superclass
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     [super didSelectCell];
-    
-	self.ownerTableViewModel.activeCell = self;
+
+    self.ownerTableViewModel.activeCell = self;
 
     if (!self.boundObject) {
         return;
     }
 
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    
+
     UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
-    
+
     [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
 }
 
 // overrides superclass
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath
-{
+- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
     UIViewController *detailViewController;
     if ([self.ibDetailViewControllerIdentifier length]) {
         detailViewController = [SCUtilities instantiateViewControllerWithIdentifier:self.ibDetailViewControllerIdentifier usingStoryboard:self.ownerTableViewModel.viewController.storyboard];
@@ -5944,7 +5264,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else {
             SCDebugLog(@"Warning: Could not instantiate view controller with id '%@' from Storyboard.", self.ibDetailViewControllerIdentifier);
         }
-
     }
 
     else {
@@ -5956,27 +5275,24 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (BOOL)generatesDetailView
-{
+- (BOOL)generatesDetailView {
     return YES;
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCObjectAttributes class]]) {
         return;
     }
 
     __unused SCObjectAttributes *objectAttributes = (SCObjectAttributes *)attributes;
-	// No assignments currently needed.
+    // No assignments currently needed.
     // Placeholder for future assignments.
 }
 
-- (void)setCellTextAndDetailText
-{
+- (void)setCellTextAndDetailText {
     if (self.boundObjectTitleText) {
         self.textLabel.text = self.boundObjectTitleText;
     }
@@ -5985,86 +5301,71 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         if (self.boundObject && self.objectDefinition.titlePropertyName) {
             self.textLabel.text = [self.objectDefinition titleValueForObject:self.boundObject];
         }
-
     }
 
     if (self.boundObject && self.objectDefinition.descriptionPropertyName) {
-        self.detailTextLabel.text = [SCUtilities stringValueForPropertyName:self.objectDefinition.descriptionPropertyName
-																inObject:self.boundObject
-											separateValuesUsingDelimiter:@" "];
+        self.detailTextLabel.text = [SCUtilities stringValueForPropertyName:self.objectDefinition.descriptionPropertyName inObject:self.boundObject separateValuesUsingDelimiter:@" "];
     }
-
 }
 
 
 @end
 
 
-
-
-
 #pragma mark - SCArrayOfObjectsCell
-
 
 
 @implementation SCArrayOfObjectsCell
 
-+ (instancetype)cellWithDataStore:(SCDataStore *)store
-{
++ (instancetype)cellWithDataStore:(SCDataStore *)store {
     return [[[self class] alloc] initWithDataStore:store];
 }
 
-+ (instancetype)cellWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition
-{
-	return [[[self class] alloc] initWithItems:cellItems itemsDefinition:definition];
++ (instancetype)cellWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition {
+    return [[[self class] alloc] initWithItems:cellItems itemsDefinition:definition];
 }
 
-+ (instancetype)cellWithEntityDefinition:(SCEntityDefinition *)definition
-{
-	return [[[self class] alloc] initWithEntityDefinition:definition];
++ (instancetype)cellWithEntityDefinition:(SCEntityDefinition *)definition {
+    return [[[self class] alloc] initWithEntityDefinition:definition];
 }
 
-+ (instancetype)cellWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects
-{
-	return [[[self class] alloc] initWithBoundItemsSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsObjects:ownsObjects];
++ (instancetype)cellWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects {
+    return [[[self class] alloc] initWithBoundItemsSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsObjects:ownsObjects];
 }
 
 //overrides superclass
-- (void)performInitialization
-{
-	[super performInitialization];
-	
+- (void)performInitialization {
+    [super performInitialization];
+
     _dataStore = nil;
-    _dataFetchOptions = nil;  // will be re-initialized when dataStore is set
-    
-	_allowAddingItems = TRUE;
-	_allowDeletingItems = TRUE;
-	_allowMovingItems = TRUE;
-	_allowEditDetailView = TRUE;
-	_allowRowSelection = TRUE;
-	_autoSelectNewItemCell = FALSE;
-	_displayItemsCountInBadgeView = TRUE;
-    
+    _dataFetchOptions = nil; // will be re-initialized when dataStore is set
+
+    _allowAddingItems = TRUE;
+    _allowDeletingItems = TRUE;
+    _allowMovingItems = TRUE;
+    _allowEditDetailView = TRUE;
+    _allowRowSelection = TRUE;
+    _autoSelectNewItemCell = FALSE;
+    _displayItemsCountInBadgeView = TRUE;
+
     _placeholderCell = nil;
     _addNewItemCell = nil;
     _addNewItemCellExistsInNormalMode = TRUE;
     _addNewItemCellExistsInEditingMode = TRUE;
-    
+
     _detailSectionActions = [[SCSectionActions alloc] init];
 }
 
-- (instancetype)initWithDataStore:(SCDataStore *)store
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithDataStore:(SCDataStore *)store {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.dataStore = store;
     }
 
     return self;
 }
 
-- (instancetype)initWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition
-{
-    if ( (self=[self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil]) ) {
+- (instancetype)initWithItems:(NSMutableArray *)cellItems itemsDefinition:(SCDataDefinition *)definition {
+    if ((self = [self initWithStyle:SC_DefaultCellStyle reuseIdentifier:nil])) {
         self.dataStore = [SCArrayStore storeWithObjectsArray:cellItems defaultDefiniton:definition];
         [self.dataStore addDataDefinition:definition];
     }
@@ -6072,51 +5373,45 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     return self;
 }
 
-- (instancetype)initWithEntityDefinition:(SCEntityDefinition *)definition
-{
-	SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
+- (instancetype)initWithEntityDefinition:(SCEntityDefinition *)definition {
+    SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext defaultEntityDefinition:definition];
 
-	self = [self initWithDataStore:store];
+    self = [self initWithDataStore:store];
 
     return self;
 }
 
-- (instancetype)initWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects
-{
-	SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext boundSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsStoreObjects:ownsObjects];
+- (instancetype)initWithBoundItemsSet:(NSMutableSet *)cellItemsSet boundSetEntityDefinition:(SCEntityDefinition *)definition boundSetOwnsObjects:(BOOL)ownsObjects {
+    SCCoreDataStore *store = [SCCoreDataStore storeWithManagedObjectContext:definition.managedObjectContext boundSet:cellItemsSet boundSetEntityDefinition:definition boundSetOwnsStoreObjects:ownsObjects];
 
-	self = [self initWithDataStore:store];
+    self = [self initWithDataStore:store];
 
     return self;
 }
 
 
 // overrides superclass
-- (void)setBoundObject:(NSObject *)object
-{
+- (void)setBoundObject:(NSObject *)object {
     [super setBoundObject:object];
-    
+
     [self bindDataStoreToBoundObject];
 }
 
 // overrides superclass
-- (void)setBoundObjectStore:(SCDataStore *)objectStore
-{
+- (void)setBoundObjectStore:(SCDataStore *)objectStore {
     [super setBoundObjectStore:objectStore];
-    
+
     [self bindDataStoreToBoundObject];
 }
 
 // overrides superclass
-- (void)setBoundPropertyName:(NSString *)propertyName
-{
+- (void)setBoundPropertyName:(NSString *)propertyName {
     [super setBoundPropertyName:propertyName];
-    
+
     [self bindDataStoreToBoundObject];
 }
 
-- (void)setDataStore:(SCDataStore *)store
-{
+- (void)setDataStore:(SCDataStore *)store {
     _dataStore = store;
 
     if (!_dataFetchOptions) {
@@ -6126,48 +5421,38 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     [self bindDataStoreToBoundObject];
 }
 
-- (void)bindDataStoreToBoundObject
-{
+- (void)bindDataStoreToBoundObject {
     if (self.boundObject && self.boundObjectStore && self.boundPropertyName && self.dataStore) {
         [self.dataStore bindStoreToPropertyName:self.boundPropertyName forObject:self.boundObject withDefinition:[self.boundObjectStore definitionForObject:self.boundObject]];
     }
-
 }
 
 
 //override superclass
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     if (self.displayItemsCountInBadgeView) {
-        if (self.dataStore.storeMode==SCStoreModeSynchronous) {
+        if (self.dataStore.storeMode == SCStoreModeSynchronous) {
             self.badgeView.text = [NSString stringWithFormat:@"%i", (int)self.items.count];
         }
 
         else {
             self.badgeView.text = @"-";
-            
-            typeof(self) weak_self = self;
-            [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions
-                success:^(NSArray *results)
-                {
-                    weak_self.badgeView.text = [NSString stringWithFormat:@"%i", (int)results.count];
-                }
-                failure:nil noConnection:nil];
-        }
 
+            typeof(self) weak_self = self;
+            [self.dataStore asynchronousFetchObjectsWithOptions:self.dataFetchOptions success:^(NSArray *results) { weak_self.badgeView.text = [NSString stringWithFormat:@"%i", (int)results.count]; } failure:nil noConnection:nil];
+        }
     }
 
     [super layoutSubviews];
 }
 
 //overrides superclass
-- (void)buildDetailModel:(SCTableViewModel *)detailModel
-{
+- (void)buildDetailModel:(SCTableViewModel *)detailModel {
     [detailModel clear];
 
     if ([detailModel isKindOfClass:[SCArrayOfObjectsModel class]]) {
         SCArrayOfObjectsModel *objectsModel = (SCArrayOfObjectsModel *)detailModel;
-        
+
         objectsModel.dataStore = self.dataStore;
         objectsModel.allowAddingItems = self.allowAddingItems;
         objectsModel.allowDeletingItems = self.allowDeletingItems;
@@ -6188,7 +5473,7 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     else {
         SCArrayOfObjectsSection *objectsSection = [SCArrayOfObjectsSection sectionWithHeaderTitle:nil dataStore:self.dataStore];
-        
+
         objectsSection.boundObjectStore = self.boundObjectStore;
         objectsSection.allowAddingItems = self.allowAddingItems;
         objectsSection.allowDeletingItems = self.allowDeletingItems;
@@ -6210,50 +5495,43 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         objectsSection.addNewItemCellExistsInNormalMode = self.addNewItemCellExistsInNormalMode;
         objectsSection.addNewItemCellExistsInEditingMode = self.addNewItemCellExistsInEditingMode;
         [objectsSection setDetailViewControllerOptions:self.detailViewControllerOptions];
-        
+
         [objectsSection.sectionActions setActionsTo:self.detailSectionActions overrideExisting:YES];
-        
+
         [detailModel addSection:objectsSection];
     }
-
 }
 
-- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel
-{
-	[self cellValueChanged];
+- (void)commitDetailModelChanges:(SCTableViewModel *)detailModel {
+    [self cellValueChanged];
 }
 
 //overrides superclass
-- (void)setEnabled:(BOOL)_enabled
-{
+- (void)setEnabled:(BOOL)_enabled {
     [super setEnabled:_enabled];
-    
+
     [self determineAccessoryType];
 }
 
 //override superclass
-- (void)willDisplay
-{
-	[super willDisplay];
-	
+- (void)willDisplay {
+    [super willDisplay];
+
     [self determineAccessoryType];
 }
 
-- (void)determineAccessoryType
-{
-    if (self.enabled && (self.dataStore.storeMode==SCStoreModeAsynchronous || self.items)) {
+- (void)determineAccessoryType {
+    if (self.enabled && (self.dataStore.storeMode == SCStoreModeAsynchronous || self.items)) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 
     else {
         self.accessoryType = UITableViewCellAccessoryNone;
     }
-
 }
 
 //override superclass
-- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType
-{
+- (SCNavigationBarType)defaultDetailViewControllerNavigationBarType {
     SCNavigationBarType navBarType;
     if (!self.allowAddingItems && !self.allowDeletingItems && !self.allowMovingItems) {
         navBarType = SCNavigationBarTypeNone;
@@ -6267,36 +5545,33 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else {
             navBarType = SCNavigationBarTypeEditRight;
         }
-
     }
 
     return navBarType;
 }
 
 //override superclass
-- (void)didSelectCell
-{
+- (void)didSelectCell {
     [super didSelectCell];
-    
-	self.ownerTableViewModel.activeCell = self;
-	
-	// If table is in edit mode, just display the bound object's detail view
+
+    self.ownerTableViewModel.activeCell = self;
+
+    // If table is in edit mode, just display the bound object's detail view
     if (self.editing) {
         [super didSelectCell];
         return;
     }
 
     NSIndexPath *indexPath = [self.ownerTableViewModel indexPathForCell:self];
-    
+
     UIViewController *detailViewController = [self generatedDetailViewController:indexPath];
-    
-    
+
+
     [self presentDetailViewController:detailViewController forCell:self forRowAtIndexPath:indexPath withPresentationMode:self.detailViewControllerOptions.presentationMode];
 }
 
 // overrides superclass
-- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath
-{
+- (UIViewController *)generatedDetailViewController:(NSIndexPath *)indexPath {
     UIViewController *detailViewController;
     if ([self.ibDetailViewControllerIdentifier length]) {
         detailViewController = [SCUtilities instantiateViewControllerWithIdentifier:self.ibDetailViewControllerIdentifier usingStoryboard:self.ownerTableViewModel.viewController.storyboard];
@@ -6311,7 +5586,6 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
         else {
             SCDebugLog(@"Warning: Could not instantiate view controller with id '%@' from Storyboard.", self.ibDetailViewControllerIdentifier);
         }
-
     }
 
     else {
@@ -6323,15 +5597,13 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
 
 // overrides superclass
-- (BOOL)generatesDetailView
-{
+- (BOOL)generatesDetailView {
     return YES;
 }
 
 //overrides superclass
-- (void)setAttributesTo:(SCPropertyAttributes *)attributes
-{
-	[super setAttributesTo:attributes];
+- (void)setAttributesTo:(SCPropertyAttributes *)attributes {
+    [super setAttributesTo:attributes];
 
     if (![attributes isKindOfClass:[SCArrayOfObjectsAttributes class]]) {
         return;
@@ -6348,9 +5620,9 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
     }
 
     self.allowAddingItems = objectsArrayAttributes.allowAddingItems;
-	self.allowDeletingItems = objectsArrayAttributes.allowDeletingItems;
-	self.allowMovingItems = objectsArrayAttributes.allowMovingItems;
-	self.allowEditDetailView = objectsArrayAttributes.allowEditingItems;
+    self.allowDeletingItems = objectsArrayAttributes.allowDeletingItems;
+    self.allowMovingItems = objectsArrayAttributes.allowMovingItems;
+    self.allowEditDetailView = objectsArrayAttributes.allowEditingItems;
     if ([objectsArrayAttributes.placeholderuiElement isKindOfClass:[SCTableViewCell class]]) {
         self.placeholderCell = (SCTableViewCell *)objectsArrayAttributes.placeholderuiElement;
     }
@@ -6369,30 +5641,12 @@ rejecting input, or replacing the user's selection. UIKit owns text layout.
 
     self.addNewItemCellExistsInNormalMode = objectsArrayAttributes.addNewObjectuiElementExistsInNormalMode;
     self.addNewItemCellExistsInEditingMode = objectsArrayAttributes.addNewObjectuiElementExistsInEditingMode;
-    
+
     [self.detailSectionActions setActionsTo:objectsArrayAttributes.sectionActions overrideExisting:NO];
 }
 
-- (NSArray *)items
-{
+- (NSArray *)items {
     return [self.dataStore fetchObjectsWithOptions:self.dataFetchOptions];
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

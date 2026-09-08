@@ -15,9 +15,8 @@
 
 @implementation SCModelActions
 
-- (instancetype)init
-{
-    if ( (self=[super init]) ) {
+- (instancetype)init {
+    if ((self = [super init])) {
         // initializations here
     }
 
@@ -25,8 +24,7 @@
 }
 
 
-- (void)setActionsTo:(SCModelActions *)actions overrideExisting:(BOOL)override
-{
+- (void)setActionsTo:(SCModelActions *)actions overrideExisting:(BOOL)override {
     if ((override || !self.didAddSection) && actions.didAddSection) {
         self.didAddSection = actions.didAddSection;
     }
@@ -98,7 +96,6 @@
     if ((override || !self.didComputeSearchResults) && actions.didComputeSearchResults) {
         self.didComputeSearchResults = actions.didComputeSearchResults;
     }
-
 }
 
 

@@ -33,8 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Finally, SCTableViewController provides several useful actions (SCTableViewControllerActions) that notify the delegate object of events like the view appearing or disappearing.
 
 
-@interface SCTableViewController : UITableViewController
-{
+@interface SCTableViewController : UITableViewController {
 }
 
 #pragma mark - Configuration
@@ -59,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL allowEditingModeCancelButton;
 
 /// The navigation bar's Done button. Only contains a value if the button exists on the bar.
-@property (nonatomic, readonly, nullable) UIBarButtonItem	*doneButton;
+@property (nonatomic, readonly, nullable) UIBarButtonItem *doneButton;
 
 /// When set to YES, the view controller will automatically disable all navigation bar buttons until its view fully appears. This setting is inhereted by all automatically generated detail view controllers. Default: NO.
 @property (nonatomic, readwrite) BOOL autoDisableNavigationButtonsUntilViewAppears;
@@ -184,7 +183,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 #pragma mark - SCTableViewControllerDelegate
 /// This protocol should be adopted by objects that want to mediate as a delegate for
 /// SCTableViewController. All methods for this protocol are optional.
@@ -225,23 +223,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
 /// - Returns: Retrun TRUE to have the view controller dismissed, otherwise return FALSE.
-- (BOOL)tableViewControllerShouldDismiss:(SCTableViewController *)tableViewController
-                 cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
+- (BOOL)tableViewControllerShouldDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 /// Notifies the delegate that the view controller will be dismissed.
 /// - Parameter tableViewController: The view controller informing the delegate of the event.
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
-- (void)tableViewControllerWillDismiss:(SCTableViewController *)tableViewController
-               cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
+- (void)tableViewControllerWillDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 /// Notifies the delegate that the view controller has been dismissed.
 /// - Parameter tableViewController: The view controller informing the delegate of the event.
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
-- (void)tableViewControllerDidDismiss:(SCTableViewController *)tableViewController
-                   cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
-
+- (void)tableViewControllerDidDismiss:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 
 // Internal
@@ -258,15 +252,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter tableViewController: The view controller informing the delegate of the event.
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
-- (void)tableViewControllerWillLoseFocus:(SCTableViewController *)tableViewController
-                      cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
+- (void)tableViewControllerWillLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 /// Notifies the delegate that the view controller did lose focus to its master model.
 /// - Parameter tableViewController: The view controller informing the delegate of the event.
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to dismiss the view controller.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to dismiss the view controller.
-- (void)tableViewControllerDidLoseFocus:(SCTableViewController *)tableViewController
-                     cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
+- (void)tableViewControllerDidLoseFocus:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 /// Notifies the delegate that the view controller did enter editing mode.
 /// - Parameter viewController: The view controller associated with the operation.
@@ -276,8 +268,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter tableViewController: The view controller informing the delegate of the event.
 /// - Parameter cancelTapped: TRUE if Cancel button has been tapped to exit editing mode.
 /// - Parameter doneTapped: TRUE if Done button has been tapped to exit editing mode.
-- (void)tableViewControllerDidExitEditingMode:(SCTableViewController *)tableViewController
-                           cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
+- (void)tableViewControllerDidExitEditingMode:(SCTableViewController *)tableViewController cancelButtonTapped:(BOOL)cancelTapped doneButtonTapped:(BOOL)doneTapped;
 
 @end
 

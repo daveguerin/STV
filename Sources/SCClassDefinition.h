@@ -13,7 +13,6 @@
 #import "SCDataDefinition.h"
 
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SCClassDefinition
@@ -43,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// ```
 ///
 /// - SeeAlso: ``SCDataDefinition``.
-@interface SCClassDefinition : SCDataDefinition 
+@interface SCClassDefinition : SCDataDefinition
 
 #pragma mark - Creation and Initialization
 
@@ -86,8 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter _cls: A class for which the definition will be extended.
 /// - Parameter propertyNames: An array of the names of properties to be generated. All array elements must be of type NSString.
 /// - Parameter propertyTitles: An array of titles to the properties in propertyNames. All array elements must be of type NSString.
-+ (instancetype)definitionWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames
-		propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
++ (instancetype)definitionWithClass:(nullable Class)_cls propertyNames:(nullable NSArray<NSString *> *)propertyNames propertyTitles:(nullable NSArray<NSString *> *)propertyTitles;
 
 /// Allocates and returns an initialized SCClassDefinition given a class and an SCPropertyGroupArray.
 ///

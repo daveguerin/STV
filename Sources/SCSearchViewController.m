@@ -12,13 +12,11 @@
 #import "SCTableViewModel.h"
 
 
-@interface SCSearchViewController ()
-{
+@interface SCSearchViewController () {
     BOOL _searchBarNeedsLayout;
     BOOL _tableViewNeedsLayout;
 }
 @end
-
 
 
 @implementation SCSearchViewController
@@ -27,8 +25,7 @@
 @synthesize searchBar = _searchBar;
 
 // overrides superclass
-- (void)setTableViewModel:(SCTableViewModel *)model
-{
+- (void)setTableViewModel:(SCTableViewModel *)model {
     [super setTableViewModel:model];
 
     if ([model isKindOfClass:[SCArrayOfItemsModel class]]) {
@@ -36,22 +33,18 @@
         itemsModel.searchBar = self.searchBar;
         itemsModel.enableSearchController = TRUE;
     }
-
 }
 
-- (void)setSearchBar:(UISearchBar *)searchBar
-{
+- (void)setSearchBar:(UISearchBar *)searchBar {
     _searchBar = searchBar;
 
     if ([self.tableViewModel isKindOfClass:[SCArrayOfItemsModel class]]) {
         SCArrayOfItemsModel *itemsModel = (SCArrayOfItemsModel *)self.tableViewModel;
         itemsModel.searchBar = self.searchBar;
     }
-
 }
 
-- (UISearchBar *)searchBar
-{
+- (UISearchBar *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] init];
         _searchBarNeedsLayout = YES;
@@ -61,8 +54,7 @@
     return _searchBar;
 }
 
-- (UITableView *)tableView
-{
+- (UITableView *)tableView {
     if (!_tableView) {
         _tableViewNeedsLayout = YES;
         [super setTableView:[[UITableView alloc] init]];
@@ -71,22 +63,19 @@
     return _tableView;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     [self layoutGeneratedControls];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     [self layoutGeneratedControls];
 }
 
-- (void)layoutGeneratedControls
-{
+- (void)layoutGeneratedControls {
     UISearchBar *searchBar = self.searchBar;
     UITableView *tableView = self.tableView;
     UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
@@ -103,13 +92,7 @@
         }
 
         searchBar.translatesAutoresizingMaskIntoConstraints = NO;
-        [NSLayoutConstraint activateConstraints:@[
-            [searchBar.leadingAnchor
-                constraintEqualToAnchor:safeArea.leadingAnchor],
-            [searchBar.trailingAnchor
-                constraintEqualToAnchor:safeArea.trailingAnchor],
-            [searchBar.topAnchor constraintEqualToAnchor:safeArea.topAnchor]
-        ]];
+        [NSLayoutConstraint activateConstraints:@[[searchBar.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor], [searchBar.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor], [searchBar.topAnchor constraintEqualToAnchor:safeArea.topAnchor]]];
         _searchBarNeedsLayout = NO;
     }
 
@@ -119,20 +102,9 @@
         }
 
         tableView.translatesAutoresizingMaskIntoConstraints = NO;
-        [NSLayoutConstraint activateConstraints:@[
-            [tableView.leadingAnchor
-                constraintEqualToAnchor:safeArea.leadingAnchor],
-            [tableView.trailingAnchor
-                constraintEqualToAnchor:safeArea.trailingAnchor],
-            [tableView.topAnchor
-                constraintEqualToAnchor:searchBar.bottomAnchor],
-            [tableView.bottomAnchor
-                constraintEqualToAnchor:safeArea.bottomAnchor]
-        ]];
+        [NSLayoutConstraint activateConstraints:@[[tableView.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor], [tableView.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor], [tableView.topAnchor constraintEqualToAnchor:searchBar.bottomAnchor], [tableView.bottomAnchor constraintEqualToAnchor:safeArea.bottomAnchor]]];
         _tableViewNeedsLayout = NO;
     }
-
 }
 
 @end
-
