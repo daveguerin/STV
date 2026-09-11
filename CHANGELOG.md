@@ -1,5 +1,20 @@
 # STV CHANGELOG
 
+## Unreleased
+
+* Reconciles synchronous array-model predicate/search membership after generated
+  detail edits, including same-group renames, and refreshes the underlying table
+  when clearing an active native search. Asynchronous update behavior is unchanged.
+* Restores live updates for attached visible-row selections after data-source
+  count queries, so expand/collapse works without application reload workarounds.
+* Creates real numeric drafts, tracks primitive replacements through insertion
+  and cancellation, rejects nil array replacements, and preserves rollback state.
+* Honors explicit `SCObjectCell` detail navigation options while retaining the
+  existing definition-driven defaults for `SCNavigationBarTypeAuto`.
+* Documents store lifecycle commit attempts and the resulting Core Data rollback
+  boundary; automatic-save behavior is unchanged.
+* Adds regression tests for these interaction and binding paths.
+
 ## STV 7.1.0
 
 This release includes source and behavior changes.

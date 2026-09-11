@@ -68,6 +68,14 @@ typedef void (^SCPostFetchAsyncronousAction_Block)(NSArray<id> *_Nullable result
 /// Subclass SCDataStore for other backends. Setting storeMode alone does not
 /// supply asynchronous operations.
 ///
+/// Stores observe UIApplicationDidEnterBackgroundNotification and
+/// UIApplicationWillTerminateNotification and call commitData automatically.
+/// Concrete stores determine whether that call saves data. In particular,
+/// SCCoreDataStore attempts to save its context, including an in-memory store.
+/// A consumer's Save button is therefore not an exclusive save boundary;
+/// context rollback discards changes since the latest successful save.
+/// Use SCCoreDataStore.commitFailure to observe automatic save failures.
+///
 /// Sample use:
 /// ```objective-c
 /// // context is a configured main-queue context; TaskEntityDef describes its

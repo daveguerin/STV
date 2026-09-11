@@ -1863,6 +1863,18 @@
         return;
     }
 
+    /*
+     hermes:
+     Data-source count queries can enter loading mode after rendering without
+     another display callback. An attached visible-row selection is live UI,
+     so restore interaction updates before a special cell changes its section.
+     Programmatic/offscreen configuration remains deferred while loading.
+     */
+    if (tableView == self.tableView && tableView.window &&
+        [[tableView indexPathsForVisibleRows] containsObject:indexPath]) {
+        [self exitLoadingMode];
+    }
+
     if (cell != self.activeCell) {
         SCTableViewCell *prevCell = self.activeCell;
         self.activeCell = cell;
@@ -2932,6 +2944,54 @@
 - (void)itemModified:(NSObject *)item inSection:(SCArrayOfItemsSection *)section {
     [self clearLastReturnedCellData];
 
+    BOOL membershipChanged = NO;
+    // Async stores notify update completion using the original section index.
+    // Leave their existing dismissal behavior intact until that completion
+    // path can coordinate membership changes.
+    BOOL synchronousStore = self.dataStore.storeMode == SCStoreModeSynchronous;
+    if (synchronousStore && self.dataFetchOptions.filter && self.dataFetchOptions.filterPredicate) {
+        // Reconcile the fetched snapshot, not the store. Refetching here can
+        // race an asynchronous detail update or replace a caller-owned batch.
+        NSMutableArray *matchingItems = [_items mutableCopy];
+        [self.dataFetchOptions filterMutableArray:matchingItems];
+        membershipChanged = matchingItems.count != _items.count;
+        if (membershipChanged) {
+            _items = matchingItems;
+        }
+    }
+
+    if (synchronousStore && filteredArray) {
+        NSArray *matchingResults = [self searchResultsForText:self.searchBar.text];
+        BOOL visibleMembershipChanged = matchingResults.count != filteredArray.count;
+        if (!visibleMembershipChanged) {
+            for (NSObject *result in filteredArray) {
+                if ([matchingResults indexOfObjectIdenticalTo:result] == NSNotFound) {
+                    visibleMembershipChanged = YES;
+                    break;
+                }
+            }
+        }
+        filteredArray = matchingResults;
+        // Preserve section-local configuration and callbacks for ordinary edits.
+        // The existing section path below handles row sorting without refetching.
+        membershipChanged = visibleMembershipChanged || [self indexForSection:section] != [self getSectionIndexForItem:item];
+    }
+
+    if (synchronousStore && membershipChanged) {
+        // An edit can leave its search results without changing section title.
+        // Rebuild once, before any section-level row sorting/reloading occurs.
+        section.selectedCellIndexPath = nil;
+        sectionsInSync = FALSE;
+        [self.tableView reloadData];
+        // Both native tables share these sections, even when search is active
+        // with an empty query. Discard both cached row/accessibility snapshots.
+        if (self.tableView != [super tableView]) {
+            [self clearLastReturnedCellData];
+            [[super tableView] reloadData];
+        }
+        return;
+    }
+
     NSUInteger oldSectionIndex = [self indexForSection:section];
     NSUInteger newSectionIndex = [self getSectionIndexForItem:item];
 
@@ -3031,6 +3091,10 @@
 #pragma mark -
 #pragma mark UISearchBarDelegate methods
 
+- (NSArray *)searchResultsForText:(NSString *)searchText {
+    return nil; // Implemented by the object and string models.
+}
+
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     if (self.lockCellSelection) {
         return FALSE;
@@ -3079,6 +3143,14 @@
     [self reconcileKeyboardInset];
     // Call the correspoding searchBar delegate
     [self searchBar:searchController.searchBar textDidChange:searchController.searchBar.text];
+
+    // UIKit reveals the underlying table for an empty query while search is
+    // still active. The tableView getter continues to route to the results
+    // table, so refresh the newly visible table as well after rebuilding data.
+    if (!searchController.searchBar.text.length && self.tableView != [super tableView]) {
+        [self clearLastReturnedCellData];
+        [[super tableView] reloadData];
+    }
 }
 
 - (void)willPresentSearchController:(UISearchController *)searchController {
@@ -3166,10 +3238,17 @@
 #pragma mark UISearchBarDelegate methods
 
 - (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText {
+    filteredArray = [self searchResultsForText:searchText];
+    self.addButtonItem.enabled = !filteredArray;
+    sectionsInSync = FALSE;
+    [self.tableView reloadData];
+}
+
+- (NSArray *)searchResultsForText:(NSString *)searchText {
     NSArray *resultsArray = nil;
 
-    if ([sbar.text length] && self.items.count) {
-        NSString *safeSearchString = [self safeSearchStringFromString:sbar.text];
+    if ([searchText length] && self.items.count) {
+        NSString *safeSearchString = [self safeSearchStringFromString:searchText];
 
         SCDataDefinition *objDef = [self.dataStore definitionForObject:[self.items objectAtIndex:0]]; // any object
         if (!self.searchPropertyName) {
@@ -3210,7 +3289,14 @@
 
             SCDebugLog(@"Warning: Invalid search predicate: %@.", predicate);
         }
+    }
 
+    if ([searchText length]) {
+        // An active query stays active even when the predicate removed the last
+        // fetched item; an empty result is distinct from clearing the search.
+        if (!resultsArray) {
+            resultsArray = @[];
+        }
         // Check for custom results
         NSArray *customResultsArray = nil;
         if (self.modelActions.didComputeSearchResults) {
@@ -3222,12 +3308,7 @@
         }
     }
 
-    filteredArray = resultsArray;
-    self.addButtonItem.enabled = !filteredArray;
-
-    sectionsInSync = FALSE;
-
-    [self.tableView reloadData]; // self.tableView automatically returns the correct tableView in case a UISearchController is action
+    return resultsArray;
 }
 
 @end
@@ -3252,10 +3333,17 @@
 #pragma mark UISearchBarDelegate methods
 
 - (void)searchBar:(UISearchBar *)sbar textDidChange:(NSString *)searchText {
+    filteredArray = [self searchResultsForText:searchText];
+    self.addButtonItem.enabled = !filteredArray;
+    sectionsInSync = FALSE;
+    [self.tableView reloadData];
+}
+
+- (NSArray *)searchResultsForText:(NSString *)searchText {
     NSArray *resultsArray = nil;
 
-    if ([sbar.text length]) {
-        NSString *safeSearchString = [self safeSearchStringFromString:sbar.text];
+    if ([searchText length]) {
+        NSString *safeSearchString = [self safeSearchStringFromString:searchText];
 
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", safeSearchString];
         resultsArray = [self.items filteredArrayUsingPredicate:predicate];
@@ -3271,12 +3359,7 @@
         }
     }
 
-    filteredArray = resultsArray;
-    self.addButtonItem.enabled = !filteredArray;
-
-    sectionsInSync = FALSE;
-
-    [self.tableView reloadData]; // self.tableView automatically returns the correct tableView in case a UISearchController is action
+    return resultsArray;
 }
 
 @end

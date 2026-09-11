@@ -26,9 +26,15 @@
 #define KibDetailViewControllerIdentifier @"ibDetailViewControllerIdentifier"
 
 
+// Private array-store contract: never infer a draft from its replacement value.
+@interface SCArrayStore (SCPrimitiveEditing)
+- (NSObject *)sc_primitiveDraftForObject:(NSObject *)object;
+@end
+
 @interface SCTableViewCell ()
 
 @property (nonatomic, strong) NSObject *initialBoundValue;
+@property (nonatomic, strong) NSObject *sc_primitiveDraftIdentity;
 
 @property (nonatomic, strong) NSLayoutConstraint *sc_heightConstraint;
 @property (nonatomic) CGFloat sc_resolvedHeight;
@@ -263,6 +269,7 @@
 
 - (void)setBoundObject:(NSObject *)boundObject {
     _boundObject = boundObject;
+    self.sc_primitiveDraftIdentity = nil;
 
     [self resetInitialBoundValue];
 }
@@ -711,6 +718,19 @@
             value = self.ownerTableViewModel.cellActions.willCommitBoundValue(self, indexPath, value);
         }
 
+        // Arrays cannot hold nil. Preserve a primitive binding while a numeric
+        // editor is empty so the next valid edit can still replace its value.
+        if (!value && [self.boundObjectStore isKindOfClass:[SCArrayStore class]] &&
+            [SCUtilities isBasicDataTypeClass:[self.boundObject class]]) {
+            return;
+        }
+
+        // Read callbacks may transform boundValue; draft routing needs the raw
+        // original object instead of the semantic rollback snapshot.
+        if (!self.sc_primitiveDraftIdentity && [self.boundObjectStore isKindOfClass:[SCArrayStore class]]) {
+            self.sc_primitiveDraftIdentity = [(SCArrayStore *)self.boundObjectStore sc_primitiveDraftForObject:self.boundObject];
+        }
+
         if (!self.initialBoundValue) {
             NSObject *initialValue = self.boundValue;
             if (initialValue) {
@@ -723,7 +743,11 @@
         }
 
         if (self.boundObjectStore) {
-            [self.boundObjectStore setValue:value forPropertyName:self.boundPropertyName inObject:self.boundObject];
+            NSObject *target = self.boundObject;
+            if ([self.boundObjectStore isKindOfClass:[SCArrayStore class]]) {
+                target = [(SCArrayStore *)self.boundObjectStore sc_primitiveDraftForObject:self.sc_primitiveDraftIdentity] ?: target;
+            }
+            [self.boundObjectStore setValue:value forPropertyName:self.boundPropertyName inObject:target];
         }
 
         else {
@@ -731,7 +755,12 @@
         }
 
         if ([SCUtilities isBasicDataTypeClass:[self.boundObject class]]) {
+            // Rebinding an immutable value is still part of the same edit.
+            NSObject *initialValue = self.initialBoundValue;
+            NSObject *draftIdentity = self.sc_primitiveDraftIdentity;
             self.boundObject = value;
+            self.initialBoundValue = initialValue;
+            self.sc_primitiveDraftIdentity = draftIdentity;
         }
     }
 }
@@ -3986,7 +4015,7 @@
     }
 
     if (self.label.text) { // if a date value have been selected
-        self.boundValue = self.datePicker.date;
+        self.boundValue = self.controlValue;
     }
 
     else {
@@ -5194,6 +5223,10 @@
 
 //override superclass
 - (SCNavigationBarType)defaultDetailViewControllerNavigationBarType {
+    if (self.detailViewControllerOptions.navigationBarType != SCNavigationBarTypeAuto) {
+        return self.detailViewControllerOptions.navigationBarType;
+    }
+
     SCNavigationBarType navBarType;
     if (self.objectDefinition.requireEditingModeToEditPropertyValues) {
         navBarType = SCNavigationBarTypeEditRight;

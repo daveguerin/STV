@@ -17,6 +17,13 @@
 #import <objc/runtime.h>
 
 
+@interface SCArrayStore () {
+    // Only original draft identities are keys. Replacement class-cluster
+    // objects can be shared by other drafts or existing rows.
+    NSMapTable *_primitiveDraftValues;
+}
+@end
+
 @implementation SCArrayStore
 
 
@@ -84,7 +91,9 @@
     }
 
     else if ([definition isKindOfClass:[SCNumberDefinition class]]) {
-        object = [[NSNumber alloc] init];
+        // NSNumber's plain init returns nil. Use a distinct, non-tagged zero
+        // so editing a draft cannot replace an existing @0 by identity.
+        object = [[NSDecimalNumber alloc] initWithString:@"0"];
     }
 
     else if ([definition isKindOfClass:[SCDateDefinition class]]) {
@@ -102,6 +111,11 @@
 
 // overrides superclass
 - (BOOL)discardUninsertedObject:(NSObject *)object {
+    NSObject *draft = [self sc_primitiveDraftForObject:object];
+    if (draft) {
+        [_primitiveDraftValues removeObjectForKey:draft];
+        object = draft;
+    }
     [_uninsertedObjects removeObjectIdenticalTo:object];
 
     return TRUE;
@@ -109,9 +123,12 @@
 
 // overrides superclass
 - (BOOL)insertObject:(NSObject *)object {
+    NSObject *draft = [self sc_primitiveDraftForObject:object];
+    object = [_primitiveDraftValues objectForKey:draft] ?: object;
     [self.objectsArray addObject:object];
 
-    [_uninsertedObjects removeObjectIdenticalTo:object];
+    [_primitiveDraftValues removeObjectForKey:draft];
+    [_uninsertedObjects removeObjectIdenticalTo:draft ?: object];
 
     return TRUE;
 }
@@ -132,7 +149,12 @@
 
 // overrides superclass
 - (BOOL)insertObject:(NSObject *)object atOrder:(NSUInteger)order {
+    NSObject *draft = [self sc_primitiveDraftForObject:object];
+    object = [_primitiveDraftValues objectForKey:draft] ?: object;
     [self.objectsArray insertObject:object atIndex:order];
+
+    [_primitiveDraftValues removeObjectForKey:draft];
+    [_uninsertedObjects removeObjectIdenticalTo:draft ?: object];
 
     return TRUE;
 }
@@ -197,6 +219,21 @@
 // overrides superclass
 - (void)setValue:(NSObject *)value forPropertyName:(NSString *)propertyName inObject:(NSObject *)object {
     if ([SCUtilities isBasicDataTypeClass:[object class]]) {
+        // An array cannot represent nil. Preserve the row rather than throwing
+        // or interpreting a cleared editor as a request to delete an object.
+        if (!value) {
+            return;
+        }
+
+        NSObject *draft = [self sc_primitiveDraftForObject:object];
+        if (draft) {
+            if (!_primitiveDraftValues) {
+                _primitiveDraftValues = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality valueOptions:NSPointerFunctionsStrongMemory];
+            }
+            [_primitiveDraftValues setObject:value forKey:draft];
+            return;
+        }
+
         // replace old data type object with new one
         NSUInteger index = [self.objectsArray indexOfObjectIdenticalTo:object];
         if (index != NSNotFound) {
@@ -207,6 +244,19 @@
     else {
         [super setValue:value forPropertyName:propertyName inObject:object];
     }
+}
+
+- (NSObject *)sc_primitiveDraftForObject:(NSObject *)object {
+    if (![SCUtilities isBasicDataTypeClass:[object class]]) {
+        return nil;
+    }
+
+    NSUInteger index = [_uninsertedObjects indexOfObjectIdenticalTo:object];
+    if (index != NSNotFound) {
+        return [_uninsertedObjects objectAtIndex:index];
+    }
+
+    return nil;
 }
 
 - (BOOL)validateInsertForObject:(NSObject *)object {

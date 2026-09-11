@@ -2584,7 +2584,14 @@
         // replace with the new data type object
         SCTableViewCell *cell = [detailModel cellAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         if ([cell isKindOfClass:[SCControlCell class]]) {
-            newItem = [(SCControlCell *)cell controlValue];
+            if ([self.dataStore isKindOfClass:[SCArrayStore class]] && cell.boundObject) {
+                // Release this original draft, not another draft that happens
+                // to share the committed immutable replacement pointer.
+                [self.dataStore discardUninsertedObject:newItem];
+            }
+            // Use the committed identity: recomputing controlValue may create
+            // an equal number/date/string that is not the store's tracked draft.
+            newItem = cell.boundObject ?: newItem;
         }
     }
 
