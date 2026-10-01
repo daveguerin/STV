@@ -973,6 +973,16 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// interaction; required-value validation is separate. Summary labels use
 /// `delimeter`, not the semicolon used by string bindings.
 ///
+/// When `allowMultipleSelection` is YES and `delimeter` is exactly `@"\n"`,
+/// summary refreshes set `label.numberOfLines` to zero. Automatically sized
+/// rows can then grow to show the selected titles on separate lines. This also
+/// applies to `SCObjectSelectionCell`; explicit fixed cell heights still apply.
+/// Leaving this mode restores the label's previous line count unless the caller
+/// has since assigned a nonzero count. Other separators do not enable this mode.
+///
+/// Changing either property refreshes the summary and requests an automatic
+/// row-height update without committing or changing the selected indexes.
+///
 /// - SeeAlso: ``SCSelectionSection``.
 @interface SCSelectionCell : SCLabelCell
 
@@ -1057,7 +1067,11 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// Bound-value reloads rebuild this set from the binding.
 @property (nonatomic, readonly) NSMutableSet<NSNumber *> *selectedItemsIndexes;
 
-/// If TRUE, the cell allows multiple selection. Default: FALSE.
+/// Whether the generated detail list allows multiple selections. Default: NO.
+/// With `delimeter` equal to `@"\n"`, summary refreshes enable unlimited lines
+/// on `label`. Disabling restores the previously managed line count.
+/// Changing this property refreshes the summary and requests automatic sizing;
+/// it does not commit changes or reduce an existing set to a single selection.
 @property (nonatomic, readwrite) BOOL allowMultipleSelection;
 
 /// If TRUE, the cell allows no selection at all. Default: FALSE.
@@ -1092,8 +1106,13 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 @property (nonatomic, readwrite) BOOL displaySelection;
 
 /// The separator between displayed selected-item titles. Default: `@", "`.
-/// Only affects the summary when `displaySelection` is YES. String bindings
-/// serialize selections with semicolons instead.
+/// With `allowMultipleSelection` set to YES, exactly `@"\n"` enables unlimited
+/// summary-label lines. Leaving that mode restores the previous line count
+/// unless the caller has since assigned a nonzero count. Existing custom line
+/// counts are otherwise preserved; `SCLabelCell` defaults are unchanged.
+/// Changing the separator refreshes the summary and requests automatic sizing,
+/// without committing edits. `displaySelection` controls whether text is shown.
+/// String bindings still serialize selections with semicolons instead.
 @property (nonatomic, copy) NSString *delimeter;
 
 

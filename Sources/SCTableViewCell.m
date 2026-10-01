@@ -4123,6 +4123,8 @@
     BOOL _loadingContents;
     UIActivityIndicatorView *_activityIndicator;
     BOOL _commitingDetailModel;
+    __weak UILabel *_sc_multilineSummaryLabel;
+    NSInteger _sc_previousSummaryLineCount;
 }
 
 - (void)buildSelectedItemsIndexesFromBoundValue;
@@ -4228,6 +4230,55 @@
     return self;
 }
 
+
+- (void)setAllowMultipleSelection:(BOOL)allowMultipleSelection {
+    if (_allowMultipleSelection == allowMultipleSelection) {
+        return;
+    }
+
+    _allowMultipleSelection = allowMultipleSelection;
+    [self sc_refreshSelectionSummary];
+}
+
+- (void)setDelimeter:(NSString *)delimeter {
+    if ([_delimeter isEqualToString:delimeter]) {
+        return;
+    }
+
+    _delimeter = [delimeter copy];
+    [self sc_refreshSelectionSummary];
+}
+
+- (void)sc_refreshSelectionSummary {
+    [self loadBoundValueIntoLabel];
+    [self setNeedsLayout];
+    if (self.height == UITableViewAutomaticDimension) {
+        [self.ownerTableViewModel invalidateHeightForCell:self animated:NO];
+    }
+}
+
+- (void)sc_updateSummaryLineCount {
+    UILabel *label = self.label;
+    BOOL multiline = self.allowMultipleSelection &&
+        [self.delimeter isEqualToString:@"\n"];
+    UILabel *previousLabel = _sc_multilineSummaryLabel;
+    if (previousLabel && (!multiline || previousLabel != label)) {
+        if (previousLabel.numberOfLines == 0) {
+            previousLabel.numberOfLines = _sc_previousSummaryLineCount;
+        }
+
+        _sc_multilineSummaryLabel = nil;
+    }
+
+    if (multiline && label) {
+        if (_sc_multilineSummaryLabel != label || label.numberOfLines != 0) {
+            _sc_previousSummaryLineCount = label.numberOfLines;
+            _sc_multilineSummaryLabel = label;
+        }
+
+        label.numberOfLines = 0;
+    }
+}
 
 - (NSArray *)items {
     if (!itemsInSync) {
@@ -4384,6 +4435,14 @@
 
 //override superclass
 - (void)loadBoundValueIntoLabel {
+    /*
+    hermes:
+    Newline-separated multiple selections need a multiline summary before
+    Auto Layout fits the row. Restore only the line count managed here when
+    leaving that mode, preserving a caller's later nonzero override.
+    */
+    [self sc_updateSummaryLineCount];
+
     NSArray *indexesArray = [[self.selectedItemsIndexes allObjects] sortedArrayUsingSelector:@selector(compare:)];
     if (self.items.count && self.displaySelection && indexesArray.count) {
         NSMutableString *selectionString = [[NSMutableString alloc] init];
