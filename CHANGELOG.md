@@ -7,6 +7,8 @@
   when clearing an active native search. Asynchronous update behavior is unchanged.
 * Restores live updates for attached visible-row selections after data-source
   count queries, so expand/collapse works without application reload workarounds.
+  Selection and deselection callbacks use the event table's rendered cell, including
+  the underlying table while native search remains active with an empty query.
 * Creates real numeric drafts, tracks primitive replacements through insertion
   and cancellation, rejects nil array replacements, and preserves rollback state.
 * Honors explicit `SCObjectCell` detail navigation options while retaining the

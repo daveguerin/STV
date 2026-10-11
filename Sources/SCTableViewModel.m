@@ -1829,7 +1829,7 @@
     }
 
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 
     if (!cell.selectable || !cell.enabled) {
         return nil;
@@ -1857,7 +1857,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 
     if (!cell.enabled) {
         return;
@@ -1870,7 +1870,7 @@
      so restore interaction updates before a special cell changes its section.
      Programmatic/offscreen configuration remains deferred while loading.
      */
-    if (tableView == self.tableView && tableView.window &&
+    if (tableView.window &&
         [[tableView indexPathsForVisibleRows] containsObject:indexPath]) {
         [self exitLoadingMode];
     }
@@ -1918,7 +1918,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 
     BOOL allowDeselect = YES;
     if (cell.cellActions.willDeselect) {
@@ -1948,7 +1948,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     SCTableViewSection *section = [self sectionAtIndex:indexPath.section];
-    SCTableViewCell *cell = (SCTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    SCTableViewCell *cell = (SCTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     [cell didDeselectCell];
 
     if (cell.cellActions.didDeselect) {
