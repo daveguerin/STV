@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* Restores the point-based `SCControlCell.maxTextLabelWidth` contract by removing
+  the additional 45% title-width restriction introduced during the Auto Layout
+  migration. Changing the cap schedules constraint and layout updates. When space
+  is insufficient, programmatic titles yield before standard controls and images
+  to avoid ambiguous horizontal compression; callers can override that priority.
 * Reconciles synchronous array-model predicate/search membership after generated
   detail edits, including same-group renames, and refreshes the underlying table
   when clearing an active native search. Asynchronous update behavior is unchanged.

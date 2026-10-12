@@ -2430,6 +2430,25 @@
 
 @implementation SCControlCell
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
+        /*
+        hermes:
+        Let programmatic titles yield before neighboring controls and images
+        when space is tight. Shared setup runs before Interface Builder flags
+        are decoded, so do not apply this default there. Keep nondefault
+        priorities chosen by subclass initialization unchanged; callers can
+        still override the default after construction.
+        */
+        UILabel *title = self.textLabel;
+        if ([title contentCompressionResistancePriorityForAxis:UILayoutConstraintAxisHorizontal] == UILayoutPriorityDefaultHigh) {
+            [title setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh - 1 forAxis:UILayoutConstraintAxisHorizontal];
+        }
+    }
+
+    return self;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
@@ -2477,6 +2496,18 @@
     if (!self.controlCreatedInIB) {
         self.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
+}
+
+
+- (void)setMaxTextLabelWidth:(CGFloat)maxTextLabelWidth {
+    if (_maxTextLabelWidth == maxTextLabelWidth) {
+        return;
+    }
+
+    _maxTextLabelWidth = maxTextLabelWidth;
+    self.sc_layoutKey = nil;
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
 }
 
 
@@ -2601,7 +2632,7 @@
         title.translatesAutoresizingMaskIntoConstraints = NO;
         title.adjustsFontForContentSizeCategory = YES;
         [title setContentHuggingPriority:251 forAxis:UILayoutConstraintAxisHorizontal];
-        [constraints addObjectsFromArray:@[[title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [title.centerYAnchor constraintEqualToAnchor:control.centerYAnchor], [title.widthAnchor constraintLessThanOrEqualToConstant:self.maxTextLabelWidth], [title.widthAnchor constraintLessThanOrEqualToAnchor:margins.widthAnchor multiplier:0.45], [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:title.trailingAnchor constant:self.controlMargin]]];
+        [constraints addObjectsFromArray:@[[title.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [title.centerYAnchor constraintEqualToAnchor:control.centerYAnchor], [title.widthAnchor constraintLessThanOrEqualToConstant:self.maxTextLabelWidth], [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:title.trailingAnchor constant:self.controlMargin]]];
         NSLayoutConstraint *spacing = [control.leadingAnchor constraintEqualToAnchor:title.trailingAnchor constant:self.controlMargin];
         spacing.priority = 749;
         NSLayoutConstraint *indent = [control.leadingAnchor constraintGreaterThanOrEqualToAnchor:margins.leadingAnchor constant:self.controlIndentation];

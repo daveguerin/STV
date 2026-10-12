@@ -35,7 +35,12 @@
 
 // overrides superclass
 - (void)commitData {
-    [self.standardUserDefaultsObject synchronize];
+    /*
+     Apple says that the NSUserDefaults synchronize method is unnecessary and
+     shouldn’t be used.
+
+     [self.standardUserDefaultsObject synchronize];
+     */
 }
 
 @end

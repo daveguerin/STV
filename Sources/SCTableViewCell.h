@@ -620,10 +620,13 @@ typedef NS_ENUM(NSInteger, SCTableViewCellSizingMode) {
 /// The current control value, or nil for an empty or unsupported control.
 @property (nonatomic, nullable, readonly) NSObject *controlValue;
 
-/// The title-label width cap for programmatic side-by-side control layout.
-/// Default: 200 points. The title is also limited to 45% of the available
-/// control-group width. Nib-authored layout and stacked text editors use
-/// their own constraints.
+/// The title-label width cap, in points, for programmatic side-by-side layout.
+/// Default: 200 points. This is a maximum, not a fixed width; available space
+/// and the neighboring control's layout requirements can further limit it.
+/// Programmatic titles yield before standard controls and images when space
+/// is insufficient; callers can override horizontal compression resistance.
+/// Changing the cap schedules constraint and layout updates. Nib-authored
+/// layout and stacked text editors use their own constraints.
 @property (nonatomic, readwrite) CGFloat maxTextLabelWidth;
 
 /// The preferred minimum leading offset of a programmatic control from its
